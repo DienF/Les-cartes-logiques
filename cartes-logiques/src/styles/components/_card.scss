@@ -1,123 +1,106 @@
-
-
 .card {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    
-    .affix1{
-        font-size : 2vh;
-        position: absolute;
-        border-radius: 2px;
-        background-color: black;
-        border: 1px solid #800000;
-        margin-top: 4vh;
-        margin-left: 8vh;
-        padding: 1vh;
-        display: inline-block;
-        vertical-align:middle;
-    
-        
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .affix1 {
+    font-size: 2vh;
+    position: absolute;
+    border-radius: 2px;
+    background-color: black;
+    border: 1px solid #800000;
+    margin-top: 4vh;
+    margin-left: 8vh;
+    padding: 1vh;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .affix2 {
+    font-size: 2vh;
+    position: absolute;
+    border-radius: 2px;
+    background-color: black;
+    border: 1px solid #800000;
+    margin-top: 4vh;
+    margin-left: 7vh;
+    padding: 1vh;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .card_simple_h {
+    border-radius: 2vh;
+    box-shadow: 0 10px 90px #00000024;
+    background-color: black;
+    border: 0.4vh solid #800000;
+    height: 11.3vh;
+    width: 8vh;
+    margin-left: 0.3vh;
+    margin-right: 0.3vh;
+    margin-top: 0.3vh;
+    margin-bottom: 0.3vh;
+  }
+  .card_simple_w {
+    border-radius: 2vh;
+    box-shadow: 0 10px 90px #00000024;
+    background-color: black;
+    border: 0.4vh solid #800000;
+    height: 5.12vh;
+    width: 8vh;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  .card_simple {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "a";
+  }
+  .card_double {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "a a";
+  }
+  .card_triple_a {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "a b"
+      "a b";
+
+    .card_simple_h {
+      grid-area: a;
     }
-    
-    .affix2{
-        font-size : 2vh;
-        position: absolute;
-        border-radius: 2px;
-        background-color: black;
-        border: 1px solid #800000;
-        margin-top: 4vh;
-        margin-left: 7vh;
-        padding: 1vh;
-        display: inline-block;
-        vertical-align:middle;
-    
-        
+  }
+  .card_triple_b {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "b a"
+      "b a";
+
+    .card_simple_h {
+      grid-area: a;
     }
-    .card_simple_h{
+  }
+  .card_quadruple {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "a a"
+      "a a";
+  }
 
-
-        border-radius: 2vh;
-        box-shadow: 0 10px 90px #00000024;
-        background-color: black;
-        border: 0.4vh solid #800000;
-        height:11.3vh;
-        width:8vh;
-        margin-left:0.3vh;
-        margin-right : 0.3vh;
-        margin-top:0.3vh;
-        margin-bottom : 0.3vh;
-        
-    }
-    .card_simple_w{
-        border-radius: 2vh;
-        box-shadow: 0 10px 90px #00000024;
-        background-color: black;
-        border: 0.4vh solid #800000;
-        height:5.12vh;
-        width:8vh;
-        margin-top:2px;
-        margin-bottom : 2px;
-        margin-left:2px;
-        margin-right : 2px;
-        
-    }
-    .card_simple{
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-        grid-template-areas: "a";
-    }
-    .card_double{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr;
-        grid-template-areas: "a a";
-    }
-    .card_triple_a{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        grid-template-areas: 
-        "a b"
-        "a b";
-
-        .card_simple_h{
-            grid-area: a;
-        }
-
-    }
-    .card_triple_b{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        grid-template-areas: 
-        "b a"
-        "b a";
-
-        .card_simple_h{
-            grid-area: a;
-        }
-
-    }
-    .card_quadruple{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        grid-template-areas: 
-        "a a"
-        "a a";
-    }
-    
-
-
-
-
-
-    .card_selec{
-        border: 0.65vh solid black;
-        margin-top:0px;
-        margin-bottom : 0px;
-        margin-right:0px;
-        margin-left : 0px;
-    }
+  .card_selec {
+    border: 0.65vh solid black;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+  }
 }

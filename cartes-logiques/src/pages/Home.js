@@ -1,18 +1,15 @@
-import React from 'react'
-import Game from '../componant/Game';
-import Navigation from '../componant/Navigation';
-
+import React from "react";
+import Game from "../componant/Game";
+import Navigation from "../componant/Navigation";
 
 const home = () => {
   return (
     <div className="home">
-      
-        <Navigation/>
-        
-        <Game/>
-        
+      <Navigation />
+
+      <Game />
     </div>
-  )
-}
+  );
+};
 
 export default home;
