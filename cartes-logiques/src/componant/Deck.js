@@ -1,50 +1,22 @@
-import React, {useEffect , useState } from 'react';
+import React from 'react';
 import Card from './Card';
-
-const Deck = ({array,updateGame,indice}) => {
-    var [deck ,setDeck] = useState([]);
-    const [playOnce,setPlayOnce] = useState(true);
-    useEffect(() =>{
-        if(playOnce){
-            setDeck(array);
-            setPlayOnce(false);
-        }
+import {GameTab} from './Game';
 
 
-    } , [deck , playOnce , array ]);
-    const select = (card , state) =>{
-        card.active = state;
-        if(card.CardClass1 != null){
-            select(card.CardClass1,state);
-        }
-        if(card.CardClass2 != null){
-            select(card.CardClass2,state);
-        }
-    }
-    const update = (carda) => {
-        select(carda, !carda.active);
-        var tmp = deck.copyWithin(deck.length,0);
-        tmp.map(function(card){
-            if(card.id !== carda.id ){
-                select(card,false)
-            }
-            return 0;
-        });
-        tmp =  deck.map((card) =>
-        card.id === carda.id ? carda : card
-      );
-        setDeck(arr => tmp);
-        updateGame(deck,indice);
+const Deck = ({updateGame,indice}) => {
+    
+
+    const update = (indiceCard) => {
+        updateGame(indice,indiceCard);
     };
+
     return (
         <div className="deck" >
-            {deck.map((card) =>(
-                <Card card={card}  update={update} key={card.id}  />
-                
-            ))}
-  
-            
-   
+            <GameTab.Consumer>
+                {game => { return game[indice].map((card,index) =>(
+                    <Card deckIndice ={indice} cardIndice={card.id} update={update} key={index}  />
+                ))}}
+            </GameTab.Consumer>
         </div>
 
     );

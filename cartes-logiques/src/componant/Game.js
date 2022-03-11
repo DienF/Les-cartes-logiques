@@ -1,5 +1,7 @@
 import React, {useState , useEffect} from 'react';
 import Deck from './Deck';
+export const GameTab = React.createContext();
+
 class CardClass {
     constructor(id,color,active,liaison,CardClass1,CardClass2) {
       this.id=id;
@@ -11,25 +13,24 @@ class CardClass {
     }
   }
 const Game = () => {
-    var [game ,setGame] = useState([]); 
+    const [game ,setGame] = useState([]); 
     const [playOnce,setPlayOnce] = useState(true);
-
     useEffect(() =>{
         if(playOnce){
             setGame(    oldarray =>
                 [
                     [
-                        new CardClass(1,null,false,1,new CardClass(1,"blue",false,0,null,null),new CardClass(2,"green",false,0,null,null)),
-                        new CardClass(2,null,false,1,new CardClass(1,"yellow",false,0,null,null),new CardClass(2,null,false,1,new CardClass(1,"red",false,0,null,null),new CardClass(2,"orange",false,0,null,null))),
-                        new CardClass(3,null,false,1,new CardClass(1,null,false,1,new CardClass(1,"blue",false,0,null,null),new CardClass(2,"pink",false,0,null,null)),new CardClass(2,"lime",false,0,null,null)),
-                        new CardClass(4,false,false,1,new CardClass(1,null,false,1,new CardClass(1,"aqua",false,0,null,null),new CardClass(2,"brown",false,0,null,null)),new CardClass(2,null,false,1,new CardClass(1,"purple",false,0,null,null),new CardClass(2,"gold",false,0,null,null))),
+                        new CardClass(0,null,false,1,new CardClass(0,"blue",false,0,null,null),new CardClass(1,"green",false,0,null,null)),
+                        new CardClass(1,null,false,1,new CardClass(0,"yellow",false,0,null,null),new CardClass(1,null,false,1,new CardClass(0,"red",false,0,null,null),new CardClass(1,"orange",false,0,null,null))),
+                        new CardClass(2,null,false,1,new CardClass(0,null,false,1,new CardClass(0,"blue",false,0,null,null),new CardClass(1,"pink",false,0,null,null)),new CardClass(1,"lime",false,0,null,null)),
+                        new CardClass(3,null,false,1,new CardClass(0,null,false,1,new CardClass(0,"aqua",false,0,null,null),new CardClass(1,"brown",false,0,null,null)),new CardClass(1,null,false,1,new CardClass(0,"purple",false,0,null,null),new CardClass(1,"gold",false,0,null,null))),
                         
                     ],
                     [
-                        new CardClass(1,null,false,2,new CardClass(1,"blue",false,0,null,null),new CardClass(2,"green",false,0,null,null)),,
-                        new CardClass(2,"blue",false,0,null,null),
-                        new CardClass(3,"green",false,0,null,null),
-                        new CardClass(4,"blue",false,0,null,null),
+                        new CardClass(0,null,false,2,new CardClass(0,"blue",false,0,null,null),new CardClass(1,"green",false,0,null,null)),
+                        new CardClass(1,"blue",false,0,null,null),
+                        new CardClass(2,"green",false,0,null,null),
+                        new CardClass(3,"blue",false,0,null,null),
                         
                     ]
                 ]
@@ -39,25 +40,40 @@ const Game = () => {
 
 
     } , [game , playOnce]);
-
-    const update = (newtab,i) => {
-        var tempo = game.copyWithin(game.length,0);
-        console.log(newtab);
-        tempo[i] = newtab.copyWithin(newtab.length,0);
-        console.log(tempo);
-        setGame(tempo);
-
+    const select = (card , state) =>{
+        card.active = state;
+        if(card.CardClass1 != null){
+            select(card.CardClass1,state);
+        }
+        if(card.CardClass2 != null){
+            select(card.CardClass2,state);
+        }
     }
-/*            {game.map((deck,index) =>(
-                <div key={index}> card1 : {deck[0].active.toString()} card2 : {deck[1].active.toString()} card3 : {deck[2].active.toString()} card4 : {deck[3].active.toString()}</div>
-            ))}*/
+    const update = (i,j) => {
+        var tempo = game.copyWithin(game.length,0);
+        tempo[i].map(function(card){
+            if(card.id !== j ){
+                select(card,false);
+            }
+            else{
+                select(card,true);
+            }
+            return 0;
+        });
+        setGame(arr => tempo);
+        console.log(game);
+    }
+    /*{game.map((deck,index) =>(
+        <div key={index}> card1 : {deck[0].active.toString()} card2 : {deck[1].active.toString()} card3 : {deck[2].active.toString()} card4 : {deck[3].active.toString()}</div>
+    ))}*/
 
     return (
         <div className="game">
-
+            <GameTab.Provider value={game}>
             {game.map((deck,index) =>(
-                <Deck array={deck} updateGame={update} indice={index} key={index} ></Deck>
+                <Deck updateGame={update} indice={index} key={index} ></Deck>
             ))} 
+            </GameTab.Provider>
 
         </div>
     );
