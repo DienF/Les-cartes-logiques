@@ -5,7 +5,10 @@ import {GameTab} from './Game';
 
 const Deck = ({updateGame,indice}) => {
     
-
+    /**
+     * fonction qui est appeler au moment d'un click sur une carte et appelle la fonction updateGame passer par le componant Game.
+     * @param indiceCard - index de la carte dans le tableau. 
+     */
     const update = (indiceCard) => {
         updateGame(indice,indiceCard);
     };

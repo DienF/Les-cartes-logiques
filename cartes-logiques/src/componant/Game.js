@@ -40,6 +40,11 @@ const Game = () => {
 
 
     } , [game , playOnce]);
+    /**
+     * fonction recursive elle change l'atribut 'active' et regarde si CardClass1 et CardClass2 sont null si il ne le sont pas on appelle la meme fonction sur eux
+     * @param card - la carte qui doit etre selectioner ou pas
+     * @param state - boolean qui definie si une carte est selectioner ou pas
+     */
     const select = (card , state) =>{
         card.active = state;
         if(card.CardClass1 != null){
@@ -49,6 +54,12 @@ const Game = () => {
             select(card.CardClass2,state);
         }
     }
+    /**
+     *  (pour l'instant) met toute les cartes d'un deck en non selectioner sauf pour la carte qui est passer en parametre 
+     * et lui inverse son etat(ex : une carte selectioner tu reclique dessus ca la deselectionne)
+     * @param  i - index deck
+     * @param  j - index carte
+     */
     const update = (i,j) => {
         var tempo = game.copyWithin(game.length,0);
         tempo[i].map(function(card){
@@ -56,16 +67,13 @@ const Game = () => {
                 select(card,false);
             }
             else{
-                select(card,true);
+                select(card,!card.active);
             }
             return 0;
         });
         setGame(arr => tempo);
         console.log(game);
     }
-    /*{game.map((deck,index) =>(
-        <div key={index}> card1 : {deck[0].active.toString()} card2 : {deck[1].active.toString()} card3 : {deck[2].active.toString()} card4 : {deck[3].active.toString()}</div>
-    ))}*/
 
     return (
         <div className="game">
