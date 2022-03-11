@@ -61,7 +61,7 @@ const Game = () => {
      * @param  j - index carte
      */
     const update = (i,j) => {
-        var tempo = game.copyWithin(game.length,0);
+        var tempo = [...game];
         tempo[i].map(function(card){
             if(card.id !== j ){
                 select(card,false);

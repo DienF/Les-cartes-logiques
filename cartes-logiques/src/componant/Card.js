@@ -46,7 +46,6 @@ const Card = ({deckIndice,cardIndice,update}) => {
     const getTabClass  = (game,i,j,k) =>{
         
         const className = getClassType(game,i,j);
-        var tabClasse = [];
 
 
         if(className === "card_simple"){
@@ -122,7 +121,7 @@ const Card = ({deckIndice,cardIndice,update}) => {
             <GameTab.Consumer>{game =>{
                 return (<div className={getClassType(game,deckIndice,cardIndice)}  onClick={handleClick}>
                     {getTab(game,deckIndice,cardIndice).map((cardaffiche,index) =>(
-                        <div key={index} style={{backgroundColor: cardaffiche.color}} className={getTabClass(game,deckIndice,cardIndice,index)+" " +(cardaffiche.active ? "card_selec" : "" )}></div>))}
+                        <div key={index} style={{backgroundColor: cardaffiche.color}} className={getTabClass(game,deckIndice,cardIndice,index)+(cardaffiche.active ? " card_selec" : "" )}></div>))}
                 </div>)
             }}
             </GameTab.Consumer>
