@@ -1,6 +1,6 @@
 import React from "react";
-import Game from "../componant/Game";
-import Navigation from "../componant/Navigation";
+import Game from "../components/Game";
+import Navigation from "../components/Navigation";
 
 const home = () => {
   return (
