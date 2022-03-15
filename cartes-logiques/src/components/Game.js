@@ -15,6 +15,10 @@ class CardClass {
 const Game = () => {
   const [game, setGame] = useState([]);
   const [playOnce, setPlayOnce] = useState(true);
+  const [nbSelec, setNbSelec] = useState(0);
+  const [selecDeck, setSelecDeck] = useState(-1);
+  const [selecCard, setSelecCard] = useState(-1);
+
   useEffect(() => {
     if (playOnce) {
       setGame((oldarray) => [
@@ -98,6 +102,30 @@ const Game = () => {
     }
   }, [game, playOnce]);
   /**
+   * @todo fonction qui affiche une fenetre pour que le joueur valide ou non la selection des 2 cartes et si oui effectue l'opreation associer
+   * possibiliter de changer le nom de la methode et les noms des attributs
+   * @param {*} c - index deck de la deuxieme carte selectionner
+   * @param {*} d - index carte de la deuxieme carte selectionner
+   */
+  const popup = (c, d) => {
+    console.log("les cartes selectioner : ");
+    console.log(game[selecDeck][selecCard]);
+    console.log(" et ");
+    console.log(game[c][d]);
+    /* pour reset la selection des cartes de tout les decks
+    setNbSelec(0);
+    setSelecCard(-1);
+    setSelecDeck(-1);
+    game.forEach((e) => {
+      e.forEach((s) => {
+        select(s, false);
+      });
+    });
+
+
+    */
+  };
+  /**
    * fonction recursive elle change l'atribut 'active' et regarde si CardClass1 et CardClass2 sont null si il ne le sont pas on appelle la meme fonction sur eux
    * @param card - la carte qui doit etre selectioner ou pas
    * @param state - boolean qui definie si une carte est selectioner ou pas
@@ -112,23 +140,51 @@ const Game = () => {
     }
   };
   /**
-   *  (pour l'instant) met toute les cartes d'un deck en non selectioner sauf pour la carte qui est passer en parametre
-   * et lui inverse son etat(ex : une carte selectioner tu reclique dessus ca la deselectionne)
+   *  la carte qui est deja selectioner et celle qui est passer en parametre utilise la fonction select qui selectionne toute les cartes dans la cartes
+   * ou deselectionne la premiere carte selectionner si on reclique dessus
+   * enfin si on selectionne une deuxieme carte ca appelle la fonction popup qui s'occupera de valider le choix et d'executer l'operation.
    * @param  i - index deck
    * @param  j - index carte
    */
   const update = (i, j) => {
-    var tempo = [...game];
-    tempo[i].map(function (card) {
-      if (card.id !== j) {
-        select(card, false);
-      } else {
-        select(card, !card.active);
+    var tempoSelecDeck = selecDeck;
+    var tempoSelecCard = selecCard;
+    var tempoNbSelec = nbSelec;
+    if (tempoNbSelec < 2) {
+      var tempo = [...game];
+      tempo[i].map(function (card) {
+        if (
+          !(
+            card.id !== j &&
+            (!(i === tempoSelecDeck && card.id === tempoSelecCard) ||
+              tempoNbSelec === 0)
+          )
+        ) {
+          if (card.id === j) {
+            select(card, !card.active);
+            if (card.active === true) {
+              if (tempoNbSelec === 0) {
+                tempoSelecDeck = i;
+                tempoSelecCard = j;
+              }
+              tempoNbSelec++;
+            } else {
+              tempoNbSelec--;
+              tempoSelecCard = -1;
+              tempoSelecDeck = -1;
+            }
+          }
+        }
+        return 0;
+      });
+      setGame((arr) => tempo);
+      setNbSelec(tempoNbSelec);
+      setSelecCard(tempoSelecCard);
+      setSelecDeck(tempoSelecDeck);
+      if (tempoNbSelec === 2) {
+        popup(i, j);
       }
-      return 0;
-    });
-    setGame((arr) => tempo);
-    console.log(game);
+    }
   };
 
   return (
