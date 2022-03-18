@@ -8,127 +8,71 @@ class CardClass {
     this.id = id;
     this.color = color;
     this.active = active;
-    this.liaison = liaison; // 0 carte sipmple 1 liaison "et" 2 liaison "=>" 
+    this.liaison = liaison; // 0 carte sipmple 1 liaison "et" 2 liaison "=>"
     this.left = left;
     this.right = right;
   }
-  toString(){
+  toString() {
     var res = "(";
-    if(this.color != null){
+    if (this.color != null) {
       res += this.color.toString();
     }
-    if(this.left !== null){
+    if (this.left !== null) {
       res += this.left.toString();
     }
-    if(this.liaison === 1){
-      res += " et ";
+    if (this.liaison === 1) {
+      res += " ^ ";
     }
-    if(this.liaison === 2){
+    if (this.liaison === 2) {
       res += " => ";
     }
-    if(this.right !== null){
+    if (this.right !== null) {
       res += this.right.toString();
     }
-    
+
     return res + ")";
+  }
+  toFile() {
+    if (this.color !== null) {
+      return { color: this.color };
+    } else {
+      return {
+        left: this.left.toFile(),
+        liaison: this.liaison,
+        right: this.right.toFile(),
+      };
+    }
   }
 }
 
-
-
-
-const Game = () => {
-  const [game, setGame] = useState([]);
-  const [playOnce, setPlayOnce] = useState(true);
+const Game = ({ mode }) => {
+  const [game, setGame] = useState([[]]);
   const [nbSelec, setNbSelec] = useState(0);
-  const [selecDeck1, setselecDeck1] = useState(-1);
-  const [selecCard1, setselecCard1] = useState(-1);
-  const [selecDeck2, setselecDeck2] = useState(-1);
-  const [selecCard2, setselecCard2] = useState(-1);
-  const [isPopup, setIsPopup] = useState(false);
+  const [selecDeck1, setSelecDeck1] = useState(-1);
+  const [selecCard1, setSelecCard1] = useState(-1);
+  const [selecDeck2, setSelecDeck2] = useState(-1);
+  const [selecCard2, setSelecCard2] = useState(-1);
+  const [popupSelect, setPopupSelect] = useState(false);
+  const [popupAddCard, setPopupAddCard] = useState(false);
+  const [popupDeleteCard, setPopupDeleteCard] = useState(false);
+  const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
+  const [popupFusion, setPopupFusion] = useState(false);
+
 
   useEffect(() => {
-    if (playOnce) {
-      setGame(() => [
-        [
-          new CardClass(
-            0,
-            null,
-            false,
-            1,
-            new CardClass(0, "blue", false, 0, null, null),
-            new CardClass(1, "green", false, 0, null, null)
-          ),
-          new CardClass(
-            1,
-            null,
-            false,
-            1,
-            new CardClass(0, "yellow", false, 0, null, null),
-            new CardClass(
-              1,
-              null,
-              false,
-              1,
-              new CardClass(0, "red", false, 0, null, null),
-              new CardClass(1, "orange", false, 0, null, null)
-            )
-          ),
-          new CardClass(
-            2,
-            null,
-            false,
-            1,
-            new CardClass(
-              0,
-              null,
-              false,
-              1,
-              new CardClass(0, "blue", false, 0, null, null),
-              new CardClass(1, "pink", false, 0, null, null)
-            ),
-            new CardClass(1, "lime", false, 0, null, null)
-          ),
-          new CardClass(
-            3,
-            null,
-            false,
-            1,
-            new CardClass(
-              0,
-              null,
-              false,
-              1,
-              new CardClass(0, "aqua", false, 0, null, null),
-              new CardClass(1, "white", false, 0, null, null)
-            ),
-            new CardClass(
-              1,
-              null,
-              false,
-              1,
-              new CardClass(0, "purple", false, 0, null, null),
-              new CardClass(1, "gold", false, 0, null, null)
-            )
-          ),
-        ],
-        [
-          new CardClass(
-            0,
-            null,
-            false,
-            2,
-            new CardClass(0, "blue", false, 0, null, null),
-            new CardClass(1, "green", false, 0, null, null)
-          ),
-          new CardClass(1, "blue", false, 0, null, null),
-          new CardClass(2, "green", false, 0, null, null),
-          new CardClass(3, "blue", false, 0, null, null),
-        ],
-      ]);
-      setPlayOnce(false);
+    
+    if (mode !== "create") {
+      setGame([[], []]);
+      fetch(mode+'.json')
+      .then(response => response.text())
+      .then(data => {
+        setGame(gameInput(JSON.parse(data)));
+      });
+      console.log(game);
+    } else {
+      setGame([[], []]);
     }
-  }, [game, playOnce]);
+  }, [mode]);
   /**
    * @todo fonction qui affiche une fenetre pour que le joueur valide ou non la selection des 2 cartes et si oui effectue l'opreation associer
    * possibiliter de changer le nom de la methode et les noms des attributs
@@ -136,7 +80,7 @@ const Game = () => {
    * @param {*} d - index carte de la deuxieme carte selectionner
    */
   const popup = () => {
-    setIsPopup(true);
+    setPopupSelect(true);
   };
   /**
    * fonction recursive elle change l'atribut 'active' et regarde si left et right sont null si il ne le sont pas on appelle la meme fonction sur eux
@@ -167,6 +111,7 @@ const Game = () => {
       var tempo = [...game];
       tempo[i].map(function (card) {
         if (
+          card !== null &&
           !(
             card.id !== j &&
             (!(i === temposelecDeck1 && card.id === temposelecCard1) ||
@@ -192,12 +137,18 @@ const Game = () => {
       });
       setGame(() => tempo);
       setNbSelec(tempoNbSelec);
-      setselecCard1(temposelecCard1);
-      setselecDeck1(temposelecDeck1);
+      setSelecCard1(temposelecCard1);
+      setSelecDeck1(temposelecDeck1);
+
       if (tempoNbSelec === 2) {
-        setselecDeck2(i);
-        setselecCard2(j);
-        popup();
+        setSelecDeck2(i);
+        setSelecCard2(j);
+        if (mode !== "create") {
+          popup();
+        } else {
+          setPopupFusion(true);
+        }
+        
       }
     }
   };
@@ -206,37 +157,213 @@ const Game = () => {
    */
   const allFalse = () => {
     setNbSelec(0);
-    setselecCard1(-1);
-    setselecDeck1(-1);
-    setselecCard1(-2);
-    setselecDeck1(-2);
-    game.forEach((e) => {
+    setSelecCard1(-1);
+    setSelecDeck1(-1);
+    setSelecCard2(-2);
+    setSelecDeck2(-2);
+    var tmp = [...game];
+    tmp.forEach((e) => {
       e.forEach((s) => {
-        select(s, false);
+        if (s !== null) {
+          select(s, false);
+        }
       });
     });
-  }
+    setGame(tmp);
+  };
   /**
    * ferme le popup  et deselectionne toute les cartes.
    */
-  const closePopup = () =>{
-    setIsPopup(false);
+  const closePopup = () => {
+    setPopupSelect(false);
     allFalse();
+  };
+
+  const addCard = (deckIndice) => {
+    setIndiceDeckAddCard(deckIndice);
+    setPopupAddCard(true);
+  };
+  const choixCouleur = (event) => {
+    var tmp = [...game];
+    event.target.checked = false;
+    tmp[indiceDeckAddCard].push(
+      new CardClass(
+        game[indiceDeckAddCard].length,
+        event.target.value,
+        false,
+        0,
+        null,
+        null
+      )
+    );
+    setGame(tmp);
+  };
+  const choixLiaison = (event) => {
+    console.log(game);
+    var tmp = [...game];
+    event.target.checked = false;
+    const l = parseInt(event.target.value);
+    const c1 = game[selecDeck1][selecCard1];
+    const c2 = game[selecDeck2][selecCard2];
+    tmp[indiceDeckAddCard].push(
+      new CardClass(
+        game[indiceDeckAddCard].length,
+        null,
+        false,
+        l,
+        new CardClass(0,c1.color,false,c1.liaison,c1.left,c1.right),
+        new CardClass(1,c2.color,false,c2.liaison,c2.left,c2.right)
+      )
+    );
+    setGame(tmp);
+    setPopupFusion(false);
+    allFalse();
+    console.log(game);
+  };
+  const deleteCard = () => {
+    setPopupDeleteCard(false);
+    var tmp = [...game];
+    tmp[selecDeck1][selecCard1] = null;
+    setGame(tmp);
+    allFalse();
+  };
+  const gameOutput = () => {
+    var res = [[], []];
+    game.map(function (deck, index) {
+      deck.map(function (card) {
+        if (card != null) {
+          res[index].push(card.toFile());
+        }
+      });
+    });
+
+    return res;
+  };
+  const gameInput = (data) =>{
+    var res = [[],[]]
+    var i=0;
+    data[0].forEach(element => {
+        res[0].push(toClass(element,i));
+      i++;
+    });
+    i=0;
+    data[1].forEach(element => {
+      res[1].push(toClass(element,i));
+      i++;
+    });
+    console.log(res);
+    return res;
+  }
+  const saveAsFile = () => {
+    console.log(JSON.stringify(gameOutput()));
+  };
+  const toClass = (obj,i) =>{
+    if(obj.color === undefined){
+      console.log(new CardClass(i,null,false,obj.liaison,toClass(obj.left,0),toClass(obj.right,1)));
+      return new CardClass(i,null,false,obj.liaison,toClass(obj.left,0),toClass(obj.right,1));
+    }
+    else{
+      return new CardClass(i,obj.color,false,0,null,null);
+    }
   }
   return (
-    <div className="game">
+    <div className="game" >
+      <p>{mode}</p>
+      <button onClick={saveAsFile}>convertir en fichier</button>
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
-          <Deck updateGame={update} indice={index} key={index}></Deck>
+          <Deck
+            updateGame={update}
+            indice={index}
+            addCardFunc={addCard}
+            deleteCardFunc={setPopupDeleteCard}
+            nbDeck={game.length}
+            key={index}
+          ></Deck>
         ))}
       </GameTab.Provider>
-      {isPopup && <Popup
-      content={<>
-        <b>Voulez vous fusionner cette carte {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][{selecCard1}] avec elle {game[selecDeck2][selecCard2].toString()}: [{selecDeck2}][{selecCard2}] ?</b>
-        <br></br>
-        <button onClick={closePopup}>Annuler</button>
-      </>}
-    />}
+      {popupSelect && (
+        <Popup
+          content={
+            <>
+              <b>
+                Voulez vous fusionner cette carte{" "}
+                {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][
+                {selecCard1}] avec elle{" "}
+                {game[selecDeck2][selecCard2].toString()}: [{selecDeck2}][
+                {selecCard2}] ?
+              </b>
+              <br></br>
+              <button onClick={closePopup}>Annuler</button>
+            </>
+          }
+        />
+      )}
+      {popupAddCard && (
+        <Popup
+          content={
+            <>
+              <b>Choisissez une Couleur</b>
+              <div onChange={choixCouleur}>
+                <input type="radio" value="red" name="couleur" /> Rouge
+                <input type="radio" value="yellow" name="couleur" /> Jaune
+                <input type="radio" value="blue" name="couleur" /> Bleu
+                <input type="radio" value="orange" name="couleur" /> Orange
+              </div>
+              <button
+                onClick={function () {
+                  setPopupAddCard(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
+      {popupFusion && (
+        <Popup
+          content={
+            <>
+              <b>Choisissez une liaison</b>
+              <div onChange={choixLiaison}>
+                <input type="radio" value="1" name="liaison" /> et
+                <input type="radio" value="2" name="liaison" /> {"=>"}
+              </div>
+              <button
+                onClick={function () {
+                  setPopupFusion(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
+      {popupDeleteCard && (
+        <Popup
+          content={
+            <>
+              <b>
+                Voulez vous suprimer cette carte{" "}
+                {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][
+                {selecCard1}] ?
+              </b>
+              <br></br>
+              <button onClick={deleteCard}>Oui</button>
+
+              <button
+                onClick={function () {
+                  setPopupDeleteCard(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
     </div>
   );
 };

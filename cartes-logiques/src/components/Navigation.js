@@ -7,8 +7,11 @@ const Navigation = () => {
       <NavLink exact="true" to="/">
         Home
       </NavLink>
-      <NavLink exact="true" to="About">
+      <NavLink exact="true" to="/About">
         About
+      </NavLink>
+      <NavLink exact="true" to="/CreateExercice">
+        Creer un exercice
       </NavLink>
       <h1>Titre</h1>
     </div>

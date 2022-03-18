@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Game from "../components/Game";
 import Navigation from "../components/Navigation";
 
-const home = () => {
+const Home = () => {
+  const [ex, setEx] = useState();
+  useEffect(() => {
+      setEx("ex1");
+  }, []);
+
+
+
   return (
     <div className="home">
       <Navigation />
 
-      <Game />
+      <Game mode={ex} />
     </div>
   );
 };
 
-export default home;
+export default Home;
