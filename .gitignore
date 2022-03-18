@@ -1,2 +1,3 @@
 
-*.json
+cartes-logiques/package.json
+cartes-logiques/package-lock.json

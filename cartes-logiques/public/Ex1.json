@@ -1,0 +1,19 @@
+[
+  [
+    {
+      "left": { "color": "red" },
+      "liaison": 1,
+      "right": { "color": "yellow" }
+    },
+    { "left": { "color": "red" }, 
+      "liaison": 2,
+      "right": { "color": "blue" } 
+    },
+    {
+      "left": { "color": "blue" },
+      "liaison": 2,
+      "right": { "color": "orange" }
+    }
+  ],
+  [{ "color": "orange" }]
+]
