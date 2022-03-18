@@ -17,46 +17,46 @@ const Card = ({ deckIndice, cardIndice, update }) => {
    * @returns  - renvoie le nom de la classe corespondant a la carte.
    */
   const getClassType = (game, i, j) => {
-    if (game[i][j].CardClass1 === null && game[i][j].CardClass2 === null) {
+    if (game[i][j].left === null && game[i][j].right === null) {
       return "card_simple";
     }
     if (
-      game[i][j].CardClass1 !== null &&
-      game[i][j].CardClass2 !== null &&
-      game[i][j].CardClass1.CardClass1 === null &&
-      game[i][j].CardClass1.CardClass2 === null &&
-      game[i][j].CardClass2.CardClass1 === null &&
-      game[i][j].CardClass2.CardClass2 === null
+      game[i][j].left !== null &&
+      game[i][j].right !== null &&
+      game[i][j].left.left === null &&
+      game[i][j].left.right === null &&
+      game[i][j].right.left === null &&
+      game[i][j].right.right === null
     ) {
       return "card_double";
     }
     if (
-      game[i][j].CardClass1 !== null &&
-      game[i][j].CardClass2 !== null &&
-      game[i][j].CardClass1.CardClass1 === null &&
-      game[i][j].CardClass1.CardClass2 === null &&
-      game[i][j].CardClass2.CardClass1 !== null &&
-      game[i][j].CardClass2.CardClass2 !== null
+      game[i][j].left !== null &&
+      game[i][j].right !== null &&
+      game[i][j].left.left === null &&
+      game[i][j].left.right === null &&
+      game[i][j].right.left !== null &&
+      game[i][j].right.right !== null
     ) {
       return "card_triple_a";
     }
     if (
-      game[i][j].CardClass1 !== null &&
-      game[i][j].CardClass2 !== null &&
-      game[i][j].CardClass1.CardClass1 !== null &&
-      game[i][j].CardClass1.CardClass2 !== null &&
-      game[i][j].CardClass2.CardClass1 === null &&
-      game[i][j].CardClass2.CardClass2 === null
+      game[i][j].left !== null &&
+      game[i][j].right !== null &&
+      game[i][j].left.left !== null &&
+      game[i][j].left.right !== null &&
+      game[i][j].right.left === null &&
+      game[i][j].right.right === null
     ) {
       return "card_triple_b";
     }
     if (
-      game[i][j].CardClass1 !== null &&
-      game[i][j].CardClass2 !== null &&
-      game[i][j].CardClass1.CardClass1 !== null &&
-      game[i][j].CardClass1.CardClass2 !== null &&
-      game[i][j].CardClass2.CardClass1 !== null &&
-      game[i][j].CardClass2.CardClass2 !== null
+      game[i][j].left !== null &&
+      game[i][j].right !== null &&
+      game[i][j].left.left !== null &&
+      game[i][j].left.right !== null &&
+      game[i][j].right.left !== null &&
+      game[i][j].right.right !== null
     ) {
       return "card_quadruple";
     }
@@ -111,24 +111,24 @@ const Card = ({ deckIndice, cardIndice, update }) => {
       tab.push(game[i][j]);
     }
     if (className === "card_double") {
-      tab.push(game[i][j].CardClass1);
-      tab.push(game[i][j].CardClass2);
+      tab.push(game[i][j].left);
+      tab.push(game[i][j].right);
     }
     if (className === "card_triple_a") {
-      tab.push(game[i][j].CardClass1);
-      tab.push(game[i][j].CardClass2.CardClass1);
-      tab.push(game[i][j].CardClass2.CardClass2);
+      tab.push(game[i][j].left);
+      tab.push(game[i][j].right.left);
+      tab.push(game[i][j].right.right);
     }
     if (className === "card_triple_b") {
-      tab.push(game[i][j].CardClass1.CardClass1);
-      tab.push(game[i][j].CardClass1.CardClass2);
-      tab.push(game[i][j].CardClass2);
+      tab.push(game[i][j].left.left);
+      tab.push(game[i][j].left.right);
+      tab.push(game[i][j].right);
     }
     if (className === "card_quadruple") {
-      tab.push(game[i][j].CardClass1.CardClass1);
-      tab.push(game[i][j].CardClass1.CardClass2);
-      tab.push(game[i][j].CardClass2.CardClass1);
-      tab.push(game[i][j].CardClass2.CardClass2);
+      tab.push(game[i][j].left.left);
+      tab.push(game[i][j].right.left);
+      tab.push(game[i][j].left.right);
+      tab.push(game[i][j].right.right);
     }
     return tab;
   };
