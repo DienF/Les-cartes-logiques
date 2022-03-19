@@ -1,10 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
-
+import CreateExercice from "./pages/CreateExercice";
 import Home from "./pages/Home";
 import NotFoud from "./pages/NotFoud";
-import CreateExercice from "./pages/CreateExercice";
 
 const App = () => {
   return (

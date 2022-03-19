@@ -2,17 +2,19 @@ import React from "react";
 import Card from "./Card";
 import { GameTab } from "./Game";
 
-const Deck = ({ updateGame, indice, addCardFunc,deleteCardFunc ,nbDeck}) => {
+const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck}) => {
   /**
-   * fonction qui est appeler au moment d'un click sur une carte et appelle la fonction updateGame passer par le componant Game.
-   * @param indiceCard - index de la carte dans le tableau.
+   * Fonction qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.
+   * @param indiceCard - index de la carte dans le tableau
    */
   const update = (indiceCard) => {
     updateGame(indice, indiceCard);
   };
+
   const addCardToDeck = () => {
     addCardFunc(indice);
   };
+
   const deleleCardToDeck =()=>{
     deleteCardFunc(true);
   }

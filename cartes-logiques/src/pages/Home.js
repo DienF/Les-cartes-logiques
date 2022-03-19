@@ -8,8 +8,6 @@ const Home = () => {
       setEx("ex1");
   }, []);
 
-
-
   return (
     <div className="home">
       <Navigation />

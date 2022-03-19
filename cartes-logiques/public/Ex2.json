@@ -16,5 +16,9 @@
       "right": { "color": "orange" }
     }
   ],
-  [{ "color": "orange" }]
+  [{ 
+      "left": { "color": "red" }, 
+      "liaison": 1,
+      "right": { "color": "orange" } 
+  }]
 ]

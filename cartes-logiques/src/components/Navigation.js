@@ -11,7 +11,7 @@ const Navigation = () => {
         About
       </NavLink>
       <NavLink exact="true" to="/CreateExercice">
-        Creer un exercice
+        Créer un exercice
       </NavLink>
       <h1>Titre</h1>
     </div>
