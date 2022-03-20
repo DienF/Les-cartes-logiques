@@ -6,13 +6,17 @@ export const GameTab = React.createContext();
 class CardClass {
   /**
    * @param {number} id 
-   * @param {*} color 
-   * @param {*} active 
-   * @param {number} liaison - 0 = carte simple ;
-   *                           1 = liaison "et" ;
-   *                           2 = liaison "=>"
-   * @param {*} left 
-   * @param {*} right 
+   * @param {string|null} color - couleurs disponibles :
+   *                              rouge ("red")     ;
+   *                              jaune ("yellow")  ;
+   *                              bleu ("blue")     ;
+   *                              orange ("orange")
+   * @param {true|false} active
+   * @param {0|1|2} liaison - 0 = carte simple ;
+   *                          1 = liaison "et" ;
+   *                          2 = liaison "=>"
+   * @param {CardClass|null} left 
+   * @param {CardClass|null} right 
    */
   constructor(id, color, active, liaison, left, right) {
     this.id = id;
@@ -135,8 +139,8 @@ const Game = ({ mode }) => {
   /**
    * Fonction récursive qui : change l'attribut 'active' ;
    *                          regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
-   * @param card - la carte qui doit être sélectionnée ou pas
-   * @param state - booléen qui définit si une carte est sélectionnée ou pas
+   * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
+   * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
    */
   const select = (card, state) => {
     card.active = state;
@@ -150,8 +154,8 @@ const Game = ({ mode }) => {
    * reclique dessus.
    * Enfin, si on sélectionne une 2ème carte, on appelle la fonction {@link popup} qui s'occupera de valider le
    * choix & d'exécuter l'opération.
-   * @param i - index du Deck
-   * @param j - index de la carte
+   * @param {number} i - index du Deck
+   * @param {number} j - index de la carte
    */
   const update = (i, j) => {
     setPopupDeleteCard(false);
@@ -226,7 +230,7 @@ const Game = ({ mode }) => {
 
   /**
    * Fait apparaître le popup qui nous demande la couleur de la carte qu'on veut ajouter.
-   * @param {*} deckIndice - l'indice du deck où l'on ajoute une carte 
+   * @param {number} deckIndice - l'indice du deck où l'on ajoute une carte 
    */
   const addCard = (deckIndice) => {
     setIndiceDeckAddCard(deckIndice);
@@ -286,7 +290,7 @@ const Game = ({ mode }) => {
    */
   const deleteCard = () => {
     setPopupDeleteCard(false);
-    if(!(selecCard1 === -1 && selecDeck1 === -1)){
+    if (!(selecCard1 === -1 && selecDeck1 === -1)){
       if (!(selecDeck1 === game.length - 1 && selecCard1 === 0)) {
         var tmp = [...game];
         tmp[selecDeck1][selecCard1] = null;
@@ -319,12 +323,12 @@ const Game = ({ mode }) => {
    */
   const gameInput = (data) =>{
     var res = [[], []]
-    var i=0;
+    var i = 0;
     data[0].forEach(element => {
         res[0].push(toClass(element, i));
       i++;
     });
-    i=0;
+    i = 0;
     data[1].forEach(element => {
       res[1].push(toClass(element, i));
       i++;
@@ -354,20 +358,20 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Crée une instance {@link CardClass} et la renvoie.
-   * @param {} obj - information mimimum pour créer une carte :
-   *                          Carte simple = juste la couleur
-   *                          Carte complexe = les 2 cartes qui la compose & la liaison
+   * Transforme un objet JSON en instance {@link CardClass}.
+   * @param {JSON} obj - information mimimum pour créer une carte :
+   *                     Carte simple = juste la couleur
+   *                     Carte complexe = les 2 cartes qui la compose & la liaison
    * @param {number} i - numéro de l'id  
    * @returns {CardClass}
    */
-  const toClass = (obj,i) => {
-    if (obj.color === undefined) {
-      return new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1));
-    } else {
-      return new CardClass(i, obj.color, false, 0, null, null);
-    }
+  const toClass = (obj, i) => {
+    // si c'est une carte complexe
+    if (obj.color === undefined) return new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1));
+    // si c'est une carte simple
+    else return new CardClass(i, obj.color, false, 0, null, null);
   }
+
   return (
     <div className="game" >
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
