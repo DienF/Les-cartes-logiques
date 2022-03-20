@@ -24,28 +24,30 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
   }
 
   return (
-    <div className={"deck " + setClassname() } >
-      {indice === 0 && (<h3>Départ</h3>)}
-      {indice === nbDeck-1 && (<h3>Objectif</h3>)}
-      {mode === "create" && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
-      <br/>
-      {mode === "create" && (<button onClick={deleleCardToDeck}>Suprimmer une carte</button>)}
-      <GameTab.Consumer>
-        {(game) => {
-          return game[indice].map((card, index) =>
-            card !== null ? (
-              <Card
-                deckIndice={indice}
-                cardIndice={index}
-                update={update}
-                key={index}
-              />
-            ) : (
-              <></>
-            )
-          );
-        }}
-      </GameTab.Consumer>
+    <div className="deck ">
+      <div className={setClassname()}>
+        {indice === 0 && (<h3>Départ</h3>)}
+        {indice === nbDeck-1 && (<h3>Objectif</h3>)}
+        {mode === "create" && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
+        <br/>
+        {mode === "create" && (<button onClick={deleleCardToDeck}>Suprimmer une carte</button>)}
+        <GameTab.Consumer>
+          {(game) => {
+            return game[indice].map((card, index) =>
+              card !== null ? (
+                <Card
+                  deckIndice={indice}
+                  cardIndice={index}
+                  update={update}
+                  key={index}
+                />
+              ) : (
+                <></>
+              )
+            );
+          }}
+        </GameTab.Consumer>
+      </div>
       </div>
   );
 };
