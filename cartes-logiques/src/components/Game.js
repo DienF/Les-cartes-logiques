@@ -142,6 +142,7 @@ const Game = ({ mode }) => {
    * @param j - index de la carte
    */
   const update = (i, j) => {
+    setPopupDeleteCard(false);
     var tempoSelecDeck1 = selecDeck1;
     var tempoSelecCard1 = selecCard1;
     var tempoNbSelec = nbSelec;
