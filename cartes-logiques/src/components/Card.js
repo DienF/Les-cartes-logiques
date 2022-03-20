@@ -11,10 +11,10 @@ const Card = ({ deckIndice, cardIndice, update }) => {
   
   /**
    * Détermine le type de carte.
-   * @param game - le tableau qui contient toutes les cartes
-   * @param i - le numéro de Deck
-   * @param j - la position de la carte dans le Deck
-   * @returns le nom de la classe corespondant à la carte
+   * @param {*} game - le tableau qui contient toutes les cartes
+   * @param {number} i - le numéro de Deck
+   * @param {number} j - la position de la carte dans le Deck
+   * @returns {string} le nom de la classe corespondant à la carte
    */
   const getClassType = (game, i, j) => {
     if (game[i][j].left === null && game[i][j].right === null)
@@ -55,12 +55,12 @@ const Card = ({ deckIndice, cardIndice, update }) => {
 
   /**
    * Renvoie soit "card_simple_h" (carte verticale), soit "card_simple_w" (carte horizontale)
-   * @param game - le tableau qui contient toutes les cartes
-   * @param i - le numéro de deck
-   * @param j - la position de la carte dans le Deck
-   * @param k - la position de la carte dans les cartes complexes
-   *            ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
-   * @returns le nom de la classe corespondant à la carte
+   * @param {*} game - le tableau qui contient toutes les cartes
+   * @param {number} i - le numéro de deck
+   * @param {number} j - la position de la carte dans le Deck
+   * @param {number} k - la position de la carte dans les cartes complexes
+   *                     ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
+   * @returns {string} le nom de la classe corespondant à la carte
    */
   const getTabClass = (game, i, j, k) => {
     const className = getClassType(game, i, j);
@@ -80,10 +80,10 @@ const Card = ({ deckIndice, cardIndice, update }) => {
 
   /**
    * Renvoie un tableau qui va être utilisé par la fonction map pour afficher toutes les cartes.
-   * @param game - le tableau qui contient toutes les cartes
-   * @param i - le numéro de Deck
-   * @param j - la position de la carte dans le Deck
-   * @returns un tableau de cartes
+   * @param {*} game - le tableau qui contient toutes les cartes
+   * @param {number} i - le numéro de Deck
+   * @param {number} j - la position de la carte dans le Deck
+   * @returns {*} un tableau de cartes
    */
   const getTab = (game, i, j) => {
     const className = getClassType(game, i, j);

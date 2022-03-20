@@ -2,10 +2,10 @@ import React from "react";
 import Card from "./Card";
 import { GameTab } from "./Game";
 
-const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck , mode}) => {
+const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) => {
   /**
-   * Fonction qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.
-   * @param indiceCard - index de la carte dans le tableau
+   * Méthode qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.
+   * @param {number} indiceCard - index de la carte dans le tableau
    */
   const update = (indiceCard) => {
     updateGame(indice, indiceCard);
@@ -15,7 +15,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck , mode}) 
     addCardFunc(indice);
   };
 
-  const deleleCardToDeck =()=>{
+  const deleleCardToDeck = () =>{
     deleteCardFunc(true);
   }
 
@@ -25,7 +25,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck , mode}) 
       {indice === nbDeck-1 && (<h3>Objectif</h3>)}
       {(indice !== 0 || mode === "create") && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
       <br/>
-      {(indice !== 0 || mode === "create") && (<button onClick={deleleCardToDeck}>Suprimer une carte</button>)}
+      {(indice !== 0 || mode === "create") && (<button onClick={deleleCardToDeck}>Suprimmer une carte</button>)}
       <GameTab.Consumer>
         {(game) => {
           return game[indice].map((card, index) =>
