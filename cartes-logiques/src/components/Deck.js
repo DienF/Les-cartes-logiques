@@ -18,14 +18,18 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
   const deleleCardToDeck = () =>{
     deleteCardFunc(true);
   }
+  const setClassname = () =>{
+    if(indice === 0)return "start";
+    if(indice === nbDeck-1)return "goal";
+  }
 
   return (
-    <div className="deck">
+    <div className={"deck " + setClassname() } >
       {indice === 0 && (<h3>Départ</h3>)}
       {indice === nbDeck-1 && (<h3>Objectif</h3>)}
-      {(indice !== 0 || mode === "create") && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
+      {mode === "create" && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
       <br/>
-      {(indice !== 0 || mode === "create") && (<button onClick={deleleCardToDeck}>Suprimmer une carte</button>)}
+      {mode === "create" && (<button onClick={deleleCardToDeck}>Suprimmer une carte</button>)}
       <GameTab.Consumer>
         {(game) => {
           return game[indice].map((card, index) =>
@@ -42,7 +46,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
           );
         }}
       </GameTab.Consumer>
-    </div>
+      </div>
   );
 };
 

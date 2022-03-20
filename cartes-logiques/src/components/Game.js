@@ -37,10 +37,10 @@ class CardClass {
    * @returns {string} un string plus lisible
    */
   toString() {
-    var res = "(";
+    let res = "(";
     if (this.color != null)  res += this.color.toString();
     if (this.left !== null)  res += this.left.toString();
-    if (this.liaison === 1)  res += " ^ ";
+    if (this.liaison === 1)  res += " et ";
     if (this.liaison === 2)  res += " => ";
     if (this.right !== null) res += this.right.toString();
 
@@ -53,28 +53,28 @@ class CardClass {
    * { "color" : "couleur"}
    * { 
    *   "left": { "color": "couleur" }, 
-   *   "liaison": num,
+   *   "liaison": "",
    *   "right": { "color": "couleur" } 
    * }
    * { 
    *   "left": { "color": "couleur" }, 
-   *   "liaison": num,
+   *   "liaison": "",
    *   "right": { 
    *              "left": { "color": "couleur" }, 
-   *              "liaison": num,
+   *              "liaison": "et",
    *              "right": { "color": "couleur" } 
    *            }
    * }
    * { 
    *   "left": { 
    *             "left": { "color": "couleur" }, 
-   *             "liaison": num,
+   *             "liaison": "=>",
    *             "right": { "color": "couleur" } 
    *            },
-   *   "liaison": num, 
+   *   "liaison": "=>", 
    *   "right": { 
    *              "left": { "color": "couleur" }, 
-   *              "liaison": num,
+   *              "liaison": "et",
    *              "right": { "color": "couleur" } 
    *             }
    * }
@@ -94,12 +94,23 @@ class CardClass {
    * @returns une nouvelle instance d'une meme carte
    */
   copy(){
-    var l = null;
-    var r = null;
+    let l = null;
+    let r = null;
     if(this.left !== null) l=this.left.copy();
     if(this.right !== null) r= this.right.copy();
     return new CardClass(this.id,this.color,this.active,this.liaison,l,r);
   }
+    /**
+   * Fonction récursive qui : change l'attribut 'active' ;
+   *                          regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
+   * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
+   * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
+   */
+    select(state){
+      this.active = state;
+      if (this.left != null) this.left.select(state);
+      if (this.right != null) this.right.select(state);
+    };
 }
 
 const Game = ({ mode }) => {
@@ -132,21 +143,10 @@ const Game = ({ mode }) => {
   }, [mode]);
 
   /**
-   * Met la variable popupSelect en true ce qui affiche le popup.
+   * Met la letiable popupSelect en true ce qui affiche le popup.
    */
   const popup = () => { setPopupSelect(true); };
 
-  /**
-   * Fonction récursive qui : change l'attribut 'active' ;
-   *                          regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
-   * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
-   * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
-   */
-  const select = (card, state) => {
-    card.active = state;
-    if (card.left != null) select(card.left, state);
-    if (card.right != null) select(card.right, state);
-  };
 
   /**
    * La carte qui est déja sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
@@ -159,18 +159,18 @@ const Game = ({ mode }) => {
    */
   const update = (i, j) => {
     setPopupDeleteCard(false);
-    var tempoSelecDeck1 = selecDeck1;
-    var tempoSelecCard1 = selecCard1;
-    var tempoNbSelec = nbSelec;
+    let tempoSelecDeck1 = selecDeck1;
+    let tempoSelecCard1 = selecCard1;
+    let tempoNbSelec = nbSelec;
     if (tempoNbSelec < 2) {
-      var tempo = [...game];
+      let tempo = [...game];
       tempo[i].map(function (card) {
         if (card !== null &&
           !(card.id !== j &&
           (!(i === tempoSelecDeck1 && card.id === tempoSelecCard1) || tempoNbSelec === 0))
         ) {
           if (card.id === j) {
-            select(card, !card.active);
+            card.select(!card.active);
             if (card.active === true) {
               if (tempoNbSelec === 0) {
                 tempoSelecDeck1 = i;
@@ -186,7 +186,7 @@ const Game = ({ mode }) => {
         }
         return 0;
       });
-      setGame(() => tempo);
+      setGame(tempo);
       setNbSelec(tempoNbSelec);
       setSelecCard1(tempoSelecCard1);
       setSelecDeck1(tempoSelecDeck1);
@@ -209,11 +209,11 @@ const Game = ({ mode }) => {
     setSelecDeck1(-1);
     setSelecCard2(-2);
     setSelecDeck2(-2);
-    var tmp = [...game];
+    let tmp = [...game];
     tmp.forEach((e) => {
       e.forEach((s) => {
         if (s !== null) {
-          select(s, false);
+          s.select(false);
         }
       });
     });
@@ -243,14 +243,14 @@ const Game = ({ mode }) => {
    *                  (event.target.checked) - on le met à false si on veut faire plusieurs fois la même couleur
    */
   const choixCouleur = (event) => {
-    var tmp = [...game];
+    let tmp = [...game];
     event.target.checked = false;
     tmp[indiceDeckAddCard].push(
       new CardClass(
         game[indiceDeckAddCard].length, // id
         event.target.value,             // color
         false,                          // active
-        0,                              // liaison
+        "",                             // liaison
         null,                           // left
         null                            // right
       )
@@ -263,13 +263,13 @@ const Game = ({ mode }) => {
    * @param {*} event (event.target.value) - reçoit la liaison cliquée
    */
   const choixLiaison = (event) => {
-    var tmp = [...game];
+    let tmp = [...game];
     event.target.checked = false;
     const l = parseInt(event.target.value);                               // liaison
-    var c1 = game[selecDeck1][selecCard1].copy();
-    var c2 = game[selecDeck2][selecCard2].copy();
-    c1.liaison = 0;
-    c2.liaison = 1;
+    let c1 = game[selecDeck1][selecCard1].copy();
+    let c2 = game[selecDeck2][selecCard2].copy();
+    c1.id = 0;
+    c2.id = 1;
     tmp[indiceDeckAddCard].push(
       new CardClass(
         game[indiceDeckAddCard].length,                                   // id
@@ -292,7 +292,7 @@ const Game = ({ mode }) => {
     setPopupDeleteCard(false);
     if (!(selecCard1 === -1 && selecDeck1 === -1)){
       if (!(selecDeck1 === game.length - 1 && selecCard1 === 0)) {
-        var tmp = [...game];
+        let tmp = [...game];
         tmp[selecDeck1][selecCard1] = null;
         setGame(tmp);
       }
@@ -306,11 +306,13 @@ const Game = ({ mode }) => {
    * @returns un tableau d'objet
    */
   const gameOutput = () => {
-    var res = [[], []];
+    let res = [[], []];
     game.map(function (deck, index) {
       deck.map(function (card) {
         if (card != null) res[index].push(card.toFile());
+        return 0;
       });
+      return 0;
     });
 
     return res;
@@ -322,8 +324,8 @@ const Game = ({ mode }) => {
    * @returns un tableau de Deck
    */
   const gameInput = (data) =>{
-    var res = [[], []]
-    var i = 0;
+    let res = [[], []]
+    let i = 0;
     data[0].forEach(element => {
         res[0].push(toClass(element, i));
       i++;
@@ -432,8 +434,8 @@ const Game = ({ mode }) => {
             <>
               <b>Choisissez une liaison</b>
               <div onChange={choixLiaison}>
-                <input type="radio" value="1" name="liaison" /> et
-                <input type="radio" value="2" name="liaison" /> {"=>"}
+                <input type="radio" value="et" name="liaison" /> et
+                <input type="radio" value="=>" name="liaison" /> {"=>"}
               </div>
               <button
                 onClick={function () {

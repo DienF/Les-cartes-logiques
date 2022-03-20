@@ -2,17 +2,17 @@
   [
     {
       "left": { "color": "red" },
-      "liaison": 1,
+      "liaison": "et",
       "right": { "color": "yellow" }
     },
     { 
       "left": { "color": "red" }, 
-      "liaison": 2,
+      "liaison": "=>",
       "right": { "color": "blue" } 
     },
     {
       "left": { "color": "blue" },
-      "liaison": 2,
+      "liaison": "=>",
       "right": { "color": "orange" }
     }
   ],
