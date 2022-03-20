@@ -84,6 +84,18 @@ class CardClass {
       right: this.right.toFile(),
     };
   }
+
+  /**
+   * Renvoie une nouvelle instance d'une carte, si la carte est composer de deux autre cartes les autres cartes sont egalement de nouvelle instance
+   * @returns une nouvelle instance d'une meme carte
+   */
+  copy(){
+    var l = null;
+    var r = null;
+    if(this.left !== null) l=this.left.copy();
+    if(this.right !== null) r= this.right.copy();
+    return new CardClass(this.id,this.color,this.active,this.liaison,l,r);
+  }
 }
 
 const Game = ({ mode }) => {
@@ -250,16 +262,18 @@ const Game = ({ mode }) => {
     var tmp = [...game];
     event.target.checked = false;
     const l = parseInt(event.target.value);                               // liaison
-    const c1 = game[selecDeck1][selecCard1];
-    const c2 = game[selecDeck2][selecCard2];
+    var c1 = game[selecDeck1][selecCard1].copy();
+    var c2 = game[selecDeck2][selecCard2].copy();
+    c1.liaison = 0;
+    c2.liaison = 1;
     tmp[indiceDeckAddCard].push(
       new CardClass(
         game[indiceDeckAddCard].length,                                   // id
         null,                                                             // color
         false,                                                            // active
         l,                                                                // liaison
-        new CardClass(0, c1.color, false, c1.liaison, c1.left, c1.right), // left
-        new CardClass(1, c2.color, false, c2.liaison, c2.left, c2.right)  // right
+        c1,                                                               // left
+        c2                                                                // right
       )
     );
     setGame(tmp);
