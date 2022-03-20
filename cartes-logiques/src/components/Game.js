@@ -110,7 +110,6 @@ const Game = ({ mode }) => {
       .then(data => {
         setGame(gameInput(JSON.parse(data)));
       });
-      console.log(game);
     } else {
       setGame([[], []]);
     }
@@ -247,7 +246,6 @@ const Game = ({ mode }) => {
    * @param {*} event (event.target.value) - reçoit la liaison cliquée
    */
   const choixLiaison = (event) => {
-    console.log(game);
     var tmp = [...game];
     event.target.checked = false;
     const l = parseInt(event.target.value);                               // liaison
@@ -266,7 +264,6 @@ const Game = ({ mode }) => {
     setGame(tmp);
     setPopupFusion(false);
     allFalse();
-    console.log(game);
   };
 
   /**
@@ -274,9 +271,13 @@ const Game = ({ mode }) => {
    */
   const deleteCard = () => {
     setPopupDeleteCard(false);
-    var tmp = [...game];
-    tmp[selecDeck1][selecCard1] = null;
-    setGame(tmp);
+    if(!(selecCard1 === -1 && selecDeck1 === -1)){
+      if (!(selecDeck1 === game.length - 1 && selecCard1 === 0)) {
+        var tmp = [...game];
+        tmp[selecDeck1][selecCard1] = null;
+        setGame(tmp);
+      }
+    }
     allFalse();
   };
 
@@ -313,7 +314,6 @@ const Game = ({ mode }) => {
       res[1].push(toClass(element, i));
       i++;
     });
-    console.log(res);
     return res;
   }
 
@@ -325,8 +325,22 @@ const Game = ({ mode }) => {
   };
 
   /**
+   * Pour l'instant ouvre le fichier Ex1.json 
+   *
+   */
+  const openFile = () => {
+    const namefile = "Ex1.json";
+    setGame([[] ,[]]);
+    fetch(namefile)
+      .then((response) => response.text())
+      .then((data) => {
+        setGame(gameInput(JSON.parse(data)));
+      });
+  };
+
+  /**
    * Crée une instance {@link CardClass} et la renvoie.
-   * @param {CardClass} obj - information mimimum pour créer une carte :
+   * @param {} obj - information mimimum pour créer une carte :
    *                          Carte simple = juste la couleur
    *                          Carte complexe = les 2 cartes qui la compose & la liaison
    * @param {number} i - numéro de l'id  
@@ -334,7 +348,6 @@ const Game = ({ mode }) => {
    */
   const toClass = (obj,i) => {
     if (obj.color === undefined) {
-      console.log(new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1)));
       return new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1));
     } else {
       return new CardClass(i, obj.color, false, 0, null, null);
@@ -342,8 +355,8 @@ const Game = ({ mode }) => {
   }
   return (
     <div className="game" >
-      <p>{mode}</p>
-      <button onClick={saveAsFile}>Convertir en fichier</button>
+      {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
+      {mode === "create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
           <Deck
@@ -352,6 +365,7 @@ const Game = ({ mode }) => {
             addCardFunc = {addCard}
             deleteCardFunc = {setPopupDeleteCard}
             nbDeck = {game.length}
+            mode = {mode}
             key = {index}
           ></Deck>
         ))}
@@ -413,7 +427,7 @@ const Game = ({ mode }) => {
           }
         />
       )}
-      {popupDeleteCard && (
+      {popupDeleteCard && !(selecCard1 === -1 || selecDeck1 === -1) && (
         <Popup
           content={
             <>

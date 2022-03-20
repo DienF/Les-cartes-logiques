@@ -1,7 +1,7 @@
 import React from "react";
 import Navigation from "../components/Navigation";
 
-const NotFoud = () => {
+const NotFound = () => {
   return (
     <div>
       <Navigation />
@@ -10,4 +10,4 @@ const NotFoud = () => {
   );
 };
 
-export default NotFoud;
+export default NotFound;
