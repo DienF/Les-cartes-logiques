@@ -4,6 +4,12 @@
   position: relative;
 
   padding-bottom: 10%;
-  padding-left: 30%;
+  padding-left: 10%;
   border: 15px solid white;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%; 
+  grid-template-areas:
+  "start . . goal"
+  "start . . goal"
+  "start . . goal";
 }
