@@ -142,6 +142,7 @@ const Game = ({ mode }) => {
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
   const [popupFusion, setPopupFusion] = useState(false);
   const [popupWin,setPopupWin] = useState(false);
+  const [popupEmpreint,setPopupEmpreint] = useState(false);
 
   /**
    * Initialise l'exercice.
@@ -184,7 +185,7 @@ const Game = ({ mode }) => {
     let tempoSelecDeck1 = selecDeck1;
     let tempoSelecCard1 = selecCard1;
     let tempoNbSelec = nbSelec;
-    if (tempoNbSelec < 2 && !(i === game.length-1 && mode !== "create")) {
+    if (tempoNbSelec < 2 && ((i !== game.length-1) || (i === game.length-1 && game[i][j].liaison === "=>" && nbSelec === 0))) {
       let tempo = [...game];
       tempo[i].map(function (card) {
         if (card !== null &&
@@ -212,7 +213,7 @@ const Game = ({ mode }) => {
       setNbSelec(tempoNbSelec);
       setSelecCard1(tempoSelecCard1);
       setSelecDeck1(tempoSelecDeck1);
-
+      if(i === game.length-1 && game[i][j].liaison === "=>")setPopupEmpreint(true);
       if (tempoNbSelec === 2) {
         setSelecDeck2(i);
         setSelecCard2(j);
@@ -393,6 +394,7 @@ const Game = ({ mode }) => {
     // si c'est une carte simple
     else return new CardClass(i, obj.color, false,"", null, null);
   }
+  
   /**
    * compare l'objectif (game[game.length-1][0]) et toute les cartes du deck 0.
    * @returns true/false
@@ -409,6 +411,31 @@ const Game = ({ mode }) => {
 
     })
     return bool;
+  }
+  /**
+   * Les verifications de la carte sont faite dans la methode update (si carte dans le deck objectif et a comme liaison "=>")
+   * creer un deck juste avant l'objectif et lui passe une nouvelle carte (la partie gauche de la carte selectionner)
+   * creer une carte dans la partie objectif qui est une objectif secondaire
+   */
+  const empreint = () =>{
+    setPopupEmpreint(false);
+    let tmp = [...game];
+    tmp[selecDeck1][selecCard1].select(false);
+    let tmpObjectif = [...game[game.length-1]];
+    let tmpCard = game[selecDeck1][selecCard1].right.copy()
+    tmpCard.id = game[game.length-1].length;
+    tmpCard.select(false);
+    tmpObjectif.push(tmpCard)
+    tmp[game.length-1] = [];
+    tmpCard = game[selecDeck1][selecCard1].left.copy();
+    tmpCard.id = 0; 
+    tmpCard.select(false);
+    tmp[game.length-1].push(tmpCard);
+    tmp.push(tmpObjectif);
+    setGame(tmp);
+    setNbSelec(0);
+    setSelecCard1(-1);
+    setSelecDeck1(-1);
   }
   return (
     <div className="game" >
@@ -427,7 +454,7 @@ const Game = ({ mode }) => {
           ></Deck>
         ))}
       </GameTab.Provider>
-      {popupSelect && (
+      {popupSelect && (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1 ) && (
         <Popup
           content={
             <>
@@ -514,6 +541,24 @@ const Game = ({ mode }) => {
               <button
                 onClick={function () {
                   setPopupWin(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
+      {popupEmpreint && (
+        <Popup
+          content={
+            <>
+              <b>Voulez vous empreinter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
+              <button onClick={empreint}> Oui </button>
+              <button
+                onClick={function () {
+                  setPopupEmpreint(false);
+                  allFalse();
                 }}
               >
                 Annuler
