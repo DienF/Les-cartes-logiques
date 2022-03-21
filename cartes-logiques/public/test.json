@@ -1,0 +1,26 @@
+[
+  [
+    {
+      "left": { "color": "red" },
+      "liaison": "et",
+      "right": { "color": "yellow" }
+    },
+    {
+      "left": { "color": "red" },
+      "liaison": "=>",
+      "right": { "color": "blue" }
+    },
+    {
+      "left": { "color": "blue" },
+      "liaison": "=>",
+      "right": { "color": "orange" }
+    }
+  ],
+  [
+    {
+      "left": { "color": "orange" },
+      "liaison": "=>",
+      "right": { "color": "blue" }
+    }
+  ]
+]

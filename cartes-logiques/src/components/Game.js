@@ -40,8 +40,7 @@ class CardClass {
     let res = "(";
     if (this.color != null)  res += this.color.toString();
     if (this.left !== null)  res += this.left.toString();
-    if (this.liaison === 1)  res += " et ";
-    if (this.liaison === 2)  res += " => ";
+    res += this.liaison;
     if (this.right !== null) res += this.right.toString();
 
     return res + ")";
@@ -106,11 +105,28 @@ class CardClass {
    * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
    * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
    */
-    select(state){
+  select(state){
       this.active = state;
       if (this.left != null) this.left.select(state);
       if (this.right != null) this.right.select(state);
-    };
+  };
+
+  /**
+   * Compare deux carte si les deux cartes sont identique ca renvoie true sinon false;
+   * @param {CardClass} card - l'autre carte a comparer
+   * @returns true/false
+   */
+  equals(card){
+    if(this.color !== null && card.color !== null)return (this.color === card.color);
+    else{
+      let bool = true;
+      if((this.left === null && card.left !== null) || (this.left !== null && card.left === null)) return false;
+      if((this.right === null && card.right !== null) || (this.right !== null && card.right === null)) return false;
+      if(this.left !== null && card.left !== null) bool = this.left.equals(card.left);
+      if(this.right !== null && card.right !== null) bool = (bool && this.right.equals(card.right));
+      return bool;
+    }
+  }
 }
 
 const Game = ({ mode }) => {
@@ -125,6 +141,7 @@ const Game = ({ mode }) => {
   const [popupDeleteCard, setPopupDeleteCard] = useState(false);
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
   const [popupFusion, setPopupFusion] = useState(false);
+  const [popupWin,setPopupWin] = useState(false);
 
   /**
    * Initialise l'exercice.
@@ -145,7 +162,12 @@ const Game = ({ mode }) => {
   /**
    * Met la letiable popupSelect en true ce qui affiche le popup.
    */
-  const popup = () => { setPopupSelect(true); };
+  const popup = () => { 
+    setPopupSelect(true);
+
+
+    setPopupWin(isWin()); //laisser ca a la fin de la fonction.
+  };
 
 
   /**
@@ -162,7 +184,7 @@ const Game = ({ mode }) => {
     let tempoSelecDeck1 = selecDeck1;
     let tempoSelecCard1 = selecCard1;
     let tempoNbSelec = nbSelec;
-    if (tempoNbSelec < 2) {
+    if (tempoNbSelec < 2 && !(i === game.length-1 && mode !== "create")) {
       let tempo = [...game];
       tempo[i].map(function (card) {
         if (card !== null &&
@@ -265,7 +287,7 @@ const Game = ({ mode }) => {
   const choixLiaison = (event) => {
     let tmp = [...game];
     event.target.checked = false;
-    const l = parseInt(event.target.value);                               // liaison
+    const l = event.target.value;                               // liaison
     let c1 = game[selecDeck1][selecCard1].copy();
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
@@ -291,11 +313,9 @@ const Game = ({ mode }) => {
   const deleteCard = () => {
     setPopupDeleteCard(false);
     if (!(selecCard1 === -1 && selecDeck1 === -1)){
-      if (!(selecDeck1 === game.length - 1 && selecCard1 === 0)) {
-        let tmp = [...game];
-        tmp[selecDeck1][selecCard1] = null;
-        setGame(tmp);
-      }
+      let tmp = [...game];
+      tmp[selecDeck1][selecCard1] = null;
+      setGame(tmp);
     }
     allFalse();
   };
@@ -371,9 +391,25 @@ const Game = ({ mode }) => {
     // si c'est une carte complexe
     if (obj.color === undefined) return new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1));
     // si c'est une carte simple
-    else return new CardClass(i, obj.color, false, 0, null, null);
+    else return new CardClass(i, obj.color, false,"", null, null);
   }
+  /**
+   * compare l'objectif (game[game.length-1][0]) et toute les cartes du deck 0.
+   * @returns true/false
+   */
+  const isWin = () =>{
+    const objectif = game[game.length-1][0];
+    let bool = false;
+    game[0].forEach(card =>{
+      if(card !== null){
+        if(card.equals(objectif)){
+          bool = true;
+        }
+      }
 
+    })
+    return bool;
+  }
   return (
     <div className="game" >
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
@@ -462,6 +498,22 @@ const Game = ({ mode }) => {
               <button
                 onClick={function () {
                   setPopupDeleteCard(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
+      {popupWin && (
+        <Popup
+          content={
+            <>
+              <b>Bravo vous avez gagné</b>
+              <button
+                onClick={function () {
+                  setPopupWin(false);
                 }}
               >
                 Annuler
