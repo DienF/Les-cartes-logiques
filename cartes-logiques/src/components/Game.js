@@ -150,7 +150,7 @@ const Game = ({ mode }) => {
   useEffect(() => {
     if (mode !== "create") {
       setGame([[], []]);
-      fetch(mode + '.json')
+      fetch(mode + ".json")
       .then(response => response.text())
       .then(data => {
         setGame(gameInput(JSON.parse(data)));
@@ -185,7 +185,7 @@ const Game = ({ mode }) => {
     let tempoSelecDeck1 = selecDeck1;
     let tempoSelecCard1 = selecCard1;
     let tempoNbSelec = nbSelec;
-    if (tempoNbSelec < 2 && ((i !== game.length-1) || (i === game.length-1 && game[i][j].liaison === "=>" && nbSelec === 0))) {
+    if (tempoNbSelec < 2 && ((i !== game.length-1) || (i === game.length-1 && game[i][j].liaison === "=>" && nbSelec === 0) || mode === "create")) {
       let tempo = [...game];
       tempo[i].map(function (card) {
         if (card !== null &&
@@ -213,7 +213,7 @@ const Game = ({ mode }) => {
       setNbSelec(tempoNbSelec);
       setSelecCard1(tempoSelecCard1);
       setSelecDeck1(tempoSelecDeck1);
-      if(i === game.length-1 && game[i][j].liaison === "=>")setPopupEmpreint(true);
+      if(i === game.length-1 && game[i][j].liaison === "=>" && mode !== "create")setPopupEmpreint(true);
       if (tempoNbSelec === 2) {
         setSelecDeck2(i);
         setSelecCard2(j);
