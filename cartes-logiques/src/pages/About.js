@@ -5,7 +5,16 @@ const About = () => {
   return (
     <div>
       <Navigation />
-      <h1>About</h1>
+      <h2>A Propos de ce site</h2>
+      <div className="about"> 
+        <p> Projet tutoré : Création d'un jeu de logique encadré par Monsieur Eric Edo</p>
+        <p> Etudiants : </p>
+        <ul> 
+          <li> Audouard Florian </li>
+          <li> Féré Adrien </li>
+          <li> Perron Guillaume </li>
+        </ul> 
+      </div>
     </div>
   );
 };
