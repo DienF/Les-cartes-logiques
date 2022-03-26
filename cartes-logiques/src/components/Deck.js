@@ -21,11 +21,12 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
   const setClassname = () =>{
     if(indice === 0)return "start";
     if(indice === nbDeck-1)return "goal";
+    return "other";
   }
 
   return (
-    <div className="deck ">
-      <div className={setClassname()}>
+    <div className={setClassname()}>
+      <div className="deck">
         {indice === 0 && (<h3>Départ</h3>)}
         {indice === nbDeck-1 && (<h3>Objectif</h3>)}
         {/*mode === "create" && */(<button onClick={addCardToDeck}>Ajouter une carte</button>)}
