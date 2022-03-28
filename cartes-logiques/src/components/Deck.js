@@ -43,7 +43,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
         {indice === nbDeck-1 && (<h3>Objectif</h3>)}
         {/*mode === "create" && */(<button onClick={addCardToDeck}>Ajouter une carte</button>)}
         <br/>
-        {/*mode === "create" && */(<button onClick={deleleCardToDeck}>Suprimmer une carte</button>)}
+        {/*mode === "create" && */(<button onClick={deleleCardToDeck}>Supprimer une carte</button>)}
         <GameTab.Consumer>
           {(game) => {
             return game[indice].map((card, index) =>
