@@ -123,10 +123,21 @@ class CardClass {
       let bool = true;
       if((this.left === null && card.left !== null) || (this.left !== null && card.left === null)) return false;
       if((this.right === null && card.right !== null) || (this.right !== null && card.right === null)) return false;
+      if(this.liaison !== card.liaison) return false;
       if(this.left !== null && card.left !== null) bool = this.left.equals(card.left);
       if(this.right !== null && card.right !== null) bool = (bool && this.right.equals(card.right));
       return bool;
     }
+  }
+
+  /**
+   * Si la carte est simple ou double renvoie true.
+   * @returns true/false
+   */
+  isSimpleOrDouble(){
+    if(this.color !== null)return true;
+    if(this.left.color !== null && this.right.color !== null)return true;
+    else return false;
   }
 }
 
@@ -164,9 +175,12 @@ const Game = ({ mode }) => {
   }, [mode]);
 
   /**
+   * 1er cas possible :
    * Vérifie que la carte sélectionner en deuxième a une liaison "=>".
    * Vérifie que la carte sélectionner en premier sois égale à la partie gauche de la deuxième carte
    * si oui ajoute une nouvelle carte qui est la copie de la partie droite de la deuxième carte dans le deck le plus grand
+   * 2eme cas possible :
+   * Vérifie que les deux cartes sont "simple" ou double si c'est la cas ajoute une carte double avec les couleurs des deux cartes sélectionner et la lisaion "et". 
    * si non affiche un popup d’erreur
    */
   const fusion = () => {
@@ -179,7 +193,18 @@ const Game = ({ mode }) => {
       tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
       setGame(tmp);
       allFalse();
-      setPopupWin(isWin());
+      setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
+    }
+    else if(tmp[selecDeck1][selecCard1].isSimpleOrDouble() && tmp[selecDeck2][selecCard2].isSimpleOrDouble()){
+      let finalDeck = Math.max(selecDeck1,selecDeck2);
+      let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
+      let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
+      tmpCard1.id = 0;
+      tmpCard2.id = 1;
+      tmp[finalDeck].push(new CardClass(tmp[finalDeck].length,null,false,"et",tmpCard1,tmpCard2));
+      setGame(tmp);
+      allFalse();
+      setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
     }
     else setPopupError(true);
   };
@@ -244,8 +269,8 @@ const Game = ({ mode }) => {
     setNbSelec(0);
     setSelecCard1(-1);
     setSelecDeck1(-1);
-    setSelecCard2(-2);
-    setSelecDeck2(-2);
+    setSelecCard2(-1);
+    setSelecDeck2(-1);
     let tmp = [...game];
     tmp.forEach((e) => {
       e.forEach((s) => {
@@ -412,19 +437,34 @@ const Game = ({ mode }) => {
   }
 
   /**
-   * compare l'objectif (game[game.length-1][0]) et toute les cartes du deck 0.
+   * Compare l'objectif (game[game.length-1][currentDeck]) et toute les cartes du deck curentDeck.
+   * si on verifie le deck 0 renvoie true si on trouve l'objectif
+   * si on ne verifie pas le deck 0 si l'objectif est dans le deck
+   * ajoute l'objectif au dessus au deck précédent et 
+   * on regarde le deck en dessous (curentDeck -1) pour voir si la carte ajouter n'est pas l'objectif au dessus.
+   * @param {int} curentDeck le deck le plus élever
    * @returns true/false
    */
-  const isWin = () =>{
-    const objectif = game[game.length-1][0];
+  const isWin = (curentDeck) =>{
+    
+    const objectif = game[game.length-1][curentDeck];
     let bool = false;
-    game[0].forEach(card =>{
+    game[curentDeck].forEach(card =>{
       if(card !== null){
         if(card.equals(objectif)){
-          bool = true;
+          if(curentDeck === 0)bool = true;
+          else{
+            let tmp = [...game];
+            tmp[curentDeck] = null;
+            tmp[game.length-1][curentDeck] = null;
+            let tmpCard = game[game.length-1][curentDeck-1].copy();
+            tmpCard.id = tmp[curentDeck-1].length;
+            tmp[curentDeck-1].push(tmpCard);
+            setGame(tmp);
+            bool = isWin(curentDeck-1);
+          }
         }
       }
-
     })
     return bool;
   }
@@ -476,15 +516,19 @@ const Game = ({ mode }) => {
       {mode === "create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
-          <Deck
-            updateGame = {update}
-            indice = {index}
-            addCardFunc = {addCard}
-            deleteCardFunc = {setPopupDeleteCard}
-            nbDeck = {game.length}
-            mode = {mode}
-            key = {index}
-          ></Deck>
+          deck !== null ? (
+            <Deck
+              updateGame = {update}
+              indice = {index}
+              addCardFunc = {addCard}
+              deleteCardFunc = {setPopupDeleteCard}
+              nbDeck = {game.length}
+              mode = {mode}
+              key = {index}
+            ></Deck>
+        ) : (
+          <></>
+        )
         ))}
       </GameTab.Provider>
       {popupSelect && (selecCard1 > -1 && selecCard2 > -1 && selecDeck1 > -1 && selecDeck2 > -1 ) && (
