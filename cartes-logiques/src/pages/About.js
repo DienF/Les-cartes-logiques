@@ -5,8 +5,8 @@ const About = () => {
   return (
     <div>
       <Navigation />
-      <h2>À propos de ce site</h2>
       <div className="about"> 
+        <h2>À propos de ce site</h2>
         <p> Projet tutoré : Création d'un jeu de logique encadré par M. Eric Edo</p>
         <p> Étudiants : </p>
         <ul> 
