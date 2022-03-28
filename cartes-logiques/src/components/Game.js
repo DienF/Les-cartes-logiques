@@ -5,7 +5,7 @@ export const GameTab = React.createContext();
 
 class CardClass {
   /**
-   * @param {number} id 
+   * @param {number} id
    * @param {string|null} color - couleurs disponibles :
    *                              rouge ("red")     ;
    *                              jaune ("yellow")  ;
@@ -15,8 +15,8 @@ class CardClass {
    * @param {""|"et"|"=>"} liaison -  ""  = carte simple ;
    *                                 "et" = liaison "et" ;
    *                                 "=>" = liaison "=>"
-   * @param {CardClass|null} left 
-   * @param {CardClass|null} right 
+   * @param {CardClass|null} left
+   * @param {CardClass|null} right
    */
   constructor(id, color, active, liaison, left, right) {
     this.id = id;
@@ -40,8 +40,7 @@ class CardClass {
     let res = "(";
     if (this.color != null)  res += this.color.toString();
     if (this.left !== null)  res += this.left.toString();
-    if (this.liaison === 1)  res += " et ";
-    if (this.liaison === 2)  res += " => ";
+    res += this.liaison;
     if (this.right !== null) res += this.right.toString();
 
     return res + ")";
@@ -51,31 +50,31 @@ class CardClass {
    * Transforme un objet CardClass en objet JSON.
    * @example
    * { "color" : "couleur"}
-   * { 
-   *   "left": { "color": "couleur" }, 
+   * {
+   *   "left": { "color": "couleur" },
    *   "liaison": "",
-   *   "right": { "color": "couleur" } 
+   *   "right": { "color": "couleur" }
    * }
-   * { 
-   *   "left": { "color": "couleur" }, 
+   * {
+   *   "left": { "color": "couleur" },
    *   "liaison": "",
-   *   "right": { 
-   *              "left": { "color": "couleur" }, 
+   *   "right": {
+   *              "left": { "color": "couleur" },
    *              "liaison": "et",
-   *              "right": { "color": "couleur" } 
+   *              "right": { "color": "couleur" }
    *            }
    * }
-   * { 
-   *   "left": { 
-   *             "left": { "color": "couleur" }, 
+   * {
+   *   "left": {
+   *             "left": { "color": "couleur" },
    *             "liaison": "=>",
-   *             "right": { "color": "couleur" } 
+   *             "right": { "color": "couleur" }
    *            },
-   *   "liaison": "=>", 
-   *   "right": { 
-   *              "left": { "color": "couleur" }, 
+   *   "liaison": "=>",
+   *   "right": {
+   *              "left": { "color": "couleur" },
    *              "liaison": "et",
-   *              "right": { "color": "couleur" } 
+   *              "right": { "color": "couleur" }
    *             }
    * }
    * @returns {JSON} - à stocker dans un fichier .json
@@ -100,18 +99,35 @@ class CardClass {
     if (this.right !== null) r = this.right.copy();
     return new CardClass(this.id,this.color,this.active,this.liaison,l,r);
   }
-  
+
   /**
    * Fonction récursive qui : change l'attribut 'active' ;
    *                          regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
    * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
    * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
    */
-  select(state) {
-    this.active = state;
-    if (this.left != null)  this.left.select(state);
-    if (this.right != null) this.right.select(state);
+  select(state){
+      this.active = state;
+      if (this.left != null) this.left.select(state);
+      if (this.right != null) this.right.select(state);
   };
+
+  /**
+   * Compare deux carte si les deux cartes sont identique ca renvoie true sinon false;
+   * @param {CardClass} card - l'autre carte a comparer
+   * @returns true/false
+   */
+  equals(card){
+    if(this.color !== null && card.color !== null)return (this.color === card.color);
+    else{
+      let bool = true;
+      if((this.left === null && card.left !== null) || (this.left !== null && card.left === null)) return false;
+      if((this.right === null && card.right !== null) || (this.right !== null && card.right === null)) return false;
+      if(this.left !== null && card.left !== null) bool = this.left.equals(card.left);
+      if(this.right !== null && card.right !== null) bool = (bool && this.right.equals(card.right));
+      return bool;
+    }
+  }
 }
 
 const Game = ({ mode }) => {
@@ -126,6 +142,8 @@ const Game = ({ mode }) => {
   const [popupDeleteCard, setPopupDeleteCard] = useState(false);
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
   const [popupFusion, setPopupFusion] = useState(false);
+  const [popupWin,setPopupWin] = useState(false);
+  const [popupEmpreint,setPopupEmpreint] = useState(false);
 
   /**
    * Initialise l'exercice.
@@ -133,7 +151,7 @@ const Game = ({ mode }) => {
   useEffect(() => {
     if (mode !== "create") {
       setGame([[], []]);
-      fetch(mode + '.json')
+      fetch(mode + ".json")
       .then(response => response.text())
       .then(data => {
         setGame(gameInput(JSON.parse(data)));
@@ -146,7 +164,12 @@ const Game = ({ mode }) => {
   /**
    * Met la letiable popupSelect en true ce qui affiche le popup.
    */
-  const popup = () => { setPopupSelect(true); };
+  const popup = () => {
+    setPopupSelect(true);
+
+
+    setPopupWin(isWin()); //laisser ca a la fin de la fonction.
+  };
 
   /**
    * La carte qui est déja sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
@@ -162,7 +185,7 @@ const Game = ({ mode }) => {
     let tempoSelecDeck1 = selecDeck1;
     let tempoSelecCard1 = selecCard1;
     let tempoNbSelec = nbSelec;
-    if (tempoNbSelec < 2) {
+    if (tempoNbSelec < 2 && ((i !== game.length-1) || (i === game.length-1 && game[i][j].liaison === "=>" && nbSelec === 0) || mode === "create")) {
       let tempo = [...game];
       tempo[i].map(function (card) {
         if (card !== null &&
@@ -190,7 +213,7 @@ const Game = ({ mode }) => {
       setNbSelec(tempoNbSelec);
       setSelecCard1(tempoSelecCard1);
       setSelecDeck1(tempoSelecDeck1);
-
+      if(i === game.length-1 && game[i][j].liaison === "=>" && mode !== "create")setPopupEmpreint(true);
       if (tempoNbSelec === 2) {
         setSelecDeck2(i);
         setSelecCard2(j);
@@ -230,7 +253,7 @@ const Game = ({ mode }) => {
 
   /**
    * Fait apparaître le popup qui nous demande la couleur de la carte qu'on veut ajouter.
-   * @param {number} deckIndice - l'indice du deck où l'on ajoute une carte 
+   * @param {number} deckIndice - l'indice du deck où l'on ajoute une carte
    */
   const addCard = (deckIndice) => {
     setIndiceDeckAddCard(deckIndice);
@@ -265,7 +288,7 @@ const Game = ({ mode }) => {
   const choixLiaison = (event) => {
     let tmp = [...game];
     event.target.checked = false;
-    const l = parseInt(event.target.value);       // liaison
+    const l = event.target.value;                               // liaison
     let c1 = game[selecDeck1][selecCard1].copy();
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
@@ -291,18 +314,16 @@ const Game = ({ mode }) => {
   const deleteCard = () => {
     setPopupDeleteCard(false);
     if (!(selecCard1 === -1 && selecDeck1 === -1)){
-      if (!(selecDeck1 === game.length - 1 && selecCard1 === 0)) {
-        let tmp = [...game];
-        tmp[selecDeck1][selecCard1] = null;
-        setGame(tmp);
-      }
+      let tmp = [...game];
+      tmp[selecDeck1][selecCard1] = null;
+      setGame(tmp);
     }
     allFalse();
   };
 
   /**
    * Transforme le tableau en tableau d'objets avec seulement les informations qui nous intéressent (couleur/liaison).
-   * 
+   *
    * @returns un tableau d'objet
    */
   const gameOutput = () => {
@@ -346,7 +367,7 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Pour l'instant ouvre le fichier Ex1.json 
+   * Pour l'instant ouvre le fichier Ex1.json
    *
    */
   const openFile = () => {
@@ -364,16 +385,58 @@ const Game = ({ mode }) => {
    * @param {JSON} obj - information mimimum pour créer une carte :
    *                     Carte simple = juste la couleur
    *                     Carte complexe = les 2 cartes qui la compose & la liaison
-   * @param {number} i - numéro de l'id  
+   * @param {number} i - numéro de l'id
    * @returns {CardClass}
    */
   const toClass = (obj, i) => {
     // si c'est une carte complexe
     if (obj.color === undefined) return new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1));
     // si c'est une carte simple
-    else return new CardClass(i, obj.color, false, 0, null, null);
+    else return new CardClass(i, obj.color, false,"", null, null);
   }
 
+  /**
+   * compare l'objectif (game[game.length-1][0]) et toute les cartes du deck 0.
+   * @returns true/false
+   */
+  const isWin = () =>{
+    const objectif = game[game.length-1][0];
+    let bool = false;
+    game[0].forEach(card =>{
+      if(card !== null){
+        if(card.equals(objectif)){
+          bool = true;
+        }
+      }
+
+    })
+    return bool;
+  }
+  /**
+   * Les verifications de la carte sont faite dans la methode update (si carte dans le deck objectif et a comme liaison "=>")
+   * creer un deck juste avant l'objectif et lui passe une nouvelle carte (la partie gauche de la carte selectionner)
+   * creer une carte dans la partie objectif qui est une objectif secondaire
+   */
+  const empreint = () =>{
+    setPopupEmpreint(false);
+    let tmp = [...game];
+    tmp[selecDeck1][selecCard1].select(false);
+    let tmpObjectif = [...game[game.length-1]];
+    let tmpCard = game[selecDeck1][selecCard1].right.copy()
+    tmpCard.id = game[game.length-1].length;
+    tmpCard.select(false);
+    tmpObjectif.push(tmpCard)
+    tmp[game.length-1] = [];
+    tmpCard = game[selecDeck1][selecCard1].left.copy();
+    tmpCard.id = 0;
+    tmpCard.select(false);
+    tmp[game.length-1].push(tmpCard);
+    tmp.push(tmpObjectif);
+    setGame(tmp);
+    setNbSelec(0);
+    setSelecCard1(-1);
+    setSelecDeck1(-1);
+  }
   return (
     <div className="game" >
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
@@ -391,7 +454,7 @@ const Game = ({ mode }) => {
           ></Deck>
         ))}
       </GameTab.Provider>
-      {popupSelect && (
+      {popupSelect && (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1 ) && (
         <Popup
           content={
             <>
@@ -462,6 +525,40 @@ const Game = ({ mode }) => {
               <button
                 onClick={function () {
                   setPopupDeleteCard(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
+      {popupWin && (
+        <Popup
+          content={
+            <>
+              <b>Bravo vous avez gagné</b>
+              <button
+                onClick={function () {
+                  setPopupWin(false);
+                }}
+              >
+                Annuler
+              </button>
+            </>
+          }
+        />
+      )}
+      {popupEmpreint && (
+        <Popup
+          content={
+            <>
+              <b>Voulez vous empreinter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
+              <button onClick={empreint}> Oui </button>
+              <button
+                onClick={function () {
+                  setPopupEmpreint(false);
+                  allFalse();
                 }}
               >
                 Annuler

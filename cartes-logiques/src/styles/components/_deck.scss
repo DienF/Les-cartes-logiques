@@ -1,16 +1,25 @@
 .deck {
   background-color: beige;
-
+  grid-area: 1;
   position: relative;
-  top: 40px;
   padding: 2%;
   margin-left: 2%;
   margin-right: 2%;
-  float: left;
   border: 3px solid white;
+  height: 100%;
   h3{
     color : black;
     text-align: center;
     margin-bottom: 10%;
   }
 }
+
+.start {
+  grid-area: start;
+}
+
+.goal {
+  grid-area: goal;
+}
+
+
