@@ -12,9 +12,9 @@ class CardClass {
    *                              bleu ("blue")     ;
    *                              orange ("orange")
    * @param {true|false} active
-   * @param {0|1|2} liaison - 0 = carte simple ;
-   *                          1 = liaison "et" ;
-   *                          2 = liaison "=>"
+   * @param {""|"et"|"=>"} liaison -  ""  = carte simple ;
+   *                                 "et" = liaison "et" ;
+   *                                 "=>" = liaison "=>"
    * @param {CardClass|null} left 
    * @param {CardClass|null} right 
    */
@@ -93,24 +93,25 @@ class CardClass {
    * Renvoie une nouvelle instance d'une carte, si la carte est composer de deux autre cartes les autres cartes sont egalement de nouvelle instance
    * @returns une nouvelle instance d'une meme carte
    */
-  copy(){
+  copy() {
     let l = null;
     let r = null;
-    if(this.left !== null) l=this.left.copy();
-    if(this.right !== null) r= this.right.copy();
+    if (this.left !== null)  l = this.left.copy();
+    if (this.right !== null) r = this.right.copy();
     return new CardClass(this.id,this.color,this.active,this.liaison,l,r);
   }
-    /**
+  
+  /**
    * Fonction récursive qui : change l'attribut 'active' ;
    *                          regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
    * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
    * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
    */
-    select(state){
-      this.active = state;
-      if (this.left != null) this.left.select(state);
-      if (this.right != null) this.right.select(state);
-    };
+  select(state) {
+    this.active = state;
+    if (this.left != null)  this.left.select(state);
+    if (this.right != null) this.right.select(state);
+  };
 }
 
 const Game = ({ mode }) => {
@@ -146,7 +147,6 @@ const Game = ({ mode }) => {
    * Met la letiable popupSelect en true ce qui affiche le popup.
    */
   const popup = () => { setPopupSelect(true); };
-
 
   /**
    * La carte qui est déja sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
@@ -265,19 +265,19 @@ const Game = ({ mode }) => {
   const choixLiaison = (event) => {
     let tmp = [...game];
     event.target.checked = false;
-    const l = parseInt(event.target.value);                               // liaison
+    const l = parseInt(event.target.value);       // liaison
     let c1 = game[selecDeck1][selecCard1].copy();
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
     c2.id = 1;
     tmp[indiceDeckAddCard].push(
       new CardClass(
-        game[indiceDeckAddCard].length,                                   // id
-        null,                                                             // color
-        false,                                                            // active
-        l,                                                                // liaison
-        c1,                                                               // left
-        c2                                                                // right
+        game[indiceDeckAddCard].length,           // id
+        null,                                     // color
+        false,                                    // active
+        l,                                        // liaison
+        c1,                                       // left
+        c2                                        // right
       )
     );
     setGame(tmp);
@@ -319,8 +319,8 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Reçoit un tableau d'un fichier json à qui on a appliqué la méthode parse (json => tableau object) et renvoie un tableau qui peut etre lu par notre site
-   * @param {*} data tableau d'objets qui va servir pour l'initialisation
+   * Reçoit un tableau d'un fichier JSON à qui on a appliqué la méthode parse (JSON => tableau object) et renvoie un tableau qui peut etre lu par notre site
+   * @param {Object[]} data tableau d'objets qui va servir pour l'initialisation
    * @returns un tableau de Deck
    */
   const gameInput = (data) =>{

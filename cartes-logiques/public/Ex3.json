@@ -2,11 +2,6 @@
   [
     {
       "left": { "color": "red" },
-      "liaison": "et",
-      "right": { "color": "yellow" }
-    },
-    {
-      "left": { "color": "red" },
       "liaison": "=>",
       "right": { "color": "blue" }
     },
@@ -19,7 +14,7 @@
   [
     {
       "left": { "color": "red" },
-      "liaison": "et",
+      "liaison": "=>",
       "right": { "color": "orange" }
     }
   ]
