@@ -144,6 +144,8 @@ const Game = ({ mode }) => {
   const [popupFusion, setPopupFusion] = useState(false);
   const [popupWin,setPopupWin] = useState(false);
   const [popupEmpreint,setPopupEmpreint] = useState(false);
+  const [popupGetCard, setPopupGetCard] = useState(false);
+  const [popupError, setPopupError] = useState(false);
 
   /**
    * Initialise l'exercice.
@@ -162,13 +164,24 @@ const Game = ({ mode }) => {
   }, [mode]);
 
   /**
-   * Met la letiable popupSelect en true ce qui affiche le popup.
+   * Vérifie que la carte sélectionner en deuxième a une liaison "=>".
+   * Vérifie que la carte sélectionner en premier sois égale à la partie gauche de la deuxième carte
+   * si oui ajoute une nouvelle carte qui est la copie de la partie droite de la deuxième carte dans le deck le plus grand
+   * si non affiche un popup d’erreur
    */
-  const popup = () => {
-    setPopupSelect(true);
-
-
-    setPopupWin(isWin()); //laisser ca a la fin de la fonction.
+  const fusion = () => {
+    let tmp = [...game];
+    tmp[selecDeck1][selecCard1].select(false);
+    tmp[selecDeck2][selecCard2].select(false);
+    if(tmp[selecDeck2][selecCard2].liaison === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1])){
+      let finalDeck = Math.max(selecDeck1,selecDeck2);
+      tmp[finalDeck].push(tmp[selecDeck2][selecCard2].right.copy());
+      tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
+      setGame(tmp);
+      allFalse();
+      setPopupWin(isWin());
+    }
+    else setPopupError(true);
   };
 
   /**
@@ -214,10 +227,11 @@ const Game = ({ mode }) => {
       setSelecCard1(tempoSelecCard1);
       setSelecDeck1(tempoSelecDeck1);
       if(i === game.length-1 && game[i][j].liaison === "=>" && mode !== "create")setPopupEmpreint(true);
+      if(tempoNbSelec === 1 && game[i][j].liaison === "et" && mode !== "create")setPopupGetCard(true);
       if (tempoNbSelec === 2) {
         setSelecDeck2(i);
         setSelecCard2(j);
-        if (mode !== "create") popup();
+        if (mode !== "create") setPopupSelect(true);
         else setPopupFusion(true);
       }
     }
@@ -248,6 +262,8 @@ const Game = ({ mode }) => {
    */
   const closePopup = () => {
     setPopupSelect(false);
+    setPopupGetCard(false);
+    setPopupError(false);
     allFalse();
   };
 
@@ -437,6 +453,23 @@ const Game = ({ mode }) => {
     setSelecCard1(-1);
     setSelecDeck1(-1);
   }
+
+  /**
+   * Fonction appeler après avoir sélectionner une carte avec une liaison "et"
+   * ajoute la partie gauche et droite de la carte au deck.
+   */
+  const addTwoCard = () =>{
+    let tmp = [...game];
+    game[selecDeck1][selecCard1].select(false);
+    tmp[selecDeck1].push(game[selecDeck1][selecCard1].left.copy());
+    tmp[selecDeck1][tmp[selecDeck1].length-1].id = tmp[selecDeck1].length-1;
+    tmp[selecDeck1].push(game[selecDeck1][selecCard1].right.copy());
+    tmp[selecDeck1][tmp[selecDeck1].length-1].id = tmp[selecDeck1].length-1;
+    setGame(tmp);
+    setPopupGetCard(false);
+    allFalse();
+
+  }
   return (
     <div className="game" >
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
@@ -454,7 +487,7 @@ const Game = ({ mode }) => {
           ></Deck>
         ))}
       </GameTab.Provider>
-      {popupSelect && (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1 ) && (
+      {popupSelect && (selecCard1 > -1 && selecCard2 > -1 && selecDeck1 > -1 && selecDeck2 > -1 ) && (
         <Popup
           content={
             <>
@@ -464,6 +497,38 @@ const Game = ({ mode }) => {
                 {game[selecDeck2][selecCard2].toString()} : [{selecDeck2}][{selecCard2}] ?
               </b>
               <br></br>
+              <button onClick={fusion}>Oui</button>
+              <button onClick={closePopup}>Annuler</button>
+            </>
+          }
+        />
+      )}
+      {popupError && (selecCard1 > -1 && selecCard2 > -1 && selecDeck1 > -1 && selecDeck2 > -1 ) && (
+        <Popup
+          content={
+            <>
+              <b>
+                Vous ne pouvez fusionner cette carte{" "}
+                {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][{selecCard1}] avec celle-ci{" "}
+                {game[selecDeck2][selecCard2].toString()} : [{selecDeck2}][{selecCard2}].
+              </b>
+              <br></br>
+              <button onClick={closePopup}>Fermer</button>
+            </>
+          }
+        />
+      )}
+      {popupGetCard && (selecCard1 !== -1 && selecDeck1 !== -1) && (
+        <Popup
+          content={
+            <>
+              <b>
+                Voulez-vous ajouter les cartes {" "}
+                {game[selecDeck1][selecCard1].left.toString()} et 
+                {" " + game[selecDeck1][selecCard1].right.toString()} au deck numero {selecDeck1+1}?
+              </b>
+              <br></br>
+              <button onClick={addTwoCard}>Oui</button>
               <button onClick={closePopup}>Annuler</button>
             </>
           }
