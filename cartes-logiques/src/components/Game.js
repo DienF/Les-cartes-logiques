@@ -157,6 +157,7 @@ const Game = ({ mode }) => {
   const [popupEmpreint,setPopupEmpreint] = useState(false);
   const [popupGetCard, setPopupGetCard] = useState(false);
   const [popupError, setPopupError] = useState(false);
+  const [ancienGame , setAncienGame] = useState([]);
 
   /**
    * Initialise l'exercice.
@@ -188,6 +189,20 @@ const Game = ({ mode }) => {
     tmp[selecDeck1][selecCard1].select(false);
     tmp[selecDeck2][selecCard2].select(false);
     if(tmp[selecDeck2][selecCard2].liaison === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1])){
+      let tmpAncienGame =  [...ancienGame];
+      let saveGameTmp = [];
+      for(var i = 0 ; i < game.length ; i++){
+        if(game[i] !== null){
+          saveGameTmp[i] = [];
+          for(var j = 0 ; j < game[i].length ; j++){
+            if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+            else saveGameTmp.push(null);
+          }
+        }
+        else saveGameTmp.push(null);
+      }
+      tmpAncienGame.push(saveGameTmp);
+      setAncienGame(tmpAncienGame);
       let finalDeck = Math.max(selecDeck1,selecDeck2);
       tmp[finalDeck].push(tmp[selecDeck2][selecCard2].right.copy());
       tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
@@ -196,6 +211,20 @@ const Game = ({ mode }) => {
       setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
     }
     else if(tmp[selecDeck1][selecCard1].isSimpleOrDouble() && tmp[selecDeck2][selecCard2].isSimpleOrDouble()){
+      let tmpAncienGame =  [...ancienGame];
+      let saveGameTmp = [];
+      for(var i = 0 ; i < game.length ; i++){
+        if(game[i] !== null){
+          saveGameTmp[i] = [];
+          for(var j = 0 ; j < game[i].length ; j++){
+            if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+            else saveGameTmp.push(null);
+          }
+        }
+        else saveGameTmp.push(null);
+      }
+      tmpAncienGame.push(saveGameTmp);
+      setAncienGame(tmpAncienGame);
       let finalDeck = Math.max(selecDeck1,selecDeck2);
       let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
       let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
@@ -357,6 +386,7 @@ const Game = ({ mode }) => {
     if (!(selecCard1 === -1 && selecDeck1 === -1)){
       let tmp = [...game];
       tmp[selecDeck1][selecCard1] = null;
+      saveGame();
       setGame(tmp);
     }
     allFalse();
@@ -499,21 +529,86 @@ const Game = ({ mode }) => {
    * ajoute la partie gauche et droite de la carte au deck.
    */
   const addTwoCard = () =>{
+    let tmpAncienGame =  [...ancienGame];
+    let saveGameTmp = [];
+    for(var i = 0 ; i < game.length ; i++){
+      if(game[i] !== null){
+        saveGameTmp[i] = [];
+        for(var j = 0 ; j < game[i].length ; j++){
+          if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+          else saveGameTmp.push(null);
+        }
+      }
+      else saveGameTmp.push(null);
+    }
+    tmpAncienGame.push(saveGameTmp);
+    setAncienGame(tmpAncienGame);
     let tmp = [...game];
     game[selecDeck1][selecCard1].select(false);
     tmp[selecDeck1].push(game[selecDeck1][selecCard1].left.copy());
     tmp[selecDeck1][tmp[selecDeck1].length-1].id = tmp[selecDeck1].length-1;
     tmp[selecDeck1].push(game[selecDeck1][selecCard1].right.copy());
     tmp[selecDeck1][tmp[selecDeck1].length-1].id = tmp[selecDeck1].length-1;
+
     setGame(tmp);
     setPopupGetCard(false);
     allFalse();
 
   }
+
+  /**
+   * Prend le dernier élément du tableau ancienGame et remplace la variable game
+   * (marche pas)
+   */
+  const retourEnArriere = () =>{
+    if(ancienGame.length !== 0){
+      let tmpAncienGame = [...ancienGame];
+      let tmpSavedGame = tmpAncienGame[tmpAncienGame.length-1];
+      let futurGameTmp = [];
+      for(var i = 0 ; i < tmpSavedGame.length ; i++){
+        if(tmpSavedGame[i] !== null){
+          futurGameTmp[i] = [];
+          for(var j = 0 ; j < tmpSavedGame[i].length ; j++){
+            if(tmpSavedGame[i][j] !== null)futurGameTmp[i].push(tmpSavedGame[i][j].copy());
+            else futurGameTmp.push(null);
+          }
+        }
+        else futurGameTmp.push(null);
+      }
+      console.log(futurGameTmp);
+      setGame([]); // NE FONCTIONNE PAS 
+      console.log(game);
+      tmpAncienGame.pop();
+      setAncienGame(tmpAncienGame);
+    }
+    allFalse();
+  }
+
+  /**
+   * A la base la fonction qui sauvegarde la partie qui est pour l'instant recopier trois fois dans les autres fonction
+   * car ne fonctionne pas en appelant une fonction (asynchrone).
+   */
+  const saveGame = () =>{
+    let tmpAncienGame =  [...ancienGame];
+    let saveGameTmp = [];
+    for(var i = 0 ; i < game.length ; i++){
+      if(game[i] !== null){
+        saveGameTmp[i] = [];
+        for(var j = 0 ; j < game[i].length ; j++){
+          if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+          else saveGameTmp.push(null);
+        }
+      }
+      else saveGameTmp.push(null);
+    }
+    tmpAncienGame.push(saveGameTmp);
+    setAncienGame(tmpAncienGame);
+  }
   return (
     <div className="game" >
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
       {mode === "create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
+      <button onClick={retourEnArriere}>Retour en arrière</button>
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
           deck !== null ? (
