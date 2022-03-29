@@ -126,14 +126,17 @@ const Card = ({ deckIndice, cardIndice, update }) => {
             >
               {getTab(game, deckIndice, cardIndice).map(
                 (cardAffiche, index) => (
-                  <div
-                    key={index}
-                    style={{ backgroundColor: cardAffiche.color }}
-                    className={
-                      getTabClass(game, deckIndice, cardIndice, index) +
-                      (cardAffiche.active ? " card_selec" : "")
-                    }
-                  ></div>
+                  <div>
+                    <div
+                      key={index}
+                      style={{ backgroundColor: cardAffiche.color }}
+                      className={
+                        getTabClass(game, deckIndice, cardIndice, index) +
+                        (cardAffiche.active ? " card_selec" : "")
+                      }
+                    ></div>
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix">{game[deckIndice][cardIndice].liaison}</div>)}
+                  </div>
                 )
               )}
             </div>

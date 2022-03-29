@@ -632,8 +632,8 @@ const Game = ({ mode }) => {
             <>
               <b>
                 Voulez-vous fusionner cette carte{" "}
-                {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][{selecCard1}] avec celle-ci{" "}
-                {game[selecDeck2][selecCard2].toString()} : [{selecDeck2}][{selecCard2}] ?
+                {game[selecDeck1][selecCard1].toString()} avec celle-ci{" "}
+                {game[selecDeck2][selecCard2].toString()}?
               </b>
               <br></br>
               <button onClick={fusion}>Oui</button>
@@ -648,8 +648,8 @@ const Game = ({ mode }) => {
             <>
               <b>
                 Vous ne pouvez fusionner cette carte{" "}
-                {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][{selecCard1}] avec celle-ci{" "}
-                {game[selecDeck2][selecCard2].toString()} : [{selecDeck2}][{selecCard2}].
+                {game[selecDeck1][selecCard1].toString()}  avec celle-ci{" "}
+                {game[selecDeck2][selecCard2].toString()}.
               </b>
               <br></br>
               <button onClick={closePopup}>Fermer</button>
