@@ -561,6 +561,7 @@ const Game = ({ mode }) => {
    * (marche pas)
    */
   const retourEnArriere = () =>{
+    
     if(ancienGame.length !== 0){
       let tmpAncienGame = [...ancienGame];
       let tmpSavedGame = tmpAncienGame[tmpAncienGame.length-1];
@@ -576,13 +577,26 @@ const Game = ({ mode }) => {
         else futurGameTmp.push(null);
       }
       console.log(futurGameTmp);
-      setGame([]); // NE FONCTIONNE PAS 
-      console.log(game);
+      //fonction allFalse() mais si appeller marche pas car executer de manière asynchrone
+      setNbSelec(0);
+      setSelecCard1(-1);
+      setSelecDeck1(-1);
+      setSelecCard2(-1);
+      setSelecDeck2(-1);
+      futurGameTmp.forEach((e) => {
+        e.forEach((s) => {
+          if (s !== null) {
+            s.select(false);
+          }
+        });
+      });
+      //////////////////////////////////////////////////////////////////////////////////////
+      setGame(futurGameTmp);
       tmpAncienGame.pop();
       setAncienGame(tmpAncienGame);
     }
-    allFalse();
-  }
+
+}
 
   /**
    * A la base la fonction qui sauvegarde la partie qui est pour l'instant recopier trois fois dans les autres fonction
