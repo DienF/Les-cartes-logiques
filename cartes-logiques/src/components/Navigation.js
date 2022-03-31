@@ -20,7 +20,7 @@ const Navigation = () => {
               </li>
               <li>
                 <NavLink exact="true" to="/About">
-                  A Propos
+                  À propos
                 </NavLink>
               </li>
             </ul>

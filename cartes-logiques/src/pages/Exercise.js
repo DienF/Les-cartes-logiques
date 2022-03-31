@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Game from "../components/Game";
 import Navigation from "../components/Navigation";
 
-const Exercice = () => {
+const Exercise = () => {
   const [ex, setEx] = useState();
   useEffect(() => {
     setEx("ex1");
@@ -16,4 +16,4 @@ const Exercice = () => {
   );
 };
 
-export default Exercice;
+export default Exercise;

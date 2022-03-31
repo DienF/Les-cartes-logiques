@@ -12,37 +12,36 @@ class CardClass {
    *                              bleu ("blue")     ;
    *                              orange ("orange")
    * @param {true|false} active
-   * @param {""|"et"|"=>"} liaison -  ""  = carte simple ;
-   *                                 "et" = liaison "et" ;
-   *                                 "=>" = liaison "=>"
+   * @param {""|"et"|"=>"} link -  ""  = carte simple ;
+   *                              "et" = liaison "et" ;
+   *                              "=>" = liaison "⇒"
    * @param {CardClass|null} left
    * @param {CardClass|null} right
    */
-  constructor(id, color, active, liaison, left, right) {
-    this.id = id;
-    this.color = color;
-    this.active = active;
-    this.liaison = liaison;
-    this.left = left;
-    this.right = right;
+  constructor(id, color, active, link, left, right) {
+    this.id      = id;
+    this.color   = color;
+    this.active  = active;
+    this.link    = link;
+    this.left    = left;
+    this.right   = right;
   }
 
   /**
-   * Renvoie un objet CardClass sous la forme d'un string.
+   * Renvoie un objet {@link CardClass} sous la forme d'un string.
    * Carte simple : (couleur)
    * Carte double : (couleur) liaison (couleur)
    * Carte triple : (couleur) liaison ((couleur) liaison (couleur))
    * Carte quadruple : ((couleur) liaison (couleur)) liaison ((couleur) liaison (couleur))
    * @example ((rouge) ^ (jaune)) => (bleu)
-   * @returns {string} un string plus lisible
+   * @returns un string plus lisible
    */
   toString() {
     let res = "(";
     if (this.color != null)  res += this.color.toString();
     if (this.left !== null)  res += this.left.toString();
-    res += this.liaison;
+    res += this.link;
     if (this.right !== null) res += this.right.toString();
-
     return res + ")";
   }
 
@@ -52,28 +51,28 @@ class CardClass {
    * { "color" : "couleur"}
    * {
    *   "left": { "color": "couleur" },
-   *   "liaison": "",
+   *   "link": "",
    *   "right": { "color": "couleur" }
    * }
    * {
    *   "left": { "color": "couleur" },
-   *   "liaison": "",
+   *   "link": "",
    *   "right": {
    *              "left": { "color": "couleur" },
-   *              "liaison": "et",
+   *              "link": "et",
    *              "right": { "color": "couleur" }
    *            }
    * }
    * {
    *   "left": {
    *             "left": { "color": "couleur" },
-   *             "liaison": "=>",
+   *             "link": "=>",
    *             "right": { "color": "couleur" }
    *            },
-   *   "liaison": "=>",
+   *   "link": "=>",
    *   "right": {
    *              "left": { "color": "couleur" },
-   *              "liaison": "et",
+   *              "link": "et",
    *              "right": { "color": "couleur" }
    *             }
    * }
@@ -82,61 +81,63 @@ class CardClass {
   toFile() {
     if (this.color !== null) return { color: this.color };
     else return {
-      left: this.left.toFile(),
-      liaison: this.liaison,
-      right: this.right.toFile(),
+      left:    this.left.toFile(),
+      link:    this.link,
+      right:   this.right.toFile(),
     };
   }
 
   /**
-   * Renvoie une nouvelle instance d'une carte, si la carte est composer de deux autre cartes les autres cartes sont egalement de nouvelle instance
-   * @returns une nouvelle instance d'une meme carte
+   * Renvoie une nouvelle instance d'une carte.
+   * Si la carte est composée de 2 autres cartes ces dernières sont également de nouvelles instances.
+   * @returns une nouvelle instance d'une même carte
    */
   copy() {
     let l = null;
     let r = null;
     if (this.left !== null)  l = this.left.copy();
     if (this.right !== null) r = this.right.copy();
-    return new CardClass(this.id,this.color,this.active,this.liaison,l,r);
+    return new CardClass(this.id,this.color,this.active,this.link,l,r);
   }
 
   /**
-   * Fonction récursive qui : change l'attribut 'active' ;
-   *                          regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
-   * @param {CardClass} card - la carte qui doit être sélectionnée ou pas
+   * Fonction récursive qui :
+   * change l'attribut 'active' ;
+   * regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
+   * @param {CardClass} card   - la carte qui doit être sélectionnée ou pas
    * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
    */
-  select(state){
+  select(state) {
       this.active = state;
-      if (this.left != null) this.left.select(state);
+      if (this.left  != null) this.left.select(state);
       if (this.right != null) this.right.select(state);
   };
 
   /**
-   * Compare deux carte si les deux cartes sont identique ca renvoie true sinon false;
-   * @param {CardClass} card - l'autre carte a comparer
-   * @returns true/false
+   * Compare les attributs de 2 cartes.
+   * @param {CardClass} card - l'autre carte à comparer
+   * @returns true si identiques sinon false
    */
-  equals(card){
-    if(this.color !== null && card.color !== null)return (this.color === card.color);
-    else{
+  equals(card) {
+    if (this.color !== null && card.color !== null) return (this.color === card.color);
+    else {
       let bool = true;
-      if((this.left === null && card.left !== null) || (this.left !== null && card.left === null)) return false;
-      if((this.right === null && card.right !== null) || (this.right !== null && card.right === null)) return false;
-      if(this.liaison !== card.liaison) return false;
-      if(this.left !== null && card.left !== null) bool = this.left.equals(card.left);
-      if(this.right !== null && card.right !== null) bool = (bool && this.right.equals(card.right));
+      if ((this.left   === null && card.left  !== null) || (this.left  !== null && card.left  === null)) return false;
+      if ((this.right  === null && card.right !== null) || (this.right !== null && card.right === null)) return false;
+      if (this.link !== card.link) return false;
+      if (this.left    !== null && card.left  !== null) bool = this.left.equals(card.left);
+      if (this.right   !== null && card.right !== null) bool = (bool && this.right.equals(card.right));
       return bool;
     }
   }
 
   /**
-   * Si la carte est simple ou double renvoie true.
-   * @returns true/false
+   * Vérifie si la carte est simple/double.
+   * @returns true si simple/double sinon false
    */
   isSimpleOrDouble(){
-    if(this.color !== null)return true;
-    if(this.left.color !== null && this.right.color !== null)return true;
+    if (this.color !== null) return true;
+    if (this.left.color !== null && this.right.color !== null) return true;
     else return false;
   }
 }
@@ -154,10 +155,10 @@ const Game = ({ mode }) => {
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
   const [popupFusion, setPopupFusion] = useState(false);
   const [popupWin,setPopupWin] = useState(false);
-  const [popupEmpreint,setPopupEmpreint] = useState(false);
+  const [popupEmprunt,setPopupEmprunt] = useState(false);
   const [popupGetCard, setPopupGetCard] = useState(false);
   const [popupError, setPopupError] = useState(false);
-  const [ancienGame , setAncienGame] = useState([]);
+  const [lastGame , setLastGame] = useState([]);
 
   /**
    * Initialise l'exercice.
@@ -177,32 +178,33 @@ const Game = ({ mode }) => {
 
   /**
    * 1er cas possible :
-   * Vérifie que la carte sélectionner en deuxième a une liaison "=>".
-   * Vérifie que la carte sélectionner en premier sois égale à la partie gauche de la deuxième carte
-   * si oui ajoute une nouvelle carte qui est la copie de la partie droite de la deuxième carte dans le deck le plus grand
-   * 2eme cas possible :
-   * Vérifie que les deux cartes sont "simple" ou double si c'est la cas ajoute une carte double avec les couleurs des deux cartes sélectionner et la lisaion "et". 
-   * si non affiche un popup d’erreur
+   * Vérifie que la carte sélectionnée en 2ème a une liaison "=>" ;
+   * Vérifie que la carte sélectionnée en 1er est égale à la partie gauche de la 2ème carte ;
+   * Si oui ajoute une nouvelle carte qui est la copie de la partie droite de la 2ème carte dans le {@link Deck} le plus grand.
+   * 2ème cas possible :
+   * Vérifie que les2 cartes sont simples ou doubles ;
+   * Si c'est la cas ajoute une carte double avec les couleurs des 2 cartes sélectionnées et la liaison "et" ;
+   * Sinon affiche un popup d’erreur.
    */
   const fusion = () => {
     let tmp = [...game];
     tmp[selecDeck1][selecCard1].select(false);
     tmp[selecDeck2][selecCard2].select(false);
-    if(tmp[selecDeck2][selecCard2].liaison === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1])){
-      let tmpAncienGame =  [...ancienGame];
+    if (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1])) {
+      let tmpLastGame = [...lastGame];
       let saveGameTmp = [];
-      for(var i = 0 ; i < game.length ; i++){
-        if(game[i] !== null){
+      for (var i = 0 ; i < game.length ; i++) {
+        if (game[i] !== null) {
           saveGameTmp[i] = [];
-          for(var j = 0 ; j < game[i].length ; j++){
-            if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+          for (var j = 0 ; j < game[i].length ; j++) {
+            if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
             else saveGameTmp.push(null);
           }
         }
         else saveGameTmp.push(null);
       }
-      tmpAncienGame.push(saveGameTmp);
-      setAncienGame(tmpAncienGame);
+      tmpLastGame.push(saveGameTmp);
+      setLastGame(tmpLastGame);
       let finalDeck = Math.max(selecDeck1,selecDeck2);
       tmp[finalDeck].push(tmp[selecDeck2][selecCard2].right.copy());
       tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
@@ -210,21 +212,21 @@ const Game = ({ mode }) => {
       allFalse();
       setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
     }
-    else if(tmp[selecDeck1][selecCard1].isSimpleOrDouble() && tmp[selecDeck2][selecCard2].isSimpleOrDouble()){
-      let tmpAncienGame =  [...ancienGame];
+    else if (tmp[selecDeck1][selecCard1].isSimpleOrDouble() && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
+      let tmpLastGame = [...lastGame];
       let saveGameTmp = [];
-      for(var i = 0 ; i < game.length ; i++){
-        if(game[i] !== null){
+      for (var i = 0 ; i < game.length ; i++) {
+        if (game[i] !== null) {
           saveGameTmp[i] = [];
-          for(var j = 0 ; j < game[i].length ; j++){
-            if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+          for (var j = 0 ; j < game[i].length ; j++) {
+            if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
             else saveGameTmp.push(null);
           }
         }
         else saveGameTmp.push(null);
       }
-      tmpAncienGame.push(saveGameTmp);
-      setAncienGame(tmpAncienGame);
+      tmpLastGame.push(saveGameTmp);
+      setLastGame(tmpLastGame);
       let finalDeck = Math.max(selecDeck1,selecDeck2);
       let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
       let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
@@ -239,7 +241,7 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * La carte qui est déja sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
+   * La carte qui est déjà sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
    * qui sélectionne toutes les cartes dans le Deck ou déselectionne la première carte sélectionnée si on
    * reclique dessus.
    * Enfin, si on sélectionne une 2ème carte, on appelle la fonction {@link popup} qui s'occupera de valider le
@@ -252,7 +254,7 @@ const Game = ({ mode }) => {
     let tempoSelecDeck1 = selecDeck1;
     let tempoSelecCard1 = selecCard1;
     let tempoNbSelec = nbSelec;
-    if (tempoNbSelec < 2 && ((i !== game.length-1) || (i === game.length-1 && game[i][j].liaison === "=>" && nbSelec === 0) || mode === "create")) {
+    if (tempoNbSelec < 2 && ((i !== game.length-1) || (i === game.length-1 && game[i][j].link === "=>" && nbSelec === 0) || mode === "create")) {
       let tempo = [...game];
       tempo[i].map(function (card) {
         if (card !== null &&
@@ -280,8 +282,8 @@ const Game = ({ mode }) => {
       setNbSelec(tempoNbSelec);
       setSelecCard1(tempoSelecCard1);
       setSelecDeck1(tempoSelecDeck1);
-      if(i === game.length-1 && game[i][j].liaison === "=>" && mode !== "create")setPopupEmpreint(true);
-      if(tempoNbSelec === 1 && game[i][j].liaison === "et" && mode !== "create")setPopupGetCard(true);
+      if(i === game.length-1 && game[i][j].link === "=>" && mode !== "create")setPopupEmprunt(true);
+      if(tempoNbSelec === 1 && game[i][j].link === "et" && mode !== "create")setPopupGetCard(true);
       if (tempoNbSelec === 2) {
         setSelecDeck2(i);
         setSelecCard2(j);
@@ -331,8 +333,8 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Crée une carte avec la couleur selectionnée (ne ferme pas le popup quand on sélectionne une couleur)
-   * @param {*} event (event.target.value) - reçoit la couleur cliquée
+   * Crée une carte avec la couleur selectionnée (ne ferme pas le popup quand on sélectionne une couleur).
+   * @param {*} event (event.target.value)   - reçoit la couleur cliquée ;
    *                  (event.target.checked) - on le met à false si on veut faire plusieurs fois la même couleur
    */
   const choixCouleur = (event) => {
@@ -343,7 +345,7 @@ const Game = ({ mode }) => {
         game[indiceDeckAddCard].length, // id
         event.target.value,             // color
         false,                          // active
-        "",                             // liaison
+        "",                             // link
         null,                           // left
         null                            // right
       )
@@ -352,13 +354,13 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Crée une carte complexe avec les 2 cartes selectionnées (cette fonction est appelée à la fin de update en mode création)
+   * Crée une carte complexe avec les 2 cartes sélectionnées (cette fonction est appelée à la fin de {@link update()} en mode création).
    * @param {*} event (event.target.value) - reçoit la liaison cliquée
    */
   const choixLiaison = (event) => {
     let tmp = [...game];
     event.target.checked = false;
-    const l = event.target.value;                 // liaison
+    const l = event.target.value;                 // link
     let c1 = game[selecDeck1][selecCard1].copy();
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
@@ -368,7 +370,7 @@ const Game = ({ mode }) => {
         game[indiceDeckAddCard].length,           // id
         null,                                     // color
         false,                                    // active
-        l,                                        // liaison
+        l,                                        // link
         c1,                                       // left
         c2                                        // right
       )
@@ -431,15 +433,14 @@ const Game = ({ mode }) => {
   }
 
   /**
-   * @todo Stocker dans un fichier sur le serveur ou sur le pc local ou laisser comme ça (afficher le json dans la console)
+   * @todo Stocker dans un fichier sur le serveur ou sur le PC local ou laisser comme ça (afficher le JSON dans la console).
    */
   const saveAsFile = () => {
     console.log(JSON.stringify(gameOutput()));
   };
 
   /**
-   * Pour l'instant ouvre le fichier Ex1.json
-   *
+   * Pour l'instant ouvre le fichier Ex1.json.
    */
   const openFile = () => {
     const namefile = "Ex1.json";
@@ -454,57 +455,56 @@ const Game = ({ mode }) => {
   /**
    * Transforme un objet JSON en instance {@link CardClass}.
    * @param {JSON} obj - information mimimum pour créer une carte :
-   *                     Carte simple = juste la couleur
+   *                     Carte simple = juste la couleur ;
    *                     Carte complexe = les 2 cartes qui la compose & la liaison
    * @param {number} i - numéro de l'id
-   * @returns {CardClass}
+   * @returns un objet {@link CardClass}
    */
   const toClass = (obj, i) => {
     // si c'est une carte complexe
-    if (obj.color === undefined) return new CardClass(i, null, false, obj.liaison, toClass(obj.left, 0), toClass(obj.right, 1));
+    if (obj.color === undefined) return new CardClass(i, null, false, obj.link, toClass(obj.left, 0), toClass(obj.right, 1));
     // si c'est une carte simple
     else return new CardClass(i, obj.color, false,"", null, null);
   }
 
   /**
-   * Compare l'objectif (game[game.length-1][currentDeck]) et toute les cartes du deck curentDeck.
-   * si on verifie le deck 0 renvoie true si on trouve l'objectif
-   * si on ne verifie pas le deck 0 si l'objectif est dans le deck
-   * ajoute l'objectif au dessus au deck précédent et 
-   * on regarde le deck en dessous (curentDeck -1) pour voir si la carte ajouter n'est pas l'objectif au dessus.
-   * @param {int} curentDeck le deck le plus élever
-   * @returns true/false
+   * Compare l'objectif (game[game.length-1][currentDeck]) et toutes les cartes du deck currentDeck :
+   * si on vérifie le deck 0, renvoie true si on trouve l'objectif ;
+   * si on ne vérifie pas le deck 0, si l'objectif est dans le deck on ajoute l'objectif au dessus du deck précédent et 
+   * on regarde le deck en dessous (currentDeck-1) pour voir si la carte ajoutée n'est pas l'objectif du dessus.
+   * @param {number} currentDeck - le Deck le plus élevé
+   * @returns true ou false
    */
-  const isWin = (curentDeck) =>{
-    
-    const objectif = game[game.length-1][curentDeck];
+  const isWin = (currentDeck) => {
+    const objectif = game[game.length-1][currentDeck];
     let bool = false;
-    game[curentDeck].forEach(card =>{
-      if(card !== null){
-        if(card.equals(objectif)){
-          if(curentDeck === 0)bool = true;
-          else{
+    game[currentDeck].forEach(card => {
+      if (card !== null) {
+        if (card.equals(objectif)) {
+          if (currentDeck === 0) bool = true;
+          else {
             let tmp = [...game];
-            tmp[curentDeck] = null;
-            tmp[game.length-1][curentDeck] = null;
-            let tmpCard = game[game.length-1][curentDeck-1].copy();
-            tmpCard.id = tmp[curentDeck-1].length;
-            tmp[curentDeck-1].push(tmpCard);
+            tmp[currentDeck] = null;
+            tmp[game.length-1][currentDeck] = null;
+            let tmpCard = game[game.length-1][currentDeck-1].copy();
+            tmpCard.id = tmp[currentDeck-1].length;
+            tmp[currentDeck-1].push(tmpCard);
             setGame(tmp);
-            bool = isWin(curentDeck-1);
+            bool = isWin(currentDeck-1);
           }
         }
       }
     })
     return bool;
   }
+
   /**
-   * Les verifications de la carte sont faite dans la methode update (si carte dans le deck objectif et a comme liaison "=>")
+   * Les vérifications de la carte sont faites dans la méthode {@link update()} (si carte dans le deck objectif et a comme liaison "=>")
    * creer un deck juste avant l'objectif et lui passe une nouvelle carte (la partie gauche de la carte selectionner)
    * creer une carte dans la partie objectif qui est une objectif secondaire
    */
-  const empreint = () =>{
-    setPopupEmpreint(false);
+  const emprunt = () =>{
+    setPopupEmprunt(false);
     let tmp = [...game];
     tmp[selecDeck1][selecCard1].select(false);
     let tmpObjectif = [...game[game.length-1]];
@@ -525,24 +525,24 @@ const Game = ({ mode }) => {
   }
 
   /**
-   * Fonction appeler après avoir sélectionner une carte avec une liaison "et"
-   * ajoute la partie gauche et droite de la carte au deck.
+   * Fonction appelée après avoir sélectionner une carte avec une liaison "et".
+   * Ajoute la partie gauche et droite de la carte au {@link Deck}.
    */
-  const addTwoCard = () =>{
-    let tmpAncienGame =  [...ancienGame];
+  const addTwoCard = () => {
+    let tmpLastGame = [...lastGame];
     let saveGameTmp = [];
-    for(var i = 0 ; i < game.length ; i++){
-      if(game[i] !== null){
+    for (var i = 0 ; i < game.length ; i++) {
+      if (game[i] !== null) {
         saveGameTmp[i] = [];
-        for(var j = 0 ; j < game[i].length ; j++){
-          if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+        for (var j = 0 ; j < game[i].length ; j++) {
+          if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
           else saveGameTmp.push(null);
         }
       }
       else saveGameTmp.push(null);
     }
-    tmpAncienGame.push(saveGameTmp);
-    setAncienGame(tmpAncienGame);
+    tmpLastGame.push(saveGameTmp);
+    setLastGame(tmpLastGame);
     let tmp = [...game];
     game[selecDeck1][selecCard1].select(false);
     tmp[selecDeck1].push(game[selecDeck1][selecCard1].left.copy());
@@ -553,71 +553,70 @@ const Game = ({ mode }) => {
     setGame(tmp);
     setPopupGetCard(false);
     allFalse();
-
   }
 
   /**
-   * Prend le dernier élément du tableau ancienGame et remplace la variable game
-   * (marche pas)
+   * Prend le dernier élément du tableau {@link lastGame} et remplace la variable {@link game}.
+   * (ne marche pas)
    */
-  const retourEnArriere = () =>{
-    
-    if(ancienGame.length !== 0){
-      let tmpAncienGame = [...ancienGame];
-      let tmpSavedGame = tmpAncienGame[tmpAncienGame.length-1];
-      let futurGameTmp = [];
-      for(var i = 0 ; i < tmpSavedGame.length ; i++){
-        if(tmpSavedGame[i] !== null){
-          futurGameTmp[i] = [];
-          for(var j = 0 ; j < tmpSavedGame[i].length ; j++){
-            if(tmpSavedGame[i][j] !== null)futurGameTmp[i].push(tmpSavedGame[i][j].copy());
-            else futurGameTmp.push(null);
+  const retourEnArriere = () => {
+    if (lastGame.length !== 0) {
+      let tmpLastGame = [...lastGame];
+      let tmpSavedGame = tmpLastGame[tmpLastGame.length-1];
+      let tmpFutureGame = [];
+      for (var i = 0 ; i < tmpSavedGame.length ; i++) {
+        if (tmpSavedGame[i] !== null) {
+          tmpFutureGame[i] = [];
+          for (var j = 0 ; j < tmpSavedGame[i].length ; j++) {
+            if (tmpSavedGame[i][j] !== null) tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
+            else tmpFutureGame.push(null);
           }
         }
-        else futurGameTmp.push(null);
+        else tmpFutureGame.push(null);
       }
-      console.log(futurGameTmp);
-      //fonction allFalse() mais si appeller marche pas car executer de manière asynchrone
+      console.log(tmpFutureGame);
+      // fonction allFalse() mais si appellée elle ne marche pas car executée de manière asynchrone
       setNbSelec(0);
       setSelecCard1(-1);
       setSelecDeck1(-1);
       setSelecCard2(-1);
       setSelecDeck2(-1);
-      futurGameTmp.forEach((e) => {
+      tmpFutureGame.forEach((e) => {
         e.forEach((s) => {
           if (s !== null) {
             s.select(false);
           }
         });
       });
-      //////////////////////////////////////////////////////////////////////////////////////
-      setGame(futurGameTmp);
-      tmpAncienGame.pop();
-      setAncienGame(tmpAncienGame);
+      //////////////////////////////
+      setGame(tmpFutureGame);
+      tmpLastGame.pop();
+      setLastGame(tmpLastGame);
     }
 
 }
 
   /**
-   * A la base la fonction qui sauvegarde la partie qui est pour l'instant recopier trois fois dans les autres fonction
+   * À la base la fonction qui sauvegarde la partie qui est pour l'instant recopié 3 fois dans les autres fonctions
    * car ne fonctionne pas en appelant une fonction (asynchrone).
    */
-  const saveGame = () =>{
-    let tmpAncienGame =  [...ancienGame];
+  const saveGame = () => {
+    let tmpLastGame =  [...lastGame];
     let saveGameTmp = [];
-    for(var i = 0 ; i < game.length ; i++){
-      if(game[i] !== null){
+    for (var i = 0 ; i < game.length ; i++) {
+      if (game[i] !== null) {
         saveGameTmp[i] = [];
-        for(var j = 0 ; j < game[i].length ; j++){
-          if(game[i][j] !== null)saveGameTmp[i].push(game[i][j].copy());
+        for (var j = 0 ; j < game[i].length ; j++) {
+          if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
           else saveGameTmp.push(null);
         }
       }
       else saveGameTmp.push(null);
     }
-    tmpAncienGame.push(saveGameTmp);
-    setAncienGame(tmpAncienGame);
+    tmpLastGame.push(saveGameTmp);
+    setLastGame(tmpLastGame);
   }
+
   return (
     <div className="game" >
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
@@ -627,17 +626,17 @@ const Game = ({ mode }) => {
         {game.map((deck, index) => (
           deck !== null ? (
             <Deck
-              updateGame = {update}
-              indice = {index}
-              addCardFunc = {addCard}
+              updateGame     = {update}
+              indice         = {index}
+              addCardFunc    = {addCard}
               deleteCardFunc = {setPopupDeleteCard}
-              nbDeck = {game.length}
-              mode = {mode}
-              key = {index}
+              nbDeck         = {game.length}
+              mode           = {mode}
+              key            = {index}
             ></Deck>
-        ) : (
+          ) : (
           <></>
-        )
+          )
         ))}
       </GameTab.Provider>
       {popupSelect && (selecCard1 > -1 && selecCard2 > -1 && selecDeck1 > -1 && selecDeck2 > -1 ) && (
@@ -734,7 +733,7 @@ const Game = ({ mode }) => {
           content={
             <>
               <b>
-                Voulez-vous suprimmer cette carte{" "}
+                Voulez-vous supprimer cette carte{" "}
                 {game[selecDeck1][selecCard1].toString()} : [{selecDeck1}][{selecCard1}] ?
               </b>
               <br></br>
@@ -761,21 +760,21 @@ const Game = ({ mode }) => {
                   setPopupWin(false);
                 }}
               >
-                Annuler
+                Fermer
               </button>
             </>
           }
         />
       )}
-      {popupEmpreint && (
+      {popupEmprunt && (
         <Popup
           content={
             <>
-              <b>Voulez vous empreinter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
-              <button onClick={empreint}> Oui </button>
+              <b>Voulez vous emprunter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
+              <button onClick={emprunt}> Oui </button>
               <button
                 onClick={function () {
-                  setPopupEmpreint(false);
+                  setPopupEmprunt(false);
                   allFalse();
                 }}
               >

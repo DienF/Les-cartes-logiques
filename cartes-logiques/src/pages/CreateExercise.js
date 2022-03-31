@@ -2,7 +2,7 @@ import React from 'react';
 import Game from '../components/Game';
 import Navigation from '../components/Navigation';
 
-const CreateExercice = () => {
+const CreateExercise = () => {
     return (
         <div className="create">
             <Navigation/>    
@@ -11,4 +11,4 @@ const CreateExercice = () => {
     );
 };
 
-export default CreateExercice;
+export default CreateExercise;
