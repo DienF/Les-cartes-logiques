@@ -7,9 +7,9 @@ class CardClass {
   /**
    * @param {number} id
    * @param {string|null} color - couleurs disponibles :
-   *                              rouge ("red")     ;
-   *                              jaune ("yellow")  ;
-   *                              bleu ("blue")     ;
+   *                              rouge  ("red")    ;
+   *                              jaune  ("yellow") ;
+   *                              bleu   ("blue")   ;
    *                              orange ("orange")
    * @param {true|false} active
    * @param {""|"et"|"=>"} link -  ""  = carte simple ;
@@ -33,8 +33,8 @@ class CardClass {
    * Carte double : (couleur) liaison (couleur)
    * Carte triple : (couleur) liaison ((couleur) liaison (couleur))
    * Carte quadruple : ((couleur) liaison (couleur)) liaison ((couleur) liaison (couleur))
-   * @example ((rouge) ^ (jaune)) => (bleu)
-   * @returns un string plus lisible
+   * @example ((rouge) ∧ (jaune)) ⇒ (bleu)
+   * @returns {string} un string plus lisible
    */
   toString() {
     let res = "(";
@@ -90,7 +90,7 @@ class CardClass {
   /**
    * Renvoie une nouvelle instance d'une carte.
    * Si la carte est composée de 2 autres cartes ces dernières sont également de nouvelles instances.
-   * @returns une nouvelle instance d'une même carte
+   * @returns {CardClass} une nouvelle instance d'une même carte
    */
   copy() {
     let l = null;
@@ -116,7 +116,7 @@ class CardClass {
   /**
    * Compare les attributs de 2 cartes.
    * @param {CardClass} card - l'autre carte à comparer
-   * @returns true si identiques sinon false
+   * @returns {true|false} true si identiques sinon false
    */
   equals(card) {
     if (this.color !== null && card.color !== null) return (this.color === card.color);
@@ -133,9 +133,9 @@ class CardClass {
 
   /**
    * Vérifie si la carte est simple/double.
-   * @returns true si simple/double sinon false
+   * @returns {true|false} true si simple/double sinon false
    */
-  isSimpleOrDouble(){
+  isSimpleOrDouble() {
     if (this.color !== null) return true;
     if (this.left.color !== null && this.right.color !== null) return true;
     else return false;
@@ -178,13 +178,13 @@ const Game = ({ mode }) => {
 
   /**
    * 1er cas possible :
-   * Vérifie que la carte sélectionnée en 2ème a une liaison "=>" ;
-   * Vérifie que la carte sélectionnée en 1er est égale à la partie gauche de la 2ème carte ;
-   * Si oui ajoute une nouvelle carte qui est la copie de la partie droite de la 2ème carte dans le {@link Deck} le plus grand.
+   * vérifie que la carte sélectionnée en 2ème a une liaison "=>" ;
+   * vérifie que la carte sélectionnée en 1er est égale à la partie gauche de la 2ème carte ;
+   * si oui ajoute une nouvelle carte qui est la copie de la partie droite de la 2ème carte dans le {@link Deck} le plus grand.
    * 2ème cas possible :
-   * Vérifie que les2 cartes sont simples ou doubles ;
-   * Si c'est la cas ajoute une carte double avec les couleurs des 2 cartes sélectionnées et la liaison "et" ;
-   * Sinon affiche un popup d’erreur.
+   * vérifie que les2 cartes sont simples ou doubles ;
+   * si c'est la cas ajoute une carte double avec les couleurs des 2 cartes sélectionnées et la liaison "et" ;
+   * sinon affiche un popup d’erreur.
    */
   const fusion = () => {
     let tmp = [...game];
@@ -397,7 +397,7 @@ const Game = ({ mode }) => {
   /**
    * Transforme le tableau en tableau d'objets avec seulement les informations qui nous intéressent (couleur/liaison).
    *
-   * @returns un tableau d'objet
+   * @returns un tableau d'objets
    */
   const gameOutput = () => {
     let res = [[], []];
@@ -458,7 +458,7 @@ const Game = ({ mode }) => {
    *                     Carte simple = juste la couleur ;
    *                     Carte complexe = les 2 cartes qui la compose & la liaison
    * @param {number} i - numéro de l'id
-   * @returns un objet {@link CardClass}
+   * @returns {CardClass} une carte
    */
   const toClass = (obj, i) => {
     // si c'est une carte complexe
@@ -473,7 +473,7 @@ const Game = ({ mode }) => {
    * si on ne vérifie pas le deck 0, si l'objectif est dans le deck on ajoute l'objectif au dessus du deck précédent et 
    * on regarde le deck en dessous (currentDeck-1) pour voir si la carte ajoutée n'est pas l'objectif du dessus.
    * @param {number} currentDeck - le Deck le plus élevé
-   * @returns true ou false
+   * @returns {true|false} true ou false
    */
   const isWin = (currentDeck) => {
     const objectif = game[game.length-1][currentDeck];
@@ -660,7 +660,7 @@ const Game = ({ mode }) => {
           content={
             <>
               <b>
-                Vous ne pouvez fusionner cette carte{" "}
+                Vous ne pouvez pas fusionner cette carte{" "}
                 {game[selecDeck1][selecCard1].toString()}  avec celle-ci{" "}
                 {game[selecDeck2][selecCard2].toString()}.
               </b>
@@ -690,7 +690,7 @@ const Game = ({ mode }) => {
         <Popup
           content={
             <>
-              <b>Choisissez une Couleur</b>
+              <b>Choisissez une couleur</b>
               <div onChange={choixCouleur}>
                 <input type="radio" value="red" name="couleur" /> Rouge
                 <input type="radio" value="yellow" name="couleur" /> Jaune
@@ -754,7 +754,7 @@ const Game = ({ mode }) => {
         <Popup
           content={
             <>
-              <b>Bravo vous avez gagné</b>
+              <b>Bravo, vous avez gagné !</b>
               <button
                 onClick={function () {
                   setPopupWin(false);
@@ -770,7 +770,7 @@ const Game = ({ mode }) => {
         <Popup
           content={
             <>
-              <b>Voulez vous emprunter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
+              <b>Voulez-vous emprunter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
               <button onClick={emprunt}> Oui </button>
               <button
                 onClick={function () {

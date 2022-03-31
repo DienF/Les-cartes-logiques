@@ -14,7 +14,7 @@ const Card = ({ deckIndice, cardIndice, update }) => {
    * @param {*}   game - le tableau qui contient toutes les cartes
    * @param {number} i - le numéro du Deck
    * @param {number} j - la position de la carte dans le Deck
-   * @returns le nom de la classe correspondant à la carte
+   * @returns {"card_simple"|"card_double"|"card_triple_a"|"card_triple_b"|"card_quadruple"} le nom de la classe correspondant à la carte
    */
   const getClassType = (game, i, j) => {
     if (game[i][j].left === null && game[i][j].right === null)
@@ -60,7 +60,7 @@ const Card = ({ deckIndice, cardIndice, update }) => {
    * @param {number} j - la position de la carte dans le Deck
    * @param {number} k - la position de la carte dans les cartes complexes ;
    *                     ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
-   * @returns "card_simple_h" (carte verticale) ou "card_simple_w" (carte horizontale)
+   * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
    */
   const getTabClass = (game, i, j, k) => {
     const className = getClassType(game, i, j);
@@ -83,7 +83,7 @@ const Card = ({ deckIndice, cardIndice, update }) => {
    * @param {*}   game - le tableau qui contient toutes les cartes
    * @param {number} i - le numéro du Deck
    * @param {number} j - la position de la carte dans le Deck
-   * @returns un tableau de cartes
+   * @returns {CardClass[]} un tableau de cartes
    */
   const getTab = (game, i, j) => {
     const className = getClassType(game, i, j);
