@@ -8,7 +8,7 @@ const Navigation = () => {
           <li>
           <a href="#">Menu</a>
             <ul>
-                <li>
+              <li>
                 <NavLink exact="true" to="/">
                   Accueil
                 </NavLink>

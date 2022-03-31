@@ -358,7 +358,7 @@ const Game = ({ mode }) => {
   const choixLiaison = (event) => {
     let tmp = [...game];
     event.target.checked = false;
-    const l = event.target.value;                               // liaison
+    const l = event.target.value;                 // liaison
     let c1 = game[selecDeck1][selecCard1].copy();
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
@@ -383,7 +383,7 @@ const Game = ({ mode }) => {
    */
   const deleteCard = () => {
     setPopupDeleteCard(false);
-    if (!(selecCard1 === -1 && selecDeck1 === -1)){
+    if (!(selecCard1 === -1 && selecDeck1 === -1)) {
       let tmp = [...game];
       tmp[selecDeck1][selecCard1] = null;
       saveGame();

@@ -1,0 +1,44 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+
+const Choice = () => {
+  return (
+    <div className="choice">
+        <ul className="choicebar">
+          <li>
+          <a href="#">Exercice :</a>
+            <ul>
+              <li>
+                <NavLink exact="true" to="/Exercice">
+                  Exercice 1
+                </NavLink>
+              </li>
+              <li>
+                <NavLink exact="true" to="/Exercice">
+                  Exercice 2
+                </NavLink>
+              </li>
+              <li>
+                <NavLink exact="true" to="/Exercice">
+                  Exercice 3
+                </NavLink>
+              </li>
+              <li>
+                <NavLink exact="true" to="/Exercice">
+                  Exercice 4
+                </NavLink>
+              </li>
+              <li>
+                <NavLink exact="true" to="/Exercice">
+                  Exercice 5
+                </NavLink>
+              </li>
+            </ul>
+          </li>
+      </ul>
+    </div>
+    
+  );
+};
+
+export default Choice;
