@@ -1,0 +1,22 @@
+.choice{
+    padding-top: 20%;
+    height : 50vh;
+    width : 50vw;
+    margin: 0 auto;
+    li {
+        background-color: lightgray;
+        list-style-type: none;
+    a {
+        text-decoration: none;
+        color : black;
+    }
+    ul li a{
+        background-color: lightgray;
+        border: 1px black;
+    }
+    ul li a:hover{
+        background-color: gray;
+    }
+    }
+
+}

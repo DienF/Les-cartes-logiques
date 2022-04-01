@@ -6,7 +6,7 @@ const Choice = () => {
     <div className="choice">
         <ul className="choicebar">
           <li>
-          <a href="#">Exercice :</a>
+          <a href="#">Exercices :</a>
             <ul>
               <li>
                 <NavLink exact="true" to="/Exercise">
