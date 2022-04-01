@@ -8,7 +8,20 @@
   display: grid;
   grid-template-columns: 20% 30% 30% 20%; 
   grid-template-areas:
+  "b b b b"
   "start . . goal"
   "start . . goal"
   "start . . goal";
+
+  .bouton{
+    grid-area: b;
+    align-items: center;
+    button{
+      margin-bottom: 1.2vh;
+      margin-top: 0.8vh;
+      margin-right: 2vh;
+      margin-left: 2vh;
+    }
+
+  }
 }
