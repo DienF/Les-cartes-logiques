@@ -2,19 +2,19 @@
   [
     {
       "left": { "color": "red" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "blue" }
     },
     {
       "left": { "color": "blue" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "orange" }
     }
   ],
   [
     {
       "left": { "color": "red" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "orange" }
     }
   ]

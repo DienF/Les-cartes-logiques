@@ -2,24 +2,24 @@
   [
     {
       "left": { "color": "blue" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "yellow" }
     },
     {
       "left": { "color": "blue" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "red" }
     },
     {
       "left": {
         "left": { "color": "red" },
-        "liaison": "et",
+        "link": "et",
         "right": { "color": "blue" }
       },
-      "liaison": "=>",
+      "link": "=>",
       "right": {
         "left": { "color": "yellow" },
-        "liaison": "=>",
+        "link": "=>",
         "right": { "color": "orange" }
       }
     }
@@ -27,7 +27,7 @@
   [
     {
       "left": { "color": "blue" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "orange" }
     }
   ]

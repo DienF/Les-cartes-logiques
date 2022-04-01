@@ -135,6 +135,7 @@ const Card = ({ deckIndice, cardIndice, update }) => {
                         (cardAffiche.active ? " card_selec" : "")
                       }
                     ></div>
+                    {console.log(game[deckIndice][cardIndice])}
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix">{game[deckIndice][cardIndice].link}</div>)}
                   </div>
                 )

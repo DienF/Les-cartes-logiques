@@ -2,24 +2,24 @@
   [
     {
       "left": { "color": "red" },
-      "liaison": "et",
+      "link": "et",
       "right": { "color": "yellow" }
     },
     {
       "left": { "color": "red" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "blue" }
     },
     {
       "left": { "color": "blue" },
-      "liaison": "=>",
+      "link": "=>",
       "right": { "color": "orange" }
     }
   ],
   [
     {
       "left": { "color": "red" },
-      "liaison": "et",
+      "link": "et",
       "right": { "color": "orange" }
     }
   ]
