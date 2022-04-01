@@ -5,7 +5,7 @@ import Navigation from "../components/Navigation";
 const Exercise = () => {
   const [ex, setEx] = useState();
   useEffect(() => {
-    setEx("ex1");
+    setEx("ex5");
   }, []);
 
   return (
