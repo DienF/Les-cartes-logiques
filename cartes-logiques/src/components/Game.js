@@ -175,6 +175,7 @@ const Game = ({ mode }) => {
     }
   }, [mode]);
 
+
   /** Comentaire obsolete
    * 1er cas possible :
    * vérifie que la carte sélectionnée en 2ème a une liaison "=>" ;
@@ -244,9 +245,28 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Déselectionne toute les cartes.
+   * Déselectionne toute les cartes dans le tableau recu et devien le jeu.
    */
-  const allFalse = () => {
+  const allFalse = (tmp) => {
+    setNbSelec(0);
+    setSelecCard1(-1);
+    setSelecDeck1(-1);
+    setSelecCard2(-1);
+    setSelecDeck2(-1);
+    tmp.forEach((e) => {
+      e.forEach((s) => {
+        if (s !== null) {
+          s.select(false);
+        }
+      });
+    });
+    setGame(tmp);
+  };
+
+  /**
+   * Déselectionne toute les cartes du jeu.
+   */
+  const allFalseGame = () => {
     setNbSelec(0);
     setSelecCard1(-1);
     setSelecDeck1(-1);
@@ -269,7 +289,7 @@ const Game = ({ mode }) => {
   const closePopup = () => {
     setPopupError(false);
     setMessageErreur("Aucun message d'erreur prévu :(");
-    allFalse();
+    allFalseGame();
   };
 
   /**
@@ -287,6 +307,7 @@ const Game = ({ mode }) => {
    *                  (event.target.checked) - on le met à false si on veut faire plusieurs fois la même couleur
    */
   const choixCouleur = (event) => {
+    saveGame();
     let tmp = [...game];
     event.target.checked = false;
     tmp[indiceDeckAddCard].push(
@@ -299,7 +320,7 @@ const Game = ({ mode }) => {
         null                            // right
       )
     );
-    setGame(tmp);
+    allFalse(tmp);
   };
 
   /**
@@ -307,6 +328,7 @@ const Game = ({ mode }) => {
    * @param {*} event (event.target.value) - reçoit la liaison cliquée
    */
   const choixLiaison = (event) => {
+    saveGame();
     let tmp = [...game];
     event.target.checked = false;
     const l = event.target.value;                 // link
@@ -324,9 +346,8 @@ const Game = ({ mode }) => {
         c2                                        // right
       )
     );
-    setGame(tmp);
     setPopupFusion(false);
-    allFalse();
+    allFalse(tmp);
   };
 
   /**
@@ -338,9 +359,9 @@ const Game = ({ mode }) => {
       let tmp = [...game];
       tmp[selecDeck1][selecCard1] = null;
       saveGame();
-      setGame(tmp);
+      allFalse(tmp);
     }
-    allFalse();
+    else allFalseGame();
   };
 
   /**
@@ -394,6 +415,7 @@ const Game = ({ mode }) => {
   const openFile = () => {
     const namefile = "Ex1.json";
     setGame([[] ,[]]);
+    saveGame();
     fetch(namefile)
       .then((response) => response.text())
       .then((data) => {
@@ -454,26 +476,20 @@ const Game = ({ mode }) => {
    */
   const emprunt = () =>{
     setPopupEmprunt(false);
+    saveGame();
     let tmp = [...game];
-    tmp[selecDeck1][selecCard1].select(false);
     let tmpObjectif = [...game[game.length-1]];
     let tmpCard = game[selecDeck1][selecCard1].right.copy()
     tmpCard.id = game[game.length-1].length;
-    tmpCard.select(false);
     tmpObjectif.push(tmpCard)
     tmp[game.length-1] = [];
     tmpCard = game[selecDeck1][selecCard1].left.copy();
     tmpCard.id = 0;
-    tmpCard.select(false);
     tmp[game.length-1].push(tmpCard);
     tmp.push(tmpObjectif);
-    setGame(tmp);
-    setNbSelec(0);
-    setSelecCard1(-1);
-    setSelecDeck1(-1);
+    allFalse(tmp);
+
   }
-
-
 
   /**
    * Prend le dernier élément du tableau {@link lastGame} et remplace la variable {@link game}.
@@ -494,22 +510,7 @@ const Game = ({ mode }) => {
         }
         else tmpFutureGame.push(null);
       }
-      console.log(tmpFutureGame);
-      // fonction allFalse() mais si appellée elle ne marche pas car executée de manière asynchrone
-      setNbSelec(0);
-      setSelecCard1(-1);
-      setSelecDeck1(-1);
-      setSelecCard2(-1);
-      setSelecDeck2(-1);
-      tmpFutureGame.forEach((e) => {
-        e.forEach((s) => {
-          if (s !== null) {
-            s.select(false);
-          }
-        });
-      });
-      //////////////////////////////
-      setGame(tmpFutureGame);
+      allFalse(tmpFutureGame);
       tmpLastGame.pop();
       setLastGame(tmpLastGame);
     }
@@ -551,24 +552,10 @@ const Game = ({ mode }) => {
    */
   const addCardAnd = () => {
     if((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)){
-      
       let deckI = Math.max(selecDeck1,selecDeck2);
       let cardI = Math.max(selecCard1,selecCard2);
       if(game[deckI][cardI].link === "et"){
-        let tmpLastGame = [...lastGame];
-        let saveGameTmp = [];
-        for (var i = 0 ; i < game.length ; i++) {
-          if (game[i] !== null) {
-            saveGameTmp[i] = [];
-            for (var j = 0 ; j < game[i].length ; j++) {
-              if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
-              else saveGameTmp.push(null);
-            }
-          }
-          else saveGameTmp.push(null);
-        }
-        tmpLastGame.push(saveGameTmp);
-        setLastGame(tmpLastGame);
+        saveGame();
         let tmp = [...game];
         game[deckI][cardI].select(false);
         tmp[deckI].push(game[deckI][cardI].left.copy());
@@ -576,8 +563,8 @@ const Game = ({ mode }) => {
         tmp[deckI].push(game[deckI][cardI].right.copy());
         tmp[deckI][tmp[deckI].length-1].id = tmp[deckI].length-1;
     
-        setGame(tmp);
-        allFalse();
+        allFalse(tmp);
+        setPopupWin(isWin(selecDeck1));
       }
       else{
         setMessageErreur("La carte sélectionner doit avoir une liaison principale de type \"et\" !");
@@ -610,24 +597,9 @@ const Game = ({ mode }) => {
   const addCardFuse = () => {
     if(selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1){
       let tmp = [...game];
-      tmp[selecDeck1][selecCard1].select(false);
-      tmp[selecDeck2][selecCard2].select(false);
       let bool = (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]));
       if (bool || (tmp[selecDeck1][selecCard1].link === "=>" && tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2]))) {
-        let tmpLastGame = [...lastGame];
-        let saveGameTmp = [];
-        for (var i = 0 ; i < game.length ; i++) {
-          if (game[i] !== null) {
-            saveGameTmp[i] = [];
-            for (var j = 0 ; j < game[i].length ; j++) {
-              if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
-              else saveGameTmp.push(null);
-            }
-          }
-          else saveGameTmp.push(null);
-        }
-        tmpLastGame.push(saveGameTmp);
-        setLastGame(tmpLastGame);
+        saveGame();
         let finalDeck = Math.max(selecDeck1,selecDeck2);
         let deckCarteComplex = -1;
         let cardCarteComplex = -1;
@@ -642,8 +614,7 @@ const Game = ({ mode }) => {
 
         tmp[finalDeck].push(tmp[deckCarteComplex][cardCarteComplex].right.copy());
         tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
-        setGame(tmp);
-        allFalse();
+        allFalse(tmp);
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
       else {
@@ -677,32 +648,16 @@ const Game = ({ mode }) => {
   const fuseCardAdd = () => {
     if(selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1){
       let tmp = [...game];
-      tmp[selecDeck1][selecCard1].select(false);
-      tmp[selecDeck2][selecCard2].select(false);
       let bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
       if ( bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
-        let tmpLastGame = [...lastGame];
-        let saveGameTmp = [];
-        for (var i = 0 ; i < game.length ; i++) {
-          if (game[i] !== null) {
-            saveGameTmp[i] = [];
-            for (var j = 0 ; j < game[i].length ; j++) {
-              if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
-              else saveGameTmp.push(null);
-            }
-          }
-          else saveGameTmp.push(null);
-        }
-        tmpLastGame.push(saveGameTmp);
-        setLastGame(tmpLastGame);
+        saveGame();
         let finalDeck = Math.max(selecDeck1,selecDeck2);
         let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
         let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
         tmpCard1.id = 0;
         tmpCard2.id = 1;
         tmp[finalDeck].push(new CardClass(tmp[finalDeck].length,null,false,"et",tmpCard1,tmpCard2));
-        setGame(tmp);
-        allFalse();
+        allFalse(tmp);
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
       else {
@@ -732,28 +687,14 @@ const Game = ({ mode }) => {
       tmp[selecDeck2][selecCard2].select(false);
       let bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
       if ( bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
-        let tmpLastGame = [...lastGame];
-        let saveGameTmp = [];
-        for (var i = 0 ; i < game.length ; i++) {
-          if (game[i] !== null) {
-            saveGameTmp[i] = [];
-            for (var j = 0 ; j < game[i].length ; j++) {
-              if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
-              else saveGameTmp.push(null);
-            }
-          }
-          else saveGameTmp.push(null);
-        }
-        tmpLastGame.push(saveGameTmp);
-        setLastGame(tmpLastGame);
+        saveGame();
         let finalDeck = Math.max(selecDeck1,selecDeck2);
         let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
         let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
         tmpCard1.id = 0;
         tmpCard2.id = 1;
         tmp[finalDeck].push(new CardClass(tmp[finalDeck].length,null,false,"=>",tmpCard1,tmpCard2));
-        setGame(tmp);
-        allFalse();
+        allFalse(tmp);
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
       else {
@@ -779,10 +720,10 @@ const Game = ({ mode }) => {
       {mode === "create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
       <div className="bouton">
         <button onClick={retourEnArriere}>Retour en arrière</button>
-        <button onClick={addCardAnd}>Ajout carte et</button>
-        <button onClick={addCardFuse}>Ajout carte {"=>"}</button>
-        <button onClick={fuseCardAdd}>Fusion carte et</button>
-        <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>
+        {mode !== "create" && <button onClick={addCardAnd}>Ajout carte et</button>}
+        {mode !== "create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
+        {mode !== "create" && <button onClick={fuseCardAdd}>Fusion carte et</button>}
+        {mode !== "create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
       </div>
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
@@ -903,7 +844,7 @@ const Game = ({ mode }) => {
               <button
                 onClick={function () {
                   setPopupEmprunt(false);
-                  allFalse();
+                  allFalseGame();
                 }}
               >
                 Annuler
