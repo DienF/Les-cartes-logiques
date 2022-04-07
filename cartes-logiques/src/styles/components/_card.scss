@@ -2,27 +2,22 @@
   margin-top: 20px;
   margin-bottom: 20px;
   color : black;
-  .affix {
+  .affix_h {
     font-size: 2vh;
     position: absolute;
-    border-radius: 2px;
     background-color: grey;
-    border: 1px solid #800000;
     margin-top: -8.5vh;
     margin-left: 7.6vh;
     padding: 1vh;
     display: inline-block;
     vertical-align: middle;
   }
-
-  .affix2 {
+  .affix_v {
     font-size: 2vh;
     position: absolute;
-    border-radius: 2px;
-    background-color: black;
-    border: 1px solid #800000;
-    margin-top: 4vh;
-    margin-left: 7vh;
+    background-color: grey;
+    margin-top: -2vh;
+    margin-left: 2.5vh;
     padding: 1vh;
     display: inline-block;
     vertical-align: middle;

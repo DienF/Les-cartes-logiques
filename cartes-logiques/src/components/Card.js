@@ -135,7 +135,12 @@ const Card = ({ deckIndice, cardIndice, update }) => {
                         (cardAffiche.active ? " card_selec" : "")
                       }
                     ></div>
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
+                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
+                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].right.link}</div>)}
+                    {index === 2 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
                   </div>
                 )
               )}
