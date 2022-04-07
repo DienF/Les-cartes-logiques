@@ -227,29 +227,31 @@ const Game = ({ mode }) => {
     let tmpSelecDeck2 = selecDeck2;
     let tmpSelecCard1 = selecCard1;
     let tmpSelecCard2 = selecCard2;
-    if (tmpSelecDeck1 === i && tmpSelecCard1 === j){
-      tmpSelecCard1 = -1;
-      tmpSelecDeck1 = -1;
-      tmpNbselec--;
-      currentCard.select(!currentCard.active);
-    }
-    else if (tmpSelecDeck2 === i && tmpSelecCard2 === j){
-      tmpSelecCard2 = -1;
-      tmpSelecDeck2 = -1
-      tmpNbselec--;
-      currentCard.select(!currentCard.active);
-    }
-    else if(tmpSelecDeck1 === -1 && tmpSelecCard1 === -1){
-      tmpSelecDeck1 = i;
-      tmpSelecCard1 = j;
-      tmpNbselec++;
-      currentCard.select(!currentCard.active);
-    }
-    else if (tmpNbselec<2){
-      tmpSelecDeck2 = i;
-      tmpSelecCard2 = j;
-      tmpNbselec++;
-      currentCard.select(!currentCard.active);
+    if((i === game.length-1 && game[i][j].link === "=>" && mode !== "create") || i !== game.length-1 || mode === "create"){
+      if (tmpSelecDeck1 === i && tmpSelecCard1 === j){
+        tmpSelecCard1 = -1;
+        tmpSelecDeck1 = -1;
+        tmpNbselec--;
+        currentCard.select(!currentCard.active);
+      }
+      else if (tmpSelecDeck2 === i && tmpSelecCard2 === j){
+        tmpSelecCard2 = -1;
+        tmpSelecDeck2 = -1
+        tmpNbselec--;
+        currentCard.select(!currentCard.active);
+      }
+      else if(tmpSelecDeck1 === -1 && tmpSelecCard1 === -1){
+        tmpSelecDeck1 = i;
+        tmpSelecCard1 = j;
+        tmpNbselec++;
+        currentCard.select(!currentCard.active);
+      }
+      else if (tmpNbselec<2){
+        tmpSelecDeck2 = i;
+        tmpSelecCard2 = j;
+        tmpNbselec++;
+        currentCard.select(!currentCard.active);
+      }
     }
     setNbSelec(tmpNbselec);
     setSelecCard1(tmpSelecCard1);
@@ -599,6 +601,7 @@ const Game = ({ mode }) => {
    * Si toutes les conditions énumérer au-dessus sont respecter la partie droite est ajouter au deck le plus haut.
    */
   const addCardFuse = () => {
+
     if(selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1){
       let tmp = [...game];
       let bool = (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]));
