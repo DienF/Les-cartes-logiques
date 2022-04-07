@@ -128,7 +128,6 @@ const Card = ({ deckIndice, cardIndice, update }) => {
                 (cardAffiche, index) => (
                   <div>
                     <div
-                      key={index}
                       style={{ backgroundColor: cardAffiche.color }}
                       className={
                         getTabClass(game, deckIndice, cardIndice, index) +

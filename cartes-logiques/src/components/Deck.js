@@ -47,16 +47,12 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
         <GameTab.Consumer>
           {(game) => {
             return game[indice].map((card, index) =>
-              card !== null ? (
-                <Card
-                  deckIndice={indice}
-                  cardIndice={index}
-                  update={update}
-                  key={index}
-                />
-              ) : (
-                <></>
-              )
+              <Card
+                deckIndice={indice}
+                cardIndice={index}
+                update={update}
+                key={index}
+              />
             );
           }}
         </GameTab.Consumer>
