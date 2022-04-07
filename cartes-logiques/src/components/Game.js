@@ -220,49 +220,46 @@ const Game = ({ mode }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
-    setPopupDeleteCard(false);
-    let tempoSelecDeck = selecDeck1;
-    let tempoSelecCard = selecCard1;
-    let tempoNbSelec = nbSelec;
-    if (((i !== game.length-1) || (i === game.length-1 && game[i][j].link === "=>" && nbSelec === 0) || mode === "create")) {
-      let tempo = [...game];
-      tempo[i].map(function (card) {
-        if (!(card.id !== j &&
-          (!(i === tempoSelecDeck && card.id === tempoSelecCard) || tempoNbSelec === 0))
-        ) {
-          if (card.id === j && !(card.active === false && tempoNbSelec === 2)) {
-            card.select(!card.active);
-            if (card.active === true) {
-              if (tempoNbSelec === 0) {
-                setSelecCard1(j);
-                setSelecDeck1(i);
-              }
-              tempoNbSelec++;
-            } else {
-              tempoNbSelec--;
-              if(selecDeck1 === i && selecCard1 === j){
-                setSelecCard1(-1);
-                setSelecDeck1(-1);
-              }
-              else{
-                setSelecCard2(-1);
-                setSelecDeck2(-1);
-              }
-            }
-          }
-        }
-        return 0;
-      });
-      setGame(tempo);
-      setNbSelec(tempoNbSelec);
-      if(i === game.length-1 && game[i][j].link === "=>" && mode !== "create")setPopupEmprunt(true);
-      if (tempoNbSelec === 2) {
-        setSelecDeck2(i);
-        setSelecCard2(j);
-        if (mode === "create") setPopupFusion(true);
-      }
-      
+    let tmp = [...game];
+    let currentCard = tmp[i][j];
+    let tmpNbselec = nbSelec;
+    let tmpSelecDeck1 = selecDeck1;
+    let tmpSelecDeck2 = selecDeck2;
+    let tmpSelecCard1 = selecCard1;
+    let tmpSelecCard2 = selecCard2;
+    if (tmpSelecDeck1 === i && tmpSelecCard1 === j){
+      tmpSelecCard1 = -1;
+      tmpSelecDeck1 = -1;
+      tmpNbselec--;
+      currentCard.select(!currentCard.active);
     }
+    else if (tmpSelecDeck2 === i && tmpSelecCard2 === j){
+      tmpSelecCard2 = -1;
+      tmpSelecDeck2 = -1
+      tmpNbselec--;
+      currentCard.select(!currentCard.active);
+    }
+    else if(tmpSelecDeck1 === -1 && tmpSelecCard1 === -1){
+      tmpSelecDeck1 = i;
+      tmpSelecCard1 = j;
+      tmpNbselec++;
+      currentCard.select(!currentCard.active);
+    }
+    else if (tmpNbselec<2){
+      tmpSelecDeck2 = i;
+      tmpSelecCard2 = j;
+      tmpNbselec++;
+      currentCard.select(!currentCard.active);
+    }
+    setNbSelec(tmpNbselec);
+    setSelecCard1(tmpSelecCard1);
+    setSelecCard2(tmpSelecCard2);
+    setSelecDeck1(tmpSelecDeck1);
+    setSelecDeck2(tmpSelecDeck2);
+    tmp[i][j] = currentCard;
+    setGame(tmp);
+    if (tmpNbselec === 2 && mode === "create")setPopupFusion(true);
+    if(i === game.length-1 && game[i][j].link === "=>" && mode !== "create")setPopupEmprunt(true);
   };
 
   /**
