@@ -1,22 +1,25 @@
 .choice{
+    grid-area: m;
     padding-top: 20%;
-    height : 50vh;
-    width : 50vw;
     margin: 0 auto;
     li {
         background-color: lightgray;
         list-style-type: none;
+        padding: 30px;
+        border-radius: 5px;
+        margin: 0 3vw;
+        display: inline;
+    }
     a {
+        font-size: large;
         text-decoration: none;
         color : black;
     }
-    ul li a{
-        background-color: lightgray;
-        border: 1px black;
-    }
-    ul li a:hover{
+    li:hover{
         background-color: gray;
-    }
+        a:hover{
+            background-color: gray;
+        }
     }
 
 }
