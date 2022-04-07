@@ -175,19 +175,41 @@ const Game = ({ mode }) => {
     }
   }, [mode]);
 
-
-  /** Comentaire obsolete
-   * 1er cas possible :
-   * vérifie que la carte sélectionnée en 2ème a une liaison "=>" ;
-   * vérifie que la carte sélectionnée en 1er est égale à la partie gauche de la 2ème carte ;
-   * si oui ajoute une nouvelle carte qui est la copie de la partie droite de la 2ème carte dans le {@link Deck} le plus grand.
-   * 2ème cas possible :
-   * vérifie que les2 cartes sont simples ou doubles ;
-   * si c'est la cas ajoute une carte double avec les couleurs des 2 cartes sélectionnées et la liaison "et" ;
-   * sinon affiche un popup d’erreur.
+  /**
+   * renvoie un nouveau deck sans la carte indiquer en parametre
+   * @param {Array} deck - Deck dans lequel il faut supprimer la carte
+   * @param {number} indiceCard - Indice de la carte a supprimer
+   * @returns {Array}
    */
+  const delCard = (deck, indiceCard) =>{
+    let finalDeck = [];
+    deck[indiceCard] = null;
+    let compte = 0;
+    for(let i = 0;i<deck.length;i++){
+      if(deck[i] !== null){
+        let tmpCard = deck[i];
+        tmpCard.id = tmpCard.id - compte;
+        finalDeck.push(tmpCard);
+      }
+      else compte++;
+    }
+    return finalDeck;
+  } 
 
-
+  /**
+   * renvoie un nouveau tableau sans le deck passer en paramètre.
+   * @param {Array} curentGame - tableau de la partie (avec potentiellement des modifications)
+   * @param {number} indiceDeck - indice du deck a supprimer
+   * @returns 
+   */
+  const delDeck = (curentGame, indiceDeck) => {
+    let finalGame = [];
+    curentGame[indiceDeck] = null;
+    for(let i = 0;i<curentGame.length;i++){
+      if(curentGame[i] !== null) finalGame.push(curentGame[i]);
+    }
+    return finalGame;
+  }
   /**
    * La carte qui est déjà sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
    * qui sélectionne toutes les cartes dans le Deck ou déselectionne la première carte sélectionnée si on
@@ -205,8 +227,7 @@ const Game = ({ mode }) => {
     if (((i !== game.length-1) || (i === game.length-1 && game[i][j].link === "=>" && nbSelec === 0) || mode === "create")) {
       let tempo = [...game];
       tempo[i].map(function (card) {
-        if (card !== null &&
-          !(card.id !== j &&
+        if (!(card.id !== j &&
           (!(i === tempoSelecDeck && card.id === tempoSelecCard) || tempoNbSelec === 0))
         ) {
           if (card.id === j && !(card.active === false && tempoNbSelec === 2)) {
@@ -255,9 +276,7 @@ const Game = ({ mode }) => {
     setSelecDeck2(-1);
     tmp.forEach((e) => {
       e.forEach((s) => {
-        if (s !== null) {
-          s.select(false);
-        }
+        s.select(false);
       });
     });
     setGame(tmp);
@@ -275,9 +294,7 @@ const Game = ({ mode }) => {
     let tmp = [...game];
     tmp.forEach((e) => {
       e.forEach((s) => {
-        if (s !== null) {
-          s.select(false);
-        }
+        s.select(false);
       });
     });
     setGame(tmp);
@@ -356,9 +373,9 @@ const Game = ({ mode }) => {
   const deleteCard = () => {
     setPopupDeleteCard(false);
     if (!(selecCard1 === -1 && selecDeck1 === -1)) {
-      let tmp = [...game];
-      tmp[selecDeck1][selecCard1] = null;
       saveGame();
+      let tmp = [...game];
+      tmp[selecDeck1] = delCard(game[selecDeck1],selecCard1);
       allFalse(tmp);
     }
     else allFalseGame();
@@ -373,7 +390,7 @@ const Game = ({ mode }) => {
     let res = [[], []];
     game.map(function (deck, index) {
       deck.map(function (card) {
-        if (card != null) res[index].push(card.toFile());
+        res[index].push(card.toFile());
         return 0;
       });
       return 0;
@@ -450,19 +467,17 @@ const Game = ({ mode }) => {
     const objectif = game[game.length-1][currentDeck];
     let bool = false;
     game[currentDeck].forEach(card => {
-      if (card !== null) {
-        if (card.equals(objectif)) {
-          if (currentDeck === 0) bool = true;
-          else {
-            let tmp = [...game];
-            tmp[currentDeck] = null;
-            tmp[game.length-1][currentDeck] = null;
-            let tmpCard = game[game.length-1][currentDeck-1].copy();
-            tmpCard.id = tmp[currentDeck-1].length;
-            tmp[currentDeck-1].push(tmpCard);
-            setGame(tmp);
-            bool = isWin(currentDeck-1);
-          }
+      if (card.equals(objectif)) {
+        if (currentDeck === 0) bool = true;
+        else {
+          let tmp = [...game];
+          tmp = delDeck(tmp, currentDeck);
+          tmp[tmp.length-1] = delCard(tmp[tmp.length-1],currentDeck);
+          let tmpCard = game[game.length-1][currentDeck-1].copy();
+          tmpCard.id = tmp[currentDeck-1].length;
+          tmp[currentDeck-1].push(tmpCard);
+          setGame(tmp);
+          bool = isWin(currentDeck-1);
         }
       }
     })
@@ -501,14 +516,10 @@ const Game = ({ mode }) => {
       let tmpSavedGame = tmpLastGame[tmpLastGame.length-1];
       let tmpFutureGame = [];
       for (var i = 0 ; i < tmpSavedGame.length ; i++) {
-        if (tmpSavedGame[i] !== null) {
-          tmpFutureGame[i] = [];
-          for (var j = 0 ; j < tmpSavedGame[i].length ; j++) {
-            if (tmpSavedGame[i][j] !== null) tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
-            else tmpFutureGame.push(null);
-          }
+        tmpFutureGame[i] = [];
+        for (var j = 0 ; j < tmpSavedGame[i].length ; j++) {
+          tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
         }
-        else tmpFutureGame.push(null);
       }
       allFalse(tmpFutureGame);
       tmpLastGame.pop();
@@ -525,15 +536,11 @@ const Game = ({ mode }) => {
     let tmpLastGame =  [...lastGame];
     let saveGameTmp = [];
     for (var i = 0 ; i < game.length ; i++) {
-      if (game[i] !== null) {
-        saveGameTmp[i] = [];
-        for (var j = 0 ; j < game[i].length ; j++) {
-          if (game[i][j] !== null) saveGameTmp[i].push(game[i][j].copy());
-          else saveGameTmp.push(null);
-        }
+      saveGameTmp[i] = [];
+      for (var j = 0 ; j < game[i].length ; j++) {
+        saveGameTmp[i].push(game[i][j].copy());
       }
-      else saveGameTmp.push(null);
-    }
+  }
     tmpLastGame.push(saveGameTmp);
     setLastGame(tmpLastGame);
   }
@@ -727,7 +734,6 @@ const Game = ({ mode }) => {
       </div>
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
-          deck !== null ? (
             <Deck
               updateGame     = {update}
               indice         = {index}
@@ -737,9 +743,6 @@ const Game = ({ mode }) => {
               mode           = {mode}
               key            = {index}
             ></Deck>
-          ) : (
-          <></>
-          )
         ))}
       </GameTab.Provider>
       {popupError && (
