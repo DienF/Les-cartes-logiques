@@ -21,6 +21,7 @@
     padding: 1vh;
     display: inline-block;
     vertical-align: middle;
+    transform: rotate(90deg);
   }
   .card_simple_h {
     border-radius: 2vh;
@@ -64,10 +65,16 @@
     grid-template-rows: 1fr 1fr;
     grid-template-areas:
       "a b"
-      "a b";
+      "a c";
 
-    .card_simple_h {
+    .card0 {
       grid-area: a;
+    }
+    .card1 {
+      grid-area: b;
+    }
+    .card2 {
+      grid-area: c;
     }
   }
   .card_triple_b {
@@ -75,17 +82,19 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: 
-    "b a"
-    "b a";
+    "a c"
+    "b c";
     
-    .card_simple_w{
-      position: relative;
+    .card0{
+      grid-area: a;
+    }
+    
+    .card1{
       grid-area: b;
     }
 
-    .card_simple_h {
-      position:relative;
-      grid-area: a;
+    .card2 {
+      grid-area: c;
     }
   }
   .card_quadruple {
