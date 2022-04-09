@@ -126,7 +126,7 @@ const Card = ({ deckIndice, cardIndice, update }) => {
             >
               {getTab(game, deckIndice, cardIndice).map(
                 (cardAffiche, index) => (
-                  <div className={"card"+index.toString()}>
+                  <div key={index.toString()} className={"card"+index.toString()}>
                     <div
                       style={{ backgroundColor: cardAffiche.color }}
                       className={
