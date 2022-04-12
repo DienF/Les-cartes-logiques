@@ -135,6 +135,8 @@ const Card = ({ deckIndice, cardIndice, update }) => {
                       }
                     ></div>
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_a" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_a" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_b" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
                     {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_b" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
