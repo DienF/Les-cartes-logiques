@@ -5,13 +5,17 @@ import Navigation from "../components/Navigation";
 const Exercise = () => {
   const [ex, setEx] = useState();
   useEffect(() => {
-    setEx("ex1");
+    fetch("Ex.json")
+    .then(response => response.text())
+    .then(data => {
+      setEx(JSON.parse(data)[0]);
+    });
   }, []);
 
   return (
     <div className="home">
       <Navigation />
-      <Game mode={ex} />
+      <Game mode="play" ex={ex} />
     </div>
   );
 };

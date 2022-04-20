@@ -142,7 +142,7 @@ class CardClass {
   }
 }
 
-const Game = ({ mode }) => {
+const Game = ({ mode, ex }) => {
   const [game, setGame] = useState([[]]);
   const [nbSelec, setNbSelec] = useState(0);
   const [selecDeck1, setSelecDeck1] = useState(-1);
@@ -156,8 +156,8 @@ const Game = ({ mode }) => {
   const [popupWin,setPopupWin] = useState(false);
   const [popupEmprunt,setPopupEmprunt] = useState(false);
   const [popupError, setPopupError] = useState(false);
-  const [lastGame , setLastGame] = useState([]);
-  const [messageErreur , setMessageErreur] = useState("");
+  const [lastGame, setLastGame] = useState([]);
+  const [messageErreur, setMessageErreur] = useState("");
 
   /**
    * Initialise l'exercice.
@@ -165,15 +165,14 @@ const Game = ({ mode }) => {
   useEffect(() => {
     if (mode !== "create") {
       setGame([[], []]);
-      fetch(mode + ".json")
-      .then(response => response.text())
-      .then(data => {
-        setGame(gameInput(JSON.parse(data)));
-      });
+      console.log(ex);
+      if (ex !== undefined) {
+        setGame(gameInput(ex));
+      }
     } else {
       setGame([[], []]);
     }
-  }, [mode]);
+  }, [mode, ex])
 
   /**
    * Renvoie un nouveau Deck sans la carte passée en paramètre.
@@ -184,29 +183,29 @@ const Game = ({ mode }) => {
   const delCard = (deck, indiceCard) => {
     let finalDeck = [];
     deck[indiceCard] = null;
-    let compte = 0;
-    for (let i = 0;i<deck.length;i++) {
+    let cpt = 0;
+    for (let i = 0; i < deck.length; i++) {
       if (deck[i] !== null) {
         let tmpCard = deck[i];
-        tmpCard.id = tmpCard.id - compte;
+        tmpCard.id = tmpCard.id - cpt;
         finalDeck.push(tmpCard);
       }
-      else compte++;
+      else cpt++;
     }
     return finalDeck;
   } 
 
   /**
    * Renvoie un nouveau tableau sans le Deck passé en paramètre.
-   * @param {Array}  curentGame - tableau de la partie (avec potentiellement des modifications)
+   * @param {Array} currentGame - tableau de la partie (avec potentiellement des modifications)
    * @param {number} indiceDeck - indice du Deck à supprimer
    * @returns 
    */
-  const delDeck = (curentGame, indiceDeck) => {
+  const delDeck = (currentGame, indiceDeck) => {
     let finalGame = [];
-    curentGame[indiceDeck] = null;
-    for(let i = 0;i<curentGame.length;i++){
-      if(curentGame[i] !== null) finalGame.push(curentGame[i]);
+    currentGame[indiceDeck] = null;
+    for(let i = 0;i<currentGame.length;i++){
+      if(currentGame[i] !== null) finalGame.push(currentGame[i]);
     }
     return finalGame;
   }
@@ -394,16 +393,16 @@ const Game = ({ mode }) => {
       });
       return 0;
     });
-
     return res;
   };
 
   /**
-   * Reçoit un tableau d'un fichier JSON à qui on a appliqué la méthode parse (JSON => tableau object) et renvoie un tableau qui peut etre lu par notre site
-   * @param {Object[]} data tableau d'objets qui va servir pour l'initialisation
+   * Reçoit un tableau d'un fichier JSON à qui on va appliquer la méthode {@link JSON.parse()} dans {@link openFile()}
+   * ({@link JSON} ⇒ tableau d'{@link Object}) et renvoie un tableau qui peut être lu par notre site.
+   * @param {Object[]} data - tableau d'objets qui va servir pour l'initialisation
    * @returns un tableau de Deck
    */
-  const gameInput = (data) =>{
+  const gameInput = (data) => {
     let res = [[], []]
     let i = 0;
     data[0].forEach(element => {
@@ -441,6 +440,7 @@ const Game = ({ mode }) => {
 
   /**
    * Transforme un objet JSON en instance {@link CardClass}.
+   * @todo Modifier pour que cela marche avec Ex.json.
    * @param {JSON} obj - information mimimum pour créer une carte :
    *                     Carte simple = juste la couleur ;
    *                     Carte complexe = les 2 cartes qui la compose & la liaison
@@ -451,7 +451,7 @@ const Game = ({ mode }) => {
     // si c'est une carte complexe
     if (obj.color === undefined) return new CardClass(i, null, false, obj.link, toClass(obj.left, 0), toClass(obj.right, 1));
     // si c'est une carte simple
-    else return new CardClass(i, obj.color, false,"", null, null);
+    else return new CardClass(i, obj.color, false, "", null, null);
   }
 
   /**
@@ -537,7 +537,7 @@ const Game = ({ mode }) => {
       for (var j = 0 ; j < game[i].length ; j++) {
         saveGameTmp[i].push(game[i][j].copy());
       }
-  }
+    }
     tmpLastGame.push(saveGameTmp);
     setLastGame(tmpLastGame);
   }
@@ -545,14 +545,14 @@ const Game = ({ mode }) => {
   /**
    * Fonction appelée après avoir appuyé sur le bouton "Ajouter carte et".
    * 
-   * Une seule et unique carte doit être sélectionner sinon un popup d'erreur apparait avec ce message : 
-   *    si deux carte est sélectionnée :  "Vous devez sélectionner une seule carte !"
-   *    si zéros carte sont sélectionner :  "Vous devez sélectionner une carte !" 
+   * Une seule et unique carte doit être sélectionner sinon un popup d'erreur apparaît avec ce message : 
+   *    Si deux cartes sont sélectionnées :  "Vous devez sélectionner une seule carte !"
+   *    Si zéro carte sont sélectionnées  :  "Vous devez sélectionner une carte !" 
    * 
    * La carte sélectionner doit avoir une liaison principale de type "et" sinon un popup d'erreur apparait avec ce message :
-   *    "La carte sélectionner doit avoir une liaison principale de type "et" !"
+   *    "La carte sélectionnée doit avoir une liaison principale de type "et" !"
    * 
-   * Si toutes les conditions énumérer au-dessus sont respecter la partie gauche et droite de la carte est ajouter au Deck.
+   * Si toutes les conditions énumérées au-dessus sont respectées les parties gauche et droite de la carte sont ajoutées au Deck.
    */
   const addCardAnd = () => {
     if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
