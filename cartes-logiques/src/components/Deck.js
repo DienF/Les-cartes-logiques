@@ -5,7 +5,6 @@ import { GameTab } from "./Game";
 const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) => {
   /**
    * Méthode qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.
-   * @see GameTab#update()
    * @param {number} indiceCard - index de la carte dans le tableau
    */
   const update = (indiceCard) => {

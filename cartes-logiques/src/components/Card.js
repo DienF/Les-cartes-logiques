@@ -79,7 +79,7 @@ const Card = ({ deckIndice, cardIndice, update }) => {
   };
 
   /**
-   * Renvoie un tableau qui va être utilisé par la fonction map pour afficher toutes les cartes.
+   * Renvoie un tableau qui va être utilisé par la fonction {@link Array.map()} pour afficher toutes les cartes.
    * @param {*}   game - le tableau qui contient toutes les cartes
    * @param {number} i - le numéro du Deck
    * @param {number} j - la position de la carte dans le Deck

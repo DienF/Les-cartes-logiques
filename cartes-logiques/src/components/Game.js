@@ -19,12 +19,12 @@ class CardClass {
    * @param {CardClass|null} right
    */
   constructor(id, color, active, link, left, right) {
-    this.id      = id;
-    this.color   = color;
-    this.active  = active;
-    this.link    = link;
-    this.left    = left;
-    this.right   = right;
+    this.id     = id;
+    this.color  = color;
+    this.active = active;
+    this.link   = link;
+    this.left   = left;
+    this.right  = right;
   }
 
   /**
@@ -38,8 +38,8 @@ class CardClass {
    */
   toString() {
     let res = "(";
-    if (this.color != null)  res += this.color.toString();
-    if (this.left !== null)  res += this.left.toString();
+    if (this.color  != null) res += this.color.toString();
+    if (this.left  !== null) res += this.left.toString();
     res += this.link;
     if (this.right !== null) res += this.right.toString();
     return res + ")";
@@ -68,22 +68,22 @@ class CardClass {
    *             "left": { "color": "couleur" },
    *             "link": "=>",
    *             "right": { "color": "couleur" }
-   *            },
+   *           },
    *   "link": "=>",
    *   "right": {
    *              "left": { "color": "couleur" },
    *              "link": "et",
    *              "right": { "color": "couleur" }
-   *             }
+   *            }
    * }
    * @returns {JSON} - à stocker dans un fichier .json
    */
   toFile() {
     if (this.color !== null) return { color: this.color };
     else return {
-      left:    this.left.toFile(),
-      link:    this.link,
-      right:   this.right.toFile(),
+      left:  this.left.toFile(),
+      link:  this.link,
+      right: this.right.toFile(),
     };
   }
 
@@ -95,16 +95,16 @@ class CardClass {
   copy() {
     let l = null;
     let r = null;
-    if (this.left !== null)  l = this.left.copy();
+    if (this.left  !== null) l = this.left.copy();
     if (this.right !== null) r = this.right.copy();
-    return new CardClass(this.id,this.color,this.active,this.link,l,r);
+    return new CardClass(this.id, this.color, this.active, this.link, l, r);
   }
 
   /**
    * Fonction récursive qui :
    * change l'attribut 'active' ;
    * regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
-   * @param {CardClass} card   - la carte qui doit être sélectionnée ou pas
+   * @param {CardClass}   card - la carte qui doit être sélectionnée ou pas
    * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
    */
   select(state) {
@@ -176,17 +176,17 @@ const Game = ({ mode }) => {
   }, [mode]);
 
   /**
-   * renvoie un nouveau deck sans la carte indiquer en parametre
-   * @param {Array} deck - Deck dans lequel il faut supprimer la carte
-   * @param {number} indiceCard - Indice de la carte a supprimer
+   * Renvoie un nouveau Deck sans la carte passée en paramètre.
+   * @param {Array}        deck - Deck dans lequel il faut supprimer la carte
+   * @param {number} indiceCard - indice de la carte à supprimer
    * @returns {Array}
    */
-  const delCard = (deck, indiceCard) =>{
+  const delCard = (deck, indiceCard) => {
     let finalDeck = [];
     deck[indiceCard] = null;
     let compte = 0;
-    for(let i = 0;i<deck.length;i++){
-      if(deck[i] !== null){
+    for (let i = 0;i<deck.length;i++) {
+      if (deck[i] !== null) {
         let tmpCard = deck[i];
         tmpCard.id = tmpCard.id - compte;
         finalDeck.push(tmpCard);
@@ -197,9 +197,9 @@ const Game = ({ mode }) => {
   } 
 
   /**
-   * renvoie un nouveau tableau sans le deck passer en paramètre.
-   * @param {Array} curentGame - tableau de la partie (avec potentiellement des modifications)
-   * @param {number} indiceDeck - indice du deck a supprimer
+   * Renvoie un nouveau tableau sans le Deck passé en paramètre.
+   * @param {Array}  curentGame - tableau de la partie (avec potentiellement des modifications)
+   * @param {number} indiceDeck - indice du Deck à supprimer
    * @returns 
    */
   const delDeck = (curentGame, indiceDeck) => {
@@ -210,12 +210,12 @@ const Game = ({ mode }) => {
     }
     return finalGame;
   }
+
   /**
-   * La carte qui est déjà sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link select}
-   * qui sélectionne toutes les cartes dans le Deck ou déselectionne la première carte sélectionnée si on
-   * reclique dessus.
-   * Enfin, si on sélectionne une 2ème carte, on appelle la fonction {@link popup} qui s'occupera de valider le
-   * choix & d'exécuter l'opération.
+   * La carte qui est déjà sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link CardClass.select()} qui
+   * sélectionne toutes les cartes dans le Deck ou déselectionne la première carte sélectionnée si on reclique dessus.
+   * Enfin, si on sélectionne une 2ème carte, on appelle la fonction {@link popup} qui s'occupera de valider le choix
+   * & d'exécuter l'opération.
    * @param {number} i - index du Deck
    * @param {number} j - index de la carte
    */
@@ -228,25 +228,25 @@ const Game = ({ mode }) => {
     let tmpSelecCard1 = selecCard1;
     let tmpSelecCard2 = selecCard2;
     if((i === game.length-1 && game[i][j].link === "=>" && mode !== "create") || i !== game.length-1 || mode === "create"){
-      if (tmpSelecDeck1 === i && tmpSelecCard1 === j){
+      if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
         tmpSelecCard1 = -1;
         tmpSelecDeck1 = -1;
         tmpNbselec--;
         currentCard.select(!currentCard.active);
       }
-      else if (tmpSelecDeck2 === i && tmpSelecCard2 === j){
+      else if (tmpSelecDeck2 === i && tmpSelecCard2 === j) {
         tmpSelecCard2 = -1;
         tmpSelecDeck2 = -1
         tmpNbselec--;
         currentCard.select(!currentCard.active);
       }
-      else if(tmpSelecDeck1 === -1 && tmpSelecCard1 === -1){
+      else if(tmpSelecDeck1 === -1 && tmpSelecCard1 === -1) {
         tmpSelecDeck1 = i;
         tmpSelecCard1 = j;
         tmpNbselec++;
         currentCard.select(!currentCard.active);
       }
-      else if (tmpNbselec<2){
+      else if (tmpNbselec < 2) {
         tmpSelecDeck2 = i;
         tmpSelecCard2 = j;
         tmpNbselec++;
@@ -260,8 +260,8 @@ const Game = ({ mode }) => {
     setSelecDeck2(tmpSelecDeck2);
     tmp[i][j] = currentCard;
     setGame(tmp);
-    if (tmpNbselec === 2 && mode === "create")setPopupFusion(true);
-    if(i === game.length-1 && game[i][j].link === "=>" && mode !== "create")setPopupEmprunt(true);
+    if (tmpNbselec === 2 && mode === "create") setPopupFusion(true);
+    if (i === game.length-1 && game[i][j].link === "=>" && mode !== "create") setPopupEmprunt(true);
   };
 
   /**
@@ -300,7 +300,7 @@ const Game = ({ mode }) => {
   };
 
   /**
-   * Ferme le popup & déselectionne toutes les cartes.
+   * Ferme le popup & désélectionne toutes les cartes.
    */
   const closePopup = () => {
     setPopupError(false);
@@ -430,7 +430,7 @@ const Game = ({ mode }) => {
    */
   const openFile = () => {
     const namefile = "Ex1.json";
-    setGame([[] ,[]]);
+    setGame([[], []]);
     saveGame();
     fetch(namefile)
       .then((response) => response.text())
@@ -485,10 +485,10 @@ const Game = ({ mode }) => {
 
   /**
    * Les vérifications de la carte sont faites dans la méthode {@link update()} (si carte dans le deck objectif et a comme liaison "=>")
-   * creer un deck juste avant l'objectif et lui passe une nouvelle carte (la partie gauche de la carte selectionner)
-   * creer une carte dans la partie objectif qui est une objectif secondaire
+   * Créer un deck juste avant l'objectif et lui passe une nouvelle carte (la partie gauche de la carte selectionnée).
+   * Créer une carte dans la partie objectif qui est une objectif secondaire.
    */
-  const emprunt = () =>{
+  const emprunt = () => {
     setPopupEmprunt(false);
     saveGame();
     let tmp = [...game];
@@ -502,7 +502,6 @@ const Game = ({ mode }) => {
     tmp[game.length-1].push(tmpCard);
     tmp.push(tmpObjectif);
     allFalse(tmp);
-
   }
 
   /**
@@ -511,8 +510,8 @@ const Game = ({ mode }) => {
    */
   const retourEnArriere = () => {
     if (lastGame.length !== 0) {
-      let tmpLastGame = [...lastGame];
-      let tmpSavedGame = tmpLastGame[tmpLastGame.length-1];
+      let tmpLastGame   = [...lastGame];
+      let tmpSavedGame  = tmpLastGame[tmpLastGame.length-1];
       let tmpFutureGame = [];
       for (var i = 0 ; i < tmpSavedGame.length ; i++) {
         tmpFutureGame[i] = [];
@@ -524,15 +523,14 @@ const Game = ({ mode }) => {
       tmpLastGame.pop();
       setLastGame(tmpLastGame);
     }
-
-}
+  }
 
   /**
    * À la base la fonction qui sauvegarde la partie qui est pour l'instant recopié 3 fois dans les autres fonctions
    * car ne fonctionne pas en appelant une fonction (asynchrone).
    */
   const saveGame = () => {
-    let tmpLastGame =  [...lastGame];
+    let tmpLastGame = [...lastGame];
     let saveGameTmp = [];
     for (var i = 0 ; i < game.length ; i++) {
       saveGameTmp[i] = [];
@@ -545,7 +543,7 @@ const Game = ({ mode }) => {
   }
 
   /**
-    * Fonction appelée après avoir appuyé sur le bouton "Ajouter carte et"
+   * Fonction appelée après avoir appuyé sur le bouton "Ajouter carte et".
    * 
    * Une seule et unique carte doit être sélectionner sinon un popup d'erreur apparait avec ce message : 
    *    si deux carte est sélectionnée :  "Vous devez sélectionner une seule carte !"
@@ -557,10 +555,10 @@ const Game = ({ mode }) => {
    * Si toutes les conditions énumérer au-dessus sont respecter la partie gauche et droite de la carte est ajouter au Deck.
    */
   const addCardAnd = () => {
-    if((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)){
+    if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
       let deckI = Math.max(selecDeck1,selecDeck2);
       let cardI = Math.max(selecCard1,selecCard2);
-      if(game[deckI][cardI].link === "et"){
+      if (game[deckI][cardI].link === "et") {
         saveGame();
         let tmp = [...game];
         game[deckI][cardI].select(false);
@@ -568,53 +566,49 @@ const Game = ({ mode }) => {
         tmp[deckI][tmp[deckI].length-1].id = tmp[deckI].length-1;
         tmp[deckI].push(game[deckI][cardI].right.copy());
         tmp[deckI][tmp[deckI].length-1].id = tmp[deckI].length-1;
-    
         allFalse(tmp);
         setPopupWin(isWin(selecDeck1));
       }
-      else{
-        setMessageErreur("La carte sélectionner doit avoir une liaison principale de type \"et\" !");
+      else {
+        setMessageErreur("La carte sélectionnée doit avoir une liaison principale de type \"et\" !");
         setPopupError(true);
       }
     }
-    else{
-      if(nbSelec>1)setMessageErreur("Vous devez sélectionner une seule carte !");
-      if(nbSelec === 0)setMessageErreur("Vous devez sélectionner une carte !")
+    else {
+      if (nbSelec > 1)   setMessageErreur("Vous devez sélectionner une seule carte !");
+      if (nbSelec === 0) setMessageErreur("Vous devez sélectionner une carte !")
       setPopupError(true);
     }
-
-
   }
 
   /**
-   * Fonction appelée après avoir appuyé sur le bouton "Ajouter carte =>"
+   * Fonction appelée après avoir appuyé sur le bouton "Ajouter carte =>".
    * 
-   * Deux carte sont demander pour faire fonctionner cette fonction sinon un popup d'erreur apparait avec ce message :  
+   * Deux carte sont demander pour faire fonctionner cette fonction sinon un popup d'erreur apparaît avec ce message :  
    *    "Vous devez sélectionner deux cartes !"
    * 
-   * Au moins une des deux cartes doit avoir une liaison principale du type "=>" sinon un popup d'erreur apparait avec ce message :
+   * Au moins une des deux cartes doit avoir une liaison principale du type "=>" sinon un popup d'erreur apparaît avec ce message :
    *    Une des deux cartes doit avoir une liaison principale de type "=>" !"
    * 
-   * La partie gauche de la carte la plus complexe doit être égale à l'autre carte sinon un popup d'erreur apparait avec ce message :
-   *    "La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionner !"
+   * La partie gauche de la carte la plus complexe doit être égale à l'autre carte sinon un popup d'erreur apparaît avec ce message :
+   *    "La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !"
    * 
-   * Si toutes les conditions énumérer au-dessus sont respecter la partie droite est ajouter au deck le plus haut.
+   * Si toutes les conditions énumérées au-dessus sont respectées la partie droite est ajoutée au deck le plus haut.
    */
   const addCardFuse = () => {
-
-    if(selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1){
-      let tmp = [...game];
-      let bool = (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]));
+    if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
+      let tmp   = [...game];
+      let bool  = (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]));
       if (bool || (tmp[selecDeck1][selecCard1].link === "=>" && tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2]))) {
         saveGame();
         let finalDeck = Math.max(selecDeck1,selecDeck2);
         let deckCarteComplex = -1;
         let cardCarteComplex = -1;
-        if(bool){
+        if (bool) {
           deckCarteComplex = selecDeck2;
           cardCarteComplex = selecCard2;
         }
-        else{
+        else {
           deckCarteComplex = selecDeck1;
           cardCarteComplex = selecCard1;
         }
@@ -625,13 +619,12 @@ const Game = ({ mode }) => {
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
       else {
-        if(tmp[selecDeck2][selecCard2].link !== "=>" && tmp[selecDeck1][selecCard1].link !== "=>"){
+        if (tmp[selecDeck2][selecCard2].link !== "=>" && tmp[selecDeck1][selecCard1].link !== "=>") {
           setMessageErreur("Une des deux cartes doit avoir une liaison principale de type \"=>\" !");
         }
-        else{
-          setMessageErreur("La partie gauche de la carte \"=>\" doit être égale à la deuxième carte sélectionner !")
+        else {
+          setMessageErreur("La partie gauche de la carte \"=>\" doit être égale à la deuxième carte sélectionnée !")
         }
-        
         setPopupError(true);
       }
     }
@@ -642,21 +635,21 @@ const Game = ({ mode }) => {
   }
 
   /**
-   * Fonction appelée après avoir appuyé sur le bouton "Fusion carte et"
+   * Fonction appelée après avoir appuyé sur le bouton "Fusion carte et".
    * 
-   * Deux carte sont demander pour faire fonctionner cette fonction sinon un popup d'erreur apparait avec ce message :  
+   * Deux cartes sont demandées pour faire fonctionner cette fonction sinon un popup d'erreur apparaît avec ce message :  
    *    "Vous devez sélectionner deux cartes !"
    * 
-   * Les cartes accepter pour la fusion sont les cartes simple et doubles sinon un popup d'erreur apparait avec ce message :  
+   * Les cartes acceptées pour la fusion sont les cartes simples et doubles sinon un popup d'erreur apparaît avec ce message :  
    *    "On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : (la carte qui pose un problème)"
    * 
-   * Si toutes les conditions énumérer au-dessus sont respecter les deux cartes fusionnent en une nouvelle carte qui prend la liaison "et" dans le deck le plus haut des deux cartes.
+   * Si toutes les conditions énumérées au-dessus sont respectées les deux cartes fusionnent en une nouvelle carte qui prend la liaison "et" dans le deck le plus haut des deux cartes.
    */
   const fuseCardAdd = () => {
-    if(selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1){
-      let tmp = [...game];
-      let bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
-      if ( bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
+    if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
+      let tmp   = [...game];
+      let bool  = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
+      if (bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
         saveGame();
         let finalDeck = Math.max(selecDeck1,selecDeck2);
         let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
@@ -668,10 +661,10 @@ const Game = ({ mode }) => {
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
       else {
-        if(bool){
+        if (bool) {
           setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
         }
-        else{
+        else {
           setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
         }
         setPopupError(true);
@@ -680,20 +673,19 @@ const Game = ({ mode }) => {
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
       setPopupError(true);
-  }
-    
+    }
   }
 
   /**
-   * Exactement la meme fontction que fuseCardadd sauf que la carte créer a une liaison "=>".
+   * Exactement la même fonction que {@link fuseCardAdd()} sauf que la carte créée a une liaison "=>".
    */
   const fuseCardFuse = () => {
-    if(selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1){
-      let tmp = [...game];
+    if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
+      let tmp   = [...game];
       tmp[selecDeck1][selecCard1].select(false);
       tmp[selecDeck2][selecCard2].select(false);
-      let bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
-      if ( bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
+      let bool  = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
+      if (bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
         saveGame();
         let finalDeck = Math.max(selecDeck1,selecDeck2);
         let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
@@ -705,10 +697,10 @@ const Game = ({ mode }) => {
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
       else {
-        if(bool){
+        if (bool) {
           setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
         }
-        else{
+        else {
           setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
         }
         setPopupError(true);
@@ -717,8 +709,7 @@ const Game = ({ mode }) => {
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
       setPopupError(true);
-  }
-    
+    }
   }
 
   return (
@@ -764,9 +755,9 @@ const Game = ({ mode }) => {
             <>
               <b>Choisissez une couleur</b>
               <div onChange={choixCouleur}>
-                <input type="radio" value="red" name="couleur" /> Rouge
+                <input type="radio" value="red"    name="couleur" /> Rouge
                 <input type="radio" value="yellow" name="couleur" /> Jaune
-                <input type="radio" value="blue" name="couleur" /> Bleu
+                <input type="radio" value="blue"   name="couleur" /> Bleu
                 <input type="radio" value="orange" name="couleur" /> Orange
               </div>
               <button
