@@ -165,7 +165,6 @@ const Game = ({ mode, ex }) => {
   useEffect(() => {
     if (mode !== "create") {
       setGame([[], []]);
-      console.log(ex);
       if (ex !== undefined) {
         setGame(gameInput(ex));
       }
@@ -204,17 +203,17 @@ const Game = ({ mode, ex }) => {
   const delDeck = (currentGame, indiceDeck) => {
     let finalGame = [];
     currentGame[indiceDeck] = null;
-    for(let i = 0;i<currentGame.length;i++){
-      if(currentGame[i] !== null) finalGame.push(currentGame[i]);
+    for (let i = 0;i<currentGame.length;i++) {
+      if (currentGame[i] !== null) finalGame.push(currentGame[i]);
     }
     return finalGame;
   }
 
   /**
-   * La carte qui est déjà sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link CardClass.select()} qui
-   * sélectionne toutes les cartes dans le Deck ou déselectionne la première carte sélectionnée si on reclique dessus.
-   * Enfin, si on sélectionne une 2ème carte, on appelle la fonction {@link popup} qui s'occupera de valider le choix
-   * & d'exécuter l'opération.
+   * La carte qui est déjà sélectionnée & celle qui est passée en paramètre utilisent la fonction {@link CardClass.select()} 
+   * qui sélectionne toutes les cartes dans le Deck ou déselectionne la première carte sélectionnée si on reclique dessus.
+   * Enfin, si on sélectionne une 2ème carte, on appelle la fonction popup qui s'occupera de valider le choix & d'exécuter
+   * l'opération.
    * @param {number} i - index du Deck
    * @param {number} j - index de la carte
    */
@@ -226,7 +225,7 @@ const Game = ({ mode, ex }) => {
     let tmpSelecDeck2 = selecDeck2;
     let tmpSelecCard1 = selecCard1;
     let tmpSelecCard2 = selecCard2;
-    if((i === game.length-1 && game[i][j].link === "=>" && mode !== "create") || i !== game.length-1 || mode === "create"){
+    if ((i === game.length-1 && game[i][j].link === "=>" && mode !== "create") || i !== game.length-1 || mode === "create") {
       if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
         tmpSelecCard1 = -1;
         tmpSelecDeck1 = -1;
@@ -239,7 +238,7 @@ const Game = ({ mode, ex }) => {
         tmpNbselec--;
         currentCard.select(!currentCard.active);
       }
-      else if(tmpSelecDeck1 === -1 && tmpSelecCard1 === -1) {
+      else if (tmpSelecDeck1 === -1 && tmpSelecCard1 === -1) {
         tmpSelecDeck1 = i;
         tmpSelecCard1 = j;
         tmpNbselec++;

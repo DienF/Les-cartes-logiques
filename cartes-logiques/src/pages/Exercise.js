@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import Game from "../components/Game";
 import Navigation from "../components/Navigation";
 
 const Exercise = () => {
+  let location = useLocation();
   const [ex, setEx] = useState();
   useEffect(() => {
     fetch("Ex.json")

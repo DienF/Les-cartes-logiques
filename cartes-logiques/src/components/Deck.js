@@ -47,10 +47,10 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
           {(game) => {
             return game[indice].map((card, index) =>
               <Card
-                deckIndice={indice}
-                cardIndice={index}
-                update={update}
-                key={index}
+                deckIndice = {indice}
+                cardIndice = {index}
+                update     = {update}
+                key        = {index}
               />
             );
           }}
