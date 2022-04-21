@@ -17,12 +17,9 @@ const Choice = () => {
         <ul>
           {ex !== undefined && ex.map((exercice , index) => (
           <li key={index}>
-          <NavLink to={{
-            pathname: '/Exercise',
-            state:    "test"
-          }}>
-            Exercice {index+1}
-          </NavLink>
+           <NavLink exact="true" to={"/Exercise"+(index+1)}>
+              Exercice {index+1}
+            </NavLink>
         </li>
         ))}
         </ul>
