@@ -19,6 +19,11 @@ const Navigation = () => {
                 </NavLink>
               </li>
               <li>
+                <NavLink exact="true" to="/ExerciseTutoriel1">
+                  Tutoriel
+                </NavLink>
+              </li>
+              <li>
                 <NavLink exact="true" to="/About">
                   À propos
                 </NavLink>

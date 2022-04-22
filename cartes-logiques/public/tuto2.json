@@ -1,0 +1,21 @@
+[
+    [
+     {
+      "color": "yellow"
+     },
+     {
+      "left": {
+       "color": "yellow"
+      },
+      "link": "=>",
+      "right": {
+       "color": "blue"
+      }
+     }
+    ],
+    [
+     {
+      "color": "blue"
+     }
+    ]
+   ]

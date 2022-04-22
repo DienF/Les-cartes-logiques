@@ -10,9 +10,17 @@ const Exercise = () => {
   const [ex, setEx] = useState();
 
   useEffect(() => {
-    if(mode !== "Create"){
+    if(mode !== "Create" && mode !== "Tutoriel"){
       setNum(tmp);
       fetch("Ex.json")
+      .then(response => response.text())
+      .then(data => {
+        setEx(JSON.parse(data));
+      });
+    }
+    else if(mode ==="Tutoriel"){
+      setNum(tmp);
+      fetch("Tutoriel.json")
       .then(response => response.text())
       .then(data => {
         setEx(JSON.parse(data));

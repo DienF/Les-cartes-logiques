@@ -159,7 +159,6 @@ const Game = ({ mode, ex,numero  }) => {
   const [lastGame, setLastGame] = useState([]);
   const [messageErreur, setMessageErreur] = useState("");
   const [tabObjectif , setTabObjectif] = useState([[0,0]]);
-  const [convertMessage , setConvertMessage] = useState();
 
   /**
    * Initialise l'exercice.
@@ -350,9 +349,9 @@ const Game = ({ mode, ex,numero  }) => {
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
     c2.id = 1;
-    tmp[indiceDeckAddCard].push(
+    tmp[selecDeck1].push(
       new CardClass(
-        game[indiceDeckAddCard].length,           // id
+        game[selecDeck1].length,           // id
         null,                                     // color
         false,                                    // active
         l,                                        // link
