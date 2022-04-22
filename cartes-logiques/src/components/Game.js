@@ -420,9 +420,9 @@ const Game = ({ mode, ex,numero  }) => {
    * @todo Stocker dans un fichier sur le serveur ou sur le PC local ou laisser comme ça (afficher le JSON dans la console).
    */
   const saveAsFile = () => {
-    let res = [];
-    ex.forEach(element => res.push(gameOutput(element)));
-    console.log(JSON.stringify(res));
+    let res;
+    res = gameOutput(game);
+    navigator.clipboard.writeText(JSON.stringify(res, null, 1)).then(() => {})
   };
 
   /**
@@ -762,7 +762,7 @@ const Game = ({ mode, ex,numero  }) => {
   }
   
   const printConvertFile = () =>{
-    console.log("[" + test.substring(0,test.length-1) + "]");
+    navigator.clipboard.writeText("[" + test.substring(0,test.length-1) + "]").then(() => {})
   }
   return (
     <div className="game" >
@@ -775,9 +775,9 @@ const Game = ({ mode, ex,numero  }) => {
           
       </select>}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
-      {mode === "Create" && <button onClick={printConvertFile}>Afficher les fichier</button>}
+      {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regrouper</button>}
       {mode === "Create" && <input type="file" accept="application/json" onChange={openFile} ></input>}
-      {mode === "Create" && <button onClick={saveAsFile}>Afficher le fichier</button>}
+      {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
         <button onClick={retourEnArriere}>Retour en arrière</button>
         {mode !== "Create" && <button onClick={addCardAnd}>Ajout carte et</button>}
         {mode !== "Create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
