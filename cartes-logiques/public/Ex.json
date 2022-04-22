@@ -1,141 +1,216 @@
 [
+  [
     [
-        [
-            {
-                "left": { "color": "red" },
-                "link": "et",
-                "right": { "color": "yellow" }
-            },
-            { 
-                "left": { "color": "red" }, 
-                "link": "=>",
-                "right": { "color": "blue" } 
-            },
-            {
-                "left": { "color": "blue" },
-                "link": "=>",
-                "right": { "color": "orange" }
-            }
-        ],
-        [   {   "color": "orange" }]
+      {
+        "left": { "color": "red" },
+        "link": "et",
+        "right": { "color": "yellow" }
+      },
+      {
+        "left": { "color": "red" },
+        "link": "=>",
+        "right": { "color": "blue" }
+      },
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "orange" }
+      }
+    ],
+    [{ "color": "orange" }]
+  ],
+  [
+    [
+      {
+        "left": { "color": "red" },
+        "link": "et",
+        "right": { "color": "yellow" }
+      },
+      {
+        "left": { "color": "red" },
+        "link": "=>",
+        "right": { "color": "blue" }
+      },
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "orange" }
+      }
     ],
     [
-        [
-            {
-                "left": { "color": "red" },
-                "link": "et",
-                "right": { "color": "yellow" }
-            },
-            {
-                "left": { "color": "red" },
-                "link": "=>",
-                "right": { "color": "blue" }
-            },
-            {
-                "left": { "color": "blue" },
-                "link": "=>",
-                "right": { "color": "orange" }
-            }
-        ],
-        [
-            {
-                "left": { "color": "red" },
-                "link": "et",
-                "right": { "color": "orange" }
-            }
-        ]
-    ],
-    [
-        [
-            {
-                "left": { "color": "red" },
-                "link": "=>",
-                "right": { "color": "blue" }
-            },
-            {
-                "left": { "color": "blue" },
-                "link": "=>",
-                "right": { "color": "orange" }
-            }
-        ],
-        [
-            {
-                "left": { "color": "red" },
-                "link": "=>",
-                "right": { "color": "orange" }
-            }
-        ]
-    ],
-    [
-        [
-            {
-                "left": { "color": "blue" },
-                "link": "=>",
-                "right": { "color": "yellow" }
-            },
-            {
-                "left": { "color": "blue" },
-                "link": "=>",
-                "right": { "color": "red" }
-            },
-            {
-                "left": {
-                            "left": { "color": "red" },
-                            "link": "et",
-                            "right": { "color": "blue" }
-                        },
-                "link": "=>",
-                "right": {
-                            "left": { "color": "yellow" },
-                            "link": "=>",
-                            "right": { "color": "orange" }
-                        }
-            }
-        ],
-        [
-            {
-                "left": { "color": "blue" },
-                "link": "=>",
-                "right": { "color": "orange" }
-            }
-        ]
-    ],
-    [
-        [
-            {
-                "left": { "color": "orange" },
-                "link": "=>",
-                "right": { "color": "red" }
-            },
-            {
-                "left": {
-                            "left": { "color": "red" },
-                            "link": "et",
-                            "right": { "color": "yellow" }
-                        },
-                "link": "=>",
-                "right": { "color": "blue" }
-            },
-            {
-                "left": {
-                            "left": { "color": "red" },
-                            "link": "=>",
-                            "right": { "color": "blue" }
-                        },
-                "link": "=>",
-                "right": {
-                            "left": { "color": "yellow" },
-                            "link": "=>",
-                            "right": { "color": "orange" }
-                         }
-            }
-        ],
-        [
-            {
-                "left": { "color": "yellow" },
-                "link": "=>",
-                "right": { "color": "red" }
-            }
-        ]
+      {
+        "left": { "color": "red" },
+        "link": "et",
+        "right": { "color": "orange" }
+      }
     ]
+  ],
+  [
+    [
+      {
+        "left": { "color": "red" },
+        "link": "=>",
+        "right": { "color": "blue" }
+      },
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "orange" }
+      }
+    ],
+    [
+      {
+        "left": { "color": "red" },
+        "link": "=>",
+        "right": { "color": "orange" }
+      }
+    ]
+  ],
+  [
+    [
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "yellow" }
+      },
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "red" }
+      },
+      {
+        "left": {
+          "left": { "color": "red" },
+          "link": "et",
+          "right": { "color": "blue" }
+        },
+        "link": "=>",
+        "right": {
+          "left": { "color": "yellow" },
+          "link": "=>",
+          "right": { "color": "orange" }
+        }
+      }
+    ],
+    [
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "orange" }
+      }
+    ]
+  ],
+  [
+    [
+      {
+        "left": { "color": "orange" },
+        "link": "=>",
+        "right": { "color": "red" }
+      },
+      {
+        "left": {
+          "left": { "color": "red" },
+          "link": "et",
+          "right": { "color": "yellow" }
+        },
+        "link": "=>",
+        "right": { "color": "blue" }
+      },
+      {
+        "left": {
+          "left": { "color": "red" },
+          "link": "=>",
+          "right": { "color": "blue" }
+        },
+        "link": "=>",
+        "right": {
+          "left": { "color": "yellow" },
+          "link": "=>",
+          "right": { "color": "orange" }
+        }
+      }
+    ],
+    [
+      {
+        "left": { "color": "yellow" },
+        "link": "=>",
+        "right": { "color": "red" }
+      }
+    ]
+  ],
+  [
+    [
+      { "color": "red" },
+      {
+        "left": { "color": "red" },
+        "link": "et",
+        "right": { "color": "yellow" }
+      },
+      {
+        "left": { "color": "blue" },
+        "link": "=>",
+        "right": { "color": "orange" }
+      },
+      {
+        "left": {
+          "left": { "color": "red" },
+          "link": "et",
+          "right": { "color": "yellow" }
+        },
+        "link": "et",
+        "right": {
+          "left": { "color": "blue" },
+          "link": "=>",
+          "right": { "color": "orange" }
+        }
+      },
+      {
+        "left": {
+          "left": { "color": "blue" },
+          "link": "=>",
+          "right": { "color": "orange" }
+        },
+        "link": "=>",
+        "right": {
+          "left": { "color": "red" },
+          "link": "et",
+          "right": { "color": "yellow" }
+        }
+      }
+    ],
+    []
+  ],
+  [
+    [
+      {
+        "left": { "color": "blue" },
+        "link": "et",
+        "right": { "color": "yellow" }
+      },
+      {
+        "left": { "color": "orange" },
+        "link": "=>",
+        "right": { "color": "red" }
+      },
+      {
+        "left": { "color": "yellow" },
+        "link": "et",
+        "right": {
+          "left": { "color": "orange" },
+          "link": "=>",
+          "right": { "color": "red" }
+        }
+      },
+      {
+        "left": {
+          "left": { "color": "blue" },
+          "link": "et",
+          "right": { "color": "yellow" }
+        },
+        "link": "=>",
+        "right": { "color": "red" }
+      }
+    ],
+    []
+  ]
 ]
