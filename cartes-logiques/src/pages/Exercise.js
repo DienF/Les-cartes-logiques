@@ -7,26 +7,26 @@ const Exercise = () => {
   const [num, setNum] = useState();
   let tmp = useParams().num;
   let mode = useParams().mode;
-  /*
-            {ex !== undefined && ex.map((exercice , index) => (
-            <option key={index} value={index} onChange={changeExo}>Exercice {index+1}</option>
-          ))}
-  */
   const [ex, setEx] = useState();
 
   useEffect(() => {
-    setNum(tmp);
-    fetch("Ex.json")
-    .then(response => response.text())
-    .then(data => {
-      setEx(JSON.parse(data));
-    });
-  }, [tmp]);
+    if(mode !== "Create"){
+      setNum(tmp);
+      fetch("Ex.json")
+      .then(response => response.text())
+      .then(data => {
+        setEx(JSON.parse(data));
+      });
+    }
+    else{
+      setEx([[] , []]);
+    }
 
+  }, [tmp , mode]);
   return (
     <div className="home">
       <Navigation />
-      {ex !== undefined && <Game mode={mode} ex={ex} numero={num-1} nbExo={ex} />}
+      {ex !== undefined && <Game mode={mode} ex={ex} numero={num-1} />}
     </div>
   );
 };

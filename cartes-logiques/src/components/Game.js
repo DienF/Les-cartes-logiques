@@ -143,7 +143,7 @@ class CardClass {
   }
 }
 
-const Game = ({ mode, ex,numero ,nbExo }) => {
+const Game = ({ mode, ex,numero  }) => {
   const [game, setGame] = useState([[]]);
   const [nbSelec, setNbSelec] = useState(0);
   const [selecDeck1, setSelecDeck1] = useState(-1);
@@ -159,6 +159,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
   const [lastGame, setLastGame] = useState([]);
   const [messageErreur, setMessageErreur] = useState("");
   const [tabObjectif , setTabObjectif] = useState([[0,0]]);
+  const [convertMessage , setConvertMessage] = useState();
 
   /**
    * Initialise l'exercice.
@@ -166,7 +167,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
   useEffect(() => {
     
     setGame([[], []]);
-    if (ex !== undefined && numero !== undefined) {
+    if (ex !== undefined && numero !== undefined && mode !== "Create") {
       setGame(gameInput(ex[numero]));
     }
 
@@ -427,16 +428,20 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
   /**
    * Pour l'instant ouvre le fichier Ex1.json.
    */
-  const openFile = () => {
-    const namefile = "Ex.json";
-    setGame([[], []]);
-    saveGame();
-    fetch(namefile)
-      .then((response) => response.text())
-      .then((data) => {
-        setGame(gameInput(JSON.parse(data)[0]));
-      });
-  };
+  const openFile = (event) => {
+    if(event.target.files.length >0)
+    {
+      var reader = new FileReader();
+      reader.onload = onReaderLoad;
+      reader.readAsText(event.target.files[0]);
+    }
+
+  }
+  const onReaderLoad = (event) =>{
+      var obj = JSON.parse(event.target.result);
+      setGame(gameInput(obj));
+  }
+
 
   /**
    * Transforme un objet JSON en instance {@link CardClass}.
@@ -489,14 +494,6 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
     return bool;
   }
 
-  /**
-   * Les vérifications de la carte sont faites dans la méthode {@link update()} (si carte dans le deck objectif et a comme liaison "=>")
-   * Créer un deck juste avant l'objectif et lui passe une nouvelle carte (la partie gauche de la carte selectionnée).
-   * Créer une carte dans la partie objectif qui est une objectif secondaire.
-   */
-  const emprunt = () => {
-
-  }
 
   /**
    * Prend le dernier élément du tableau {@link lastGame} et remplace la variable {@link game}.
@@ -716,7 +713,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
         let tmpObjectif = [...game[game.length-1]];
         saveGame();
         let tmpCard;
-        if (deckI == game.length-1){
+        if (deckI === game.length-1){
           secondObjectif = game[selecDeck1][selecCard1].right.copy();
           tmp[game.length-1] = [];
           tmpCard = game[selecDeck1][selecCard1].left.copy();
@@ -749,19 +746,38 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
     }
 
   }
-
+  let test = "";
+  const convertFile = (event) =>{
+    if(event.target.files.length >0)
+    {
+      
+      Array.from(event.target.files).forEach((element) =>{
+        var reader = new FileReader();
+        reader.onload = event =>{
+          test += event.target.result + ",";
+        }
+        reader.readAsText(element);
+      })
+    }
+  }
+  
+  const printConvertFile = () =>{
+    console.log("[" + test.substring(0,test.length-1) + "]");
+  }
   return (
     <div className="game" >
-        <select name="exo" id="exo-select" onChange={changeExercise}>
-          <option value="">Choisir un exercice</option>
-          {nbExo.map((exercise,index) =>(
+      <div className="bouton">
+        {mode !== "Create" && <select name="exo" id="exo-select" onChange={changeExercise}>
+        <option value="">Choisir un exercice</option>
+          {ex.map((exercise,index) =>(
             <option key={index} value={index+1} >Exercice {index+1}</option>
           ))}
           
-      </select>
-      {mode === "Create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
-      {mode === "Create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
-      <div className="bouton">
+      </select>}
+      {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
+      {mode === "Create" && <button onClick={printConvertFile}>Afficher les fichier</button>}
+      {mode === "Create" && <input type="file" accept="application/json" onChange={openFile} ></input>}
+      {mode === "Create" && <button onClick={saveAsFile}>Afficher le fichier</button>}
         <button onClick={retourEnArriere}>Retour en arrière</button>
         {mode !== "Create" && <button onClick={addCardAnd}>Ajout carte et</button>}
         {mode !== "Create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
