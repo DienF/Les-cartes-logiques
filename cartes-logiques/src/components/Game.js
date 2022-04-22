@@ -155,10 +155,10 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
   const [popupFusion, setPopupFusion] = useState(false);
   const [popupWin,setPopupWin] = useState(false);
-  const [popupEmprunt,setPopupEmprunt] = useState(false);
   const [popupError, setPopupError] = useState(false);
   const [lastGame, setLastGame] = useState([]);
   const [messageErreur, setMessageErreur] = useState("");
+  const [tabObjectif , setTabObjectif] = useState([[0,0]]);
 
   /**
    * Initialise l'exercice.
@@ -258,7 +258,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
     tmp[i][j] = currentCard;
     setGame(tmp);
     if (tmpNbselec === 2 && mode === "Create") setPopupFusion(true);
-    if (i === game.length-1 && game[i][j].link === "=>" && mode !== "Create") setPopupEmprunt(true);
+    
   };
 
   /**
@@ -463,7 +463,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
    * @returns {true|false} true ou false
    */
   const isWin = (currentDeck) => {
-    const objectif = game[game.length-1][currentDeck];
+    const objectif = game[game.length-1][tabObjectif[currentDeck][1]];
     let bool = false;
     game[currentDeck].forEach(card => {
       if (card.equals(objectif)) {
@@ -471,11 +471,17 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
         else {
           let tmp = [...game];
           tmp = delDeck(tmp, currentDeck);
-          tmp[tmp.length-1] = delCard(tmp[tmp.length-1],currentDeck);
-          let tmpCard = game[game.length-1][currentDeck-1].copy();
-          tmpCard.id = tmp[currentDeck-1].length;
+          tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]);
+          if(tabObjectif[currentDeck][1]-1 !== tabObjectif[currentDeck-1][1]){
+            tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]-1);
+          }
+          let tmpCard = game[game.length-1][tabObjectif[currentDeck][1]-1].copy();
+          tmpCard.id = tmp[tabObjectif[currentDeck][1]-1].length;
           tmp[currentDeck-1].push(tmpCard);
           setGame(tmp);
+          let tmpObj = [...tabObjectif];
+          tmpObj.pop();
+          setTabObjectif(tmpObj);
           bool = isWin(currentDeck-1);
         }
       }
@@ -489,19 +495,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
    * Créer une carte dans la partie objectif qui est une objectif secondaire.
    */
   const emprunt = () => {
-    setPopupEmprunt(false);
-    saveGame();
-    let tmp = [...game];
-    let tmpObjectif = [...game[game.length-1]];
-    let tmpCard = game[selecDeck1][selecCard1].right.copy()
-    tmpCard.id = game[game.length-1].length;
-    tmpObjectif.push(tmpCard)
-    tmp[game.length-1] = [];
-    tmpCard = game[selecDeck1][selecCard1].left.copy();
-    tmpCard.id = 0;
-    tmp[game.length-1].push(tmpCard);
-    tmp.push(tmpObjectif);
-    allFalse(tmp);
+
   }
 
   /**
@@ -711,6 +705,41 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
       setPopupError(true);
     }
   }
+
+  const addObjectif = () =>{
+    if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
+      let deckI = Math.max(selecDeck1,selecDeck2);
+      let cardI = Math.max(selecCard1,selecCard2);
+      if (game[deckI][cardI].link === "=>"){
+        let secondObjectif;
+        let tmp = [...game];
+        let tmpObjectif = [...game[game.length-1]];
+        saveGame();
+        let tmpCard;
+        if (deckI == game.length-1){
+          secondObjectif = game[selecDeck1][selecCard1].right.copy();
+          tmp[game.length-1] = [];
+          tmpCard = game[selecDeck1][selecCard1].left.copy();
+          tmpCard.id = 0;
+          tmp[game.length-1].push(tmpCard);
+          tmp.push(tmpObjectif);
+          secondObjectif.id = game[game.length-1].length;
+          tmpObjectif.push(secondObjectif)
+          let tmpObj = [...tabObjectif];
+          tmpObj.push([tabObjectif.length,game[game.length-1].length]);
+          setTabObjectif(tmpObj);
+        }
+        else{          
+          secondObjectif = game[selecDeck1][selecCard1].left.copy();
+          secondObjectif.id = game[game.length-1].length;
+          tmpObjectif.push(secondObjectif)        
+          tmp[tmp.length-1] = tmpObjectif;
+        }
+        allFalse(tmp);
+      }
+    }
+  }
+
   const navigate = useNavigate();
   const changeExercise = (event) =>{
     let value = event.target.value;
@@ -738,6 +767,7 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
         {mode !== "Create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
         {mode !== "Create" && <button onClick={fuseCardAdd}>Fusion carte et</button>}
         {mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
+        {mode !== "Create" && <button onClick={addObjectif}>Ajout objectif</button>}
       </div>
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
@@ -840,24 +870,6 @@ const Game = ({ mode, ex,numero ,nbExo }) => {
                 }}
               >
                 Fermer
-              </button>
-            </>
-          }
-        />
-      )}
-      {popupEmprunt && (
-        <Popup
-          content={
-            <>
-              <b>Voulez-vous emprunter cette carte {game[selecDeck1][selecCard1].toString()} ?</b>
-              <button onClick={emprunt}> Oui </button>
-              <button
-                onClick={function () {
-                  setPopupEmprunt(false);
-                  allFalseGame();
-                }}
-              >
-                Annuler
               </button>
             </>
           }
