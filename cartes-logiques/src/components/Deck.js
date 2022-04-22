@@ -40,9 +40,9 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode}) =
       <div className="deck">
         {indice === 0 && (<h3>Départ</h3>)}
         {indice === nbDeck-1 && (<h3>Objectif</h3>)}
-        {mode === "create" && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
+        {mode === "Create" && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
         <br/>
-        {mode === "create" && (<button onClick={deleleCardToDeck}>Supprimer une carte</button>)}
+        {mode === "Create" && (<button onClick={deleleCardToDeck}>Supprimer une carte</button>)}
         <GameTab.Consumer>
           {(game) => {
             return game[indice].map((card, index) =>

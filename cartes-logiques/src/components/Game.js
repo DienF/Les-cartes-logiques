@@ -143,7 +143,7 @@ class CardClass {
   }
 }
 
-const Game = ({ mode, ex ,nbExo ,changeExo}) => {
+const Game = ({ mode, ex,numero ,nbExo }) => {
   const [game, setGame] = useState([[]]);
   const [nbSelec, setNbSelec] = useState(0);
   const [selecDeck1, setSelecDeck1] = useState(-1);
@@ -164,15 +164,13 @@ const Game = ({ mode, ex ,nbExo ,changeExo}) => {
    * Initialise l'exercice.
    */
   useEffect(() => {
-    if (mode !== "create") {
-      setGame([[], []]);
-      if (ex !== undefined) {
-        setGame(gameInput(ex));
-      }
-    } else {
-      setGame([[], []]);
+    
+    setGame([[], []]);
+    if (ex !== undefined && numero !== undefined) {
+      setGame(gameInput(ex[numero]));
     }
-  }, [mode, ex ])
+
+  }, [mode, ex, numero])
 
   /**
    * Renvoie un nouveau Deck sans la carte passée en paramètre.
@@ -226,7 +224,7 @@ const Game = ({ mode, ex ,nbExo ,changeExo}) => {
     let tmpSelecDeck2 = selecDeck2;
     let tmpSelecCard1 = selecCard1;
     let tmpSelecCard2 = selecCard2;
-    if ((i === game.length-1 && game[i][j].link === "=>" && mode !== "create") || i !== game.length-1 || mode === "create") {
+    if ((i === game.length-1 && game[i][j].link === "=>" && mode !== "Create") || i !== game.length-1 || mode === "Create") {
       if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
         tmpSelecCard1 = -1;
         tmpSelecDeck1 = -1;
@@ -259,8 +257,8 @@ const Game = ({ mode, ex ,nbExo ,changeExo}) => {
     setSelecDeck2(tmpSelecDeck2);
     tmp[i][j] = currentCard;
     setGame(tmp);
-    if (tmpNbselec === 2 && mode === "create") setPopupFusion(true);
-    if (i === game.length-1 && game[i][j].link === "=>" && mode !== "create") setPopupEmprunt(true);
+    if (tmpNbselec === 2 && mode === "Create") setPopupFusion(true);
+    if (i === game.length-1 && game[i][j].link === "=>" && mode !== "Create") setPopupEmprunt(true);
   };
 
   /**
@@ -421,7 +419,9 @@ const Game = ({ mode, ex ,nbExo ,changeExo}) => {
    * @todo Stocker dans un fichier sur le serveur ou sur le PC local ou laisser comme ça (afficher le JSON dans la console).
    */
   const saveAsFile = () => {
-    console.log(JSON.stringify(gameOutput()));
+    let res = [];
+    ex.forEach(element => res.push(gameOutput(element)));
+    console.log(JSON.stringify(res));
   };
 
   /**
@@ -715,7 +715,7 @@ const Game = ({ mode, ex ,nbExo ,changeExo}) => {
   const changeExercise = (event) =>{
     let value = event.target.value;
     if(value !== ""){
-      let url = "/Exercise" + value ;
+      let url = "/Exercise" +mode + value ;
       navigate(url);
     }
 
@@ -730,14 +730,14 @@ const Game = ({ mode, ex ,nbExo ,changeExo}) => {
           ))}
           
       </select>
-      {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
-      {mode === "create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
+      {mode === "Create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
+      {mode === "Create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
       <div className="bouton">
         <button onClick={retourEnArriere}>Retour en arrière</button>
-        {mode !== "create" && <button onClick={addCardAnd}>Ajout carte et</button>}
-        {mode !== "create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
-        {mode !== "create" && <button onClick={fuseCardAdd}>Fusion carte et</button>}
-        {mode !== "create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
+        {mode !== "Create" && <button onClick={addCardAnd}>Ajout carte et</button>}
+        {mode !== "Create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
+        {mode !== "Create" && <button onClick={fuseCardAdd}>Fusion carte et</button>}
+        {mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
       </div>
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (

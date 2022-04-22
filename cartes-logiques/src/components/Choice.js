@@ -17,7 +17,7 @@ const Choice = () => {
         <ul>
           {ex !== undefined && ex.map((exercice , index) => (
           <li key={index}>
-           <NavLink exact="true" to={"/Exercise"+(index+1)}>
+           <NavLink exact="true" to={"/ExercisePlay"+(index+1)}>
               Exercice {index+1}
             </NavLink>
         </li>

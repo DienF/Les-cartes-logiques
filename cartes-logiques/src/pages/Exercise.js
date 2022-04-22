@@ -6,11 +6,7 @@ import Navigation from "../components/Navigation";
 const Exercise = () => {
   const [num, setNum] = useState();
   let tmp = useParams().num;
-  let mode = "play";
-  if(tmp === "Create"){
-    tmp = "create";
-  }
-
+  let mode = useParams().mode;
   /*
             {ex !== undefined && ex.map((exercice , index) => (
             <option key={index} value={index} onChange={changeExo}>Exercice {index+1}</option>
@@ -30,7 +26,7 @@ const Exercise = () => {
   return (
     <div className="home">
       <Navigation />
-      {ex !== undefined && <Game mode={mode} ex={ex[num-1]} nbExo={ex} />}
+      {ex !== undefined && <Game mode={mode} ex={ex} numero={num-1} nbExo={ex} />}
     </div>
   );
 };
