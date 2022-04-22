@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Navigate, useNavigate } from 'react-router-dom';
 import Deck from "./Deck";
 import Popup from "./Popup";
 export const GameTab = React.createContext();
@@ -142,7 +143,7 @@ class CardClass {
   }
 }
 
-const Game = ({ mode, ex }) => {
+const Game = ({ mode, ex ,nbExo ,changeExo}) => {
   const [game, setGame] = useState([[]]);
   const [nbSelec, setNbSelec] = useState(0);
   const [selecDeck1, setSelecDeck1] = useState(-1);
@@ -171,7 +172,7 @@ const Game = ({ mode, ex }) => {
     } else {
       setGame([[], []]);
     }
-  }, [mode, ex])
+  }, [mode, ex ])
 
   /**
    * Renvoie un nouveau Deck sans la carte passée en paramètre.
@@ -427,13 +428,13 @@ const Game = ({ mode, ex }) => {
    * Pour l'instant ouvre le fichier Ex1.json.
    */
   const openFile = () => {
-    const namefile = "Ex1.json";
+    const namefile = "Ex.json";
     setGame([[], []]);
     saveGame();
     fetch(namefile)
       .then((response) => response.text())
       .then((data) => {
-        setGame(gameInput(JSON.parse(data)));
+        setGame(gameInput(JSON.parse(data)[0]));
       });
   };
 
@@ -710,9 +711,25 @@ const Game = ({ mode, ex }) => {
       setPopupError(true);
     }
   }
+  const navigate = useNavigate();
+  const changeExercise = (event) =>{
+    let value = event.target.value;
+    if(value !== ""){
+      let url = "/Exercise" + value ;
+      navigate(url);
+    }
+
+  }
 
   return (
     <div className="game" >
+        <select name="exo" id="exo-select" onChange={changeExercise}>
+          <option value="">Choisir un exercice</option>
+          {nbExo.map((exercise,index) =>(
+            <option key={index} value={index+1} >Exercice {index+1}</option>
+          ))}
+          
+      </select>
       {mode === "create" && (<button onClick={saveAsFile}>Convertir en fichier</button> )}
       {mode === "create" && (<button onClick={openFile}>Ouvrir un fichier</button> )}
       <div className="bouton">
