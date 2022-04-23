@@ -158,7 +158,8 @@ const Game = ({ mode, ex,numero  }) => {
   const [popupError, setPopupError] = useState(false);
   const [lastGame, setLastGame] = useState([]);
   const [messageErreur, setMessageErreur] = useState("");
-  const [tabObjectif , setTabObjectif] = useState([[0,0]]);
+  const [tabObjectif , setTabObjectif] = useState([[0,0,false]]);
+  const [saveTabObjectif , setSaveTabObjectif] = useState([[[0,0,false]]]);
 
   /**
    * Initialise l'exercice.
@@ -457,7 +458,30 @@ const Game = ({ mode, ex,numero  }) => {
     // si c'est une carte simple
     else return new CardClass(i, obj.color, false, "", null, null);
   }
-
+  const findObjectifRelative = (cardObj) =>{
+    let num = -1;
+    let deck = game.length-1;
+    game[deck].forEach((element,index) =>{
+      if(element !== null && element.color === null){
+        if(element.right.equals(cardObj)){
+          num = index;
+        }
+      }
+    })
+    return num;
+  }
+  const createTabObj = (tmp) =>{
+    let tmpObj = [];
+    tmpObj.push([0,0,false]);
+    tmp[tmp.length-1].forEach((element,index) =>{
+      if(index !== 0){
+        if(element.color !== null){
+          tmpObj.push([tmpObj.length,index,true]);
+        }
+      }
+    })
+    setTabObjectif(tmpObj);
+  }
   /**
    * Compare l'objectif (game[game.length-1][currentDeck]) et toutes les cartes du deck currentDeck :
    * si on vérifie le deck 0, renvoie true si on trouve l'objectif ;
@@ -469,23 +493,22 @@ const Game = ({ mode, ex,numero  }) => {
   const isWin = (currentDeck) => {
     const objectif = game[game.length-1][tabObjectif[currentDeck][1]];
     let bool = false;
-    game[currentDeck].forEach(card => {
+    game[currentDeck].forEach((card) => {
       if (card.equals(objectif)) {
         if (currentDeck === 0) bool = true;
         else {
           let tmp = [...game];
-          tmp = delDeck(tmp, currentDeck);
-          tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]);
-          if(tabObjectif[currentDeck][1]-1 !== tabObjectif[currentDeck-1][1]){
-            tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]-1);
-          }
-          let tmpCard = game[game.length-1][tabObjectif[currentDeck][1]-1].copy();
+          
+          let tmpCard = game[game.length-1][findObjectifRelative(objectif)].copy();
           tmpCard.id = tmp[tabObjectif[currentDeck][1]-1].length;
           tmp[currentDeck-1].push(tmpCard);
+          tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]);
+          if(tabObjectif[currentDeck][2]){
+            tmp[tmp.length-1] = delCard(tmp[tmp.length-1],findObjectifRelative(objectif));
+          }
+          tmp = delDeck(tmp, currentDeck);
+          createTabObj(tmp);
           setGame(tmp);
-          let tmpObj = [...tabObjectif];
-          tmpObj.pop();
-          setTabObjectif(tmpObj);
           bool = isWin(currentDeck-1);
         }
       }
@@ -512,6 +535,10 @@ const Game = ({ mode, ex,numero  }) => {
       allFalse(tmpFutureGame);
       tmpLastGame.pop();
       setLastGame(tmpLastGame);
+      let tmpCurrentTabObj = [...saveTabObjectif];
+      let futureTabObj = tmpCurrentTabObj.pop();
+      setTabObjectif(futureTabObj);
+      setSaveTabObjectif(tmpCurrentTabObj);
     }
   }
 
@@ -530,6 +557,10 @@ const Game = ({ mode, ex,numero  }) => {
     }
     tmpLastGame.push(saveGameTmp);
     setLastGame(tmpLastGame);
+    let tmpCurrentTabObj = [...saveTabObjectif];
+    let tmpTabObj = [...tabObjectif];
+    tmpCurrentTabObj.push(tmpTabObj);
+    setSaveTabObjectif(tmpCurrentTabObj);
   }
 
   /**
@@ -701,38 +732,84 @@ const Game = ({ mode, ex,numero  }) => {
       setPopupError(true);
     }
   }
+  const deckContain = (deck , card) =>{
+    let bool = true;
+    game[game.length-1].forEach(element =>{
+      if(deck === game.length-1) {
+        if(element.equals(game[deck][card].right))bool = false;
+      }
+      else {
+        if(element.equals(game[deck][card].left))bool = false;
+      }
+      
+    })
 
+    return bool;
+  }
   const addObjectif = () =>{
+    
     if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
       let deckI = Math.max(selecDeck1,selecDeck2);
       let cardI = Math.max(selecCard1,selecCard2);
-      if (game[deckI][cardI].link === "=>"){
-        let secondObjectif;
-        let tmp = [...game];
-        let tmpObjectif = [...game[game.length-1]];
-        saveGame();
-        let tmpCard;
-        if (deckI === game.length-1){
-          secondObjectif = game[selecDeck1][selecCard1].right.copy();
-          tmp[game.length-1] = [];
-          tmpCard = game[selecDeck1][selecCard1].left.copy();
-          tmpCard.id = 0;
-          tmp[game.length-1].push(tmpCard);
-          tmp.push(tmpObjectif);
-          secondObjectif.id = game[game.length-1].length;
-          tmpObjectif.push(secondObjectif)
-          let tmpObj = [...tabObjectif];
-          tmpObj.push([tabObjectif.length,game[game.length-1].length]);
-          setTabObjectif(tmpObj);
+      if(true || !(game.length === 2 && (cardI !== 0 || deckI === 0))){
+        if(deckContain(deckI,cardI)){
+          if (game[deckI][cardI].link === "=>"){
+            let secondObjectif;
+            let tmp = [...game];
+            let tmpObjectif = [...game[game.length-1]];
+            saveGame();
+            let tmpCard;
+            if (deckI === game.length-1){
+              secondObjectif = game[selecDeck1][selecCard1].right.copy();
+              tmp[game.length-1] = [];
+              tmpCard = game[selecDeck1][selecCard1].left.copy();
+              tmpCard.id = 0;
+              tmp[game.length-1].push(tmpCard);
+              tmp.push(tmpObjectif);
+              secondObjectif.id = game[game.length-1].length;
+              tmpObjectif.push(secondObjectif)
+              let tmpObj = [...tabObjectif];
+              if(game[game.length-1].length >1){
+                tmpObj.push([tabObjectif.length,game[game.length-1].length,true]);
+              }
+              else{
+                tmpObj.push([tabObjectif.length,game[game.length-1].length,false]);
+              }
+              
+              setTabObjectif(tmpObj);
+            }
+            else{       
+              if(game[deckI][cardI].left.link === "=>"){
+                secondObjectif = game[selecDeck1][selecCard1].left.copy();
+                secondObjectif.id = game[game.length-1].length;
+                tmpObjectif.push(secondObjectif)        
+                tmp[tmp.length-1] = tmpObjectif;
+              }
+              else{
+                setMessageErreur("L'objectif secondaire doit avoir une liaison \"=>\" !");
+                setPopupError(true);
+              }   
+  
+            }
+            allFalse(tmp);
+          }
         }
-        else{          
-          secondObjectif = game[selecDeck1][selecCard1].left.copy();
-          secondObjectif.id = game[game.length-1].length;
-          tmpObjectif.push(secondObjectif)        
-          tmp[tmp.length-1] = tmpObjectif;
+        else {
+          setMessageErreur("Cette objectif existe deja !");
+          setPopupError(true);
         }
-        allFalse(tmp);
       }
+      else{
+        setMessageErreur("Le premier objectif secondaire doit être créer avec l'objectif principal !");
+        setPopupError(true);
+      }
+      
+
+    }
+    else{
+      if (nbSelec > 1)   setMessageErreur("Vous devez sélectionner une seule carte !");
+      if (nbSelec === 0) setMessageErreur("Vous devez sélectionner une carte !")
+      setPopupError(true);
     }
   }
 
@@ -793,6 +870,7 @@ const Game = ({ mode, ex,numero  }) => {
               deleteCardFunc = {setPopupDeleteCard}
               nbDeck         = {game.length}
               mode           = {mode}
+              objectif       = {tabObjectif}
               key            = {index}
             ></Deck>
         ))}
