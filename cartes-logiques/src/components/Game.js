@@ -160,6 +160,8 @@ const Game = ({ mode, ex,numero  }) => {
   const [messageErreur, setMessageErreur] = useState("");
   const [tabObjectif , setTabObjectif] = useState([[0,0,false]]);
   const [saveTabObjectif , setSaveTabObjectif] = useState([[[0,0,false]]]);
+  const navigate = useNavigate();
+  let filesCopy = "";
 
   /**
    * Initialise l'exercice.
@@ -426,22 +428,20 @@ const Game = ({ mode, ex,numero  }) => {
   };
 
   /**
-   * Pour l'instant ouvre le fichier Ex1.json.
+   * Ouvre un fichier Json et l'affiche à l'écran.
    */
   const openFile = (event) => {
     if(event.target.files.length >0)
     {
       var reader = new FileReader();
-      reader.onload = onReaderLoad;
+      reader.onload = (event) =>{
+        var obj = JSON.parse(event.target.result);
+        setGame(gameInput(obj));
+    }
       reader.readAsText(event.target.files[0]);
     }
 
   }
-  const onReaderLoad = (event) =>{
-      var obj = JSON.parse(event.target.result);
-      setGame(gameInput(obj));
-  }
-
 
   /**
    * Transforme un objet JSON en instance {@link CardClass}.
@@ -458,6 +458,13 @@ const Game = ({ mode, ex,numero  }) => {
     // si c'est une carte simple
     else return new CardClass(i, obj.color, false, "", null, null);
   }
+
+  /**
+   * Renvoie la place de l'objectif chercher dans le tableau game[game.length-1]
+   * 
+   * @param {CardClass} cardObj - La partie droite de l'objectif que l'on cherche 
+   * @returns int
+   */
   const findObjectifRelative = (cardObj) =>{
     let num = -1;
     let deck = game.length-1;
@@ -470,6 +477,12 @@ const Game = ({ mode, ex,numero  }) => {
     })
     return num;
   }
+
+  /**
+   * Créer le tableau tabObjectif en fonction des objectifs présents dans tmp
+   * 
+   * @param {*} tmp un tableau (une game)
+   */
   const createTabObj = (tmp) =>{
     let tmpObj = [];
     tmpObj.push([0,0,false]);
@@ -515,7 +528,6 @@ const Game = ({ mode, ex,numero  }) => {
     })
     return bool;
   }
-
 
   /**
    * Prend le dernier élément du tableau {@link lastGame} et remplace la variable {@link game}.
@@ -732,27 +744,55 @@ const Game = ({ mode, ex,numero  }) => {
       setPopupError(true);
     }
   }
+
+  /**
+   * Cette Fonction sert a determiner si un objectif est deja créer
+   * 
+   * Cherche dans les objectifs si il existe une carte qui est égale a:
+   * - Si le deck est l'objectif la partie droite de la carte recue
+   * - Sinon la partie gauche de la carte recue
+   * 
+   * @param {int} deck - indice du deck
+   * @param {int} card - indice de la carte
+   * @returns true/false
+   */
   const deckContain = (deck , card) =>{
-    let bool = true;
+    let bool = false;
     game[game.length-1].forEach(element =>{
       if(deck === game.length-1) {
-        if(element.equals(game[deck][card].right))bool = false;
+        if(element.equals(game[deck][card].right))bool = true;
       }
       else {
-        if(element.equals(game[deck][card].left))bool = false;
+        if(element.equals(game[deck][card].left))bool = true;
       }
       
     })
 
     return bool;
   }
+
+  /**
+   * Fonction appelée après avoir appuyé sur le bouton "Ajouter objectif".
+   * 
+   * Une seule et unique carte doit être sélectionner sinon un popup d'erreur apparaît avec ce message : 
+   *    Si deux cartes sont sélectionnées :  "Vous devez sélectionner une seule carte !"
+   *    Si zéro carte sont sélectionnées  :  "Vous devez sélectionner une carte !" 
+   * 
+   * La carte sélectionner doit avoir une liaison principale de type "=>" sinon un popup d'erreur apparait avec ce message :
+   *    "L'objectif secondaire doit avoir une liaison "=>" !
+   * 
+   * Si toutes les conditions énumérées au-dessus sont respectées il y a deux possibilité :
+   *    La carte selectionné est dans les objectifs : Ajoute la partie gauche dans le dernier deck avant l'objectif et la droite dans l'objectif et 
+   *          defini cette objectif comme un objectif secondaire. 
+   *    Le reste : Ajoute la partie gauche dans l'objectif et ne le considere pas comme un objectif secondaire.
+   */
   const addObjectif = () =>{
     
     if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
       let deckI = Math.max(selecDeck1,selecDeck2);
       let cardI = Math.max(selecCard1,selecCard2);
       if(true || !(game.length === 2 && (cardI !== 0 || deckI === 0))){
-        if(deckContain(deckI,cardI)){
+        if(!deckContain(deckI,cardI)){
           if (game[deckI][cardI].link === "=>"){
             let secondObjectif;
             let tmp = [...game];
@@ -813,7 +853,10 @@ const Game = ({ mode, ex,numero  }) => {
     }
   }
 
-  const navigate = useNavigate();
+  /**
+   * Appeler avec le selecteur recoie le numero puis redirige le site vers l'exercice corespondans
+   * @param {*} event - le selecteur ( le numero est dans event.target.value)
+   */
   const changeExercise = (event) =>{
     let value = event.target.value;
     if(value !== ""){
@@ -822,23 +865,138 @@ const Game = ({ mode, ex,numero  }) => {
     }
 
   }
-  let test = "";
+  
+  /**
+   * Recoie plusieur fichier puis transforme ces fichier en un seul
+   * @param {*} event - le bouton qui recois les fichier (event.target.files)
+   */
   const convertFile = (event) =>{
+    filesCopy = "";
     if(event.target.files.length >0)
     {
       
       Array.from(event.target.files).forEach((element) =>{
         var reader = new FileReader();
         reader.onload = event =>{
-          test += event.target.result + ",";
+          filesCopy += event.target.result + ",";
         }
         reader.readAsText(element);
       })
     }
   }
   
+  /**
+   * Copie dans le presse-papier le fichier obtenue avec le bouton select fichiers
+   */
   const printConvertFile = () =>{
-    navigator.clipboard.writeText("[" + test.substring(0,test.length-1) + "]").then(() => {})
+    navigator.clipboard.writeText("[" + filesCopy.substring(0,filesCopy.length-1) + "]").then(() => {})
+  }
+
+  /**
+   * Redirige vers le prochain exercice si il existe
+   */
+  const nextExercise = () =>{
+    if(numero+2 <= ex.length){
+      let url = "/Exercise" +mode + (numero+2) ;
+      navigate(url);
+    }
+
+    setPopupWin(false);
+  }
+
+  const isObtainableEt = (card,cardTest) =>{
+    let bool = false;
+    if(card.color === null){
+      if(card.link === "et" && (card.left.equals(cardTest) || card.right.equals(cardTest))){
+        bool = true;
+      }
+    }
+  
+
+    return bool;
+  }
+  const isObtainableImplique = (card,cardTest) =>{
+    let bool = false;
+    if(card.color === null){
+      if(card.link === "=>" && card.right.equals(cardTest)){
+        bool = true;
+      }
+    }
+    
+    return bool;
+  }
+  const containCard = (tmp,deckId , card) =>{
+    let bool = false;
+    tmp[deckId].forEach(cardElement =>{
+      if(cardElement.equals(card)){
+        bool = true;
+      }
+    })
+    return bool;
+  }
+  const recursiveSoluce = (tmp,cardTest,deckId , deckObjectif) =>{
+    let tmpCard;
+    let bool = false;
+    console.log(cardTest.toString());
+    
+    tmp.forEach((deck,deckIndex) =>{
+      deck.forEach((card,cardIndex) =>{
+        if(deckObjectif>=deckIndex){
+          if(cardTest.color !== null && deckIndex === deckObjectif && containCard(tmp,deckObjectif,cardTest)){
+            bool = true;
+          }
+          else if(isObtainableImplique(card,cardTest)){
+            console.log("isImplique");
+            if(recursiveSoluce(tmp,card.left,deckIndex,deckObjectif)){
+              
+              bool =  true;
+            }
+          }
+          else if(isObtainableEt(card,cardTest)){
+            console.log("isEt");
+
+            if(card.left.equals(cardTest)){
+              tmpCard = card.left;
+            }
+            else{
+              tmpCard = card.right;
+            }
+            tmp[deckId].push(card.right.copy());
+            tmp[deckId].push(card.left.copy());
+            if(recursiveSoluce(tmp,tmpCard,deckIndex,deckObjectif)){
+              
+              bool = true;
+            }
+          }
+          else if(cardTest.link === "et"){
+            console.log("isEt add");
+            if(recursiveSoluce(tmp,cardTest.left,deckIndex,deckObjectif)){
+              if(recursiveSoluce(tmp,cardTest.right,deckIndex,deckObjectif)){
+                bool = true;
+                return true;
+              }
+            }
+              
+           
+          }
+          else if(deckId === tmp.length-1 && cardTest.link === "=>"){
+            console.log("Add objectif");
+            tmp.splice(tmp.length-1,0,[]);
+            tmp[tmp.length-2].push(cardTest.left.copy());
+            tmp[tmp.length-1].push(cardTest.right.copy());
+            if(recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1)){
+              bool = true;
+            }
+          }
+        }
+      })
+    })
+    return bool;
+  }
+  const soluceExercise = () =>{
+    let tmp = [...game];
+    let oui = recursiveSoluce(tmp,tmp[1][0],1,0);
+    console.log(oui);
   }
   return (
     <div className="game" >
@@ -854,6 +1012,7 @@ const Game = ({ mode, ex,numero  }) => {
       {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regrouper</button>}
       {mode === "Create" && <input type="file" accept="application/json" onChange={openFile} ></input>}
       {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
+        <button onClick={soluceExercise}>Soluce Exercice</button>
         <button onClick={retourEnArriere}>Retour en arrière</button>
         {mode !== "Create" && <button onClick={addCardAnd}>Ajout carte et</button>}
         {mode !== "Create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
@@ -958,9 +1117,7 @@ const Game = ({ mode, ex,numero  }) => {
             <>
               <b>Bravo, vous avez gagné !</b>
               <button
-                onClick={function () {
-                  setPopupWin(false);
-                }}
+                onClick={nextExercise}
               >
                 Fermer
               </button>
