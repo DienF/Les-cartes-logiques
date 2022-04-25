@@ -32,7 +32,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode , o
   const setClassname = () => {
     if (indice === 0) return "start";
     if (indice === nbDeck-1) return "goal";
-    return "other";
+    return "other" + (indice);
   }
 
   const getObjectifNum = (i) =>{

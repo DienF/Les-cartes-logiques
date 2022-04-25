@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Deck from "./Deck";
 import Popup from "./Popup";
 export const GameTab = React.createContext();
@@ -155,9 +155,9 @@ const Game = ({ mode, ex,numero  }) => {
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
   const [popupFusion, setPopupFusion] = useState(false);
   const [popupWin,setPopupWin] = useState(false);
-  const [popupError, setPopupError] = useState(false);
   const [lastGame, setLastGame] = useState([]);
   const [messageErreur, setMessageErreur] = useState("");
+  const [messageTutoriel, setMessageTutoriel] = useState("");
   const [tabObjectif , setTabObjectif] = useState([[0,0,false]]);
   const [saveTabObjectif , setSaveTabObjectif] = useState([[[0,0,false]]]);
   const navigate = useNavigate();
@@ -167,10 +167,26 @@ const Game = ({ mode, ex,numero  }) => {
    * Initialise l'exercice.
    */
   useEffect(() => {
-    
+    setSaveTabObjectif([[[0,0,false]]]);
+    setTabObjectif([[0,0,false]]);
     setGame([[], []]);
+    setLastGame([]);
     if (ex !== undefined && numero !== undefined && mode !== "Create") {
-      setGame(gameInput(ex[numero]));
+      allFalse(gameInput(ex[numero]));
+    }
+    setMessageErreur("");
+    if(numero === 0){
+      setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.","Vous pouvez sélectionner une carte en cliquant dessus."])
+    }
+    if(numero === 1){
+      setMessageTutoriel(["Dans cet exercice nous allons apprendre le troisième bouton.","Ce bouton a besoin de deux cartes pour fonctionner.","Sélectionner deux cartes."])
+    }
+    if(numero === 2){
+      setMessageTutoriel(["Dans cet exercice nous allons apprendre le quatrième bouton.","Ce bouton a besoin de deux cartes pour fonctionner.","Sélectionner deux cartes."])
+    }
+    if(numero === 3){
+      setMessageTutoriel(["Dans cet exercice nous allons apprendre le dernier bouton.","Pour faire fonctionner ce bouton on doit sélectionner l’objectif."])
+
     }
 
   }, [mode, ex, numero])
@@ -220,6 +236,7 @@ const Game = ({ mode, ex,numero  }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
+    setMessageErreur("");
     let tmp = [...game];
     let currentCard = tmp[i][j];
     let tmpNbselec = nbSelec;
@@ -262,12 +279,49 @@ const Game = ({ mode, ex,numero  }) => {
     setGame(tmp);
     if (tmpNbselec === 2 && mode === "Create") setPopupFusion(true);
     
+    if(mode === "Tutoriel"){
+      if(numero === 0){
+        setMessageTutoriel(["Une fois une carte sélectionner elle aura un contoure noire", 
+        "Vous pouvez utiliser les boutons au-dessus pour effectuer une action.",
+        "Dans cet exercice nous allons apprendre le deuxième bouton.",
+        "Ce bouton a besoin de deux conditions :",
+        "- Une seule carte doit être sélectionner",
+        "- La carte doit avoir une liaison \"et\".",
+        "Quand les conditions sont validées la partie gauche et droite de la carte est ajouter au deck."]
+        );
+      }
+      if(tmpNbselec === 2 && numero === 1){
+        setMessageTutoriel(["Ce bouton a besoin de trois conditions :",
+        "- Avoir deux cartes sélectionner",
+        "- Une des deux cartes doit avoir une liaison \"=>\"",
+        "- La partie gauche de la carte avec la liaison \"=>\" doit être identique à l’autre carte",
+        "Quand les conditions sont validées la partie droite de la carte avec la liaison \"=>\" est créer dans le deck."]
+        );
+      }
+      if(tmpNbselec === 2 && numero === 2){
+        setMessageTutoriel(["Ce bouton a besoin de deux conditions :",
+        "- Avoir deux cartes sélectionner",
+        "- Les deux cartes sélectionner doivent comporter une ou deux cartes.",
+        "Quand les conditions sont validées une nouvelle carte est créée avec les deux autres cartes sélectionner et cette carte aura une liaison \"et\""]
+        );
+      }
+      if(tmpNbselec === 1 && numero === 3 && Math.max(tmpSelecDeck1,tmpSelecDeck2) === game.length-1){
+        setMessageTutoriel(["Ce bouton a besoin de deux conditions :",
+        "- Une seule carte doit être sélectionner.",
+        "- La carte sélectionner doit être dans le deck des objectifs.",
+        "La carte sélectionner doit avoir une liaison \"=>\"",
+        "Quand les conditions sont validées un objectif secondaire se créer, l’objectif secondaire est la partie droite de la carte sélectionner, un deck se créer avec la carte qui est à gauche de la carte sélectionner."]
+        );
+      }
+    }
+    
   };
 
   /**
    * Déselectionne toute les cartes dans le tableau recu et devien le jeu.
    */
   const allFalse = (tmp) => {
+    setMessageErreur("");
     setNbSelec(0);
     setSelecCard1(-1);
     setSelecDeck1(-1);
@@ -299,14 +353,7 @@ const Game = ({ mode, ex,numero  }) => {
     setGame(tmp);
   };
 
-  /**
-   * Ferme le popup & désélectionne toutes les cartes.
-   */
-  const closePopup = () => {
-    setPopupError(false);
-    setMessageErreur("Aucun message d'erreur prévu :(");
-    allFalseGame();
-  };
+
 
   /**
    * Fait apparaître le popup qui nous demande la couleur de la carte qu'on veut ajouter.
@@ -560,13 +607,7 @@ const Game = ({ mode, ex,numero  }) => {
    */
   const saveGame = () => {
     let tmpLastGame = [...lastGame];
-    let saveGameTmp = [];
-    for (var i = 0 ; i < game.length ; i++) {
-      saveGameTmp[i] = [];
-      for (var j = 0 ; j < game[i].length ; j++) {
-        saveGameTmp[i].push(game[i][j].copy());
-      }
-    }
+    let saveGameTmp = copyGame();
     tmpLastGame.push(saveGameTmp);
     setLastGame(tmpLastGame);
     let tmpCurrentTabObj = [...saveTabObjectif];
@@ -604,13 +645,11 @@ const Game = ({ mode, ex,numero  }) => {
       }
       else {
         setMessageErreur("La carte sélectionnée doit avoir une liaison principale de type \"et\" !");
-        setPopupError(true);
       }
     }
     else {
       if (nbSelec > 1)   setMessageErreur("Vous devez sélectionner une seule carte !");
       if (nbSelec === 0) setMessageErreur("Vous devez sélectionner une carte !")
-      setPopupError(true);
     }
   }
 
@@ -658,12 +697,10 @@ const Game = ({ mode, ex,numero  }) => {
         else {
           setMessageErreur("La partie gauche de la carte \"=>\" doit être égale à la deuxième carte sélectionnée !")
         }
-        setPopupError(true);
       }
     }
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
-      setPopupError(true);
     }
   }
 
@@ -700,12 +737,10 @@ const Game = ({ mode, ex,numero  }) => {
         else {
           setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
         }
-        setPopupError(true);
       }
     }
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
-      setPopupError(true);
     }
   }
 
@@ -736,12 +771,10 @@ const Game = ({ mode, ex,numero  }) => {
         else {
           setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
         }
-        setPopupError(true);
       }
     }
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
-      setPopupError(true);
     }
   }
 
@@ -800,6 +833,10 @@ const Game = ({ mode, ex,numero  }) => {
             saveGame();
             let tmpCard;
             if (deckI === game.length-1){
+              if(mode === "Tutoriel" && numero === 3){
+                setMessageTutoriel(["Vous devez maintenant compléter l’objectif secondaire.",
+                "Si vous compléter l’objectif secondaire cela créera la carte d’où il a été créer dans deck avant, dans notre cas dans le deck départ cela complétera l’objectif principal dans notre cas."]);
+              }
               secondObjectif = game[selecDeck1][selecCard1].right.copy();
               tmp[game.length-1] = [];
               tmpCard = game[selecDeck1][selecCard1].left.copy();
@@ -827,7 +864,6 @@ const Game = ({ mode, ex,numero  }) => {
               }
               else{
                 setMessageErreur("L'objectif secondaire doit avoir une liaison \"=>\" !");
-                setPopupError(true);
               }   
   
             }
@@ -836,12 +872,10 @@ const Game = ({ mode, ex,numero  }) => {
         }
         else {
           setMessageErreur("Cette objectif existe deja !");
-          setPopupError(true);
         }
       }
       else{
         setMessageErreur("Le premier objectif secondaire doit être créer avec l'objectif principal !");
-        setPopupError(true);
       }
       
 
@@ -849,7 +883,6 @@ const Game = ({ mode, ex,numero  }) => {
     else{
       if (nbSelec > 1)   setMessageErreur("Vous devez sélectionner une seule carte !");
       if (nbSelec === 0) setMessageErreur("Vous devez sélectionner une carte !")
-      setPopupError(true);
     }
   }
 
@@ -918,7 +951,7 @@ const Game = ({ mode, ex,numero  }) => {
   const isObtainableImplique = (card,cardTest) =>{
     let bool = false;
     if(card.color === null){
-      if(card.link === "=>" && card.right.equals(cardTest)){
+      if((card.link === "=>" && card.right.equals(cardTest) ) || isObtainableImplique(card.right,cardTest) || isObtainableEt(card.right,cardTest)){
         bool = true;
       }
     }
@@ -938,59 +971,81 @@ const Game = ({ mode, ex,numero  }) => {
     let tmpCard;
     chemin[1] = false;
     let tmpChemin;
-    tmp.forEach((deck,deckIndex) =>{
-      deck.forEach((card,cardIndex) =>{
-        if(deckObjectif>=deckIndex){
-          if(!chemin[1] && cardTest.color !== null && deckIndex === deckObjectif && containCard(tmp,deckObjectif,cardTest)){
-            chemin[1] = true;
-            chemin[0].push(cardTest.copy());
-            
-          }
-          if(!chemin[1] && isObtainableImplique(card,cardTest)){
-            console.log(card.left.toString() + " Implique " +cardTest.toString());
-            chemin[0].push(card.copy());
-            tmpChemin = [...recursiveSoluce(tmp,card.left,deckIndex,deckObjectif,chemin)];
-            chemin = [...tmpChemin];
-          }
-          if(!chemin[1] && isObtainableEt(card,cardTest)){
-            console.log(card.toString() + "utilisé ajout des cartes : " + card.left.toString() +" et " + card.right.toString() );
-            chemin[0].push(card.copy());
-            if(card.left.equals(cardTest)){
-              tmpCard = card.left;
+    let deckIndex = 0;
+    if(cardTest.link === "et" && !containCard(tmp,deckObjectif,cardTest)){
+      //console.log("Carte objectif " + cardTest.toString());
+      chemin[0].push(cardTest.copy());
+      tmpChemin = [...recursiveSoluce(tmp,cardTest.left,deckIndex,deckObjectif,chemin)];
+      chemin = [...tmpChemin];
+      if(chemin[1]){
+        tmp = copyGame();
+        tmpChemin = [...recursiveSoluce(tmp,cardTest.right,deckIndex,deckObjectif,chemin)];
+        chemin = [...tmpChemin];
+      }
+        
+     
+    }
+    if(!chemin[1] && deckId === tmp.length-1 && cardTest.link === "=>"){
+      //console.log("Add objectif");
+      tmp.splice(tmp.length-1,0,[]);
+      tmp[tmp.length-2].push(cardTest.left.copy());
+      tmp[tmp.length-1].push(cardTest.right.copy());
+      chemin[0].push(tmp[tmp.length-1][tmp[tmp.length-1].length-1].copy());
+      tmpChemin = [...recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1,chemin)];
+      chemin = [...tmpChemin];
+    }
+    if(!chemin[1]){
+      tmp.slice().reverse().forEach((deck,i) =>{
+        deckIndex = tmp.length-1-i;
+        deck.forEach((card,cardIndex) =>{
+          if(deckObjectif>=deckIndex){
+            if(!chemin[1]  && deckIndex !== tmp.length-1 && deckIndex === deckObjectif && containCard(tmp,deckIndex,cardTest)){
+              chemin[1] = true;
+              if(!chemin[0][chemin[0].length-1].equals(cardTest)){
+                chemin[0].push(cardTest.copy());
+              }
+              
             }
-            else{
-              tmpCard = card.right;
+            if(!chemin[1] && deckIndex !== tmp.length-1 &&  isObtainableImplique(card,cardTest)){
+              //console.log(card.left.toString() + " Implique " +cardTest.toString());
+              if(card.right.color === null){
+                tmpChemin = [...recursiveSoluce(tmp,card.right.left,deckIndex,deckObjectif,chemin)];
+                chemin = [...tmpChemin];
+              }
+              if(chemin[0]){
+                chemin[0].push(card.copy());
+                tmpChemin = [...recursiveSoluce(tmp,card.left,deckIndex,deckObjectif,chemin)];
+                chemin = [...tmpChemin];
+              }
+  
             }
-            
-            tmp[deckId].push(card.right.copy());
-            tmp[deckId].push(card.left.copy());
-            tmpChemin = [...recursiveSoluce(tmp,tmpCard,deckIndex,deckObjectif,chemin)];
-            chemin = [...tmpChemin];
-          }
-          if(!chemin[1] && cardTest.link === "et"){
-            console.log("Carte objectif " + cardTest.toString());
-            chemin[0].push(cardTest.copy());
-            tmpChemin = [...recursiveSoluce(tmp,cardTest.left,deckIndex,deckObjectif,chemin)];
-            chemin = [...tmpChemin];
-            if(chemin[1]){
-              tmpChemin = [...recursiveSoluce(tmp,cardTest.right,deckIndex,deckObjectif,chemin)];
+            if(!chemin[1] && deckIndex !== tmp.length-1 &&  isObtainableEt(card,cardTest)){
+              //console.log(card.toString() + "utilisé ajout des cartes : " + card.left.toString() +" et " + card.right.toString() );
+              chemin[0].push(card.copy());
+              if(card.left.equals(cardTest)){
+                tmpCard = card.left;
+              }
+              else{
+                tmpCard = card.right;
+              }
+              tmp[deckId].push(card.right.copy());
+              tmp[deckId].push(card.left.copy());
+              tmpChemin = [...recursiveSoluce(tmp,tmpCard,deckIndex,deckObjectif,chemin)];
               chemin = [...tmpChemin];
             }
-              
-           
+            if(!chemin[1] && deckId !== tmp.length-1 && cardTest.link === "=>"){
+              if(card.color === null && card.left.link === "=>"){
+                tmp[tmp.length-1].push(card.left.copy());
+                tmpChemin = [...recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1,chemin)];
+                chemin = [...tmpChemin];
+              }
+        
+            }
+  
           }
-          if(!chemin[1] && deckId === tmp.length-1 && cardTest.link === "=>"){
-            console.log("Add objectif");
-            tmp.splice(tmp.length-1,0,[]);
-            tmp[tmp.length-2].push(cardTest.left.copy());
-            tmp[tmp.length-1].push(cardTest.right.copy());
-            chemin[0].push(tmp[tmp.length-1][tmp[tmp.length-1].length-1].copy());
-            tmpChemin = [...recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1,chemin)];
-            chemin = [...tmpChemin];
-          }
-        }
+        })
       })
-    })
+    }
     return chemin;
   }
   const soluceExercise = () =>{
@@ -1029,6 +1084,34 @@ const Game = ({ mode, ex,numero  }) => {
     else{
       console.log("Aucune solution trouvé")
     }
+    tmp = null;
+  }
+
+  const copyGame = () =>{
+    let tmp = [];
+    for (var i = 0 ; i < game.length ; i++) {
+      tmp[i] = [];
+      for (var j = 0 ; j < game[i].length ; j++) {
+        tmp[i].push(game[i][j].copy());
+      }
+    }
+    return tmp;
+  }
+  const getNextMove = () =>{
+    let tmp = copyGame();
+    let chemin = [[],false];
+    let deckId = tmp.length-1;
+    let cardId = tmp[tmp.length-1].length-1;
+    let objectif = tmp[deckId][cardId];
+    let result = recursiveSoluce(tmp,objectif,deckId,cardId,chemin);
+    let affiche = result[0].reverse();
+    let res = affiche[1];
+    if(objectif.link === "=>" && game.length === 2){
+      res = objectif;
+    }
+    
+    console.log(res.toString());
+    return res;
   }
   return (
     <div className="game" >
@@ -1044,14 +1127,23 @@ const Game = ({ mode, ex,numero  }) => {
       {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regrouper</button>}
       {mode === "Create" && <input type="file" accept="application/json" onChange={openFile} ></input>}
       {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
-        <button onClick={soluceExercise}>Soluce Exercice</button>
+        {true && <button onClick={getNextMove}>Soluce Exercice</button>}
         <button onClick={retourEnArriere}>Retour en arrière</button>
-        {mode !== "Create" && <button onClick={addCardAnd}>Ajout carte et</button>}
-        {mode !== "Create" && <button onClick={addCardFuse}>Ajout carte {"=>"}</button>}
-        {mode !== "Create" && <button onClick={fuseCardAdd}>Fusion carte et</button>}
-        {mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
-        {mode !== "Create" && <button onClick={addObjectif}>Ajout objectif</button>}
+        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}>Ajout carte et</button>}
+        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}>Ajout carte {"=>"}</button>}
+        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}>Fusion carte et</button>}
+        {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
+        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""}onClick={addObjectif}>Ajout objectif</button>}
       </div>
+      {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
+        {messageTutoriel.map((element,index) =>{
+          return<div key={index}>{element}</div>
+          
+        })}
+      </div>}
+      {messageErreur !== "" && <div className="message error">
+        {messageErreur}
+      </div>}
       <GameTab.Provider value={game}>
         {game.map((deck, index) => (
             <Deck
@@ -1066,19 +1158,6 @@ const Game = ({ mode, ex,numero  }) => {
             ></Deck>
         ))}
       </GameTab.Provider>
-      {popupError && (
-        <Popup
-          content={
-            <>
-              <b>
-                {messageErreur}
-              </b>
-              <br></br>
-              <button onClick={closePopup}>Fermer</button>
-            </>
-          }
-        />
-      )}
       {popupAddCard && (
         <Popup
           content={

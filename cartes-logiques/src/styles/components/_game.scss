@@ -9,9 +9,45 @@
   grid-template-columns: 20% 30% 30% 20%; 
   grid-template-areas:
   "b b b b"
-  "start . . goal"
-  "start . . goal"
-  "start . . goal";
+  "t t t t"
+  "e e e e"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal"
+  "start other1 other2 goal";
+
 
   .bouton{
     grid-area: b;
@@ -24,5 +60,29 @@
       margin-left: 2vh;
     }
 
+  }
+  .message{
+  color: black;
+  text-align: center;
+  border-radius:10px;
+  margin-left: 100px;
+  margin-right: 100px;
+  font-weight:bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+  }
+  .tutoriel{
+    grid-area: t;
+    background:#e9ffd9;
+    border:1px solid #a6ca8a;
+  }
+  .error{
+    grid-area: e;
+    background:#ffecec;
+    border:1px solid #f5aca6;
+  }
+  .boutonSelection{
+    border: #a6ca8a solid 5px;
+    border-radius: 1px;
   }
 }
