@@ -934,69 +934,101 @@ const Game = ({ mode, ex,numero  }) => {
     })
     return bool;
   }
-  const recursiveSoluce = (tmp,cardTest,deckId , deckObjectif) =>{
+  const recursiveSoluce = (tmp,cardTest,deckId , deckObjectif , chemin) =>{
     let tmpCard;
-    let bool = false;
-    console.log(cardTest.toString());
-    
+    chemin[1] = false;
+    let tmpChemin;
     tmp.forEach((deck,deckIndex) =>{
       deck.forEach((card,cardIndex) =>{
         if(deckObjectif>=deckIndex){
-          if(cardTest.color !== null && deckIndex === deckObjectif && containCard(tmp,deckObjectif,cardTest)){
-            bool = true;
+          if(!chemin[1] && cardTest.color !== null && deckIndex === deckObjectif && containCard(tmp,deckObjectif,cardTest)){
+            chemin[1] = true;
+            chemin[0].push(cardTest.copy());
+            
           }
-          else if(isObtainableImplique(card,cardTest)){
-            console.log("isImplique");
-            if(recursiveSoluce(tmp,card.left,deckIndex,deckObjectif)){
-              
-              bool =  true;
-            }
+          if(!chemin[1] && isObtainableImplique(card,cardTest)){
+            console.log(card.left.toString() + " Implique " +cardTest.toString());
+            chemin[0].push(card.copy());
+            tmpChemin = [...recursiveSoluce(tmp,card.left,deckIndex,deckObjectif,chemin)];
+            chemin = [...tmpChemin];
           }
-          else if(isObtainableEt(card,cardTest)){
-            console.log("isEt");
-
+          if(!chemin[1] && isObtainableEt(card,cardTest)){
+            console.log(card.toString() + "utilisé ajout des cartes : " + card.left.toString() +" et " + card.right.toString() );
+            chemin[0].push(card.copy());
             if(card.left.equals(cardTest)){
               tmpCard = card.left;
             }
             else{
               tmpCard = card.right;
             }
+            
             tmp[deckId].push(card.right.copy());
             tmp[deckId].push(card.left.copy());
-            if(recursiveSoluce(tmp,tmpCard,deckIndex,deckObjectif)){
-              
-              bool = true;
-            }
+            tmpChemin = [...recursiveSoluce(tmp,tmpCard,deckIndex,deckObjectif,chemin)];
+            chemin = [...tmpChemin];
           }
-          else if(cardTest.link === "et"){
-            console.log("isEt add");
-            if(recursiveSoluce(tmp,cardTest.left,deckIndex,deckObjectif)){
-              if(recursiveSoluce(tmp,cardTest.right,deckIndex,deckObjectif)){
-                bool = true;
-                return true;
-              }
+          if(!chemin[1] && cardTest.link === "et"){
+            console.log("Carte objectif " + cardTest.toString());
+            chemin[0].push(cardTest.copy());
+            tmpChemin = [...recursiveSoluce(tmp,cardTest.left,deckIndex,deckObjectif,chemin)];
+            chemin = [...tmpChemin];
+            if(chemin[1]){
+              tmpChemin = [...recursiveSoluce(tmp,cardTest.right,deckIndex,deckObjectif,chemin)];
+              chemin = [...tmpChemin];
             }
               
            
           }
-          else if(deckId === tmp.length-1 && cardTest.link === "=>"){
+          if(!chemin[1] && deckId === tmp.length-1 && cardTest.link === "=>"){
             console.log("Add objectif");
             tmp.splice(tmp.length-1,0,[]);
             tmp[tmp.length-2].push(cardTest.left.copy());
             tmp[tmp.length-1].push(cardTest.right.copy());
-            if(recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1)){
-              bool = true;
-            }
+            chemin[0].push(tmp[tmp.length-1][tmp[tmp.length-1].length-1].copy());
+            tmpChemin = [...recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1,chemin)];
+            chemin = [...tmpChemin];
           }
         }
       })
     })
-    return bool;
+    return chemin;
   }
   const soluceExercise = () =>{
     let tmp = [...game];
-    let oui = recursiveSoluce(tmp,tmp[1][0],1,0);
-    console.log(oui);
+    let chemin = [[],false];
+    let objectif = tmp[1][0];
+    let result = recursiveSoluce(tmp,objectif,1,0,chemin);
+    let affiche;
+    if(result[1]){
+      console.log("Solution trouvé")
+      if(objectif.link === "=>"){
+        console.log("Ajout Objectif secondaire : " + result[0][0] );
+        console.log("Création d'une LPU avec la carte " + objectif.left.toString());
+        affiche = result[0].reverse();
+        for(var i=0;i<affiche.length-1;i++){
+          if(affiche[i].color !== null ){
+            if(affiche[i+1].link === "=>"){
+              console.log("Utilisation de la carte " + affiche[i] + " et " + affiche[i+1] + " Création de la carte "+affiche[i+1].right);
+            }
+            i++;
+          }
+          else if(affiche[i].link === "=>"){
+            console.log("Utilisation de la carte " + affiche[i].left + " et " + affiche[i]+ " Création de la carte "+affiche[i].right);
+          }
+        }
+        console.log("Objectif secondaire remplie");
+
+      }
+      else if(objectif.link === "et"){
+      
+      }
+      else{
+
+      }
+    }
+    else{
+      console.log("Aucune solution trouvé")
+    }
   }
   return (
     <div className="game" >
