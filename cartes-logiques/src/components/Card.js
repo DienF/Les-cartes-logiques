@@ -1,7 +1,7 @@
 import React from "react";
 import { GameTab } from "./Game";
 
-const Card = ({ deckIndice, cardIndice, update }) => {
+const Card = ({ deckIndice, cardIndice, update ,cardHelp ,cardHelp2}) => {
   /**
    * Fonction qui détecte le clique sur une carte & qui appelle la fonction update passée par le component Deck.
    */
@@ -131,7 +131,8 @@ const Card = ({ deckIndice, cardIndice, update }) => {
                       style={{ backgroundColor: cardAffiche.color }}
                       className={
                         getTabClass(game, deckIndice, cardIndice, index) +
-                        (cardAffiche.active ? " card_selec" : "")
+                        (cardAffiche.active ? " card_selec" : "") +
+                        ((game[deckIndice][cardIndice].equals(cardHelp )) || (game[deckIndice][cardIndice].equals(cardHelp2)) ? " card_help" : "")
                       }
                     ></div>
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}

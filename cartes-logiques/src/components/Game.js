@@ -144,6 +144,7 @@ class CardClass {
 }
 
 const Game = ({ mode, ex,numero  }) => {
+  const cardError = new CardClass(9,"error",false,null,null);
   const [game, setGame] = useState([[]]);
   const [nbSelec, setNbSelec] = useState(0);
   const [selecDeck1, setSelecDeck1] = useState(-1);
@@ -160,6 +161,8 @@ const Game = ({ mode, ex,numero  }) => {
   const [messageTutoriel, setMessageTutoriel] = useState("");
   const [tabObjectif , setTabObjectif] = useState([[0,0,false]]);
   const [saveTabObjectif , setSaveTabObjectif] = useState([[[0,0,false]]]);
+  const [cardHelp , setCardHelp] = useState(cardError);
+  const [cardHelp2 , setCardHelp2] = useState(cardError);
   const navigate = useNavigate();
   let filesCopy = "";
 
@@ -237,6 +240,8 @@ const Game = ({ mode, ex,numero  }) => {
    */
   const update = (i, j) => {
     setMessageErreur("");
+    setCardHelp(cardError);
+    setCardHelp2(cardError);
     let tmp = [...game];
     let currentCard = tmp[i][j];
     let tmpNbselec = nbSelec;
@@ -1108,9 +1113,17 @@ const Game = ({ mode, ex,numero  }) => {
     let res = affiche[1];
     if(objectif.link === "=>" && game.length === 2){
       res = objectif;
+      setCardHelp(res);
+      setCardHelp2(cardError);
     }
-    
-    console.log(res.toString());
+    else if(res.link === "et"){
+      setCardHelp(res);
+      setCardHelp2(cardError);
+    }
+    else{
+      setCardHelp(res);
+      setCardHelp2(affiche[0]);
+    }
     return res;
   }
   return (
@@ -1127,7 +1140,7 @@ const Game = ({ mode, ex,numero  }) => {
       {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regrouper</button>}
       {mode === "Create" && <input type="file" accept="application/json" onChange={openFile} ></input>}
       {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
-        {true && <button onClick={getNextMove}>Soluce Exercice</button>}
+        {true && <button onClick={getNextMove}>Aide</button>}
         <button onClick={retourEnArriere}>Retour en arrière</button>
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}>Ajout carte et</button>}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}>Ajout carte {"=>"}</button>}
@@ -1154,6 +1167,8 @@ const Game = ({ mode, ex,numero  }) => {
               nbDeck         = {game.length}
               mode           = {mode}
               objectif       = {tabObjectif}
+              cardHelp       = {cardHelp}
+              cardHelp2      = {cardHelp2}
               key            = {index}
             ></Deck>
         ))}
