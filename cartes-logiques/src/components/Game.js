@@ -160,7 +160,6 @@ const Game = ({ mode, ex,numero  }) => {
   const [messageErreur, setMessageErreur] = useState("");
   const [messageTutoriel, setMessageTutoriel] = useState("");
   const [tabObjectif , setTabObjectif] = useState([[0,0,false]]);
-  const [saveTabObjectif , setSaveTabObjectif] = useState([[[0,0,false]]]);
   const [cardHelp , setCardHelp] = useState(cardError);
   const [cardHelp2 , setCardHelp2] = useState(cardError);
   const navigate = useNavigate();
@@ -170,7 +169,6 @@ const Game = ({ mode, ex,numero  }) => {
    * Initialise l'exercice.
    */
   useEffect(() => {
-    setSaveTabObjectif([[[0,0,false]]]);
     setTabObjectif([[0,0,false]]);
     setGame([[], []]);
     setLastGame([]);
@@ -201,9 +199,12 @@ const Game = ({ mode, ex,numero  }) => {
    * @returns {Array}
    */
   const delCard = (deck, indiceCard) => {
+    //Le deck que l'on return
     let finalDeck = [];
+    //met la carte a supprimer en null
     deck[indiceCard] = null;
     let cpt = 0;
+    //recopie le deck sauf la carte qui est egale a null
     for (let i = 0; i < deck.length; i++) {
       if (deck[i] !== null) {
         let tmpCard = deck[i];
@@ -212,6 +213,7 @@ const Game = ({ mode, ex,numero  }) => {
       }
       else cpt++;
     }
+    //renvoie le nouveau deck
     return finalDeck;
   } 
 
@@ -222,11 +224,15 @@ const Game = ({ mode, ex,numero  }) => {
    * @returns 
    */
   const delDeck = (currentGame, indiceDeck) => {
+    // le tableau du jeu que l'on renvoie
     let finalGame = [];
+    //met le deck a supprimer en null
     currentGame[indiceDeck] = null;
+    //recopie le jeu sauf le deck qui est egale a null
     for (let i = 0;i<currentGame.length;i++) {
       if (currentGame[i] !== null) finalGame.push(currentGame[i]);
     }
+    // renvoie le jeu sans le deck
     return finalGame;
   }
 
@@ -239,51 +245,71 @@ const Game = ({ mode, ex,numero  }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
+    //met le message erreur en "" ce qui ne l'afiche plus
     setMessageErreur("");
+    //n'affiche plus les deux cartes d'aide
     setCardHelp(cardError);
     setCardHelp2(cardError);
+    //copie du jeu dans tmp
     let tmp = [...game];
+    // la carte sur laquelle on a cliqué
     let currentCard = tmp[i][j];
+    //copie du nombre de carte séléctionner
     let tmpNbselec = nbSelec;
+    //copie de la permière carte séléctionner
     let tmpSelecDeck1 = selecDeck1;
-    let tmpSelecDeck2 = selecDeck2;
     let tmpSelecCard1 = selecCard1;
+    //copie de la deuxième carte séléctionne
+    let tmpSelecDeck2 = selecDeck2;
     let tmpSelecCard2 = selecCard2;
+    //rentre dans le if si
+    //on ne clique pas sur l'objectif
+    //le jeu n'est pas en mode create
+    //si on clique sur l'objectifet qu'il a une liaison =>
     if ((i === game.length-1 && game[i][j].link === "=>" && mode !== "Create") || i !== game.length-1 || mode === "Create") {
+      
       if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
+        //la carte séléctionner est deja selectionner on la deselectionne (premiere carte)
         tmpSelecCard1 = -1;
         tmpSelecDeck1 = -1;
         tmpNbselec--;
         currentCard.select(!currentCard.active);
       }
       else if (tmpSelecDeck2 === i && tmpSelecCard2 === j) {
+        //la carte séléctionner est deja selectionner on la deselectionne (deuxième carte)
         tmpSelecCard2 = -1;
         tmpSelecDeck2 = -1
         tmpNbselec--;
         currentCard.select(!currentCard.active);
       }
       else if (tmpSelecDeck1 === -1 && tmpSelecCard1 === -1) {
+        //aucune carte n'est séléctionner
         tmpSelecDeck1 = i;
         tmpSelecCard1 = j;
         tmpNbselec++;
         currentCard.select(!currentCard.active);
       }
       else if (tmpNbselec < 2) {
+        //une seul est unique carte est séléctionner
         tmpSelecDeck2 = i;
         tmpSelecCard2 = j;
         tmpNbselec++;
         currentCard.select(!currentCard.active);
       }
     }
+    //affecte toute les variable temporaire au vrai variable
     setNbSelec(tmpNbselec);
     setSelecCard1(tmpSelecCard1);
     setSelecCard2(tmpSelecCard2);
     setSelecDeck1(tmpSelecDeck1);
     setSelecDeck2(tmpSelecDeck2);
+    //on remet la carte dans le jeu avec les changement
     tmp[i][j] = currentCard;
+    //on actualise le jeu
     setGame(tmp);
+    // affiche le popup de fusion en mode creation si deux cartes sont séléctionner
     if (tmpNbselec === 2 && mode === "Create") setPopupFusion(true);
-    
+    //Affichage des tutoriel en fonction de l'exercice et du nombre de carte sél
     if(mode === "Tutoriel"){
       if(numero === 0){
         setMessageTutoriel(["Une fois une carte sélectionner elle aura un contoure noire", 
@@ -326,17 +352,21 @@ const Game = ({ mode, ex,numero  }) => {
    * Déselectionne toute les cartes dans le tableau recu et devien le jeu.
    */
   const allFalse = (tmp) => {
+    // supression des message erreur
     setMessageErreur("");
+    // on deselectionne tout
     setNbSelec(0);
     setSelecCard1(-1);
     setSelecDeck1(-1);
     setSelecCard2(-1);
     setSelecDeck2(-1);
+    // on met toute les carte du jeu passer en paramètre en mode non sélectionner
     tmp.forEach((e) => {
       e.forEach((s) => {
         s.select(false);
       });
     });
+    // on actualise le jeu
     setGame(tmp);
   };
 
@@ -344,66 +374,88 @@ const Game = ({ mode, ex,numero  }) => {
    * Déselectionne toute les cartes du jeu.
    */
   const allFalseGame = () => {
+    // supression des message erreur
+    setMessageErreur("");
+    // on deselectionne tout
     setNbSelec(0);
     setSelecCard1(-1);
     setSelecDeck1(-1);
     setSelecCard2(-1);
     setSelecDeck2(-1);
+    // copie du jeu actuelle
     let tmp = [...game];
+    // on met toute les carte du jeu actuelle en mode non sélectionner
     tmp.forEach((e) => {
       e.forEach((s) => {
         s.select(false);
       });
     });
+    // on actualise le jeu
     setGame(tmp);
   };
 
 
 
-  /**
+  /** 
+   * !!!Attention cette fonction doit etre uniquement appeller en mode create ou pour faire des tests !!!
    * Fait apparaître le popup qui nous demande la couleur de la carte qu'on veut ajouter.
    * @param {number} deckIndice - l'indice du deck où l'on ajoute une carte
    */
   const addCard = (deckIndice) => {
+    // indique dans quel deck on veut ajouter une cartes
     setIndiceDeckAddCard(deckIndice);
+    //affiche le popup pour ajouter une carte simple
     setPopupAddCard(true);
   };
 
   /**
+   * !!!Attention cette fonction doit etre uniquement appeller en mode create ou pour faire des tests !!!
    * Crée une carte avec la couleur selectionnée (ne ferme pas le popup quand on sélectionne une couleur).
    * @param {*} event (event.target.value)   - reçoit la couleur cliquée ;
    *                  (event.target.checked) - on le met à false si on veut faire plusieurs fois la même couleur
    */
   const choixCouleur = (event) => {
+    // sauvgarde le jeu (utiliser pour pouvoir faire des retour en arrière)
     saveGame();
+    // copie le jeu
     let tmp = [...game];
+    // met le radio bouton cliquer en non chequer
     event.target.checked = false;
+    // ajoute la carte dans le deck (indiceDeckAddCard est affecter avant de rentrée dans la fonction)
     tmp[indiceDeckAddCard].push(
       new CardClass(
-        game[indiceDeckAddCard].length, // id
-        event.target.value,             // color
+        game[indiceDeckAddCard].length, // id (taille du deck avant ajout)
+        event.target.value,             // color (recu avec le radio bouton)
         false,                          // active
         "",                             // link
         null,                           // left
         null                            // right
       )
     );
+    // actualise le jeu et met tout le monde en mode non séléctionner
     allFalse(tmp);
   };
 
   /**
+   * !!!Attention cette fonction doit etre uniquement appeller en mode create ou pour faire des tests !!!
    * Crée une carte complexe avec les 2 cartes sélectionnées (cette fonction est appelée à la fin de {@link update()} en mode création).
    * @param {*} event (event.target.value) - reçoit la liaison cliquée
    */
   const choixLiaison = (event) => {
+    // sauvgarde le jeu (utiliser pour pouvoir faire des retour en arrière)
     saveGame();
+    //copie du jeu
     let tmp = [...game];
+    // met le radio bouton cliquer en non chequer
     event.target.checked = false;
-    const l = event.target.value;                 // link
+    //liaison recu avec le radio bouton
+    const l = event.target.value;
+    // copie les deux cartes séléctionner     
     let c1 = game[selecDeck1][selecCard1].copy();
     let c2 = game[selecDeck2][selecCard2].copy();
     c1.id = 0;
     c2.id = 1;
+    //ajoute la carte fusionner dans le deck de la premiere carte séléctionner
     tmp[selecDeck1].push(
       new CardClass(
         game[selecDeck1].length,           // id
@@ -414,19 +466,28 @@ const Game = ({ mode, ex,numero  }) => {
         c2                                        // right
       )
     );
+    //enleve le popup
     setPopupFusion(false);
+    // actualise le jeu et met tout le monde en mode non séléctionner
     allFalse(tmp);
   };
 
   /**
+   * !!!Attention cette fonction doit etre uniquement appeller en mode create ou pour faire des tests !!!
    * Supprime la carte qui est sélectionnée.
    */
   const deleteCard = () => {
+    //enleve le popup
     setPopupDeleteCard(false);
+    // si la carte séléctionner n'est pas la carte 1 tout deselectionner
     if (!(selecCard1 === -1 && selecDeck1 === -1)) {
+      // sauvgarde le jeu (utiliser pour pouvoir faire des retour en arrière)
       saveGame();
+      //copie le jeu
       let tmp = [...game];
+      // suprimme la carte
       tmp[selecDeck1] = delCard(game[selecDeck1],selecCard1);
+      // actualise le jeu et met tout le monde en mode non séléctionner
       allFalse(tmp);
     }
     else allFalseGame();
@@ -438,14 +499,17 @@ const Game = ({ mode, ex,numero  }) => {
    * @returns un tableau d'objets
    */
   const gameOutput = () => {
+    // le tableau que l'on renvoie
     let res = [[], []];
-    game.map(function (deck, index) {
-      deck.map(function (card) {
+    // transforme toute les carte en objet (avec seulement les information essentielle)
+    // la couleur ou liaison + left + right
+    // la carte est ajouter dans le tableau renvoyer
+    game.forEach(function (deck, index) {
+      deck.forEach(function (card) {
         res[index].push(card.toFile());
-        return 0;
       });
-      return 0;
     });
+    // renvoie le tableau
     return res;
   };
 
@@ -456,17 +520,22 @@ const Game = ({ mode, ex,numero  }) => {
    * @returns un tableau de Deck
    */
   const gameInput = (data) => {
+    // tableau que l'on renvoie
     let res = [[], []]
+    // id de la future carte
     let i = 0;
+    // créeation du deck de départ
     data[0].forEach(element => {
         res[0].push(toClass(element, i));
       i++;
     });
     i = 0;
+    //création du deck objectif
     data[1].forEach(element => {
       res[1].push(toClass(element, i));
       i++;
     });
+    //renvoie le tableau de jeu
     return res;
   }
 
@@ -474,8 +543,11 @@ const Game = ({ mode, ex,numero  }) => {
    * @todo Stocker dans un fichier sur le serveur ou sur le PC local ou laisser comme ça (afficher le JSON dans la console).
    */
   const saveAsFile = () => {
+    // variable copier
     let res;
+    // copie json du jeu
     res = gameOutput(game);
+    //copie la variable dans le presse papier
     navigator.clipboard.writeText(JSON.stringify(res, null, 1)).then(() => {})
   };
 
@@ -483,13 +555,19 @@ const Game = ({ mode, ex,numero  }) => {
    * Ouvre un fichier Json et l'affiche à l'écran.
    */
   const openFile = (event) => {
+    //verifie que l'on est séléctionenr un fichier
     if(event.target.files.length >0)
     {
+      // variable pour lire le fichier 
       var reader = new FileReader();
+      // lit le fichier
       reader.onload = (event) =>{
+        // transforme le fichier json en objet
         var obj = JSON.parse(event.target.result);
+        //met le jeux a jour avec le fichier json recu
         setGame(gameInput(obj));
-    }
+      }
+      // effectue la fonction onload juste au dessus avec le premier fichier recu
       reader.readAsText(event.target.files[0]);
     }
 
@@ -518,15 +596,22 @@ const Game = ({ mode, ex,numero  }) => {
    * @returns int
    */
   const findObjectifRelative = (cardObj) =>{
+    // variable renvoyer (-1 si il trouve pas)
     let num = -1;
+    // deck objectif
     let deck = game.length-1;
+    // cheche parmis les cartes de l'objectif si il y a une 
+    // carte dont la partie droite est egale a la carte envoyer en paramètre
+    // si oui num prend la valeur de l'index de cette carte
     game[deck].forEach((element,index) =>{
+      // regarde si la couleur est null (si elle est null la carte est au moins double)
       if(element !== null && element.color === null){
         if(element.right.equals(cardObj)){
           num = index;
         }
       }
     })
+    // renvoie -1 ou la place de la carte
     return num;
   }
 
@@ -536,8 +621,13 @@ const Game = ({ mode, ex,numero  }) => {
    * @param {*} tmp un tableau (une game)
    */
   const createTabObj = (tmp) =>{
+    // creation du tableau que l'on va affecter a tabObjectif
     let tmpObj = [];
+    // push l'objectif principal
     tmpObj.push([0,0,false]);
+    // parcourt le deck objectif a la recherche d'une simple qui ne soit
+    // pas l'objectif principal
+    // si il y en a une elle ajoute dans le tableau
     tmp[tmp.length-1].forEach((element,index) =>{
       if(index !== 0){
         if(element.color !== null){
@@ -545,39 +635,65 @@ const Game = ({ mode, ex,numero  }) => {
         }
       }
     })
+    // actualise le tableau des objectif
     setTabObjectif(tmpObj);
   }
   /**
-   * Compare l'objectif (game[game.length-1][currentDeck]) et toutes les cartes du deck currentDeck :
+   * Compare l'objectif (game[game.length-1][numObjectif]) et toutes les cartes du deck currentDeck(currentDeck = numObjectif) :
    * si on vérifie le deck 0, renvoie true si on trouve l'objectif ;
    * si on ne vérifie pas le deck 0, si l'objectif est dans le deck on ajoute l'objectif au dessus du deck précédent et 
    * on regarde le deck en dessous (currentDeck-1) pour voir si la carte ajoutée n'est pas l'objectif du dessus.
-   * @param {number} currentDeck - le Deck le plus élevé
+   * @param {number} numObjectif - le numero de l'objectif
    * @returns {true|false} true ou false
    */
-  const isWin = (currentDeck) => {
-    const objectif = game[game.length-1][tabObjectif[currentDeck][1]];
+  const isWin = (numObjectif) => {
+    // objectif a verifier
+    const objectif = game[game.length-1][tabObjectif[numObjectif][1]];
+    // indice du deck lié a l'objectif
+    let currentDeck = numObjectif;
+    // variable a renvoyer de base on renvoie false
     let bool = false;
+    // parcourt le deck lié a l'objectif
     game[currentDeck].forEach((card) => {
+      // si une carte lié a cette objectif est trouvé l'objectif est validé
       if (card.equals(objectif)) {
+        // si c'est l'objectif principal on cherche pas plus loin
+        // fin de partie
         if (currentDeck === 0) bool = true;
         else {
-          let tmp = [...game];
+          // si c'est un objectif secondaire
           
+          // copie du jeu
+          let tmp = [...game];
+          // la carte qui a servie a créer l'objectif secondaire
           let tmpCard = game[game.length-1][findObjectifRelative(objectif)].copy();
           tmpCard.id = tmp[tabObjectif[currentDeck][1]-1].length;
+          // ajoute cette carte dans le deck précédent
           tmp[currentDeck-1].push(tmpCard);
+          // surpprime l'objectif
           tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]);
+          // verifie si l'objectif a un objectif lié
           if(tabObjectif[currentDeck][2]){
+            // si oui supprime egalement l'objectif qui lui est lié
             tmp[tmp.length-1] = delCard(tmp[tmp.length-1],findObjectifRelative(objectif));
           }
+          // supprime le deck qui a servie pour cette objectif secondaire
           tmp = delDeck(tmp, currentDeck);
+          //met a jour la table des objectif
           createTabObj(tmp);
+          // met a jour le jeu
           setGame(tmp);
+          // regarde l'objectif precedent pour voir si le fait
+          // d'ajouter l'objectif secondaire ne la pas validé
+          // si cela valide l'objectif principale
+          // bool = true
+          // sinon bool = false
           bool = isWin(currentDeck-1);
         }
       }
     })
+    // renvoie true si l'obejctif principal est vrai
+    // sinon renvoie false
     return bool;
   }
 
@@ -586,23 +702,32 @@ const Game = ({ mode, ex,numero  }) => {
    * (ne marche pas)
    */
   const retourEnArriere = () => {
+    // regarde si il y a au moin une sauvegarde du jeu
     if (lastGame.length !== 0) {
+      // copie le tableau de sauvegrade
       let tmpLastGame   = [...lastGame];
+      // prend le dernier tableau de jeu ajouter
       let tmpSavedGame  = tmpLastGame[tmpLastGame.length-1];
+      // initialise le future tableau de jeu
       let tmpFutureGame = [];
+      // copie le dernier tableau de jeu sauvegardé dans le futur tableau
       for (var i = 0 ; i < tmpSavedGame.length ; i++) {
         tmpFutureGame[i] = [];
         for (var j = 0 ; j < tmpSavedGame[i].length ; j++) {
           tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
         }
       }
+      // refait le tableau des objectifs au cas ou
+      // le retour en arrière est suprimmer un objectif secondaire
+      createTabObj(tmpFutureGame);
+      // met a jour le jeu avec la dernier sauvegarde
+      // met toute les cartes en mode désélectionner
       allFalse(tmpFutureGame);
+      // suprimme la dernière sauvegrade du jeu
       tmpLastGame.pop();
+      // met a jour le tableau des sauvegardes
       setLastGame(tmpLastGame);
-      let tmpCurrentTabObj = [...saveTabObjectif];
-      let futureTabObj = tmpCurrentTabObj.pop();
-      setTabObjectif(futureTabObj);
-      setSaveTabObjectif(tmpCurrentTabObj);
+
     }
   }
 
@@ -611,14 +736,14 @@ const Game = ({ mode, ex,numero  }) => {
    * car ne fonctionne pas en appelant une fonction (asynchrone).
    */
   const saveGame = () => {
+    // copie du tableau de sauvegarde
     let tmpLastGame = [...lastGame];
+    // copie le jeu actuelle
     let saveGameTmp = copyGame();
+    // ajoute le jeu actuelle dans le tableau des sauvegardes
     tmpLastGame.push(saveGameTmp);
+    // met a jour le tableau des sauvegardes
     setLastGame(tmpLastGame);
-    let tmpCurrentTabObj = [...saveTabObjectif];
-    let tmpTabObj = [...tabObjectif];
-    tmpCurrentTabObj.push(tmpTabObj);
-    setSaveTabObjectif(tmpCurrentTabObj);
   }
 
   /**
