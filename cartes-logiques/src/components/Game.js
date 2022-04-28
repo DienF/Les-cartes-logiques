@@ -144,25 +144,92 @@ class CardClass {
 }
 
 const Game = ({ mode, ex,numero  }) => {
-  const cardError = new CardClass(9,"error",false,null,null);
+  // carte qui n'existera jamais dans un deck
+  const cardError = new CardClass(-1,"error",false,null,null); 
+
+  // tableau ou sont réunie toute les cartes et deck
+  // il est disposer comme ca
+  //  deck départ       deck sous objectif      deck objectif
+  //    game[0]              game[...]            game[n-1]
+  //    game[0][0]          game[...][0]          game[n-1][0]
+  //    game[0][1]
+  //    game[0][2]
+
+  // game[0][0] = une carte
+  // game[...][0] = la partie gauche d'un objectif =>
+  // game[n-1][0] = objectif principal
   const [game, setGame] = useState([[]]);
+
+  // le nombre de carte séléctionner
   const [nbSelec, setNbSelec] = useState(0);
+
+  // indice du deck de la première carte séléctionenr
   const [selecDeck1, setSelecDeck1] = useState(-1);
+
+  // inidice de la carte dans le deck de la premiere carte séléctionner
   const [selecCard1, setSelecCard1] = useState(-1);
+
+  // indice du deck de la deuxième carte séléctionenr
   const [selecDeck2, setSelecDeck2] = useState(-1);
+
+  // inidice de la carte dans le deck de la deuxième carte séléctionner
   const [selecCard2, setSelecCard2] = useState(-1);
+
+  // variable gerant le popup d'ajout de carte en mode création
+  // false = on voit pas le popup
+  // true  = on voit le popup
   const [popupAddCard, setPopupAddCard] = useState(false);
+
+  // variable gerant le popup de supression de carte en mode création
+  // false = on voit pas le popup
+  // true  = on voit le popup
   const [popupDeleteCard, setPopupDeleteCard] = useState(false);
+
+  // indice du deck dans lequel sera ajouté la carte en mode création
+  // avec le bouton ajout carte ou en séléctionnant deux carte
+  // en choisissant la liasion 
   const [indiceDeckAddCard, setIndiceDeckAddCard] = useState(0);
+  
+  // popup aparait en mode création pour choisir la liasion 
+  // quand deux carte sont séléctionne
+  // false = on voit pas le popup
+  // true  = on voit le popup
   const [popupFusion, setPopupFusion] = useState(false);
+  
+  // popup quand on finit un exercice (objectif principal dans le deck 0)
+  // false = on voit pas le popup
+  // true  = on voit le popup
   const [popupWin,setPopupWin] = useState(false);
+
+  // tableau de sauvegarde de copie d'ancien tableau "game"
   const [lastGame, setLastGame] = useState([]);
+
+  // message a afficher en cas de coup illégal
+  // si le message est "" on affiche rien
   const [messageErreur, setMessageErreur] = useState("");
+  
+  // message tutoriel a afficher en mode tutoriel
+  // Attention c'est un tableau de string
+  // si la variable = "" on affiche rien
   const [messageTutoriel, setMessageTutoriel] = useState("");
+  
+  // tableau des objectifs
+  // sous cette forme [numero objectif , indice de la carte dans le deck , (numero != indice)]
+  // il se peut qu'il y est des cartes entre les sous objectif 
+  // comme dans l'exercice 5
   const [tabObjectif , setTabObjectif] = useState([[0,0,false]]);
+
+  // change les contoures des cartes qui sont egale au carte help
+  // elle sont changer dans la fonction getNextMove
   const [cardHelp , setCardHelp] = useState(cardError);
   const [cardHelp2 , setCardHelp2] = useState(cardError);
+
+  //variable pour les redirection
+  // utilisation : navigate(url)
   const navigate = useNavigate();
+
+  // variable qui recois les jsons des fichiers
+  // voir fonction convertFile et printConvertFile
   let filesCopy = "";
 
   /**
@@ -1411,6 +1478,7 @@ const Game = ({ mode, ex,numero  }) => {
               // la séparation d'une carte et 
               // et l'utilisation d'une carte et avec une carte =>
               tmpChemin = [...recursiveSoluce(tmp,cardTest,deckIndex,deckObjectif,chemin)];
+              //copie le resultat dans chemin
               chemin = [...tmpChemin];
             }
   
@@ -1421,15 +1489,32 @@ const Game = ({ mode, ex,numero  }) => {
     return chemin;
   }
 
+  /**
+   * Renvoie le numero de l'objectif assossier a l'indice de la carte dans le deck
+   * 
+   * @param {*} objectif indice de la carte de l'objectif que l'on cherche dans le deck
+   * @returns le numeros de l'objectif
+   */
   const getNumObjectif = (objectif) =>{
-    let res = -1;
+    // variable que l'on renvoie
+    // si on trouve pas on renvoie l'objectif principal
+    let res = 0;
+    // parcourt le tableau d'objectif
     tabObjectif.forEach(element =>{
+      // rappel le tableau objectif est comme ca
+      // [numero objectif , indice de la carte dans le deck , et objectif principal = true / objectif secondaire = false]
       if(element[1] === objectif){
+        // prend le numero d'objectif
         res = element[0];
       }
     })
     return res;
   }
+
+  // une fonction que l'on utilise pas pour l'instant
+  // cette fonction est sensé mettre dans la console tout les mouvement a faire
+  // pour gagné la partie
+  // ne marche pas normalement
   const soluceExercise = () =>{
     let tmp = [...game];
     let chemin = [[],false];
@@ -1469,58 +1554,112 @@ const Game = ({ mode, ex,numero  }) => {
     tmp = null;
   }
 
+  /**
+   * copie le jeu actuelle 
+   * crée un nouveau tableau et fait une copie de toute les cartes
+   * 
+   * @returns une copie de la partie actuelle
+   */
   const copyGame = () =>{
+    // crée le nouveau tableau vide que l'on renvoie
     let tmp = [];
+    // fait une boucle de la taille du jeu
     for (var i = 0 ; i < game.length ; i++) {
+      // créer le deck vide
       tmp[i] = [];
       for (var j = 0 ; j < game[i].length ; j++) {
+        // ajoute une copie de la carte dans le deck
         tmp[i].push(game[i][j].copy());
       }
     }
+    // renvoie le nouveau tableau
     return tmp;
   }
 
+  /**
+   * Regarde si la carte passer en paramètre existe dans le jeu actuelle
+   * et qu'elle ne sois pas dans les objectif
+   * 
+   * @param {CardClass} cardTest - la carte que l'on cherche
+   * @returns true/false 
+   */
   const cardExist = (cardTest) =>{
+    // variable que l'on renvoie de base false
     let bool = false;
+    // parcourt le jeu
     game.forEach((deck,index) =>{
+      // parcourt le deck
       deck.forEach(card =>{
+        // la carte ne doit pas etre dans les objectif
+        // et on regarde dans le deck si la carte est egale a la carte
+        // passer en paramètre si oui bool devien true
         if(index !== game.length-1 && card.equals(cardTest)) bool = true;
       })
     })
+    // renvoie la variable
     return bool;
   }
+
+  /**
+   * Cherche le prochain coup qui amène a finir l'exercice
+   * si il y a une carte au prochain coup elle ira dans cardHelp
+   * si il y en a deux elles iront dans CardHelp et CardHelp2
+   */
   const getNextMove = () =>{
+    // copie le jeu dans une variable temporaire
     let tmp = copyGame();
+    // initialise le chemin
+    // donc indice 0 aucune carte 
+    // et indice 1 aucune solution trouvé
     let chemin = [[],false];
+    // on cherche a trouvé l'objectif le plus éloigné dans le deck objectif
     let deckId = tmp.length-1;
     let cardId = tmp[tmp.length-1].length-1;
+    // l'objectif que l'on cherche
     let objectif = tmp[deckId][cardId];
+    // cherche l'objectif
     let result = recursiveSoluce(tmp,objectif,deckId,getNumObjectif(cardId),chemin);
+    // copie du tableau de carte pour trouvé l'objectif
     let tmpResult = [...result[0]]
+    // la premiere carte dans result est l'objectif donc la dernier c'est le prochain coup a jouer
+    // donc on inverse le tableau pour jouer avec l'indice 0 et 1
     let affiche = tmpResult.reverse();
+    // souvent la carte la plus importante
     let res = affiche[1];
+    // intialisation variable
     let bool = false;
-    console.log(affiche)
+    // regarde si les deux derniere carte recu existe dans jeu
+    // ou si la deuxième carte et une carte 'et' et elle existe
     bool = (cardExist(affiche[0]) || affiche[1].link === "et") && cardExist(affiche[1]);
+    // regarde si un objectif avec une liaison => a eu sont deck de créer
     if(objectif.link === "=>" && game.length === 1+tabObjectif.length){
       res = objectif;
       setCardHelp(res);
       setCardHelp2(cardError);
 
     }
+    // regarde si la deuxième carte est une carte et
     else if(res.link === "et"){
       setCardHelp(res);
       setCardHelp2(cardError);
     }
     else{
+      // si les deux carte trouvé existent
       if(bool){
         setCardHelp(res);
         setCardHelp2(affiche[0]);
       }
+      // si elles n'existent pas
       else{
+        // si les deux cartes n'existent pas
+        // c'est qu'il doit y avoir un sous objectif 
+        // a créer qui ne soit pas dans le deck objectif
         let tmpCard = cardError;
         game.forEach((deck,decki) =>{
           deck.forEach((card,cardi) =>{
+            // cherche une carte avec une liaison => dont la partie gauche a une liaison =>
+            // seul cas conue (pour l'instant) pour créer un sous objectif dans le deck$
+            // a partir d'une carte qui ne sois pas dans le deck objectif
             if(card.color === null && card.link === "=>"){
               if(card.left.color === null && card.left.link === "=>" && (card.left.left.equals(affiche[0]) || card.left.left.equals(affiche[1]))){
                 tmpCard = card;
@@ -1532,13 +1671,11 @@ const Game = ({ mode, ex,numero  }) => {
         setCardHelp2(cardError);
       }
     }
-
-
-    return res;
   }
   return (
     <div className="game" >
       <div className="bouton">
+        {/* Sélécteur d'exercice */}
         {mode !== "Create" && <select name="exo" id="exo-select" onChange={changeExercise}>
         <option value="">Choisir un exercice</option>
           {ex.map((exercise,index) =>(
@@ -1546,28 +1683,55 @@ const Game = ({ mode, ex,numero  }) => {
           ))}
           
       </select>}
+      {/* bouton pour ouvrir plusieur fichier json pour en avoir qu'un a la fin */}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
+      {/* bouton pour copier le resultat du bouton au dessus dans le presse papier */}
       {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regrouper</button>}
+      {/* bouton pour ouvir un fichier json et affiche l'exercice a l'ecran pour le modifier */}
       {mode === "Create" && <input type="file" accept="application/json" onChange={openFile} ></input>}
+      {/* copie le jeu actuelle en format json dans le presse papier */}
       {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
+      {/* affiche la ou les deux cartes qui sont le prochain mouvement logique dans le but de 
+          finir l'exercice */}
         {true && <button onClick={getNextMove}>Aide</button>}
+        {/* revient a la partie avant l'ajout d'une carte  */}
         <button onClick={retourEnArriere}>Retour en arrière</button>
+        {/* bouton pour obtenir les deux partie d'une carte et */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}>Ajout carte et</button>}
+        {/* bouton pour obtenir la partie droite d'une carte =>
+            si on a séléctionner une autre carte qui est égale a la partie
+            gauche */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}>Ajout carte {"=>"}</button>}
+        {/* fusionne deux carte (taille double max) et créer une troisième carte 
+            composer de la partie gauche (première carte séléctionner)
+            et la partie droite (deuxième carte séléctionner)
+            la carte créer aura une liasion et */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}>Fusion carte et</button>}
+        {/* fusionne deux carte (taille double max) et créer une troisième carte 
+            composer de la partie gauche (première carte séléctionner)
+            et la partie droite (deuxième carte séléctionner) 
+            la carte créer aura une liasion =>
+            !!! pour l'instant ce bouton n'est pas afficher
+            car je n'y vois aucune utilité a voir pour les
+            porchain exercice !!!*/}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
+        {/* Ajout objectif secondaire */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""}onClick={addObjectif}>Ajout objectif</button>}
       </div>
+      {/* message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
         {messageTutoriel.map((element,index) =>{
           return<div key={index}>{element}</div>
           
         })}
       </div>}
+      {/*   message d'erreur si on esseye de faire un mouvement illégal
+            exemple vouloir séparter une carte qui n'a pas une liaison et*/}
       {messageErreur !== "" && <div className="message error">
         {messageErreur}
       </div>}
       <GameTab.Provider value={game}>
+        {/* ajout des deck */}
         {game.map((deck, index) => (
             <Deck
               updateGame     = {update}
@@ -1583,6 +1747,9 @@ const Game = ({ mode, ex,numero  }) => {
             ></Deck>
         ))}
       </GameTab.Provider>
+      {/* popup disponible en mode création pour ajouter une 
+          carte simple et choisir ca couleur 
+          un bouton lui est dédié*/}
       {popupAddCard && (
         <Popup
           content={
@@ -1605,6 +1772,8 @@ const Game = ({ mode, ex,numero  }) => {
           }
         />
       )}
+      {/* popup disponible en mode création quand on sélétionne deux cartes pour choisir la liaison
+          de la future carte */}
       {popupFusion && (
         <Popup
           content={
@@ -1625,6 +1794,8 @@ const Game = ({ mode, ex,numero  }) => {
           }
         />
       )}
+      {/* popup disponible en mode création pour suprimmer une carte
+          un bouton lui est dédié */}
       {popupDeleteCard && !(selecCard1 === -1 || selecDeck1 === -1) && (
         <Popup
           content={
@@ -1647,6 +1818,7 @@ const Game = ({ mode, ex,numero  }) => {
           }
         />
       )}
+      {/* popup de victoir quand on reussi l'objectif princpal */}
       {popupWin && (
         <Popup
           content={
