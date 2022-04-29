@@ -7,7 +7,7 @@
     position: absolute;
     background-color: grey;
     margin-top: -8.5vh;
-    margin-left: 7.6vh;
+    margin-left: 7vh;
     padding: 1vh;
     display: inline-block;
     vertical-align: middle;
@@ -18,7 +18,7 @@
     background-color: grey;
     margin-top: -2vh;
     margin-left: 2.5vh;
-    padding: 1vh;
+    padding: 0.5vh 1vh;
     display: inline-block;
     vertical-align: middle;
     transform: rotate(90deg);
@@ -30,10 +30,7 @@
     border: 0.4vh solid #800000;
     height: 11.3vh;
     width: 8vh;
-    margin-left: 0.3vh;
-    margin-right: 0.3vh;
-    margin-top: 0.3vh;
-    margin-bottom: 0.3vh;
+    margin: 2px 0.3vh 2px 0.3vh;
   }
   .card_simple_w {
     border-radius: 2vh;
@@ -55,14 +52,14 @@
   }
   .card_double {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 9vh 1fr 9vh;
     grid-template-rows: 1fr;
     grid-template-areas: "a a a";
   }
   .card_triple_a {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 9vh 9vh;
+    grid-template-rows: 6vh 6vh;
     grid-template-areas:
       "a b"
       "a c";
@@ -79,8 +76,8 @@
   }
   .card_triple_b {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 9vh 9vh;
+    grid-template-rows: 6vh 6vh;
     grid-template-areas: 
     "a c"
     "b c";
@@ -99,8 +96,8 @@
   }
   .card_quadruple {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 9vh 9vh;
+    grid-template-rows: 6vh 6vh;
     grid-template-areas:
       "a a"
       "a a";
