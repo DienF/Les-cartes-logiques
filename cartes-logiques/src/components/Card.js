@@ -132,7 +132,7 @@ const Card = ({ deckIndice, cardIndice, update ,cardHelp ,cardHelp2}) => {
                       className={
                         getTabClass(game, deckIndice, cardIndice, index) +
                         (cardAffiche.active ? " card_selec" : "") +
-                        ((game[deckIndice][cardIndice].equals(cardHelp )) || (game[deckIndice][cardIndice].equals(cardHelp2)) ? " card_help" : "")
+                        ((cardHelp[0] === deckIndice && cardHelp[1] === cardIndice) || (cardHelp2[0] === deckIndice && cardHelp2[1] === cardIndice) ? " card_help" : "")
                       }
                     ></div>
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}

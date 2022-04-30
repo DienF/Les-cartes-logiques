@@ -39,7 +39,7 @@ class CardClass {
    */
   toString() {
     let res = "(";
-    if (this.color  != null) res += this.color.toString();
+    if (this.color  !== null) res += this.color.toString();
     if (this.left  !== null) res += this.left.toString();
     res += this.link;
     if (this.right !== null) res += this.right.toString();
@@ -145,7 +145,7 @@ class CardClass {
 
 const Game = ({ mode, ex,numero  }) => {
   // carte qui n'existera jamais dans un deck
-  const cardError = new CardClass(-1,"error",false,null,null); 
+  var cardError = new CardClass(-1,"error",false,null,null); 
 
   // tableau ou sont réunie toute les cartes et deck
   // il est disposer comme ca
@@ -876,47 +876,54 @@ const Game = ({ mode, ex,numero  }) => {
   const addCardFuse = () => {
     // si il y a deux carte séléctionner
     if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
-      //copie du tableau de jeu
-      let tmp   = [...game];
-      // regarde si la deuxieme carte a une liaison => et si sa partie gauche est egale a l'autre carte
-      // met le resultat dans bool
-      // on ne met pas directement la condition dans le if car on veut savoir avec quel condition on est rentré dans le if
-      let bool  = (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]));
-      // une des deux carte doit avoir une lisaion =>
-      if (bool || (tmp[selecDeck1][selecCard1].link === "=>" && tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2]))) {
-        //sauvegarde
-        saveGame();
-        // prend le deck le plus grand
-        let finalDeck = Math.max(selecDeck1,selecDeck2);
-        // initialisation de la carte ou la liaison => va etre utiliser
-        let deckCarteComplex = -1;
-        let cardCarteComplex = -1;
-        // determine et affecter l'id de la carte => utiliser
-        if (bool) {
-          deckCarteComplex = selecDeck2;
-          cardCarteComplex = selecCard2;
+      // prend le deck le plus grand
+      let finalDeck = Math.max(selecDeck1,selecDeck2);
+      if(finalDeck !== game.length-1){
+        //copie du tableau de jeu
+        let tmp   = [...game];
+        // regarde si la deuxieme carte a une liaison => et si sa partie gauche est egale a l'autre carte
+        // met le resultat dans bool
+        // on ne met pas directement la condition dans le if car on veut savoir avec quel condition on est rentré dans le if
+        let bool  = (tmp[selecDeck2][selecCard2].link === "=>" && tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]));
+        // une des deux carte doit avoir une lisaion =>
+        if (bool || (tmp[selecDeck1][selecCard1].link === "=>" && tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2]))) {
+          //sauvegarde
+          saveGame();
+          // initialisation de la carte ou la liaison => va etre utiliser
+          let deckCarteComplex = -1;
+          let cardCarteComplex = -1;
+          // determine et affecter l'id de la carte => utiliser
+          if (bool) {
+            deckCarteComplex = selecDeck2;
+            cardCarteComplex = selecCard2;
+          }
+          else {
+            deckCarteComplex = selecDeck1;
+            cardCarteComplex = selecCard1;
+          }
+          // ajoute la partie droite de la carte => utiliser dans le deck le plus haut
+          tmp[finalDeck].push(tmp[deckCarteComplex][cardCarteComplex].right.copy());
+          tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
+          // met a jour le jeu + désélectionne tout
+          allFalse(tmp);
+          // regarde si l'exercice est resolue si oui affiche le popup
+          setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
         }
         else {
-          deckCarteComplex = selecDeck1;
-          cardCarteComplex = selecCard1;
+          // si aucune des deux cartes n'a de liaison =>
+          if (tmp[selecDeck2][selecCard2].link !== "=>" && tmp[selecDeck1][selecCard1].link !== "=>") {
+            setMessageErreur("Une des deux cartes doit avoir une liaison principale de type \"=>\" !");
+          }
+          else {
+            setMessageErreur("La partie gauche de la carte \"=>\" doit être égale à la deuxième carte sélectionnée !")
+          }
         }
-        // ajoute la partie droite de la carte => utiliser dans le deck le plus haut
-        tmp[finalDeck].push(tmp[deckCarteComplex][cardCarteComplex].right.copy());
-        tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
-        // met a jour le jeu + désélectionne tout
-        allFalse(tmp);
-        // regarde si l'exercice est resolue si oui affiche le popup
-        setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
+
       }
-      else {
-        // si aucune des deux cartes n'a de liaison =>
-        if (tmp[selecDeck2][selecCard2].link !== "=>" && tmp[selecDeck1][selecCard1].link !== "=>") {
-          setMessageErreur("Une des deux cartes doit avoir une liaison principale de type \"=>\" !");
-        }
-        else {
-          setMessageErreur("La partie gauche de la carte \"=>\" doit être égale à la deuxième carte sélectionnée !")
-        }
+      else{
+        setMessageErreur("Vous ne pouvez pas utilisé une carte de l'objectif avec ce bouton !");
       }
+
     }
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
@@ -937,39 +944,46 @@ const Game = ({ mode, ex,numero  }) => {
   const fuseCardAdd = () => {
     // si deux carte sont séléctionner
     if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
-      // copie du jeu
-      let tmp   = [...game];
-      // regarde si la première carte séléctionner est une carte au maximum composé de deux carte
-      // le jeu ne prend pas en compte les cartes composer de plus de 4 cartes
-      let bool  = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
-      // regarde si la deuxième carte séléctionner est une carte au maximum composé de deux carte
-      // le jeu ne prend pas en compte les cartes composer de plus de 4 cartes
-      if (bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
-        //sauvegarde
-        saveGame();
-        // prend le deck le plus haut
-        let finalDeck = Math.max(selecDeck1,selecDeck2);
-        // copie les deux cartes
-        let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
-        let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
-        tmpCard1.id = 0;
-        tmpCard2.id = 1;
-        // ajoute la nouvelle cartes dans le deck le plus haut avec une les deux autres carte 
-        // et une liaison et
-        tmp[finalDeck].push(new CardClass(tmp[finalDeck].length,null,false,"et",tmpCard1,tmpCard2));
-        // mis a jour du jeu + désélectionne tout
-        allFalse(tmp);
-        // regarde si l'exercice est fini si oui affiche le popup
-        setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
-      }
-      else {
-        if (bool) {
-          setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
+      // prend le deck le plus haut
+      let finalDeck = Math.max(selecDeck1,selecDeck2);
+      if(finalDeck !== game.length-1){
+        // copie du jeu
+        let tmp   = [...game];
+        // regarde si la première carte séléctionner est une carte au maximum composé de deux carte
+        // le jeu ne prend pas en compte les cartes composer de plus de 4 cartes
+        let bool  = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
+        // regarde si la deuxième carte séléctionner est une carte au maximum composé de deux carte
+        // le jeu ne prend pas en compte les cartes composer de plus de 4 cartes
+        if (bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
+          //sauvegarde
+          saveGame();
+          // copie les deux cartes
+          let tmpCard1 = tmp[selecDeck1][selecCard1].copy();
+          let tmpCard2 = tmp[selecDeck2][selecCard2].copy();
+          tmpCard1.id = 0;
+          tmpCard2.id = 1;
+          // ajoute la nouvelle cartes dans le deck le plus haut avec une les deux autres carte 
+          // et une liaison et
+          tmp[finalDeck].push(new CardClass(tmp[finalDeck].length,null,false,"et",tmpCard1,tmpCard2));
+          // mis a jour du jeu + désélectionne tout
+          allFalse(tmp);
+          // regarde si l'exercice est fini si oui affiche le popup
+          setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
         }
         else {
-          setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
+          if (bool) {
+            setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
+          }
+          else {
+            setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
+          }
         }
+
       }
+      else{
+        setMessageErreur("Vous ne pouvez pas utilisé une carte de l'objectif avec ce bouton !");
+      }
+
     }
     else {
       setMessageErreur("Vous devez sélectionner deux cartes !");
@@ -1302,6 +1316,19 @@ const Game = ({ mode, ex,numero  }) => {
     return bool;
   }
 
+  const getIndice = (tmp,deckId , card) =>{
+    // la variable a renvoyer
+    let num = -1;
+    // parcour le deck passer en paramètre
+    tmp[deckId].forEach((cardElement,index) =>{
+      // si une carte de ce deck est egal a la carte passer en paramètre alors renvoie true
+      if(cardElement.equals(card)){
+        num = index;
+      }
+    })
+    return num;
+  }
+
   /**
    * cette fonction cherche de manière récurcive un objectif
    * elle cherche a trouvé un moyen de créer cardTest avec une autre carte
@@ -1328,10 +1355,14 @@ const Game = ({ mode, ex,numero  }) => {
     // regarde si la carte que l'on cherche a une liaison et 
     // et n'existe pas dans le numero de deck qui corespond a l'objectif
     if(cardTest.link === "et" && !containCard(tmp,deckObjectif,cardTest)){
-      console.log("Carte objectif " + cardTest.toString());
+      //console.log("Carte objectif " + cardTest.toString());
 
-      // ajoute la carte test dans le chemin
-      chemin[0].push(cardTest.copy());
+      
+      if(containCard(tmp,deckId,cardTest)){
+        // ajoute la carte test dans le chemin
+        chemin[0].push([deckId,tabObjectif[deckObjectif][1]]);
+      }
+      
       //cherche la partie gauche de la carte et
       tmpChemin = [...recursiveSoluce(tmp,cardTest.left,deckIndex,deckObjectif,chemin)];
       // copie de tmp chemin dans la variable chemin
@@ -1344,7 +1375,6 @@ const Game = ({ mode, ex,numero  }) => {
         tmpChemin = [...recursiveSoluce(tmp,cardTest.right,deckIndex,deckObjectif,chemin)];
         // copie de tmpChemin dans chemin
         chemin = [...tmpChemin];
-        console.log(chemin[1])
       }
         
      
@@ -1363,7 +1393,7 @@ const Game = ({ mode, ex,numero  }) => {
       // copie la partie droite de l'objectif dans le deck objectif
       tmp[tmp.length-1].push(cardTest.right.copy());
       // ajoute le seconde objectif dans le chemin
-      chemin[0].push(tmp[tmp.length-1][tmp[tmp.length-1].length-1].copy());
+      chemin[0].push([tmp.length-1,tmp[tmp.length-1].length-1]);
       // cherche a valider ce second objectif 
       tmpChemin = [...recursiveSoluce(tmp,tmp[tmp.length-1][tmp[tmp.length-1].length-1],tmp.length-1,deckObjectif+1,chemin)];
       // copie le resultat dans chemin
@@ -1393,12 +1423,16 @@ const Game = ({ mode, ex,numero  }) => {
             // et cette carte existe 
             // il sagit de la condition d'arret si on trouve une solution
             if(!chemin[1]  && deckIndex !== tmp.length-1 && deckIndex <= deckObjectif && containCard(tmp,deckIndex,cardTest)){
+              //console.log("fin");
               // on a trouvé une solution
               chemin[1] = true;
+              console.log(cardTest +"");
+              console.log(deckIndex + ","+ getIndice(tmp,deckIndex,cardTest));
+              console.log(deck);
               // verification que l'on ajoute pas la carte si elle est deja ajouté en dernier
-              if(!chemin[0][chemin[0].length-1].equals(cardTest)){
+              if(!tmp[chemin[0][chemin[0].length-1][0]][chemin[0][chemin[0].length-1][1]].equals(cardTest)){
                 // ajoute cette carte dans le chemin
-                chemin[0].push(cardTest.copy());
+                chemin[0].push([deckIndex,getIndice(tmp,deckIndex,cardTest)]);
               }
               
             }
@@ -1438,7 +1472,7 @@ const Game = ({ mode, ex,numero  }) => {
               // si on a trouvé une solution pour la partie droite
               if(chemin[1]){
                 // ajoute la carte au chemin
-                chemin[0].push(card.copy());
+                chemin[0].push([deckIndex,cardIndex]);
                 // cherche la partie gauche de la carte
                 tmpChemin = [...recursiveSoluce(tmp,card.left,deckIndex,deckObjectif,chemin)];
                 // copie le resultat
@@ -1465,10 +1499,10 @@ const Game = ({ mode, ex,numero  }) => {
             // on cherche une carte rouge si on a une carte rouge et jaune 
             // on peut la séparer pour avoir du rouge
             if(!chemin[1] && deckIndex !== tmp.length-1 &&  isObtainableEt(card,cardTest)){
-              console.log(card.toString() + "utilisé ajout des cartes : " + card.left.toString() +" et " + card.right.toString() );
+              //console.log(card.toString() + "utilisé ajout des cartes : " + card.left.toString() +" et " + card.right.toString() );
 
               // ajoute la carte au chemin
-              chemin[0].push(card.copy());
+              chemin[0].push([deckIndex,cardIndex]);
               // ajoute les deux partie de la cartes et au deck
               tmp[deckId].push(card.right.copy());
               tmp[deckId].push(card.left.copy());
@@ -1600,6 +1634,17 @@ const Game = ({ mode, ex,numero  }) => {
     return bool;
   }
 
+  const testResolve = () =>{
+    let tmp = copyGame();
+    let chemin = [[],false];
+    let deckId = tmp.length-1;
+    let cardId = tmp[tmp.length-1].length-1;
+    let objectif = tmp[deckId][cardId];
+    let result = recursiveSoluce(tmp,objectif,deckId,getNumObjectif(cardId),chemin);
+    let tmpResult = [...result[0]]
+    let affiche = tmpResult.reverse();
+    console.log(affiche);
+  }
   /**
    * Cherche le prochain coup qui amène a finir l'exercice
    * si il y a une carte au prochain coup elle ira dans cardHelp
@@ -1624,33 +1669,60 @@ const Game = ({ mode, ex,numero  }) => {
     // la premiere carte dans result est l'objectif donc la dernier c'est le prochain coup a jouer
     // donc on inverse le tableau pour jouer avec l'indice 0 et 1
     let affiche = tmpResult.reverse();
-    // souvent la carte la plus importante
-    let res = affiche[1];
     // intialisation variable
     let bool = false;
+    let card1;
+    let card2;
+    try{
+      card1 = game[affiche[0][0]][affiche[0][1]];
+      if(card1 === undefined){
+        card1 = cardError;
+      }
+    }
+    catch{
+      card1 = cardError;
+    }
+    try{
+      card2 = game[affiche[1][0]][affiche[1][1]];
+      if(card2 === undefined){
+        card2 = cardError;
+      }
+    }
+    catch{
+      card2 = cardError;
+    }
+    console.log(card1);
+    console.log(card2);
+    // souvent la carte la plus importante
+    let res1 = [affiche[0][0],affiche[0][1]];
+    let res2 = [affiche[1][0],affiche[1][1]]
     // regarde si les deux derniere carte recu existe dans jeu
     // ou si la deuxième carte et une carte 'et' et elle existe
-    bool = (cardExist(affiche[0]) || affiche[1].link === "et") && cardExist(affiche[1]);
+    bool = (cardExist(card1) || card2.link === "et") && cardExist(card2) && affiche[1][0] < game.length-1;
+    
+
     // regarde si un objectif avec une liaison => a eu sont deck de créer
     if(objectif.link === "=>" && game.length === 1+tabObjectif.length){
-      res = objectif;
-      setCardHelp(res);
+
+      res1 = [deckId,cardId];
+      setCardHelp(res1);
       setCardHelp2(cardError);
 
     }
     // regarde si la deuxième carte est une carte et
-    else if(res.link === "et"){
-      setCardHelp(res);
+    else if(card2.link === "et"){
+      setCardHelp(res2);
       setCardHelp2(cardError);
     }
     else{
       // si les deux carte trouvé existent
       if(bool){
-        setCardHelp(res);
-        setCardHelp2(affiche[0]);
+        setCardHelp(res1);
+        setCardHelp2(res2);
       }
       // si elles n'existent pas
       else{
+        console.log("oui")
         // si les deux cartes n'existent pas
         // c'est qu'il doit y avoir un sous objectif 
         // a créer qui ne soit pas dans le deck objectif
@@ -1661,8 +1733,9 @@ const Game = ({ mode, ex,numero  }) => {
             // seul cas conue (pour l'instant) pour créer un sous objectif dans le deck$
             // a partir d'une carte qui ne sois pas dans le deck objectif
             if(card.color === null && card.link === "=>"){
-              if(card.left.color === null && card.left.link === "=>" && (card.left.left.equals(affiche[0]) || card.left.left.equals(affiche[1]))){
-                tmpCard = card;
+              
+              if(card.left.color === null && card.left.link === "=>" && (card.left.left.equals(objectif))){
+                tmpCard = [decki,cardi];
               }
             }
           })
