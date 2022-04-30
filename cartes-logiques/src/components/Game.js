@@ -770,7 +770,7 @@ const Game = ({ mode, ex,numero  }) => {
    */
   const retourEnArriere = () => {
     // regarde si il y a au moin une sauvegarde du jeu
-    if (lastGame.length !== 0) {
+    if (lastGame.length > 0) {
       // copie le tableau de sauvegrade
       let tmpLastGame   = [...lastGame];
       // prend le dernier tableau de jeu ajouter
@@ -795,6 +795,9 @@ const Game = ({ mode, ex,numero  }) => {
       // met a jour le tableau des sauvegardes
       setLastGame(tmpLastGame);
 
+    }
+    else{
+      allFalseGame();
     }
   }
 
