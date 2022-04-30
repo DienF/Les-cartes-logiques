@@ -3,17 +3,18 @@
     padding-top: 20%;
     margin: 0 auto;
     li {
-        background-color: lightgray;
         list-style-type: none;
-        padding: 30px;
-        border-radius: 5px;
-        margin: 0 3vw;
-        display: inline;
-    }
-    a {
-        font-size: large;
-        text-decoration: none;
-        color : black;
+        padding: auto;
+        margin: 3vw;
+        display: inline-block;
+        a {
+            background-color: lightgray;
+            font-size: large;
+            text-decoration: none;
+            color : black;
+            padding: 30px;
+            border-radius: 5px;
+        }
     }
     li:hover{
         background-color: gray;
