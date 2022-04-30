@@ -1900,7 +1900,7 @@ const Game = ({ mode, ex,numero  }) => {
               <button
                 onClick={nextExercise}
               >
-                Fermer
+                X
               </button>
             </>
           }
