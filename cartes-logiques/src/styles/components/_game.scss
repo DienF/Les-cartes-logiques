@@ -2,7 +2,6 @@
   grid-area: m;
   background-color: rgba(117, 190, 218, 0.7);
   position: relative;
-
   padding: 55px 5% 5% 5%;
   border: 5px solid rgb(28, 2, 53);
   display: grid;
@@ -48,20 +47,20 @@
   "start other1 other2 goal"
   "start other1 other2 goal";
 
-
-  .bouton{
+  .bouton {
     grid-area: b;
     align-items: center;
     margin: auto;
-    button{
+
+    button {
       margin-bottom: 1.2vh;
       margin-top: 0.8vh;
       margin-right: 2vh;
       margin-left: 2vh;
     }
-
   }
-  .message{
+
+  .message {
   color: black;
   text-align: center;
   border-radius:10px;
@@ -71,17 +70,20 @@
   font-size: 14px;
   margin-bottom: 5px;
   }
-  .tutoriel{
+
+  .tutoriel {
     grid-area: t;
     background:#e9ffd9;
     border:1px solid #a6ca8a;
   }
-  .error{
+
+  .error {
     grid-area: e;
     background:#ffecec;
     border:1px solid #f5aca6;
   }
-  .boutonSelection{
+
+  .boutonSelection {
     border: #a6ca8a solid 5px;
     border-radius: 1px;
   }

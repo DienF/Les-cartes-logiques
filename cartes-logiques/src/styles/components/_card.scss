@@ -2,6 +2,7 @@
   margin-top: 20px;
   margin-bottom: 20px;
   color : black;
+
   .affix_h {
     font-size: 2vh;
     position: absolute;
@@ -12,6 +13,7 @@
     display: inline-block;
     vertical-align: middle;
   }
+
   .affix_v {
     font-size: 2vh;
     position: absolute;
@@ -23,6 +25,7 @@
     vertical-align: middle;
     transform: rotate(90deg);
   }
+
   .card_simple_h {
     border-radius: 2vh;
     box-shadow: 0 10px 90px #00000024;
@@ -32,6 +35,7 @@
     width: 8vh;
     margin: 2px 0.3vh 2px 0.3vh;
   }
+
   .card_simple_w {
     border-radius: 2vh;
     box-shadow: 0 10px 90px #00000024;
@@ -41,18 +45,21 @@
     width: 8vh;
     margin:2px;
   }
+
   .card_simple {
     display: grid;
     grid-template-columns: 9vh;
     grid-template-rows: 1fr;
     grid-template-areas: "a";
   }
+
   .card_double {
     display: grid;
     grid-template-columns: 9vh 9vh;
     grid-template-rows: 1fr;
     grid-template-areas: "a a";
   }
+
   .card_triple_a {
     display: grid;
     grid-template-columns: 9vh 9vh;
@@ -64,13 +71,16 @@
     .card0 {
       grid-area: a;
     }
+
     .card1 {
       grid-area: b;
     }
+
     .card2 {
       grid-area: c;
     }
   }
+
   .card_triple_b {
     display: grid;
     grid-template-columns: 9vh 9vh;
@@ -91,6 +101,7 @@
       grid-area: c;
     }
   }
+
   .card_quadruple {
     display: grid;
     grid-template-columns: 9vh 9vh;
@@ -99,10 +110,12 @@
       "a a"
       "a a";
   }
+
   .card_help {
     border: 0.80vh solid #102245;
     margin: 0px;
   }
+
   .card_selec {
     border: 0.65vh solid black;
     margin: 0px;
@@ -110,41 +123,48 @@
 
   .card_simple:hover {
     grid-template-columns: 11vh;
-    .card_simple_h{
+
+    .card_simple_h {
       height: 13.3vh;
       width: 10vh;
     }
   }
   .card_double:hover {
     grid-template-columns: 11vh 11vh;
-    .card_simple_h{
+
+    .card_simple_h {
       height: 13.3vh;
       width: 10vh;
     }
-    .affix_h{
+
+    .affix_h {
       font-size: 3vh;
       margin-top: -10.5vh;
       margin-left: 8vh;
     }
   }
 
-  .card_triple_a:hover,.card_triple_b:hover,.card_quadruple:hover{
+  .card_triple_a:hover, .card_triple_b:hover, .card_quadruple:hover {
     grid-template-columns: 11vh 11vh;
     grid-template-rows: 7vh 7vh;
-    .card_simple_h{
+
+    .card_simple_h {
       height: 13.3vh;
       width: 10vh;
     }
-    .card_simple_w{
+
+    .card_simple_w {
       height: 6.12vh;
       width: 10vh;
     }
-    .affix_h{
+
+    .affix_h {
       font-size: 3vh;
       margin-top: -10.5vh;
       margin-left: 8vh;
     }
-    .affix_v{
+
+    .affix_v {
       font-size: 3vh;
       margin-top: -3vh;
       margin-left: 3.5vh;

@@ -2,7 +2,7 @@ import React from "react";
 import Card from "./Card";
 import { GameTab } from "./Game";
 
-const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode , objectif,cardHelp,cardHelp2}) => {
+const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode, objectif, cardHelp, cardHelp2}) => {
   /**
    * Méthode qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.
    * @param {number} indiceCard - index de la carte dans le tableau
@@ -26,27 +26,25 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode , o
   }
 
   /**
-   *
    * @returns {"start"|"goal"|"other"}
    */
   const setClassname = () => {
-    if (indice === 0) return "start";
+    if (indice === 0)        return "start";
     if (indice === nbDeck-1) return "goal";
     return "other" + (indice);
   }
 
-  const getObjectifNum = (i) =>{
+  const getObjectifNum = (i) => {
     let num = -1;
     objectif.forEach(element => {
-      if(element[1] === i){
-        num = element[0];
-      }     
+      if (element[1] === i) num = element[0];   
     });
     let res = -1;
-    if (num === 0 )res = "principale";
-    if (num !== -1 && num !== 0)res = "secondaire " + num;
+    if (num === 0)               res = "principal";
+    if (num !== -1 && num !== 0) res = "secondaire " + num;
     return res;
   }
+
   return (
     <div className={setClassname()}>
       <div className="deck">

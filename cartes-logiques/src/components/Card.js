@@ -135,11 +135,11 @@ const Card = ({ deckIndice, cardIndice, update ,cardHelp ,cardHelp2}) => {
                         ((cardHelp[0] === deckIndice && cardHelp[1] === cardIndice) || (cardHelp2[0] === deckIndice && cardHelp2[1] === cardIndice) ? " card_help" : "")
                       }
                     ></div>
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_a" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
-                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_a" &&(<div className="affix_v">{game[deckIndice][cardIndice].right.link}</div>)}
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_b" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
-                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_b" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double"    &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_a"  &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_a"  &&(<div className="affix_v">{game[deckIndice][cardIndice].right.link}</div>)}
+                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_b"  &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
+                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_b"  &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
                     {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
                     {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].right.link}</div>)}
                     {index === 2 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
