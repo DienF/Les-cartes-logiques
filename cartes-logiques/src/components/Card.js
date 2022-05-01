@@ -1,9 +1,10 @@
 import React from "react";
 import { GameTab } from "./Game";
 
-const Card = ({ deckIndice, cardIndice, update ,cardHelp ,cardHelp2}) => {
+const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   /**
-   * Fonction qui détecte le clique sur une carte & qui appelle la fonction update passée par le component Deck.
+   * Fonction qui détecte le clique sur une carte & qui appelle la fonction {@link update()} passée par le
+   * component Deck.
    */
   const handleClick = () => {
     update(cardIndice);
@@ -11,10 +12,11 @@ const Card = ({ deckIndice, cardIndice, update ,cardHelp ,cardHelp2}) => {
   
   /**
    * Détermine le type de carte.
-   * @param {*}   game - le tableau qui contient toutes les cartes
-   * @param {number} i - le numéro du Deck
-   * @param {number} j - la position de la carte dans le Deck
-   * @returns {"card_simple"|"card_double"|"card_triple_a"|"card_triple_b"|"card_quadruple"} le nom de la classe correspondant à la carte
+   * @param {Array<CardClass>} game - le tableau qui contient toutes les cartes
+   * @param {number}              i - le numéro du Deck
+   * @param {number}              j - la position de la carte dans le Deck
+   * @returns {"card_simple"|"card_double"|"card_triple_a"|"card_triple_b"|"card_quadruple"} le nom de la classe
+   * correspondant à la carte
    */
   const getClassType = (game, i, j) => {
     if (game[i][j].left === null && game[i][j].right === null)
@@ -55,40 +57,39 @@ const Card = ({ deckIndice, cardIndice, update ,cardHelp ,cardHelp2}) => {
 
   /**
    * Permet de savoir si l'on doit afficher une carte à la verticale ou à l'horizontale.
-   * @param {*}   game - le tableau qui contient toutes les cartes
-   * @param {number} i - le numéro du Deck
-   * @param {number} j - la position de la carte dans le Deck
-   * @param {number} k - la position de la carte dans les cartes complexes ;
-   *                     ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
+   * @param {Array<CardClass>} game - le tableau qui contient toutes les cartes
+   * @param {number}              i - le numéro du Deck
+   * @param {number}              j - la position de la carte dans le Deck
+   * @param {number}              k - la position de la carte dans les cartes complexes ;
+   *                                  ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0
+   *                                      & l'autre fois avec k=1
    * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
    */
   const getTabClass = (game, i, j, k) => {
     const className = getClassType(game, i, j);
-
     if (className === "card_simple") return "card_simple_h";
     if (className === "card_double") return "card_simple_h";
     if (className === "card_triple_a") {
       if (k === 0) return "card_simple_h";
-      else return "card_simple_w";
+      else         return "card_simple_w";
     }
     if (className === "card_triple_b") {
       if (k === 2) return "card_simple_h";
-      else return "card_simple_w";
+      else         return "card_simple_w";
     }
     if (className === "card_quadruple") return "card_simple_w";
   };
 
   /**
    * Renvoie un tableau qui va être utilisé par la fonction {@link Array.map()} pour afficher toutes les cartes.
-   * @param {*}   game - le tableau qui contient toutes les cartes
-   * @param {number} i - le numéro du Deck
-   * @param {number} j - la position de la carte dans le Deck
-   * @returns {CardClass[]} un tableau de cartes
+   * @param {Array<CardClass>} game - le tableau qui contient toutes les cartes
+   * @param {number}              i - le numéro du deck
+   * @param {number}              j - la position de la carte dans le deck
+   * @returns {Array<CardClass>} un tableau de cartes
    */
   const getTab = (game, i, j) => {
     const className = getClassType(game, i, j);
     var tab = [];
-
     if (className === "card_simple") {
       tab.push(game[i][j]);
     }

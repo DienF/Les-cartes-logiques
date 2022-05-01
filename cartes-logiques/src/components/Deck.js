@@ -64,7 +64,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode, ob
                 cardIndice = {index}
                 update     = {update}
                 cardHelp   = {cardHelp}
-                cardHelp2   = {cardHelp2}
+                cardHelp2  = {cardHelp2}
               />
               </div>
 
