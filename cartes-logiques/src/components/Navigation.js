@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
@@ -32,7 +32,7 @@ const Navigation = () => {
                   Choisir un exercice
                 </NavLink>
                 <ul>
-                {ex !== undefined && ex.map((exercice , index) => (
+                {ex !== undefined && ex.map((exercice, index) => (
                   <li class= "exo" key={index}>
                     <NavLink exact="true" to={"/ExercisePlay"+(index+1)}>
                       Exercice {index+1}
