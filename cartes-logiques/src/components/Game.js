@@ -263,9 +263,9 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Renvoie un nouveau deck sans la carte passée en paramètre.
-   * @param {Array}        deck - deck dans lequel il faut supprimer la carte
-   * @param {number} indiceCard - indice de la carte à supprimer
-   * @returns {Array}
+   * @param {Array<CardClass>} deck - deck dans lequel il faut supprimer la carte
+   * @param {number}     indiceCard - indice de la carte à supprimer
+   * @returns {Array<CardClass>} le deck sans la carte d'indice {@link indiceCard}
    */
   const delCard = (deck, indiceCard) => {
     // Le deck que l'on va retourner
@@ -288,20 +288,20 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Renvoie un nouveau tableau sans le deck passé en paramètre.
-   * @param {Array} currentGame - tableau de la partie (avec potentiellement des modifications)
-   * @param {number} indiceDeck - indice du Deck à supprimer
-   * @returns 
+   * @param {Array<Array<CardClass>} currentGame - tableau de la partie (avec potentiellement des modifications)
+   * @param {number}                  indiceDeck - indice du Deck à supprimer
+   * @returns {Array<Array<CardClass>} le jeu sans le deck d'indice {@link indiceDeck}
    */
   const delDeck = (currentGame, indiceDeck) => {
     // Le tableau du jeu que l'on va retourner
     let finalGame = [];
-    // Supprime la carte en la passant null
+    // Supprime le deck en le passant null
     currentGame[indiceDeck] = null;
-    // Recopie le deck sauf la carte qui vaut null
-    for (let i = 0;i<currentGame.length;i++) {
+    // Recopie le jeu sauf le deck qui vaut null
+    for (let i = 0; i < currentGame.length; i++) {
       if (currentGame[i] !== null) finalGame.push(currentGame[i]);
     }
-    // Retourne le jeu sans le deck
+    // Retourne le nouveau jeu
     return finalGame;
   }
 
@@ -422,6 +422,7 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Désélectionne toutes les cartes dans le tableau reçu et devient le jeu.
+   * @param {Array<Array<CardClass>} tmp - tableau du jeu temporaire
    */
   const allFalse = (tmp) => {
     // Supression des messages d'erreur
@@ -466,8 +467,6 @@ const Game = ({ mode, ex, numero }) => {
     setGame(tmp);
   };
 
-
-
   /** 
    * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
    * Fait apparaître le popup qui nous demande la couleur de la carte qu'on veut ajouter.
@@ -483,8 +482,8 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
    * Crée une carte avec la couleur sélectionnée (ne ferme pas le popup quand on sélectionne une couleur).
-   * @param {*} event (event.target.value)   - reçoit la couleur cliquée ;
-   *                  (event.target.checked) - on le met à false si on veut faire plusieurs fois la même couleur
+   * @param {Event} event - reçoit la couleur cliquée ({@link event.target.value}) ;
+   *                      - on le met à false si on veut faire plusieurs fois la même couleur ({@link event.target.checked})
    */
   const choixCouleur = (event) => {
     // Sauvegarde le jeu (utilisé pour pouvoir faire des retours en arrière)
@@ -511,7 +510,7 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
    * Crée une carte complexe avec les 2 cartes sélectionnées (cette fonction est appelée à la fin de {@link update()} en mode création).
-   * @param {*} event (event.target.value) - reçoit la liaison cliquée
+   * @param {Event} event - reçoit la liaison cliquée ({@link event.target.value})
    */
   const choixLiaison = (event) => {
     // Sauvegarde le jeu (utilisé pour pouvoir faire des retours en arrière)
@@ -589,7 +588,7 @@ const Game = ({ mode, ex, numero }) => {
    * Reçoit un tableau d'un fichier JSON à qui on va appliquer la méthode {@link JSON.parse()} dans {@link openFile()}
    * ({@link JSON} ⇒ tableau d'{@link Object}) et renvoie un tableau qui peut être lu par notre site.
    * @param {Object[]} data - tableau d'objets qui va servir pour l'initialisation
-   * @returns un tableau de Deck
+   * @returns {Array<Array<CardClass>} un tableau de decks qui constitue le jeu
    */
   const gameInput = (data) => {
     // Tableau que l'on va retourner
@@ -625,6 +624,7 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Ouvre un fichier JSON et l'affiche à l'écran.
+   * @param {Event} event - le bouton qui ouvre les fichiers ({@link event.target.files})
    */
   const openFile = (event) => {
     // Vérifie que l'on a sélectionné un fichier
@@ -662,7 +662,7 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * Renvoie la place de l'objectif cherchée dans le tableau game[game.length-1].
    * @param {CardClass} cardObj - la partie droite de l'objectif que l'on cherche 
-   * @returns {int}
+   * @returns {number} l'indice de l'objectif dans {@link game[game.length-1]}
    */
   const findObjectifRelative = (cardObj) => {
     // Variable que l'on va retourner (-1 si il trouve pas)
@@ -685,9 +685,9 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Crée le tableau tabObjectif en fonction des objectifs présents dans tmp.
-   * @param {Array} tmp - un tableau (une game)
+   * @param {Array<Array<CardClass>} tmp - tableau du jeu temporaire
    */
-  const createTabObj = (tmp) =>{
+  const createTabObj = (tmp) => {
     // Création du tableau que l'on va affecter à tabObjectif
     let tmpObj = [];
     // Push l'objectif principal
@@ -760,7 +760,7 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Prend le dernier élément du tableau {@link lastGame} et remplace la variable {@link game}.
-   * (ne marche pas)
+   * @todo Ne marche pas.
    */
   const retourEnArriere = () => {
     // Vérifie s'il y a au moins une sauvegarde du jeu
@@ -1009,9 +1009,9 @@ const Game = ({ mode, ex, numero }) => {
    * Cherche dans les objectifs s'il existe une carte qui est égale à :
    *    Si le deck est l'objectif alors la partie droite de la carte est reçue ;
    *    Sinon c'est la partie gauche de la carte qui est reçue.
-   * @param {int} deck - indice du deck
-   * @param {int} card - indice de la carte
-   * @returns {true|false} true/false
+   * @param {number} deck - indice du deck
+   * @param {number} card - indice de la carte
+   * @returns {true|false} true ou false
    */
   const deckContain = (deck, card) => {
     // Variable que l'on va retourner (false par défaut)
@@ -1040,16 +1040,16 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * Fonction appelée après avoir appuyé sur le bouton "Ajouter objectif".
    * 
-   * Une seule et unique carte doit être sélectionner sinon un popup d'erreur apparaît avec ce message : 
+   * Une seule & unique carte doit être sélectionnée sinon un popup d'erreur apparaît avec ce message : 
    *    Si 2 cartes sont sélectionnées :  "Vous devez sélectionner une seule carte !"
    *    Si 0 carte sont sélectionnées  :  "Vous devez sélectionner une carte !" 
    * 
-   * La carte sélectionner doit avoir une liaison principale de type "=>" sinon un popup d'erreur apparait avec ce message :
+   * La carte sélectionnée doit avoir une liaison principale de type "=>" sinon un popup d'erreur apparaît avec ce message :
    *    "L'objectif secondaire doit avoir une liaison "=>" !
    * 
    * Si toutes les conditions énumérées au-dessus sont respectées il y a 2 possibilités :
-   *    La carte sélectionné est dans les objectifs : ajoute la partie gauche dans le dernier deck avant l'objectif et la
-   *    droite dans l'objectif et défini cet objectif comme un objectif secondaire. 
+   *    La carte sélectionnée est dans les objectifs : ajoute la partie gauche dans le dernier deck avant l'objectif
+   *    et la droite dans l'objectif et défini cet objectif comme un objectif secondaire. 
    *    Le reste : ajoute la partie gauche dans l'objectif et ne le considère pas comme un objectif secondaire.
    */
   const addObjectif = () =>{
@@ -1138,7 +1138,7 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Appellée avec le sélecteur, reçoit le numéro puis redirige le site vers l'exercice correspondant.
-   * @param {*} event - le sélecteur (le numéro est dans event.target.value)
+   * @param {Event} event - le sélecteur (le numéro est dans {@link event.target.value})
    */
   const changeExercise = (event) => {
     // Numéro de l'exercice demandée
@@ -1154,7 +1154,7 @@ const Game = ({ mode, ex, numero }) => {
   
   /**
    * Reçoit plusieurs fichiers puis fusionne ces fichiers pour n'en faire qu'un.
-   * @param {*} event - le bouton qui recoit les fichiers (event.target.files)
+   * @param {Event} event - le bouton qui reçoit les fichiers ({@link event.target.files})
    */
   const convertFile = (event) =>{
     // Initialisation de la variable où vont être stockés les fichiers JSON
@@ -1204,7 +1204,7 @@ const Game = ({ mode, ex, numero }) => {
    * Teste une carte pour voir si en utilisant le bouton pour séparer une carte on peut obtenir la carte (carteObjectif).
    * @param {CardClass}         card - la carte que l'on teste
    * @param {CardClass} cardObjectif - la carte que l'on veut obtenir
-   * @returns {true|false} true/false
+   * @returns {true|false} true ou false
    */
   const isObtainableEt = (card, cardObjectif) => {
     // Variable que l'on va retourner (false par défaut)
@@ -1223,7 +1223,7 @@ const Game = ({ mode, ex, numero }) => {
    * Teste une carte pour voir si on peut avoir la carte objectif en utilisant la liaision "=>".
    * @param {CardClass}         card - la carte que l'on teste
    * @param {CardClass} cardObjectif - la carte que l'on veut obtenir
-   * @returns {true|false} true/false
+   * @returns {true|false} true ou false
    */
   const isObtainableImplique = (card, cardObjectif) => {
     // Variable que l'on va retourner (false par défaut)
@@ -1243,10 +1243,10 @@ const Game = ({ mode, ex, numero }) => {
    * Parcourt le deck passé en paramètre (tmp[deckId]) et regarde s'il existe une carte qui est égale à la
    * carte passée en paramètre.
    *    Si oui renvoie true.
-   * @param {Array}        tmp 
-   * @param {int}       deckId 
-   * @param {CardClass}   card 
-   * @returns {true|false} true/false
+   * @param {Array<Array<CardClass>} tmp - tableau du jeu temporaire
+   * @param {number}              deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
+   * @param {CardClass}             card - la carte à trouver
+   * @returns {true|false} true ou false
    */
   const containCard = (tmp, deckId, card) => {
     // Variable que l'on va retourner (false par défaut)
@@ -1263,9 +1263,9 @@ const Game = ({ mode, ex, numero }) => {
    * Parcourt le deck passé en paramètre (tmp[deckId]) et regarde s'il existe une carte qui est égale à la
    * carte passée en paramètre.
    *    Si oui renvoie son indice.
-   * @param {Array}      tmp 
-   * @param {number}  deckId 
-   * @param {CardClass} card 
+   * @param {Array<Array<CardClass>} tmp - tableau du jeu temporaire
+   * @param {number}              deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
+   * @param {CardClass}             card - la carte à trouver
    * @returns {number} -1 si la carte n'est pas dans le deck sinon son indice
    */
   const getIndice = (tmp, deckId, card) =>{
@@ -1283,11 +1283,11 @@ const Game = ({ mode, ex, numero }) => {
    * Cherche de manière récursive un objectif : elle cherche à trouver un moyen de créer cardTest avec une
    * autre carte, s'il y a un moyen elle va chercher à créer cette autre carte jusqu'à tomber sur une carte
    * simple existante.
-   * @param {Array}               tmp - tableau du jeu temporaire
-   * @param {CardClass}      cardTest - la dernière carte trouvée pour aller à l'objectif
-   * @param {number}           deckId - deck de la dernière carte trouvée pour aller à l'objectif
-   * @param {number}     deckObjectif - numéro de l'objectif
-   * @param {Array<CardClass>} chemin - le chemin de cartes actuel
+   * @param {Array<Array<CardClass>} tmp - tableau du jeu temporaire
+   * @param {CardClass}         cardTest - la dernière carte trouvée pour aller à l'objectif
+   * @param {number}              deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
+   * @param {number}        deckObjectif - numéro de l'objectif
+   * @param {Array<CardClass>}    chemin - le chemin de cartes actuel
    * @returns {Array<CardClass>} le chemin
    */
   const recursiveSoluce = (tmp, cardTest, deckId, deckObjectif, chemin) => {
@@ -1536,9 +1536,9 @@ const Game = ({ mode, ex, numero }) => {
    * Regarde si la carte passer en paramètre existe dans le jeu actuelle
    * et qu'elle ne sois pas dans les objectifs.
    * @param {CardClass} cardTest - la carte que l'on cherche
-   * @returns true/false 
+   * @returns {true|false} true ou false 
    */
-  const cardExist = (cardTest) =>{
+  const cardExist = (cardTest) => {
     // Variable que l'on va retourner (false par défaut)
     let bool = false;
     // Parcourt le jeu
@@ -1586,8 +1586,6 @@ const Game = ({ mode, ex, numero }) => {
     let result = recursiveSoluce(tmp, objectif, deckId, getNumObjectif(cardId), chemin);
     /** Copie du tableau de cartes pour trouver l'objectif. */
     let tmpResult = [...result[0]]
-    // 
-    // 
     /** La 1ère carte dans result est l'objectif donc la dernière est le prochain coup à jouer donc
      *  on inverse le tableau pour jouer avec l'indice 0 & 1.
      */
@@ -1620,7 +1618,6 @@ const Game = ({ mode, ex, numero }) => {
       res1 = [deckId, cardId];
       setCardHelp(res1);
       setCardHelp2(cardError);
-
     }
     // Vérifie si la 2ème carte est une carte "et"
     else if (card2.link === "et") {
@@ -1672,7 +1669,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
       {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
-      {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regrouper</button>}
+      {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regroupés</button>}
       {/* Bouton pour ouvrir un fichier JSON et afficher l'exercice à l'écran pour le modifier */}
       {mode === "Create" && <input type="file" accept="application/json" onChange={openFile}></input>}
       {/* Copie du jeu actuel en format JSON dans le presse-papier */}
@@ -1680,15 +1677,14 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
         {true && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
-        <button onClick={retourEnArriere}>Retour en arrière</button>
-        {/* Bouton pour obtenir les deux partie d'une carte "et" */}
+        <button onClick={retourEnArriere}>Retour arrière</button>
+        {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}>Ajout carte et</button>}
-        {/* Bouton pour obtenir la partie droite d'une carte =>
-            si on a séléctionner une autre carte qui est égale a la partie
-            gauche */}
+        {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
+            est égale à la partie gauche */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}>Ajout carte {"=>"}</button>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
-            sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et". */}
+            sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et" */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}>Fusion carte et</button>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
