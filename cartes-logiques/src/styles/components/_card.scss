@@ -12,6 +12,7 @@
     padding: 1vh;
     display: inline-block;
     vertical-align: middle;
+    transition: all .5s;
   }
 
   .affix_v {
@@ -24,6 +25,7 @@
     display: inline-block;
     vertical-align: middle;
     transform: rotate(90deg);
+    transition: all .5s;
   }
 
   .card_simple_h {
@@ -34,6 +36,7 @@
     height: 11.3vh;
     width: 8vh;
     margin: 2px 0.3vh 2px 0.3vh;
+    transition: all .5s;
   }
 
   .card_simple_w {
@@ -44,6 +47,7 @@
     height: 5.12vh;
     width: 8vh;
     margin:2px;
+    transition: all .5s;
   }
 
   .card_simple {
