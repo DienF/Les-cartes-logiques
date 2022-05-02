@@ -4,6 +4,7 @@
   color : black;
 
   .affix_h {
+    border-radius: 5px;
     font-size: 2vh;
     position: absolute;
     background-color: grey;
@@ -16,6 +17,7 @@
   }
 
   .affix_v {
+    border-radius: 5px;
     font-size: 2vh;
     position: absolute;
     background-color: grey;
@@ -165,7 +167,7 @@
     .affix_h {
       font-size: 3vh;
       margin-top: -10.5vh;
-      margin-left: 8vh;
+      margin-left: 9vh;
     }
 
     .affix_v {
