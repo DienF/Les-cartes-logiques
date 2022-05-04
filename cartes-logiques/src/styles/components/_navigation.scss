@@ -24,6 +24,7 @@
     list-style:none;
     text-align: center;
     width: 180px;
+    position: relative;
   }
   .navbar ul {
     padding:0;
@@ -50,13 +51,20 @@
      border:none;
      margin:0
   }
-  .choose .exo{
+  .choose ul{
     max-height:0;
     //overflow: hidden;
     transition: all 1s;
+    position: absolute;
+    right: -150px;
+    top: 125px;
+    max-height: 15em;
+    min-width: 150px;
+    background: #4F618F;
   }
+  
   .navbar a, .choose a {
-    display:block;
+    display: block;
     text-decoration: none;
     color: #fff;
     padding: 8px 0;
@@ -67,12 +75,12 @@
      .choose li {
         display:none;
      }
-     .choose:hover li{
+     .choose:hover .exo{
         display: block;
-        max-height: 15em;
         background: #4F618F;
+        
      }
-     .choose li:hover{
+     .choose .exo:hover{
        background: #729EBF;
      }
   }
