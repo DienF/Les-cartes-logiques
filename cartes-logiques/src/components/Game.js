@@ -27,7 +27,20 @@ class CardClass {
     this.left   = left;
     this.right  = right;
   }
-
+  getColor = (color) => {
+    switch (color) {
+      case "blue":
+        return "B";
+      case "red":
+        return "R";
+      case "yellow":
+        return "J";
+      case "orange":
+        return "M";
+      default:
+        return "Non definie"
+    }
+  }
   /**
    * Renvoie un objet {@link CardClass} sous la forme d'un string.
    * Carte simple : (couleur)
@@ -39,15 +52,15 @@ class CardClass {
    */
   toString() {
     let res = "";
-    if (this.color !== null) res += this.color.toString();
-    if (this.left  !== null) res += this.left.toString();
+    if (this.color !== null) res += this.getColor(this.color);
+    if (this.left  !== null) res += "( " + this.left.toString();
     if(this.link === "et"){
-      res += "^";
+      res += " ^ ";
     }
     else{
-      res += this.link;
+      res += " " + this.link + " ";
     }
-    if (this.right !== null) res += this.right.toString();
+    if (this.right !== null) res += this.right.toString() + " )";
     return res ;
   }
 
@@ -252,12 +265,14 @@ const Game = ({ mode, ex, numero }) => {
    */
   const [cardHelp, setCardHelp] = useState(cardError);
   const [cardHelp2, setCardHelp2] = useState(cardError);
-
   /**
    * 
    */
   const [demonstration , setDemonstration] = useState([]);
 
+  const [indentationDemonstraion , setIndentationDemonstraion] = useState(0);
+
+  const [tabIndentation , setTabIndentation] = useState([0]);
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
@@ -275,15 +290,17 @@ const Game = ({ mode, ex, numero }) => {
     setTabObjectif([[0, 0, false]]);
     setGame([[], []]);
     setLastGame([]);
+    setIndentationDemonstraion(0);
+    setTabIndentation([0]);
     let tmp = gameInput(ex[numero]);
 
     if (ex !== undefined && numero !== undefined && mode !== "Create"){
       let tmpDemonstration = [];
       let res = "";
       tmp[0].forEach(element => {
-        res += " " + element.toDemonstration();
+        res += "On a " + element.toString() + " . ";
       });
-      if(tmp.length == 2){
+      if(tmp.length === 2){
         res += " Montrons " + tmp[1][0].toString() +".";
       }
       tmpDemonstration.push(res);
@@ -350,6 +367,8 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
+    console.log(indentationDemonstraion);
+    console.log(tabIndentation);
     // Met le message d'erreur en "" ce qui ne l'affiche plus
     setMessageErreur("");
     // N'affiche plus les deux cartes d'aide
@@ -748,7 +767,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} numObjectif - le numero de l'objectif
    * @returns {true|false} true ou false
    */
-  const isWin = (numObjectif) => {
+  const isWin = (numObjectif,tmpDemonstration,tmpTabIndentation) => {
     // Objectif à vérifier
     const objectif = game[game.length-1][tabObjectif[numObjectif][1]];
     // Indice du deck lié à l'objectif
@@ -780,6 +799,11 @@ const Game = ({ mode, ex, numero }) => {
           tmp = delDeck(tmp, currentDeck);
           // Met à jour la table des objectifs
           createTabObj(tmp);
+          tmpDemonstration.push("On a " + tmpCard.toString() + ".");
+          setDemonstration(tmpDemonstration);
+          tmpTabIndentation.push(indentationDemonstraion-1);
+          setTabIndentation(tmpTabIndentation);
+          setIndentationDemonstraion(indentationDemonstraion-1);
           // Met à jour le jeu
           setGame(tmp);
           /** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
@@ -818,7 +842,7 @@ const Game = ({ mode, ex, numero }) => {
       createTabObj(tmpFutureGame);
       // Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
       allFalse(tmpFutureGame);
-      var demonstrationTmp = [...demonstration];
+      let demonstrationTmp = [...demonstration];
       demonstrationTmp.pop();
       setDemonstration(demonstrationTmp);
       // Supprime la dernière sauvegrade du jeu
@@ -878,11 +902,14 @@ const Game = ({ mode, ex, numero }) => {
         tmp[deckI][tmp[deckI].length-1].id = tmp[deckI].length-1;
         // Met à jour le jeu & désélectionne toutes les cartes
         allFalse(tmp);
-        var demonstrationTmp = [...demonstration];
-        demonstrationTmp.push("On a " + game[deckI][cardI].left.toString() + " . On a " +game[deckI][cardI].right.toString() + " .");
-        setDemonstration(demonstrationTmp);
+        let tmpDemonstration = [...demonstration];
+        tmpDemonstration.push("On a " + game[deckI][cardI].left.toString() + " . On a " +game[deckI][cardI].right.toString() + " .");
+        setDemonstration(tmpDemonstration);
+        let tmpTabIndentation = [...tabIndentation];
+        tmpTabIndentation.push(indentationDemonstraion);
+        setTabIndentation(tmpTabIndentation);
         // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-        setPopupWin(isWin(selecDeck1));
+        setPopupWin(isWin(selecDeck1,tmpDemonstration,tmpTabIndentation));
       }
       else setMessageErreur("La carte sélectionnée doit avoir une liaison principale de type \"et\" !");
     }
@@ -940,11 +967,14 @@ const Game = ({ mode, ex, numero }) => {
           tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
-          var demonstrationTmp = [...demonstration];
-          demonstrationTmp.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a " + tmp[deckCarteComplex][cardCarteComplex].right +". ");
-          setDemonstration(demonstrationTmp);
+          let tmpDemonstration = [...demonstration];
+          tmpDemonstration.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a " + tmp[deckCarteComplex][cardCarteComplex].right +". ");
+          setDemonstration(tmpDemonstration);
+          let tmpTabIndentation = [...tabIndentation];
+          tmpTabIndentation.push(indentationDemonstraion);
+          setTabIndentation(tmpTabIndentation);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-          setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
+          setPopupWin(isWin(Math.max(selecDeck1,selecDeck2),tmpDemonstration,tmpTabIndentation));
         }
         else {
           // Si aucune des deux cartes n'a de liaison =>
@@ -996,11 +1026,15 @@ const Game = ({ mode, ex, numero }) => {
           tmp[finalDeck].push(new CardClass(tmp[finalDeck].length, null, false, "et", tmpCard1, tmpCard2));
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
-          var demonstrationTmp = [...demonstration];
-          demonstrationTmp.push("On a " + tmpCard1.toString() + " ^ " + tmpCard2.toString()+". ");
-          setDemonstration(demonstrationTmp);
+          let tmpDemonstration = [...demonstration];
+          tmpDemonstration.push("On a " + tmpCard1.toString() + " ^ " + tmpCard2.toString()+". ");
+          setDemonstration(tmpDemonstration);
+          let tmpTabIndentation = [...tabIndentation];
+          let tmpIndentationDemonstraion = indentationDemonstraion;
+          tmpTabIndentation.push(tmpIndentationDemonstraion);
+          setTabIndentation(tmpTabIndentation);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-          setPopupWin(isWin(Math.max(selecDeck1, selecDeck2)));
+          setPopupWin(isWin(Math.max(selecDeck1, selecDeck2),tmpDemonstration,tmpTabIndentation));
         }
         else {
           if (bool) setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
@@ -1151,6 +1185,13 @@ const Game = ({ mode, ex, numero }) => {
               tmpObj.push([tabObjectif.length,game[game.length-1].length,true]);
               // Met à jour le tableau objectif
               setTabObjectif(tmpObj);
+              let tmpDemonstration = [...demonstration];
+              tmpDemonstration.push("Supposons "+tmpCard.toString()+". Montrons "+secondObjectif.toString()+".");
+              setDemonstration(tmpDemonstration);
+              let tmpTabIndentation = [...tabIndentation];
+              tmpTabIndentation.push(indentationDemonstraion);
+              setTabIndentation(tmpTabIndentation);
+              setIndentationDemonstraion(indentationDemonstraion+1);
               // Met à jour le jeu & désélectionne toutes les cartes
               allFalse(tmp);
             }
@@ -1167,6 +1208,12 @@ const Game = ({ mode, ex, numero }) => {
                 // Met à jour le deck objectif
                 tmp[tmp.length-1] = tmpObjectif;
                 // Met à jour le jeu & désélectionne toutes les cartes
+                let tmpDemonstration = [...demonstration];
+                tmpDemonstration.push("Montrons " + secondObjectif.toString() +".");
+                setDemonstration(tmpDemonstration);
+                let tmpTabIndentation = [...tabIndentation];
+                tmpTabIndentation.push(indentationDemonstraion);
+                setTabIndentation(tmpTabIndentation);
                 allFalse(tmp);
               }
               else setMessageErreur("La partie gauche de l'objectif secondaire doit avoir une liaison \"=>\" !");
@@ -1728,7 +1775,7 @@ const Game = ({ mode, ex, numero }) => {
     }
 
     let tmpSavedGame = [];
-    for (var i = 0 ; i <= indiceRetour; i++) tmpSavedGame.push([...lastGame[i]]);
+    for ( i = 0 ; i <= indiceRetour; i++) tmpSavedGame.push([...lastGame[i]]);
     allFalse(tmpSavedGame[tmpSavedGame.length-1]);
     tmpSavedGame.pop()
     let tmpDemonstration = [];
@@ -1738,6 +1785,7 @@ const Game = ({ mode, ex, numero }) => {
     setDemonstration(tmpDemonstration);
     // allFalse(lastGame[indiceRetour]);
   }
+
 
   return (
     <div className="game" >
@@ -1805,7 +1853,7 @@ const Game = ({ mode, ex, numero }) => {
       </GameTab.Provider>
       <div className="demonstration">
         {demonstration.map((element, index) => {
-            return <div key={index} id={index} onClick={demonstrationClickHandler}>{element}</div>
+            return <div key={index} id={index} style={{ marginLeft : tabIndentation[index]*20 }} onClick={demonstrationClickHandler}>{element}</div>
           })}
         </div>
       {/* Popup disponible en mode création pour ajouter une carte simple & choisir sa couleur avec un bouton qui lui est dédié*/}
