@@ -293,19 +293,25 @@ const Game = ({ mode, ex, numero }) => {
     setIndentationDemonstraion(0);
     setTabIndentation([0]);
 
-    if (ex !== undefined && numero !== undefined && mode !== "Create"){
-      let tmp = gameInput(ex[numero]);
-      let tmpDemonstration = [];
-      let res = "";
-      tmp[0].forEach(element => {
-        res += "On a " + element.toString() + " . ";
-      });
-      if(tmp.length === 2){
-        res += " Montrons " + tmp[1][0].toString() +".";
+    if (ex[numero] !== undefined && numero !== undefined && mode !== "Create"){
+      try {      
+        let tmp = gameInput(ex[numero]);
+        let tmpDemonstration = [];
+        let res = "";
+        tmp[0].forEach(element => {
+          res += "On a " + element.toString() + " . ";
+        });
+        if(tmp.length === 2){
+          res += " Montrons " + tmp[1][0].toString() +".";
+        }
+        tmpDemonstration.push(res);
+        setDemonstration(tmpDemonstration);
+        allFalse(tmp);
+        
+      } catch (error) {
+        
       }
-      tmpDemonstration.push(res);
-      setDemonstration(tmpDemonstration);
-      allFalse(tmp);
+
     }
     setMessageErreur("");
     if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
