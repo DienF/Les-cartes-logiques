@@ -1,18 +1,10 @@
 [
-    [
-     {
-      "left": {
-       "color": "red"
-      },
+  [
+    {
+      "left": { "color": "red" },
       "link": "et",
-      "right": {
-       "color": "yellow"
-      }
-     }
-    ],
-    [
-     {
-      "color": "red"
-     }
-    ]
-   ]
+      "right": { "color": "yellow" }
+    }
+  ],
+  [{ "color": "red" }]
+]
