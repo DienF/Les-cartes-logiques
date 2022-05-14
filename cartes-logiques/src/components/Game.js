@@ -297,17 +297,21 @@ const Game = ({ mode, ex, numero }) => {
     setLastGame([]);
     setIndentationDemonstration(0);
     setTabIndentation([0]);
-    if (ex !== undefined && numero !== undefined && mode !== "Create"){
-      let tmp = gameInput(ex[numero]);
-      let tmpDemonstration = [];
-      let res = "";
-      tmp[0].forEach(element => {
-        res += "$$\\text{On a }" + element.toString() + "\\text{. }$$";
-      });
-      if (tmp.length === 2 && tmp[1].length > 0) res += "$$\\text{ Montrons }" + tmp[1][0].toString() + ".$$";
-      tmpDemonstration.push(res);
-      setDemonstration(tmpDemonstration);
-      allFalse(tmp);
+    if (ex[numero] !== undefined && numero !== undefined && mode !== "Create") {
+      try {      
+        let tmp = gameInput(ex[numero]);
+        let tmpDemonstration = [];
+        let res = "";
+        tmp[0].forEach(element => {
+          res += "$$\\text{On a }" + element.toString() + "\\text{. }$$";
+        });
+        if (tmp.length === 2 && tmp[1].length > 0) res += "$$\\text{ Montrons }" + tmp[1][0].toString() +".$$";
+        tmpDemonstration.push(res);
+        setDemonstration(tmpDemonstration);
+        allFalse(tmp);
+      } catch (error) {
+        
+      }
     }
     setMessageErreur("");
     if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
@@ -1867,13 +1871,6 @@ const Game = ({ mode, ex, numero }) => {
   return (
     <div className="game" >
       <div className="bouton">
-        {/* Sélecteur d'exercice */}
-        {mode !== "Create" && <select name="exo" id="exo-select" onChange={changeExercise}>
-        <option value="">Choisir un exercice</option>
-          {ex.map((exercise, index) =>(
-            <option key={index} value={index+1} >Exercice {index+1}</option>
-          ))}
-      </select>}
       {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
       {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
