@@ -236,6 +236,11 @@ const Game = ({ mode, ex, numero }) => {
   const [cardHelp, setCardHelp] = useState(cardError);
   const [cardHelp2, setCardHelp2] = useState(cardError);
 
+  /**
+   * 
+   */
+  const [demonstration , setDemonstration] = useState([]);
+
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
@@ -253,6 +258,7 @@ const Game = ({ mode, ex, numero }) => {
     setTabObjectif([[0, 0, false]]);
     setGame([[], []]);
     setLastGame([]);
+    setDemonstration([]);
     if (ex !== undefined && numero !== undefined && mode !== "Create") allFalse(gameInput(ex[numero]));
     setMessageErreur("");
     if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
@@ -782,6 +788,9 @@ const Game = ({ mode, ex, numero }) => {
       createTabObj(tmpFutureGame);
       // Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
       allFalse(tmpFutureGame);
+      var demonstrationTmp = [...demonstration];
+      demonstrationTmp.pop();
+      setDemonstration(demonstrationTmp);
       // Supprime la dernière sauvegrade du jeu
       tmpLastGame.pop();
       // Met à jour le tableau des sauvegardes
@@ -839,6 +848,9 @@ const Game = ({ mode, ex, numero }) => {
         tmp[deckI][tmp[deckI].length-1].id = tmp[deckI].length-1;
         // Met à jour le jeu & désélectionne toutes les cartes
         allFalse(tmp);
+        var demonstrationTmp = [...demonstration];
+        demonstrationTmp.push("On a " + game[deckI][cardI].left.toString() + " . On a " +game[deckI][cardI].right.toString() + " ." );
+        setDemonstration(demonstrationTmp);
         // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
         setPopupWin(isWin(selecDeck1));
       }
@@ -898,6 +910,9 @@ const Game = ({ mode, ex, numero }) => {
           tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
+          var demonstrationTmp = [...demonstration];
+          demonstrationTmp.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a "+ tmp[deckCarteComplex][cardCarteComplex].right +". ");
+          setDemonstration(demonstrationTmp);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
           setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
         }
@@ -951,6 +966,9 @@ const Game = ({ mode, ex, numero }) => {
           tmp[finalDeck].push(new CardClass(tmp[finalDeck].length, null, false, "et", tmpCard1, tmpCard2));
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
+          var demonstrationTmp = [...demonstration];
+          demonstrationTmp.push("On a "+tmpCard1.toString()+" ^ "+tmpCard2.toString()+". ");
+          setDemonstration(demonstrationTmp);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
           setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
         }
@@ -1656,6 +1674,28 @@ const Game = ({ mode, ex, numero }) => {
     }
   }
 
+  /**
+   * Recupere le numero de la demonstration et met le jeu a ce moment la de la partie
+   * @param {*} event - on utilise event.target.id 
+   */
+  const demonstrationClickHandler = (event) =>{
+    var indiceRetour = event.target.id;
+    
+    let tmpSavedGame = [];
+    for(var i = 0 ;i<=indiceRetour;i++){
+      tmpSavedGame.push([...lastGame[i]]);
+    }
+    allFalse(tmpSavedGame[tmpSavedGame.length-1]);
+    tmpSavedGame.pop()
+    let tmpDemonstration = [];
+    for(i = 0 ;i<=indiceRetour;i++){
+      tmpDemonstration.push(demonstration[i]);
+    }
+    tmpDemonstration.pop();
+    setLastGame(tmpSavedGame);
+    setDemonstration(tmpDemonstration);
+    //allFalse(lastGame[indiceRetour]);
+  }
   return (
     <div className="game" >
       <div className="bouton">
@@ -1720,6 +1760,11 @@ const Game = ({ mode, ex, numero }) => {
             ></Deck>
         ))}
       </GameTab.Provider>
+      <div className="demonstration">
+        {demonstration.map((element,index) => {
+            return <div key={index} id={index} onClick={demonstrationClickHandler}>{element}</div>
+          })}
+        </div>
       {/* Popup disponible en mode création pour ajouter une carte simple & choisir sa couleur avec un bouton qui lui est dédié*/}
       {popupAddCard && (
         <Popup

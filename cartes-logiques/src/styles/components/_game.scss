@@ -45,7 +45,8 @@
   "start other1 other2 goal"
   "start other1 other2 goal"
   "start other1 other2 goal"
-  "start other1 other2 goal";
+  "start other1 other2 goal"
+  "d d d d";
 
   .bouton {
     grid-area: b;
@@ -53,6 +54,7 @@
     margin: auto;
 
     button {
+      cursor: pointer;
       margin-bottom: 1.2vh;
       margin-top: 0.8vh;
       margin-right: 2vh;
@@ -86,5 +88,18 @@
   .boutonSelection {
     border: #a6ca8a solid 5px;
     border-radius: 1px;
+  }
+  .demonstration {
+    grid-area: d;
+    background: white;
+    color : black;
+    margin-top: 50px;
+    div{
+      cursor: pointer;
+    }
+    div:hover{
+      font-weight: bold;
+      
+    }
   }
 }

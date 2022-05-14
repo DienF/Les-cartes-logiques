@@ -27,13 +27,13 @@ const Navigation = () => {
                   Créer un exercice
                 </NavLink>
               </li>
-              <li class="choose">
+              <li className="choose">
                 <NavLink exact="true" to="/">
                   Choisir un exercice
                 </NavLink>
                 <ul>
                 {ex !== undefined && ex.map((exercice, index) => (
-                  <li class= "exo" key={index}>
+                  <li className="exo" key={index}>
                     <NavLink exact="true" to={"/ExercisePlay"+(index+1)}>
                       Exercice {index+1}
                     </NavLink>
