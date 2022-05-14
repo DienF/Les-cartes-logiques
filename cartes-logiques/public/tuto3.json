@@ -1,21 +1,13 @@
 [
-    [
-     {
-      "color": "blue"
-     },
-     {
-      "color": "orange"
-     }
-    ],
-    [
-     {
-      "left": {
-       "color": "blue"
-      },
+  [
+    { "color": "blue" },
+    { "color": "orange" }
+  ],
+  [
+    {
+      "left": { "color": "blue" },
       "link": "et",
-      "right": {
-       "color": "orange"
-      }
-     }
-    ]
-   ]
+      "right": { "color": "orange" }
+    }
+  ]
+]

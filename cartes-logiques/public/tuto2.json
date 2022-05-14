@@ -1,21 +1,11 @@
 [
-    [
-     {
-      "color": "yellow"
-     },
-     {
-      "left": {
-       "color": "yellow"
-      },
+  [
+    { "color": "yellow" },
+    {
+      "left": { "color": "yellow" },
       "link": "=>",
-      "right": {
-       "color": "blue"
-      }
-     }
-    ],
-    [
-     {
-      "color": "blue"
-     }
-    ]
-   ]
+      "right": { "color": "blue" }
+    }
+  ],
+  [{ "color": "blue" }]
+]

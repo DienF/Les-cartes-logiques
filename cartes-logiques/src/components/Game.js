@@ -681,7 +681,7 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Transforme un objet JSON en instance {@link CardClass}.
-   * @todo Modifier pour que cela marche avec Ex.json.
+   * @todo Modifier pour que cela marche avec exercices.json.
    * @param {JSON} obj - information mimimum pour créer une carte :
    *                     Carte simple = juste la couleur ;
    *                     Carte complexe = les 2 cartes qui la compose & la liaison
@@ -879,7 +879,7 @@ const Game = ({ mode, ex, numero }) => {
         // Met à jour le jeu & désélectionne toutes les cartes
         allFalse(tmp);
         var demonstrationTmp = [...demonstration];
-        demonstrationTmp.push("On a " + game[deckI][cardI].left.toString() + " . On a " +game[deckI][cardI].right.toString() + " ." );
+        demonstrationTmp.push("On a " + game[deckI][cardI].left.toString() + " . On a " +game[deckI][cardI].right.toString() + " .");
         setDemonstration(demonstrationTmp);
         // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
         setPopupWin(isWin(selecDeck1));
@@ -941,7 +941,7 @@ const Game = ({ mode, ex, numero }) => {
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
           var demonstrationTmp = [...demonstration];
-          demonstrationTmp.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a "+ tmp[deckCarteComplex][cardCarteComplex].right +". ");
+          demonstrationTmp.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a " + tmp[deckCarteComplex][cardCarteComplex].right +". ");
           setDemonstration(demonstrationTmp);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
           setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
@@ -997,10 +997,10 @@ const Game = ({ mode, ex, numero }) => {
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
           var demonstrationTmp = [...demonstration];
-          demonstrationTmp.push("On a "+tmpCard1.toString()+" ^ "+tmpCard2.toString()+". ");
+          demonstrationTmp.push("On a " + tmpCard1.toString() + " ^ " + tmpCard2.toString()+". ");
           setDemonstration(demonstrationTmp);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-          setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
+          setPopupWin(isWin(Math.max(selecDeck1, selecDeck2)));
         }
         else {
           if (bool) setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
@@ -1100,7 +1100,7 @@ const Game = ({ mode, ex, numero }) => {
    *    et la droite dans l'objectif et défini cet objectif comme un objectif secondaire. 
    *    Le reste : ajoute la partie gauche dans l'objectif et ne le considère pas comme un objectif secondaire.
    */
-  const addObjectif = () =>{
+  const addObjectif = () => {
     // S'il n'y a qu'une carte de sélectionné
     if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
       // Prend la carte sélectionnée
@@ -1194,7 +1194,7 @@ const Game = ({ mode, ex, numero }) => {
     // Si le sélecteur n'est pas sur "Choisir un exercice"
     if (value !== "") {
       // Création de l'url
-      let url = "/Exercise" + mode + value ;
+      let url = "/Exercise" + mode + value;
       // Redirection vers l'exercice voulu
       navigate(url);
     }
@@ -1204,7 +1204,7 @@ const Game = ({ mode, ex, numero }) => {
    * Reçoit plusieurs fichiers puis fusionne ces fichiers pour n'en faire qu'un.
    * @param {Event} event - le bouton qui reçoit les fichiers ({@link event.target.files})
    */
-  const convertFile = (event) =>{
+  const convertFile = (event) => {
     // Initialisation de la variable où vont être stockés les fichiers JSON
     filesCopy = "";
     // Si au moins 1 fichier est sélectionné
@@ -1316,7 +1316,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {CardClass}             card - la carte à trouver
    * @returns {number} -1 si la carte n'est pas dans le deck sinon son indice
    */
-  const getIndice = (tmp, deckId, card) =>{
+  const getIndice = (tmp, deckId, card) => {
     // Variable que l'on va retourner (-1 par défaut)
     let num = -1;
     // Parcourt le deck passé en paramètre
@@ -1409,7 +1409,7 @@ const Game = ({ mode, ex, numero }) => {
              *  - si le deck est dans le numéro de l'objectif
              *    (@example numéro objectif = 0 & deck départ = 0 & cette carte existe).
              */
-            if (!chemin[1]  && deckIndex !== tmp.length-1 && deckIndex <= deckObjectif && containCard(tmp, deckIndex, cardTest)) {
+            if (!chemin[1] && deckIndex !== tmp.length-1 && deckIndex <= deckObjectif && containCard(tmp, deckIndex, cardTest)) {
               // console.log("fin");
               // On a trouvé une solution
               chemin[1] = true;
@@ -1435,9 +1435,9 @@ const Game = ({ mode, ex, numero }) => {
                 if (card.right.link === "=>") {
                   /** Vérifie si l'on peut avoir la partie gauche de la partie droite de la carte que l'on
                    *  vient de tester.
-                   *  @example : bleu     jaune
-                   *              et   =>   =>
-                   *             rouge    orange
+                   *  @example : | bleu |    |jaune |
+                   *             |  et  | => |  =>  |
+                   *             |rouge |    |orange|
                    *  On cherche du orange, on vérifie si on a du jaune car s'il y en a pas ça ne sert à rien
                    *  de chercher "bleu et rouge".
                    */
@@ -1528,7 +1528,7 @@ const Game = ({ mode, ex, numero }) => {
   /** Met dans la console tous les mouvements à faire pour gagner la partie.
    *  @todo Fonction inutilisée pour l'instant. Ne marche pas normalement.
    */
-  const soluceExercise = () =>{
+  const soluceExercise = () => {
     let tmp      = [...game];
     let chemin   = [[],false];
     let objectif = tmp[1][0];
@@ -1543,12 +1543,12 @@ const Game = ({ mode, ex, numero }) => {
         for (var i=0; i < affiche.length-1; i++) {
           if (affiche[i].color !== null ) {
             if (affiche[i+1].link === "=>") {
-              console.log("Utilisation de la carte " + affiche[i] + " et " + affiche[i+1] + " Création de la carte "+ affiche[i+1].right);
+              console.log("Utilisation de la carte " + affiche[i] + " et " + affiche[i+1] + " Création de la carte " + affiche[i+1].right);
             }
             i++;
           }
           else if (affiche[i].link === "=>") {
-            console.log("Utilisation de la carte " + affiche[i].left + " et " + affiche[i] + " Création de la carte "+ affiche[i].right);
+            console.log("Utilisation de la carte " + affiche[i].left + " et " + affiche[i] + " Création de la carte " + affiche[i].right);
           }
         }
         console.log("Objectif secondaire rempli");
@@ -1590,7 +1590,7 @@ const Game = ({ mode, ex, numero }) => {
     // Variable que l'on va retourner (false par défaut)
     let bool = false;
     // Parcourt le jeu
-    game.forEach((deck, index) =>{
+    game.forEach((deck, index) => {
       // Parcourt le deck
       deck.forEach(card => {
         /** La carte ne doit pas être dans les objectifs et on regarde dans le deck si la carte est égale
@@ -1680,7 +1680,7 @@ const Game = ({ mode, ex, numero }) => {
       }
       // Si elles n'existent pas
       else {
-        // console.log("oui")
+        // console.log("Les 2 cartes n'existent pas")
         /** Si les 2 cartes n'existent pas, c'est qu'il doit y aboir un sous-objectif à créer
          *  qui ne soit pas dans le deck objectif.
          */
@@ -1705,8 +1705,8 @@ const Game = ({ mode, ex, numero }) => {
   }
 
   /**
-   * Recupere le numero de la demonstration et met le jeu a ce moment la de la partie
-   * @param {*} event - on utilise event.target.id 
+   * Recupère le numéro de la démonstration et met le jeu à ce moment-là de la partie.
+   * @param {Event} event - on utilise event.target.id 
    */
   const demonstrationClickHandler = (event) =>{
     var indiceRetour = event.target.id;
@@ -1727,7 +1727,18 @@ const Game = ({ mode, ex, numero }) => {
       //allFalse(lastGame[indiceRetour]);
     }
 
+    let tmpSavedGame = [];
+    for (var i = 0 ; i <= indiceRetour; i++) tmpSavedGame.push([...lastGame[i]]);
+    allFalse(tmpSavedGame[tmpSavedGame.length-1]);
+    tmpSavedGame.pop()
+    let tmpDemonstration = [];
+    for (i = 0 ; i <= indiceRetour; i++) tmpDemonstration.push(demonstration[i]);
+    tmpDemonstration.pop();
+    setLastGame(tmpSavedGame);
+    setDemonstration(tmpDemonstration);
+    // allFalse(lastGame[indiceRetour]);
   }
+
   return (
     <div className="game" >
       <div className="bouton">
@@ -1793,7 +1804,7 @@ const Game = ({ mode, ex, numero }) => {
         ))}
       </GameTab.Provider>
       <div className="demonstration">
-        {demonstration.map((element,index) => {
+        {demonstration.map((element, index) => {
             return <div key={index} id={index} onClick={demonstrationClickHandler}>{element}</div>
           })}
         </div>
