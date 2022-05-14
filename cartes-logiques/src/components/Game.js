@@ -38,12 +38,17 @@ class CardClass {
    * @returns {string} un string plus lisible
    */
   toString() {
-    let res = "(";
+    let res = "";
     if (this.color !== null) res += this.color.toString();
     if (this.left  !== null) res += this.left.toString();
-    res += this.link;
+    if(this.link === "et"){
+      res += "^";
+    }
+    else{
+      res += this.link;
+    }
     if (this.right !== null) res += this.right.toString();
-    return res + ")";
+    return res ;
   }
 
   /**
@@ -140,6 +145,18 @@ class CardClass {
     if (this.color !== null) return true;
     if (this.left.color !== null && this.right.color !== null) return true;
     else return false;
+  }
+
+  toDemonstration(){
+    if(this.color !== null){
+      return "On a" + this.color +".";
+    }
+    else if(this.link === "et"){
+      return "On a " + this.left.toString() + " ^ " + this.right.toString()+".";
+    }
+    else{
+      return "Puisque "+this.left.toString()+", on a " + this.right.toString()+".";
+    }
   }
 }
 
@@ -258,8 +275,21 @@ const Game = ({ mode, ex, numero }) => {
     setTabObjectif([[0, 0, false]]);
     setGame([[], []]);
     setLastGame([]);
-    setDemonstration([]);
-    if (ex !== undefined && numero !== undefined && mode !== "Create") allFalse(gameInput(ex[numero]));
+    let tmp = gameInput(ex[numero]);
+
+    if (ex !== undefined && numero !== undefined && mode !== "Create"){
+      let tmpDemonstration = [];
+      let res = "";
+      tmp[0].forEach(element => {
+        res += " " + element.toDemonstration();
+      });
+      if(tmp.length == 2){
+        res += " Montrons " + tmp[1][0].toString() +".";
+      }
+      tmpDemonstration.push(res);
+      setDemonstration(tmpDemonstration);
+      allFalse(tmp);
+    }
     setMessageErreur("");
     if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
     if (numero === 1) setMessageTutoriel(["Dans cet exercice nous allons apprendre le troisième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
@@ -1680,21 +1710,23 @@ const Game = ({ mode, ex, numero }) => {
    */
   const demonstrationClickHandler = (event) =>{
     var indiceRetour = event.target.id;
-    
-    let tmpSavedGame = [];
-    for(var i = 0 ;i<=indiceRetour;i++){
-      tmpSavedGame.push([...lastGame[i]]);
+    if(indiceRetour !== 0){
+      let tmpSavedGame = [];
+      for(var i = 0 ;i<=indiceRetour-1;i++){
+        tmpSavedGame.push([...lastGame[i]]);
+      }
+      allFalse(tmpSavedGame[tmpSavedGame.length-1]);
+      tmpSavedGame.pop()
+      let tmpDemonstration = [];
+      for(i = 0 ;i<=indiceRetour;i++){
+        tmpDemonstration.push(demonstration[i]);
+      }
+      tmpDemonstration.pop();
+      setLastGame(tmpSavedGame);
+      setDemonstration(tmpDemonstration);
+      //allFalse(lastGame[indiceRetour]);
     }
-    allFalse(tmpSavedGame[tmpSavedGame.length-1]);
-    tmpSavedGame.pop()
-    let tmpDemonstration = [];
-    for(i = 0 ;i<=indiceRetour;i++){
-      tmpDemonstration.push(demonstration[i]);
-    }
-    tmpDemonstration.pop();
-    setLastGame(tmpSavedGame);
-    setDemonstration(tmpDemonstration);
-    //allFalse(lastGame[indiceRetour]);
+
   }
   return (
     <div className="game" >
