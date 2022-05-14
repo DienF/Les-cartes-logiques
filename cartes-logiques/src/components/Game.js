@@ -367,8 +367,6 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
-    console.log(indentationDemonstraion);
-    console.log(tabIndentation);
     // Met le message d'erreur en "" ce qui ne l'affiche plus
     setMessageErreur("");
     // N'affiche plus les deux cartes d'aide
