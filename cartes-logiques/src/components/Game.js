@@ -1875,13 +1875,6 @@ const Game = ({ mode, ex, numero }) => {
   return (
     <div className="game" >
       <div className="bouton">
-        {/* Sélecteur d'exercice */}
-        {mode !== "Create" && <select name="exo" id="exo-select" onChange={changeExercise}>
-        <option value="">Choisir un exercice</option>
-          {ex.map((exercise, index) =>(
-            <option key={index} value={index+1} >Exercice {index+1}</option>
-          ))}
-      </select>}
       {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
       {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
