@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Deck from "./Deck";
 import Popup from "./Popup";
 export const GameTab = React.createContext();
+var Latex = require("react-latex");
 
 class CardClass {
   /**
@@ -27,20 +28,27 @@ class CardClass {
     this.left   = left;
     this.right  = right;
   }
+
+  /**
+   * Traduit la couleur de la carte, de base en anglais, en français afin de l'afficher en format LaTeX.
+   * @param {string} color - la couleur de la carte
+   * @returns {string} la traduction de la couleur
+   */
   getColor = (color) => {
     switch (color) {
-      case "blue":
-        return "B";
       case "red":
-        return "R";
+        return "\\textit{Rouge}";
       case "yellow":
-        return "J";
+        return "\\textit{Jaune}";
+      case "blue":
+        return "\\textit{Bleue}";
       case "orange":
-        return "M";
+        return "\\textit{Orange}";
       default:
         return "Non definie"
     }
   }
+
   /**
    * Renvoie un objet {@link CardClass} sous la forme d'un string.
    * Carte simple : (couleur)
@@ -52,16 +60,17 @@ class CardClass {
    */
   toString() {
     let res = "";
+    // Couleur de la carte
     if (this.color !== null) res += this.getColor(this.color);
-    if (this.left  !== null) res += "( " + this.left.toString();
-    if(this.link === "et"){
-      res += " ^ ";
-    }
-    else{
-      res += " " + this.link + " ";
-    }
-    if (this.right !== null) res += this.right.toString() + " )";
-    return res ;
+    // Carte gauche
+    if (this.left  !== null) res += "(" + this.left.toString();
+    // Liaison
+    if      (this.link === "et") res += "\\land";
+    else if (this.link === "=>") res += "\\Rightarrow";
+    else                         res += this.link;
+    // Carte droite
+    if (this.right !== null) res += this.right.toString() + ")";
+    return res;
   }
 
   /**
@@ -160,16 +169,13 @@ class CardClass {
     else return false;
   }
 
-  toDemonstration(){
-    if(this.color !== null){
-      return "On a" + this.color +".";
-    }
-    else if(this.link === "et"){
-      return "On a " + this.left.toString() + " ^ " + this.right.toString()+".";
-    }
-    else{
-      return "Puisque "+this.left.toString()+", on a " + this.right.toString()+".";
-    }
+  /**
+   * Renvoie la démonstration correspondante à l'action effectuée.
+   */
+  toDemonstration() {
+    if      (this.color !== null) return "$$\\text{On a }"    + this.getColor(this.color)                                                 + ".$$";
+    else if (this.link  === "et") return "$$\\text{On a }"    + this.left.toString() + "\\text{ }\\land\\text{ }" + this.right.toString() + ".$$";
+    else                          return "$$\\text{Puisque }" + this.left.toString() + "\\text{, on a }"          + this.right.toString() + ".$$";
   }
 }
 
@@ -265,12 +271,10 @@ const Game = ({ mode, ex, numero }) => {
    */
   const [cardHelp, setCardHelp] = useState(cardError);
   const [cardHelp2, setCardHelp2] = useState(cardError);
-  /**
-   * 
-   */
-  const [demonstration , setDemonstration] = useState([]);
 
-  const [indentationDemonstraion , setIndentationDemonstraion] = useState(0);
+  const [demonstration, setDemonstration] = useState([]);
+
+  const [indentationDemonstration, setIndentationDemonstration] = useState(0);
 
   const [tabIndentation , setTabIndentation] = useState([0]);
   /** Variable pour les redirections.
@@ -290,19 +294,16 @@ const Game = ({ mode, ex, numero }) => {
     setTabObjectif([[0, 0, false]]);
     setGame([[], []]);
     setLastGame([]);
-    setIndentationDemonstraion(0);
+    setIndentationDemonstration(0);
     setTabIndentation([0]);
     let tmp = gameInput(ex[numero]);
-
     if (ex !== undefined && numero !== undefined && mode !== "Create"){
       let tmpDemonstration = [];
       let res = "";
       tmp[0].forEach(element => {
-        res += "On a " + element.toString() + " . ";
+        res += "$$\\text{On a }" + element.toString() + "\\text{. }$$";
       });
-      if(tmp.length === 2){
-        res += " Montrons " + tmp[1][0].toString() +".";
-      }
+      if (tmp.length === 2 && tmp[1].length > 0) res += "$$\\text{ Montrons }" + tmp[1][0].toString() + ".$$";
       tmpDemonstration.push(res);
       setDemonstration(tmpDemonstration);
       allFalse(tmp);
@@ -367,8 +368,8 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
-    console.log(indentationDemonstraion);
-    console.log(tabIndentation);
+    // console.log(indentationDemonstration);
+    // console.log(tabIndentation);
     // Met le message d'erreur en "" ce qui ne l'affiche plus
     setMessageErreur("");
     // N'affiche plus les deux cartes d'aide
@@ -801,9 +802,9 @@ const Game = ({ mode, ex, numero }) => {
           createTabObj(tmp);
           tmpDemonstration.push("On a " + tmpCard.toString() + ".");
           setDemonstration(tmpDemonstration);
-          tmpTabIndentation.push(indentationDemonstraion-1);
+          tmpTabIndentation.push(indentationDemonstration-1);
           setTabIndentation(tmpTabIndentation);
-          setIndentationDemonstraion(indentationDemonstraion-1);
+          setIndentationDemonstration(indentationDemonstration-1);
           // Met à jour le jeu
           setGame(tmp);
           /** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
@@ -903,10 +904,10 @@ const Game = ({ mode, ex, numero }) => {
         // Met à jour le jeu & désélectionne toutes les cartes
         allFalse(tmp);
         let tmpDemonstration = [...demonstration];
-        tmpDemonstration.push("On a " + game[deckI][cardI].left.toString() + " . On a " +game[deckI][cardI].right.toString() + " .");
+        tmpDemonstration.push("$$\\text{On a }" + game[deckI][cardI].left.toString() + "\\text{. On a }" +game[deckI][cardI].right.toString() + ".$$");
         setDemonstration(tmpDemonstration);
         let tmpTabIndentation = [...tabIndentation];
-        tmpTabIndentation.push(indentationDemonstraion);
+        tmpTabIndentation.push(indentationDemonstration);
         setTabIndentation(tmpTabIndentation);
         // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
         setPopupWin(isWin(selecDeck1,tmpDemonstration,tmpTabIndentation));
@@ -968,10 +969,10 @@ const Game = ({ mode, ex, numero }) => {
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
           let tmpDemonstration = [...demonstration];
-          tmpDemonstration.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a " + tmp[deckCarteComplex][cardCarteComplex].right +". ");
+          tmpDemonstration.push("$$\\text{Puisque }" + tmp[deckCarteComplex][cardCarteComplex].left + "\\text{, on a }" + tmp[deckCarteComplex][cardCarteComplex].right +"\\text{. }$$");
           setDemonstration(tmpDemonstration);
           let tmpTabIndentation = [...tabIndentation];
-          tmpTabIndentation.push(indentationDemonstraion);
+          tmpTabIndentation.push(indentationDemonstration);
           setTabIndentation(tmpTabIndentation);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
           setPopupWin(isWin(Math.max(selecDeck1,selecDeck2),tmpDemonstration,tmpTabIndentation));
@@ -1006,11 +1007,11 @@ const Game = ({ mode, ex, numero }) => {
       let finalDeck = Math.max(selecDeck1,selecDeck2);
       if (finalDeck !== game.length-1) {
         // Copie du jeu actuel
-        let tmp   = [...game];
+        let tmp = [...game];
         /** Vérifie si la 1ère carte sélectionnée est une carte composé au maximum de 2 cartes.
          *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
          */
-        let bool  = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
+        let bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
         /** Vérifie si la 2ème carte sélectionnée est une carte composé au maximum de 2 cartes.
          *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
          */
@@ -1027,11 +1028,11 @@ const Game = ({ mode, ex, numero }) => {
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
           let tmpDemonstration = [...demonstration];
-          tmpDemonstration.push("On a " + tmpCard1.toString() + " ^ " + tmpCard2.toString()+". ");
+          tmpDemonstration.push("$$\\text{On a }" + tmpCard1.toString() + "\\text{ }\\land\\text{ }" + tmpCard2.toString()+". $$");
           setDemonstration(tmpDemonstration);
           let tmpTabIndentation = [...tabIndentation];
-          let tmpIndentationDemonstraion = indentationDemonstraion;
-          tmpTabIndentation.push(tmpIndentationDemonstraion);
+          let tmpIndentationDemonstration = indentationDemonstration;
+          tmpTabIndentation.push(tmpIndentationDemonstration);
           setTabIndentation(tmpTabIndentation);
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
           setPopupWin(isWin(Math.max(selecDeck1, selecDeck2),tmpDemonstration,tmpTabIndentation));
@@ -1189,9 +1190,9 @@ const Game = ({ mode, ex, numero }) => {
               tmpDemonstration.push("Supposons "+tmpCard.toString()+". Montrons "+secondObjectif.toString()+".");
               setDemonstration(tmpDemonstration);
               let tmpTabIndentation = [...tabIndentation];
-              tmpTabIndentation.push(indentationDemonstraion);
+              tmpTabIndentation.push(indentationDemonstration);
               setTabIndentation(tmpTabIndentation);
-              setIndentationDemonstraion(indentationDemonstraion+1);
+              setIndentationDemonstration(indentationDemonstration+1);
               // Met à jour le jeu & désélectionne toutes les cartes
               allFalse(tmp);
             }
@@ -1212,7 +1213,7 @@ const Game = ({ mode, ex, numero }) => {
                 tmpDemonstration.push("Montrons " + secondObjectif.toString() +".");
                 setDemonstration(tmpDemonstration);
                 let tmpTabIndentation = [...tabIndentation];
-                tmpTabIndentation.push(indentationDemonstraion);
+                tmpTabIndentation.push(indentationDemonstration);
                 setTabIndentation(tmpTabIndentation);
                 allFalse(tmp);
               }
@@ -1755,27 +1756,23 @@ const Game = ({ mode, ex, numero }) => {
    * Recupère le numéro de la démonstration et met le jeu à ce moment-là de la partie.
    * @param {Event} event - on utilise event.target.id 
    */
-  const demonstrationClickHandler = (event) =>{
+  const demonstrationClickHandler = (event) => {
     var indiceRetour = event.target.id;
-    if(indiceRetour !== 0){
+    var i = 0;
+    if (indiceRetour !== 0) {
       let tmpSavedGame = [];
-      for(var i = 0 ;i<=indiceRetour-1;i++){
-        tmpSavedGame.push([...lastGame[i]]);
-      }
+      for (i = 0 ; i <= indiceRetour-1; i++) tmpSavedGame.push([...lastGame[i]]);
       allFalse(tmpSavedGame[tmpSavedGame.length-1]);
       tmpSavedGame.pop()
       let tmpDemonstration = [];
-      for(i = 0 ;i<=indiceRetour;i++){
-        tmpDemonstration.push(demonstration[i]);
-      }
+      for (i = 0 ; i <= indiceRetour; i++) tmpDemonstration.push(demonstration[i]);
       tmpDemonstration.pop();
       setLastGame(tmpSavedGame);
       setDemonstration(tmpDemonstration);
-      //allFalse(lastGame[indiceRetour]);
+      // allFalse(lastGame[indiceRetour]);
     }
-
     let tmpSavedGame = [];
-    for ( i = 0 ; i <= indiceRetour; i++) tmpSavedGame.push([...lastGame[i]]);
+    for (i = 0 ; i <= indiceRetour; i++) tmpSavedGame.push([...lastGame[i]]);
     allFalse(tmpSavedGame[tmpSavedGame.length-1]);
     tmpSavedGame.pop()
     let tmpDemonstration = [];
@@ -1808,9 +1805,9 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
         {true && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
-        <button onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"19"} height={"25"}/></button>
+        <button onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"17"} height={"23"}/></button>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
-        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"} width={"97"} height={"25"}/></button>}
+        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"} width={"89"} height={"23"}/></button>}
         {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
             est égale à la partie gauche */}
         {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Ajout carte =>"} width={"106"} height={"23"}/></button>}
@@ -1822,7 +1819,7 @@ const Game = ({ mode, ex, numero }) => {
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""}onClick={addObjectif}>Ajout objectif</button>}
+        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}>Ajout objectif</button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
@@ -1851,12 +1848,12 @@ const Game = ({ mode, ex, numero }) => {
             ></Deck>
         ))}
       </GameTab.Provider>
+      {/* Affichage de la démonstration de logique mathématique de l'exercice */}
       <div className="demonstration">
         {demonstration.map((element, index) => {
-            return <div key={index} id={index} style={{ marginLeft : tabIndentation[index]*20 }} onClick={demonstrationClickHandler}>{element}</div>
-          })}
-        </div>
-      {/* Popup disponible en mode création pour ajouter une carte simple & choisir sa couleur avec un bouton qui lui est dédié*/}
+            return <div key={index} id={index} style={{ marginLeft : tabIndentation[index]*20 }} onClick={demonstrationClickHandler}><Latex>{element}</Latex></div>
+        })}
+      </div>
       {popupAddCard && (
         <Popup
           content={
