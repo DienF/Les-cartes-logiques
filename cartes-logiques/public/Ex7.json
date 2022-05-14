@@ -1,0 +1,42 @@
+[
+ [
+  {
+   "left": {
+    "color": "red"
+   },
+   "link": "<=>",
+   "right": {
+    "color": "yellow"
+   }
+  },
+  {
+   "left": {
+    "color": "yellow"
+   },
+   "link": "<=>",
+   "right": {
+    "color": "orange"
+   }
+  },
+  {
+   "left": {
+    "left": {
+     "color": "red"
+    },
+    "link": "<=>",
+    "right": {
+     "color": "orange"
+    }
+   },
+   "link": "=>",
+   "right": {
+    "color": "blue"
+   }
+  }
+ ],
+ [
+  {
+   "color": "blue"
+  }
+ ]
+]
