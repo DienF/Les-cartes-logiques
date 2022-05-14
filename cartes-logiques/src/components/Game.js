@@ -757,6 +757,7 @@ const Game = ({ mode, ex, numero }) => {
     })
     // Actualise le tableau des objectifs
     setTabObjectif(tmpObj);
+    return tmpObj.length;
   }
 
   /**
@@ -839,7 +840,7 @@ const Game = ({ mode, ex, numero }) => {
         }
       }
       // Refait le tableau des objectifs au cas où on retourne en arrière sur une suppression d'objectif secondaire
-      createTabObj(tmpFutureGame);
+      setIndentationDemonstraion(createTabObj(tmpFutureGame)-1);
       // Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
       allFalse(tmpFutureGame);
       let demonstrationTmp = [...demonstration];
@@ -848,6 +849,13 @@ const Game = ({ mode, ex, numero }) => {
       // Supprime la dernière sauvegrade du jeu
       tmpLastGame.pop();
       // Met à jour le tableau des sauvegardes
+      
+      let tmpDemonstration = [];
+      for (let i = 0 ; i <= lastGame.length-1; i++) tmpDemonstration.push(demonstration[i]);
+      let tmpTabDemonstration = [];
+      for (let i = 0 ; i <= lastGame.length-1; i++) tmpTabDemonstration.push(tabIndentation[i]);
+      setDemonstration(tmpDemonstration);
+      setTabIndentation(tmpTabDemonstration);
       setLastGame(tmpLastGame);
     }
     else allFalseGame();
@@ -1757,33 +1765,36 @@ const Game = ({ mode, ex, numero }) => {
    */
   const demonstrationClickHandler = (event) =>{
     var indiceRetour = event.target.id;
-    if(indiceRetour !== 0){
-      let tmpSavedGame = [];
-      for(var i = 0 ;i<=indiceRetour-1;i++){
-        tmpSavedGame.push([...lastGame[i]]);
+    if(indiceRetour !== lastGame.length){
+      let tmpLastGame = [...lastGame];
+      let tmpSavedGame  = tmpLastGame[indiceRetour];
+      // Initialise le futur tableau de jeu
+      let tmpFutureGame = [];
+      // Copie le dernier tableau de jeu sauvegardé dans le futur tableau
+      for (let i = 0 ; i < tmpSavedGame.length ; i++) {
+        tmpFutureGame[i] = [];
+        for (let j = 0 ; j < tmpSavedGame[i].length ; j++) {
+          tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
+        }
       }
-      allFalse(tmpSavedGame[tmpSavedGame.length-1]);
-      tmpSavedGame.pop()
+      setIndentationDemonstraion(createTabObj(tmpFutureGame)-1);
+      allFalse(tmpFutureGame);
+      //if(indiceRetour !== 0 || indiceRetour === lastGame.length-1) tmpSavedGame.pop();
       let tmpDemonstration = [];
-      for(i = 0 ;i<=indiceRetour;i++){
-        tmpDemonstration.push(demonstration[i]);
-      }
-      tmpDemonstration.pop();
-      setLastGame(tmpSavedGame);
+      for (let i = 0 ; i <= indiceRetour; i++) tmpDemonstration.push(demonstration[i]);
+      let tmpTabDemonstration = [];
+      for (let i = 0 ; i <= indiceRetour; i++) tmpTabDemonstration.push(tabIndentation[i]);
+      //if(indiceRetour !== 0 || indiceRetour === lastGame.length-1) tmpDemonstration.pop();
+      let futurLastGame = [];
+      for (let i = 0 ; i < indiceRetour; i++) futurLastGame.push(lastGame[i]);
+      setLastGame(futurLastGame);
       setDemonstration(tmpDemonstration);
-      //allFalse(lastGame[indiceRetour]);
+      setTabIndentation(tmpTabDemonstration);
+      
+      // allFalse(lastGame[indiceRetour]);
     }
 
-    let tmpSavedGame = [];
-    for ( i = 0 ; i <= indiceRetour; i++) tmpSavedGame.push([...lastGame[i]]);
-    allFalse(tmpSavedGame[tmpSavedGame.length-1]);
-    tmpSavedGame.pop()
-    let tmpDemonstration = [];
-    for (i = 0 ; i <= indiceRetour; i++) tmpDemonstration.push(demonstration[i]);
-    tmpDemonstration.pop();
-    setLastGame(tmpSavedGame);
-    setDemonstration(tmpDemonstration);
-    // allFalse(lastGame[indiceRetour]);
+
   }
 
 
@@ -1929,7 +1940,8 @@ const Game = ({ mode, ex, numero }) => {
             <>
               <b>Bravo, vous avez gagné !</b>
               <button
-                onClick={nextExercise}
+                //onClick={nextExercise}
+                onClick={setPopupWin(false)}
               >
                 ✖
               </button>
