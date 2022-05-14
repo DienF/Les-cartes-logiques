@@ -65,9 +65,10 @@ class CardClass {
     // Carte gauche
     if (this.left  !== null) res += "(" + this.left.toString();
     // Liaison
-    if      (this.link === "et") res += "\\land";
-    else if (this.link === "=>") res += "\\Rightarrow";
-    else                         res += this.link;
+    if      (this.link === "et")  res += "\\land";
+    else if (this.link === "=>")  res += "\\Rightarrow";
+    else if (this.link === "<=>") res += "\\Leftrightarrow";
+    else                          res += this.link;
     // Carte droite
     if (this.right !== null) res += this.right.toString() + ")";
     return res;
@@ -296,8 +297,8 @@ const Game = ({ mode, ex, numero }) => {
     setLastGame([]);
     setIndentationDemonstration(0);
     setTabIndentation([0]);
-    let tmp = gameInput(ex[numero]);
     if (ex !== undefined && numero !== undefined && mode !== "Create"){
+      let tmp = gameInput(ex[numero]);
       let tmpDemonstration = [];
       let res = "";
       tmp[0].forEach(element => {
@@ -983,7 +984,79 @@ const Game = ({ mode, ex, numero }) => {
           // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
           setPopupWin(isWin(Math.max(selecDeck1,selecDeck2),tmpDemonstration,tmpTabIndentation));
         }
-        else {
+        else if (tmp[selecDeck2][selecCard2].link === "<=>" || tmp[selecDeck1][selecCard1].link === "<=>") {
+          bool = false;
+          let bool2 = false;
+          let cardAdd;
+          let cardFuse;
+          if (tmp[selecDeck1][selecCard1].link === "<=>") {
+            if (tmp[selecDeck2][selecCard2].equals(tmp[selecDeck1][selecCard1].left)) {
+              bool     = true;
+              cardAdd  = tmp[selecDeck1][selecCard1].right.copy();
+              cardFuse = tmp[selecDeck1][selecCard1].left;
+            }
+            if (tmp[selecDeck2][selecCard2].equals(tmp[selecDeck1][selecCard1].right)) {
+              bool     = true;
+              cardAdd  = tmp[selecDeck1][selecCard1].left.copy();
+              cardFuse = tmp[selecDeck1][selecCard1].right;
+            }
+          }
+          if (tmp[selecDeck2][selecCard2].link === "<=>") {
+            if (tmp[selecDeck1][selecCard1].equals(tmp[selecDeck2][selecCard2].left)) {
+              bool     = true;
+              cardAdd  = tmp[selecDeck2][selecCard2].right.copy();
+              cardFuse = tmp[selecDeck2][selecCard2].left;
+            }
+            if (tmp[selecDeck1][selecCard1].equals(tmp[selecDeck2][selecCard2].right)) {
+              bool     = true;
+              cardAdd  = tmp[selecDeck2][selecCard2].left.copy();
+              cardFuse = tmp[selecDeck2][selecCard2].right;
+            }
+          }
+          if (tmp[selecDeck1][selecCard1].link === "<=>" && tmp[selecDeck2][selecCard2].link === "<=>") {
+            if (tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2].left)) {
+              bool     = true;
+              bool2    = true;
+              cardAdd  = new CardClass(0, null, false, "<=>", tmp[selecDeck1][selecCard1].right.copy(), tmp[selecDeck2][selecCard2].right.copy())
+              cardFuse = tmp[selecDeck1][selecCard1].left;
+            }
+            if (tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2].right)) {
+              bool     = true;
+              bool2    = true;
+              cardAdd  = new CardClass(0, null, false, "<=>", tmp[selecDeck1][selecCard1].right.copy(), tmp[selecDeck2][selecCard2].left.copy())
+              cardFuse = tmp[selecDeck1][selecCard1].left;
+            }
+            if (tmp[selecDeck1][selecCard1].right.equals(tmp[selecDeck2][selecCard2].left)) {
+              bool     = true;
+              bool2    = true;
+              cardAdd  = new CardClass(0, null, false, "<=>", tmp[selecDeck1][selecCard1].left.copy(), tmp[selecDeck2][selecCard2].right.copy())
+              cardFuse = tmp[selecDeck1][selecCard1].right;
+            }
+            if (tmp[selecDeck1][selecCard1].right.equals(tmp[selecDeck2][selecCard2].right)) {
+              bool     = true;
+              bool2    = true;
+              cardAdd  = new CardClass(0, null, false, "<=>", tmp[selecDeck1][selecCard1].left.copy(), tmp[selecDeck2][selecCard2].left.copy())
+              cardFuse = tmp[selecDeck1][selecCard1].right;
+            }
+          }
+          if (bool) {
+            // Sauvegarde du jeu actuel
+            saveGame();
+            cardAdd.id = tmp[finalDeck].length;
+            tmp[finalDeck].push(cardAdd);
+            allFalse(tmp);
+            let tmpDemonstration = [...demonstration];
+            if (bool2) tmpDemonstration.push("$$\\text{On a }"    + cardAdd.left.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardFuse.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardAdd.right.toString() + ".$$");
+            else       tmpDemonstration.push("$$\\text{Puisque }" + cardFuse.toString()     + "\\text{, on a }"                    + cardAdd.toString()                                                                    + "\\text{. }$$");
+            setDemonstration(tmpDemonstration);
+            let tmpTabIndentation = [...tabIndentation];
+            tmpTabIndentation.push(indentationDemonstration);
+            setTabIndentation(tmpTabIndentation);
+            // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
+            setPopupWin(isWin(Math.max(selecDeck1,selecDeck2), tmpDemonstration, tmpTabIndentation));
+          }
+        }
+        else{
           // Si aucune des deux cartes n'a de liaison =>
           if (tmp[selecDeck2][selecCard2].link !== "=>" && tmp[selecDeck1][selecCard1].link !== "=>")
             setMessageErreur("Une des deux cartes doit avoir une liaison principale de type \"=>\" !");
@@ -1079,7 +1152,7 @@ const Game = ({ mode, ex, numero }) => {
         tmpCard1.id = 0;
         tmpCard2.id = 1;
         // Ajoute la nouvelle carte dans le deck le plus haut avec les 2 autres cartes & une liaison "=>"
-        tmp[finalDeck].push(new CardClass(tmp[finalDeck].length,null,false,"=>",tmpCard1,tmpCard2));
+        tmp[finalDeck].push(new CardClass(tmp[finalDeck].length, null, false, "=>", tmpCard1, tmpCard2));
         // Met à jour le jeu & désélectionne toutes les cartes
         allFalse(tmp);
         // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
@@ -1810,7 +1883,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Copie du jeu actuel en format JSON dans le presse-papier */}
       {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
-        {true && <button onClick={getNextMove}>Aide</button>}
+        {false && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
         <button onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"17"} height={"23"}/></button>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
@@ -1845,7 +1918,7 @@ const Game = ({ mode, ex, numero }) => {
               updateGame     = {update}
               indice         = {index}
               addCardFunc    = {addCard}
-              deleteCardFunc = {setPopupDeleteCard}
+              deleteCardFunc = {deleteCard}
               nbDeck         = {game.length}
               mode           = {mode}
               objectif       = {tabObjectif}
@@ -1871,6 +1944,8 @@ const Game = ({ mode, ex, numero }) => {
                 <input type="radio" value="yellow" name="couleur" /> Jaune
                 <input type="radio" value="blue"   name="couleur" /> Bleu
                 <input type="radio" value="orange" name="couleur" /> Orange
+                <input type="radio" value="black"  name="couleur" /> Noir
+                <input type="radio" value="white"  name="couleur" /> Blanc
               </div>
               <button
                 onClick={function () {
@@ -1892,6 +1967,7 @@ const Game = ({ mode, ex, numero }) => {
               <div onChange={choixLiaison}>
                 <input type="radio" value="et" name="liaison" /> et
                 <input type="radio" value="=>" name="liaison" /> {"=>"}
+                <input type="radio" value="<=>" name="liaison" /> {"<=>"}
               </div>
               <button
                 onClick={function () {
@@ -1934,7 +2010,9 @@ const Game = ({ mode, ex, numero }) => {
               <b>Bravo, vous avez gagné !</b>
               <button
                 //onClick={nextExercise}
-                onClick={setPopupWin(false)}
+                onClick={function () {
+                  setPopupWin(false);
+                }}
               >
                 ✖
               </button>
