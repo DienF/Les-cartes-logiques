@@ -60,6 +60,18 @@
       margin-right: 2vh;
       margin-left: 2vh;
     }
+
+    #back, #addAnd, #addImplique, #fuseAnd, #addGoal{
+      height: 35px;
+      width: auto;
+      border-radius: 5px;
+      border: 2px solid lightgray;
+      background-image : linear-gradient( to right, #d4ddf5, #97b4fc );
+    }
+
+    #back:hover, #addAnd:hover, #addImplique:hover, #fuseAnd:hover, #addGoal:hover{
+      border: 2px solid black;
+    }
   }
 
   .message {

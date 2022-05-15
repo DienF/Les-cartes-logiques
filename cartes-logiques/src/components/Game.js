@@ -1882,21 +1882,21 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
         {false && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
-        <button onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"17"} height={"23"}/></button>
+        <button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"17"} height={"23"}/></button>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
-        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"} width={"89"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"} width={"89"} height={"23"}/></button>}
         {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
             est égale à la partie gauche */}
-        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Ajout carte =>"} width={"106"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "addImplique" className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Ajout carte =>"} width={"106"} height={"23"}/></button>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et" */}
-        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}><img src={"img/fusion_carte_et.png"} alt={"Fusion carte et"} width={"106"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "fuseAnd" className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}><img src={"img/fusion_carte_et.png"} alt={"Fusion carte et"} width={"106"} height={"23"}/></button>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <button className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}>Ajout objectif</button>}
+        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}>Ajout objectif</button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
