@@ -121,7 +121,10 @@
     border: 0.80vh solid #102245;
     margin: 0px;
   }
-
+  .card_non{
+    border: 0.80vh solid green;
+    margin: 0px;
+  }
   .card_selec {
     border: 0.65vh solid black;
     margin: 0px;
@@ -176,5 +179,5 @@
       margin-left: 3.5vh;
     }
   }
-  
+
 }

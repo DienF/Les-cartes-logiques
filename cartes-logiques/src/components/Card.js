@@ -18,40 +18,44 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    * @returns {"card_simple"|"card_double"|"card_triple_a"|"card_triple_b"|"card_quadruple"} le nom de la classe
    * correspondant à la carte
    */
-  const getClassType = (game, i, j) => {
-    if (game[i][j].left === null && game[i][j].right === null)
+  const getClassType = (card) => {
+    
+    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
+      return getClassType(card.right);
+    }
+    if (card.left === null && card.right === null)
       return "card_simple";
     if (
-      game[i][j].left        !== null &&
-      game[i][j].right       !== null &&
-      game[i][j].left.left   === null &&
-      game[i][j].left.right  === null &&
-      game[i][j].right.left  === null &&
-      game[i][j].right.right === null
+      card.left        !== null &&
+      card.right       !== null &&
+      card.left.left   === null &&
+      card.left.right  === null &&
+      card.right.left  === null &&
+      card.right.right === null
     ) return "card_double";
     if (
-      game[i][j].left        !== null &&
-      game[i][j].right       !== null &&
-      game[i][j].left.left   === null &&
-      game[i][j].left.right  === null &&
-      game[i][j].right.left  !== null &&
-      game[i][j].right.right !== null
+      card.left        !== null &&
+      card.right       !== null &&
+      card.left.left   === null &&
+      card.left.right  === null &&
+      card.right.left  !== null &&
+      card.right.right !== null
     ) return "card_triple_a";
     if (
-      game[i][j].left        !== null &&
-      game[i][j].right       !== null &&
-      game[i][j].left.left   !== null &&
-      game[i][j].left.right  !== null &&
-      game[i][j].right.left  === null &&
-      game[i][j].right.right === null
+      card.left        !== null &&
+      card.right       !== null &&
+      card.left.left   !== null &&
+      card.left.right  !== null &&
+      card.right.left  === null &&
+      card.right.right === null
     ) return "card_triple_b";
     if (
-      game[i][j].left        !== null &&
-      game[i][j].right       !== null &&
-      game[i][j].left.left   !== null &&
-      game[i][j].left.right  !== null &&
-      game[i][j].right.left  !== null &&
-      game[i][j].right.right !== null
+      card.left        !== null &&
+      card.right       !== null &&
+      card.left.left   !== null &&
+      card.left.right  !== null &&
+      card.right.left  !== null &&
+      card.right.right !== null
     ) return "card_quadruple";
   };
 
@@ -65,19 +69,23 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    *                                      & l'autre fois avec k=1
    * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
    */
-  const getTabClass = (game, i, j, k) => {
-    const className = getClassType(game, i, j);
-    if (className === "card_simple") return "card_simple_h";
-    if (className === "card_double") return "card_simple_h";
-    if (className === "card_triple_a") {
-      if (k === 0) return "card_simple_h";
-      else         return "card_simple_w";
+  const getTabClass = (card,k) => {
+    const className = getClassType(card);
+    let res = "";
+    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
+      res = "card_non ";
     }
-    if (className === "card_triple_b") {
-      if (k === 2) return "card_simple_h";
-      else         return "card_simple_w";
+    if (className.includes("card_simple")) return res += "card_simple_h";
+    if (className.includes("card_double")) return res +="card_simple_h";
+    if (className.includes("card_triple_a")) {
+      if (k === 0) return res +="card_simple_h";
+      else         return res +="card_simple_w";
     }
-    if (className === "card_quadruple") return "card_simple_w";
+    if (className.includes("card_triple_b")) {
+      if (k === 2) return res +="card_simple_h";
+      else         return res +="card_simple_w";
+    }
+    if (className.includes("card_quadruple")) return res +="card_simple_w";
   };
 
   /**
@@ -87,63 +95,72 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    * @param {number}              j - la position de la carte dans le deck
    * @returns {Array<CardClass>} un tableau de cartes
    */
-  const getTab = (game, i, j) => {
-    const className = getClassType(game, i, j);
+  const getTab = (card) => {
+    const className = getClassType(card);
     var tab = [];
-    if (className === "card_simple") {
-      tab.push(game[i][j]);
+    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
+      card = card.right;
     }
-    if (className === "card_double") {
-      tab.push(game[i][j].left);
-      tab.push(game[i][j].right);
+    if (className.includes("card_simple")) {
+      tab.push(card);
     }
-    if (className === "card_triple_a") {
-      tab.push(game[i][j].left);
-      tab.push(game[i][j].right.left);
-      tab.push(game[i][j].right.right);
+    else if (className.includes("card_double")) {
+      tab.push(card.left);
+      tab.push(card.right);
     }
-    if (className === "card_triple_b") {
-      tab.push(game[i][j].left.left);
-      tab.push(game[i][j].left.right);
-      tab.push(game[i][j].right);
+    else if (className.includes("card_triple_a")) {
+      tab.push(card.left);
+      tab.push(card.right.left);
+      tab.push(card.right.right);
     }
-    if (className === "card_quadruple") {
-      tab.push(game[i][j].left.left);
-      tab.push(game[i][j].right.left);
-      tab.push(game[i][j].left.right);
-      tab.push(game[i][j].right.right);
+    else if (className.includes("card_triple_b")) {
+      tab.push(card.left.left);
+      tab.push(card.left.right);
+      tab.push(card.right);
+    }
+    else if (className.includes("card_quadruple")) {
+      tab.push(card.left.left);
+      tab.push(card.right.left);
+      tab.push(card.left.right);
+      tab.push(card.right.right);
     }
     return tab;
   };
 
+  const getGoodCard = (card) =>{
+    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
+      return card.right;
+    }
+    return card;
+  }
   return (
     <div className="card">
       <GameTab.Consumer>
         {(game) => {
           return (
             <div
-              className={getClassType(game, deckIndice, cardIndice)}
+              className={getClassType(game[deckIndice][cardIndice])}
               onClick={handleClick}
             >
-              {getTab(game, deckIndice, cardIndice).map(
+              {getTab(game[deckIndice][cardIndice]).map(
                 (cardAffiche, index) => (
                   <div key={index.toString()} className={"card"+index.toString()}>
                     <div
                       style={{ backgroundColor: cardAffiche.color }}
                       className={
-                        getTabClass(game, deckIndice, cardIndice, index) +
+                        getTabClass(game[deckIndice][cardIndice], index) +
                         (cardAffiche.active ? " card_selec" : "") +
                         ((cardHelp[0] === deckIndice && cardHelp[1] === cardIndice) || (cardHelp2[0] === deckIndice && cardHelp2[1] === cardIndice) ? " card_help" : "")
                       }
                     ></div>
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_double"    &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_a"  &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
-                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_a"  &&(<div className="affix_v">{game[deckIndice][cardIndice].right.link}</div>)}
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_triple_b"  &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
-                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_triple_b"  &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
-                    {index === 0 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].left.link}</div>)}
-                    {index === 1 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_v">{game[deckIndice][cardIndice].right.link}</div>)}
-                    {index === 2 && getClassType(game, deckIndice, cardIndice) === "card_quadruple" &&(<div className="affix_h">{game[deckIndice][cardIndice].link}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_double"    &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
+                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).right.link}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).left.link}</div>)}
+                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).left.link}</div>)}
+                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).right.link}</div>)}
+                    {index === 2 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
                   </div>
                 )
               )}
