@@ -44,18 +44,22 @@ class CardClass {
         return "\\textit{Bleue}";
       case "orange":
         return "\\textit{Orange}";
+      case "black":
+        return "\\textit{True}";
+      case "white":
+        return "\\textit{False}";
       default:
-        return "Non definie"
+        return "Non definie";
     }
   }
 
   /**
    * Renvoie un objet {@link CardClass} sous la forme d'un string.
-   * Carte simple : (couleur)
-   * Carte double : (couleur) liaison (couleur)
-   * Carte triple : (couleur) liaison ((couleur) liaison (couleur))
-   * Carte quadruple : ((couleur) liaison (couleur)) liaison ((couleur) liaison (couleur))
-   * @example ((rouge) ∧ (jaune)) ⇒ (bleu)
+   * Carte simple : "couleur"
+   * Carte double : "(couleur liaison couleur)"
+   * Carte triple : "(couleur liaison (couleur liaison (couleur))"
+   * Carte quadruple : ((couleur liaison couleur) liaison (couleur liaison couleur))
+   * @example "(rouge∧jaune) ⇒ bleu"
    * @returns {string} un string plus lisible
    */
   toString() {
@@ -816,7 +820,7 @@ const Game = ({ mode, ex, numero }) => {
           tmp = delDeck(tmp, currentDeck);
           // Met à jour la table des objectifs
           createTabObj(tmp);
-          tmpDemonstration.push("On a " + tmpCard.toString() + ".");
+          tmpDemonstration.push("$$\\text{On a }" + tmpCard.toString() + ".$$");
           setDemonstration(tmpDemonstration);
           tmpTabIndentation.push(indentationDemonstration-1);
           setTabIndentation(tmpTabIndentation);
@@ -1241,7 +1245,7 @@ const Game = ({ mode, ex, numero }) => {
    *    et la droite dans l'objectif et défini cet objectif comme un objectif secondaire. 
    *    Le reste : ajoute la partie gauche dans l'objectif et ne le considère pas comme un objectif secondaire.
    */
-  const addObjectif = () => {
+   const addObjectif = () => {
     if(!navigation){
       // S'il n'y a qu'une carte de sélectionné
       if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
@@ -1294,7 +1298,7 @@ const Game = ({ mode, ex, numero }) => {
                 // Met à jour le tableau objectif
                 setTabObjectif(tmpObj);
                 let tmpDemonstration = [...demonstration];
-                tmpDemonstration.push("Supposons "+tmpCard.toString()+". Montrons "+secondObjectif.toString()+".");
+                tmpDemonstration.push("$$\\text{Supposons }" + tmpCard.toString()  +"\\text{. Montrons }" + secondObjectif.toString() + ".$$");
                 setDemonstration(tmpDemonstration);
                 let tmpTabIndentation = [...tabIndentation];
                 tmpTabIndentation.push(indentationDemonstration);
@@ -1317,7 +1321,7 @@ const Game = ({ mode, ex, numero }) => {
                   tmp[tmp.length-1] = tmpObjectif;
                   // Met à jour le jeu & désélectionne toutes les cartes
                   let tmpDemonstration = [...demonstration];
-                  tmpDemonstration.push("Montrons " + secondObjectif.toString() +".");
+                  tmpDemonstration.push("\\text{Montrons }" + secondObjectif.toString() +".$$");
                   setDemonstration(tmpDemonstration);
                   let tmpTabIndentation = [...tabIndentation];
                   tmpTabIndentation.push(indentationDemonstration);
@@ -1920,7 +1924,7 @@ const Game = ({ mode, ex, numero }) => {
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}>Ajout objectif</button>}
+        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Ajout objectif"} width={"30"} height={"23"}/></button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
