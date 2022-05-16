@@ -44,6 +44,10 @@ class CardClass {
         return "\\textit{Bleue}";
       case "orange":
         return "\\textit{Orange}";
+      case "black":
+        return "\\textit{True}";
+      case "white":
+        return "\\textit{False}";
       default:
         return "Non definie"
     }
@@ -277,7 +281,7 @@ const Game = ({ mode, ex, numero }) => {
 
   const [indentationDemonstration, setIndentationDemonstration] = useState(0);
 
-  const [tabIndentation , setTabIndentation] = useState([0]);
+  const [tabIndentation, setTabIndentation] = useState([0]);
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
@@ -1270,7 +1274,7 @@ const Game = ({ mode, ex, numero }) => {
               // Met à jour le tableau objectif
               setTabObjectif(tmpObj);
               let tmpDemonstration = [...demonstration];
-              tmpDemonstration.push("$$\\text{Supposons }" + tmpCard.toString()  +"$$\\text{. Montrons }" + secondObjectif.toString() + ".$$");
+              tmpDemonstration.push("$$\\text{Supposons }" + tmpCard.toString()  +"\\text{. Montrons }" + secondObjectif.toString() + ".$$");
               setDemonstration(tmpDemonstration);
               let tmpTabIndentation = [...tabIndentation];
               tmpTabIndentation.push(indentationDemonstration);
@@ -1293,7 +1297,7 @@ const Game = ({ mode, ex, numero }) => {
                 tmp[tmp.length-1] = tmpObjectif;
                 // Met à jour le jeu & désélectionne toutes les cartes
                 let tmpDemonstration = [...demonstration];
-                tmpDemonstration.push("Montrons " + secondObjectif.toString() +".");
+                tmpDemonstration.push("\\text{Montrons }" + secondObjectif.toString() +".$$");
                 setDemonstration(tmpDemonstration);
                 let tmpTabIndentation = [...tabIndentation];
                 tmpTabIndentation.push(indentationDemonstration);
