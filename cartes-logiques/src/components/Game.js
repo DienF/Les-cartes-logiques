@@ -1871,7 +1871,6 @@ const Game = ({ mode, ex, numero }) => {
    */
   const demonstrationClickHandler = (event) => {
     var indiceRetour = parseInt(event.currentTarget.id,10);
-    console.log(indiceRetour);
     if (indiceRetour !== lastGame.length) {
       setNavigation(true);
       setSavedGame(copyGame());
