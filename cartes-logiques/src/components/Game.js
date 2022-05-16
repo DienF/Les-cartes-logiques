@@ -805,7 +805,7 @@ const Game = ({ mode, ex, numero }) => {
           tmp = delDeck(tmp, currentDeck);
           // Met à jour la table des objectifs
           createTabObj(tmp);
-          tmpDemonstration.push("On a " + tmpCard.toString() + ".");
+          tmpDemonstration.push("$$\\text{On a }" + tmpCard.toString() + ".$$");
           setDemonstration(tmpDemonstration);
           tmpTabIndentation.push(indentationDemonstration-1);
           setTabIndentation(tmpTabIndentation);
@@ -1270,7 +1270,7 @@ const Game = ({ mode, ex, numero }) => {
               // Met à jour le tableau objectif
               setTabObjectif(tmpObj);
               let tmpDemonstration = [...demonstration];
-              tmpDemonstration.push("Supposons "+tmpCard.toString()+". Montrons "+secondObjectif.toString()+".");
+              tmpDemonstration.push("$$\\text{Supposons }" + tmpCard.toString()  +"$$\\text{. Montrons }" + secondObjectif.toString() + ".$$");
               setDemonstration(tmpDemonstration);
               let tmpTabIndentation = [...tabIndentation];
               tmpTabIndentation.push(indentationDemonstration);
