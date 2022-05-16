@@ -800,7 +800,10 @@ const Game = ({ mode, ex, numero }) => {
       // Si une carte liée à cet objectif est trouvée l'objectif est validé
       if (card.equals(objectif)) {
         // Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
-        if (currentDeck === 0) bool = true;
+        if (currentDeck === 0){
+          bool = true;
+          setSavedGame(copyGame());
+        } 
         else {
           // Si c'est un objectif secondaire : copie du jeu actuel
           let tmp = [...game];
@@ -864,6 +867,7 @@ const Game = ({ mode, ex, numero }) => {
         setIndentationDemonstration(createTabObj(tmpFutureGame)-1);
         // Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
         allFalse(tmpFutureGame);
+        setSavedGame(tmpFutureGame);
         let demonstrationTmp = [...demonstration];
         demonstrationTmp.pop();
         setDemonstration(demonstrationTmp);
@@ -933,6 +937,7 @@ const Game = ({ mode, ex, numero }) => {
           tmp[deckI][tmp[deckI].length-1].id = tmp[deckI].length-1;
           // Met à jour le jeu & désélectionne toutes les cartes
           allFalse(tmp);
+          setSavedGame(tmp);
           let tmpDemonstration = [...demonstration];
           tmpDemonstration.push("$$\\text{On a }" + game[deckI][cardI].left.toString() + "\\text{. On a }" +game[deckI][cardI].right.toString() + ".$$");
           setDemonstration(tmpDemonstration);
@@ -1001,6 +1006,7 @@ const Game = ({ mode, ex, numero }) => {
             tmp[finalDeck][tmp[finalDeck].length-1].id = tmp[finalDeck].length-1;
             // Met à jour le jeu & désélectionne toutes les cartes
             allFalse(tmp);
+            setSavedGame(tmp);
             let tmpDemonstration = [...demonstration];
             tmpDemonstration.push("$$\\text{Puisque }" + tmp[deckCarteComplex][cardCarteComplex].left + "\\text{, on a }" + tmp[deckCarteComplex][cardCarteComplex].right +"\\text{. }$$");
             setDemonstration(tmpDemonstration);
@@ -1071,6 +1077,7 @@ const Game = ({ mode, ex, numero }) => {
               cardAdd.id = tmp[finalDeck].length;
               tmp[finalDeck].push(cardAdd);
               allFalse(tmp);
+              setSavedGame(tmp);
               let tmpDemonstration = [...demonstration];
               if (bool2) tmpDemonstration.push("$$\\text{On a }"    + cardAdd.left.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardFuse.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardAdd.right.toString() + ".$$");
               else       tmpDemonstration.push("$$\\text{Puisque }" + cardFuse.toString()     + "\\text{, on a }"                    + cardAdd.toString()                                                                    + "\\text{. }$$");
@@ -1135,6 +1142,7 @@ const Game = ({ mode, ex, numero }) => {
             tmp[finalDeck].push(new CardClass(tmp[finalDeck].length, null, false, "et", tmpCard1, tmpCard2));
             // Met à jour le jeu & désélectionne toutes les cartes
             allFalse(tmp);
+            setSavedGame(tmp);
             let tmpDemonstration = [...demonstration];
             tmpDemonstration.push("$$\\text{On a }" + tmpCard1.toString() + "\\text{ }\\land\\text{ }" + tmpCard2.toString()+". $$");
             setDemonstration(tmpDemonstration);
@@ -1186,6 +1194,7 @@ const Game = ({ mode, ex, numero }) => {
         tmp[finalDeck].push(new CardClass(tmp[finalDeck].length, null, false, "=>", tmpCard1, tmpCard2));
         // Met à jour le jeu & désélectionne toutes les cartes
         allFalse(tmp);
+        setSavedGame(tmp);
         // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
         setPopupWin(isWin(Math.max(selecDeck1,selecDeck2)));
       }
@@ -1306,6 +1315,7 @@ const Game = ({ mode, ex, numero }) => {
                 setIndentationDemonstration(indentationDemonstration+1);
                 // Met à jour le jeu & désélectionne toutes les cartes
                 allFalse(tmp);
+                setSavedGame(tmp);
               }
               else {
                 // Si la carte est pas dans le deck objectif 1 si la partie gauche de la carte a une liaison => 
@@ -1327,6 +1337,7 @@ const Game = ({ mode, ex, numero }) => {
                   tmpTabIndentation.push(indentationDemonstration);
                   setTabIndentation(tmpTabIndentation);
                   allFalse(tmp);
+                  setSavedGame(tmp);
                 }
                 else setMessageErreur("La partie gauche de l'objectif secondaire doit avoir une liaison \"=>\" !");
               }
@@ -1873,7 +1884,6 @@ const Game = ({ mode, ex, numero }) => {
     var indiceRetour = parseInt(event.currentTarget.id,10);
     if (indiceRetour !== lastGame.length) {
       setNavigation(true);
-      setSavedGame(copyGame());
       let tmpLastGame = [...lastGame];
       let tmpSavedGame  = tmpLastGame[indiceRetour];
       // Initialise le futur tableau de jeu
