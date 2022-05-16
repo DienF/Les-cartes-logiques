@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
+const getPage = (location) => {
+  console.log(location);
+  switch (location) {
+    case "/":
+      return "Accueil";
+    case "/About":
+      return "A propos";
+    default:
+      return "";
+  }
+}
+
 const Navigation = () => {
   const [ex, setEx] = useState();
   useEffect(() => {
@@ -40,7 +52,6 @@ const Navigation = () => {
                   </li>
                   ))}
                 </ul>
-                
               </li>
               <li>
                 <NavLink exact="true" to="/ExerciseTutoriel1">
@@ -56,6 +67,9 @@ const Navigation = () => {
           </li>
       </ul>
       <h1>Les Cartes Logiques</h1>
+      <div id="titrePage">
+        {window.location.pathname}
+      </div>
     </div>
     
   );
