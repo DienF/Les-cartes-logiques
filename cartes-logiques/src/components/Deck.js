@@ -50,7 +50,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode, ob
       <div className="deck">
         {indice !== nbDeck-1 && indice !==0 && (<h3>LPU {indice}</h3>)}
         {indice !== nbDeck-1 && indice ===0 && (<h3>LPU</h3>)}
-        {indice === nbDeck-1 && (<h3>Objectifs</h3>)}
+        {indice === nbDeck-1 && (<h3>Objectifs <img src={"img/objectif.png"} alt={"Ajout objectif"} width={"16"} height={"23"}/></h3>)}
         {mode === "Create" && (<button onClick={addCardToDeck}>Ajouter une carte</button>)}
         <br/>
         {mode === "Create" && (<button onClick={deleleCardToDeck}>Supprimer une carte</button>)}

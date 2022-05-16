@@ -49,17 +49,17 @@ class CardClass {
       case "white":
         return "\\textit{False}";
       default:
-        return "Non definie"
+        return "Non definie";
     }
   }
 
   /**
    * Renvoie un objet {@link CardClass} sous la forme d'un string.
-   * Carte simple : (couleur)
-   * Carte double : (couleur) liaison (couleur)
-   * Carte triple : (couleur) liaison ((couleur) liaison (couleur))
-   * Carte quadruple : ((couleur) liaison (couleur)) liaison ((couleur) liaison (couleur))
-   * @example ((rouge) ∧ (jaune)) ⇒ (bleu)
+   * Carte simple : "couleur"
+   * Carte double : "(couleur liaison couleur)"
+   * Carte triple : "(couleur liaison (couleur liaison (couleur))"
+   * Carte quadruple : ((couleur liaison couleur) liaison (couleur liaison couleur))
+   * @example "(rouge∧jaune) ⇒ bleu"
    * @returns {string} un string plus lisible
    */
   toString() {
@@ -1900,7 +1900,7 @@ const Game = ({ mode, ex, numero }) => {
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}>Ajout objectif</button>}
+        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Ajout objectif"} width={"30"} height={"23"}/></button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
