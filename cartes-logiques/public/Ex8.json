@@ -2,11 +2,11 @@
  [
   {
    "left": {
-    "color": "black"
+    "color": "orange"
    },
    "link": "=>",
    "right": {
-    "color": "red"
+    "color": "white"
    }
   }
  ],

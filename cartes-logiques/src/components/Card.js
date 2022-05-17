@@ -20,8 +20,8 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    */
   const getClassType = (card) => {
     
-    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
-      return getClassType(card.right);
+    if(card.left !== null && card.link === "=>" && card.right.color === "white" ){
+      return getClassType(card.left);
     }
     if (card.left === null && card.right === null)
       return "card_simple";
@@ -72,7 +72,7 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   const getTabClass = (card,k) => {
     const className = getClassType(card);
     let res = "";
-    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
+    if(card.right !== null && card.link === "=>" && card.right.color === "white" ){
       res = "card_non ";
     }
     if (className.includes("card_simple")) return res += "card_simple_h";
@@ -98,8 +98,8 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   const getTab = (card) => {
     const className = getClassType(card);
     var tab = [];
-    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
-      card = card.right;
+    if(card.right !== null && card.link === "=>" && card.right.color === "white" ){
+      card = card.left;
     }
     if (className.includes("card_simple")) {
       tab.push(card);
@@ -128,8 +128,8 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   };
 
   const getGoodCard = (card) =>{
-    if(card.left !== null && card.link === "=>" && card.left.color === "black" ){
-      return card.right;
+    if(card.right !== null && card.link === "=>" && card.right.color === "white" ){
+      return card.left;
     }
     return card;
   }
