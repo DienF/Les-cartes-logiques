@@ -281,6 +281,8 @@ const Game = ({ mode, ex, numero }) => {
 
   const [indentationDemonstration, setIndentationDemonstration] = useState(0);
 
+  const [tabIndiceDemonstration , setTabIndiceDemonstration] = useState();
+
   const [navigation , setNavigation] = useState();
 
   const [savedGame , setSavedGame] = useState();
@@ -304,8 +306,10 @@ const Game = ({ mode, ex, numero }) => {
     setGame([[], []]);
     setLastGame([]);
     setIndentationDemonstration(0);
+    setDemonstration([]);
     setTabIndentation([0]);
     setNavigation(false);
+    setTabIndiceDemonstration([0]);
     
     if (ex[numero] !== undefined && numero !== undefined && mode !== "Create") {
       try {      
@@ -788,13 +792,15 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} numObjectif - le numero de l'objectif
    * @returns {true|false} true ou false
    */
-  const isWin = (numObjectif,tmpDemonstration,tmpTabIndentation) => {
+  const isWin = (numObjectif,tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration) => {
     // Objectif à vérifier
     const objectif = game[game.length-1][tabObjectif[numObjectif][1]];
     // Indice du deck lié à l'objectif
     let currentDeck = numObjectif;
     // Variable que l'on va retourner (false par défaut)
     let bool = false;
+    //copie du jeu actuel
+    let tmp = [...game];
     // Parcourt le deck lié à l'objectif
     game[currentDeck].forEach((card) => {
       // Si une carte liée à cet objectif est trouvée l'objectif est validé
@@ -802,11 +808,11 @@ const Game = ({ mode, ex, numero }) => {
         // Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
         if (currentDeck === 0){
           bool = true;
-          setSavedGame(copyGame());
+          
         } 
         else {
-          // Si c'est un objectif secondaire : copie du jeu actuel
-          let tmp = [...game];
+          // Si c'est un objectif secondaire :
+          
           // Copie de la carte qui a servi à créer l'objectif secondaire
           let tmpCard = game[game.length-1][findObjectifRelative(objectif)].copy();
           tmpCard.id = tmp[tabObjectif[currentDeck][1]-1].length;
@@ -825,6 +831,8 @@ const Game = ({ mode, ex, numero }) => {
           createTabObj(tmp);
           tmpDemonstration.push("$$\\text{On a }" + tmpCard.toString() + ".$$");
           setDemonstration(tmpDemonstration);
+          tmpTabIndiceDemonstration.push(tmpTabIndiceDemonstration[tmpTabIndiceDemonstration.length-1]);
+          setTabIndiceDemonstration(tmpTabIndiceDemonstration);
           tmpTabIndentation.push(indentationDemonstration-1);
           setTabIndentation(tmpTabIndentation);
           setIndentationDemonstration(indentationDemonstration-1);
@@ -838,6 +846,7 @@ const Game = ({ mode, ex, numero }) => {
         }
       }
     })
+    setSavedGame(tmp);
     // Retourne true si l'objectif principal est vrai, sinon retourne false
     return bool;
   }
@@ -941,11 +950,14 @@ const Game = ({ mode, ex, numero }) => {
           let tmpDemonstration = [...demonstration];
           tmpDemonstration.push("$$\\text{On a }" + game[deckI][cardI].left.toString() + "\\text{. On a }" +game[deckI][cardI].right.toString() + ".$$");
           setDemonstration(tmpDemonstration);
+          let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+          tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
+          setTabIndiceDemonstration(tmpTabIndiceDemonstration);
           let tmpTabIndentation = [...tabIndentation];
           tmpTabIndentation.push(indentationDemonstration);
           setTabIndentation(tmpTabIndentation);
           // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-          setPopupWin(isWin(selecDeck1,tmpDemonstration,tmpTabIndentation));
+          setPopupWin(isWin(selecDeck1,tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration));
         }
         else setMessageErreur("La carte sélectionnée doit avoir une liaison principale de type \"et\" !");
       }
@@ -1010,11 +1022,14 @@ const Game = ({ mode, ex, numero }) => {
             let tmpDemonstration = [...demonstration];
             tmpDemonstration.push("$$\\text{Puisque }" + tmp[deckCarteComplex][cardCarteComplex].left + "\\text{, on a }" + tmp[deckCarteComplex][cardCarteComplex].right +"\\text{. }$$");
             setDemonstration(tmpDemonstration);
+            let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+            tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
+            setTabIndiceDemonstration(tmpTabIndiceDemonstration);
             let tmpTabIndentation = [...tabIndentation];
             tmpTabIndentation.push(indentationDemonstration);
             setTabIndentation(tmpTabIndentation);
             // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-            setPopupWin(isWin(Math.max(selecDeck1,selecDeck2),tmpDemonstration,tmpTabIndentation));
+            setPopupWin(isWin(Math.max(selecDeck1,selecDeck2),tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration));
           }
           else if (tmp[selecDeck2][selecCard2].link === "<=>" || tmp[selecDeck1][selecCard1].link === "<=>") {
             bool = false;
@@ -1082,6 +1097,9 @@ const Game = ({ mode, ex, numero }) => {
               if (bool2) tmpDemonstration.push("$$\\text{On a }"    + cardAdd.left.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardFuse.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardAdd.right.toString() + ".$$");
               else       tmpDemonstration.push("$$\\text{Puisque }" + cardFuse.toString()     + "\\text{, on a }"                    + cardAdd.toString()                                                                    + "\\text{. }$$");
               setDemonstration(tmpDemonstration);
+              let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+              tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
+              setTabIndiceDemonstration(tmpTabIndiceDemonstration);
               let tmpTabIndentation = [...tabIndentation];
               tmpTabIndentation.push(indentationDemonstration);
               setTabIndentation(tmpTabIndentation);
@@ -1146,12 +1164,15 @@ const Game = ({ mode, ex, numero }) => {
             let tmpDemonstration = [...demonstration];
             tmpDemonstration.push("$$\\text{On a }" + tmpCard1.toString() + "\\text{ }\\land\\text{ }" + tmpCard2.toString()+". $$");
             setDemonstration(tmpDemonstration);
+            let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+            tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
+            setTabIndiceDemonstration(tmpTabIndiceDemonstration);
             let tmpTabIndentation = [...tabIndentation];
             let tmpIndentationDemonstration = indentationDemonstration;
             tmpTabIndentation.push(tmpIndentationDemonstration);
             setTabIndentation(tmpTabIndentation);
             // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-            setPopupWin(isWin(Math.max(selecDeck1, selecDeck2),tmpDemonstration,tmpTabIndentation));
+            setPopupWin(isWin(Math.max(selecDeck1, selecDeck2),tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration));
           }
           else {
             if (bool) setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
@@ -1309,6 +1330,9 @@ const Game = ({ mode, ex, numero }) => {
                 let tmpDemonstration = [...demonstration];
                 tmpDemonstration.push("$$\\text{Supposons }" + tmpCard.toString()  +"\\text{. Montrons }" + secondObjectif.toString() + ".$$");
                 setDemonstration(tmpDemonstration);
+                let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+                tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
+                setTabIndiceDemonstration(tmpTabIndiceDemonstration);
                 let tmpTabIndentation = [...tabIndentation];
                 tmpTabIndentation.push(indentationDemonstration);
                 setTabIndentation(tmpTabIndentation);
@@ -1333,6 +1357,9 @@ const Game = ({ mode, ex, numero }) => {
                   let tmpDemonstration = [...demonstration];
                   tmpDemonstration.push("$$\\text{Montrons }" + secondObjectif.toString() +".$$");
                   setDemonstration(tmpDemonstration);
+                  let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+                  tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
+                  setTabIndiceDemonstration(tmpTabIndiceDemonstration);
                   let tmpTabIndentation = [...tabIndentation];
                   tmpTabIndentation.push(indentationDemonstration);
                   setTabIndentation(tmpTabIndentation);
@@ -1884,7 +1911,8 @@ const Game = ({ mode, ex, numero }) => {
    * @param {Event} event - on utilise event.target.id 
    */
   const demonstrationClickHandler = (event) => {
-    var indiceRetour = parseInt(event.currentTarget.id,10);
+    let indiceRecu = parseInt(event.currentTarget.id,10);
+    let indiceRetour = tabIndiceDemonstration[indiceRecu];
     if (indiceRetour !== lastGame.length) {
       setNavigation(true);
       let tmpLastGame = [...lastGame];
