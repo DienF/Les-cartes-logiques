@@ -815,7 +815,7 @@ const Game = ({ mode, ex, numero }) => {
           // Supprime l'objectif secondaire
           tmp[tmp.length-1] = delCard(tmp[tmp.length-1],tabObjectif[currentDeck][1]);
           // Vérifie si l'objectif a un objectif lié
-          if (tabObjectif[currentDeck][2]) {
+          if (currentDeck !== 1 && tabObjectif[currentDeck][2]) {
             // Si oui supprime également l'objectif qui lui est lié
             tmp[tmp.length-1] = delCard(tmp[tmp.length-1], findObjectifRelative(objectif));
           }
@@ -1331,7 +1331,7 @@ const Game = ({ mode, ex, numero }) => {
                   tmp[tmp.length-1] = tmpObjectif;
                   // Met à jour le jeu & désélectionne toutes les cartes
                   let tmpDemonstration = [...demonstration];
-                  tmpDemonstration.push("\\text{Montrons }" + secondObjectif.toString() +".$$");
+                  tmpDemonstration.push("$$\\text{Montrons }" + secondObjectif.toString() +".$$");
                   setDemonstration(tmpDemonstration);
                   let tmpTabIndentation = [...tabIndentation];
                   tmpTabIndentation.push(indentationDemonstration);
@@ -1745,7 +1745,10 @@ const Game = ({ mode, ex, numero }) => {
       tmp[i] = [];
       for (var j = 0 ; j < game[i].length ; j++) {
         // Ajoute une copie de la carte dans le deck
-        tmp[i].push(game[i][j].copy());
+        try {
+          tmp[i].push(game[i][j].copy());
+        } catch (error) {
+        }
       }
     }
     // Retourne le nouveau tableau
