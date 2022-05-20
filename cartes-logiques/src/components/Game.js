@@ -2081,6 +2081,11 @@ const Game = ({ mode, ex, numero }) => {
               >
                 ✖
               </button>
+              <div className="demonstration-win">
+                {demonstration.map((element, index) => {
+                  return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20 }} ><Latex >{element}</Latex></div>
+                })}
+              </div>
             </>
           }
         />
