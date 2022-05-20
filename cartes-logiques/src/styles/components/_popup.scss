@@ -10,7 +10,6 @@
   .bigbox{
     position: relative;
     margin: 0 auto;
-    width: 50%;
     height: auto;
   }
   
@@ -45,5 +44,7 @@
     }
     .demonstration-win {
       text-align: left;
+      background-color: #F5CBA0;
+      border : 1px solid #A53010;
     }
   }

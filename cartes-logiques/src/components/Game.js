@@ -310,6 +310,7 @@ const Game = ({ mode, ex, numero }) => {
     setTabIndentation([0]);
     setNavigation(false);
     setTabIndiceDemonstration([0]);
+    setPopupWin(false);
     
     if (ex[numero] !== undefined && numero !== undefined && mode !== "Create") {
       try {      
@@ -1996,11 +1997,18 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affichage de la démonstration de logique mathématique de l'exercice */}
       <div className="demonstration">
         {demonstration.map((element, index) => {
-            return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 }} ><Latex >{element}</Latex></div>
+          if(index === 1){
+            return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 , marginTop : 20 }} ><Latex >{element}</Latex></div>
+          }
+          else{
+            return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
+          }
+
         })}
       </div>
       {popupAddCard && (
         <Popup
+          size = {50}
           content={
             <>
               <b>Choisissez une couleur</b>
@@ -2026,6 +2034,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Popup disponible en mode création quand on sélectionne 2 cartes pour choisir la liaison de la future carte */}
       {popupFusion && (
         <Popup
+          size = {50}
           content={
             <>
               <b>Choisissez une liaison</b>
@@ -2048,6 +2057,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Popup disponible en mode création pour supprimer une carte avec un bouton qui lui est dédié */}
       {popupDeleteCard && !(selecCard1 === -1 || selecDeck1 === -1) && (
         <Popup
+          size = {50}
           content={
             <>
               <b>
@@ -2070,6 +2080,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Popup de victoire quand on réussit l'objectif principal */}
       {popupWin && (
         <Popup
+          size = {demonstration[0].length/5}
           content={
             <>
               <b>Bravo, vous avez gagné !</b>
@@ -2083,7 +2094,13 @@ const Game = ({ mode, ex, numero }) => {
               </button>
               <div className="demonstration-win">
                 {demonstration.map((element, index) => {
-                  return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20 }} ><Latex >{element}</Latex></div>
+                  if(index === 1){
+                    return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20 , marginTop : 20 }} ><Latex >{element}</Latex></div>
+                  }
+                  else{
+                    return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
+                  }
+                  
                 })}
               </div>
             </>
