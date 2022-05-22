@@ -1992,8 +1992,8 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affichage de la démonstration de logique mathématique de l'exercice */}
       <div className="demonstration">
         {demonstration.map((element, index) => {
-          if (index === 1) return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20, marginTop : 20 }} ><Latex >{element}</Latex></div>
-          else             return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
+          if (index === 0) return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{paddingTop : 5 }} ><Latex >{element}</Latex></div>
+          else             return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} ><Latex >{element}</Latex></div>
         })}
       </div>
       {popupAddCard && (

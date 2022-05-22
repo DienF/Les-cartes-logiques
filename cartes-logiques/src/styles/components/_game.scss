@@ -103,9 +103,17 @@
   }
   .demonstration {
     grid-area: d;
-    background: white;
+    background-image: url("../../../public/img/FondLigneCahier.png");
+    border-radius: 5px;
     color : black;
+    margin: auto;
     margin-top: 50px;
+  
+
+    div {
+      padding: 0px 10px 5px 10px;
+      background : rgba(255,255,255,0.5);
+    }
 
     div {
       cursor: pointer;
