@@ -919,7 +919,7 @@ const Game = ({ mode, ex, numero }) => {
    * Si toutes les conditions énumérées au-dessus sont respectées les parties gauche et droite de la carte sont ajoutées au Deck.
    */
   const addCardAnd = () => {
-    if(!navigation){
+    if (!navigation) {
       // Si une seule carte est sélectionnée
       if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
         /** Prend la carte qui est sélectionnée.
@@ -929,7 +929,7 @@ const Game = ({ mode, ex, numero }) => {
         let cardI = Math.max(selecCard1, selecCard2);
         // La carte sélectionnée doit avoir la liaison principal "et"
         if (game[deckI][cardI].link === "et") {
-          if(!containCard(game,deckI,game[deckI][cardI].left) && !containCard(game,deckI,game[deckI][cardI].left)){
+          if (!containCard(game,deckI,game[deckI][cardI].left) && !containCard(game,deckI,game[deckI][cardI].left)) {
             // Sauvegarde du jeu actuel
             saveGame();
             // Copie du jeu actuel
@@ -955,9 +955,7 @@ const Game = ({ mode, ex, numero }) => {
             // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
             setPopupWin(isWin(selecDeck1, tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration));
           }
-          else{
-            error("Les Cartes que vous voulez ajouter existe deja !");
-          }
+          else error("Les cartes que vous voulez ajouter existe déjà !");
         }
         else error("La carte sélectionnée doit avoir une liaison principale de type \"et\" !");
       }
@@ -1034,7 +1032,7 @@ const Game = ({ mode, ex, numero }) => {
               setPopupWin(isWin(Math.max(selecDeck1, selecDeck2), tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration));
             }
             else{
-              error("La Carte que vous voulez ajouter existe deja !");
+              error("La carte que vous voulez ajouter existe déjà !");
             } 
           }
           else if (tmp[selecDeck2][selecCard2].link === "<=>" || tmp[selecDeck1][selecCard1].link === "<=>") {
@@ -1113,19 +1111,17 @@ const Game = ({ mode, ex, numero }) => {
                 // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
                 setPopupWin(isWin(Math.max(selecDeck1, selecDeck2), tmpDemonstration, tmpTabIndentation));
               }
-              else{
-                error("La Carte que vous voulez ajouter existe deja !");
-              } 
+              else error("La carte que vous voulez ajouter existe déjà !");
             }
           }
-          else{
-            // Si aucune des deux cartes n'a de liaison =>
+          else {
+            // Si aucune des 2 cartes n'a de liaison =>
             if (tmp[selecDeck2][selecCard2].link !== "=>" && tmp[selecDeck1][selecCard1].link !== "=>")
               error("Une des deux cartes doit avoir une liaison principale de type \"=>\" !");
             else error("La partie gauche de la carte \"=>\" doit être égale à la deuxième carte sélectionnée !")
           }
         }
-        else error("Vous ne pouvez pas utilisé une carte de l'objectif avec ce bouton !");
+        else error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
       }
       else error("Vous devez sélectionner deux cartes !");
     }
@@ -1160,7 +1156,7 @@ const Game = ({ mode, ex, numero }) => {
            *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
            */
           if (bool && tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
-            if(!containCard(game,finalDeck,new CardClass(0,null,false,"et",tmp[selecDeck1][selecCard1],tmp[selecDeck2][selecCard2]))){
+            if (!containCard(game, finalDeck, new CardClass(0, null, false, "et", tmp[selecDeck1][selecCard1], tmp[selecDeck2][selecCard2]))) {
               // Sauvegarde du jeu actuel
               saveGame();
               // Copie les 2 cartes sélectionnées
@@ -1186,20 +1182,17 @@ const Game = ({ mode, ex, numero }) => {
               // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
               setPopupWin(isWin(Math.max(selecDeck1, selecDeck2), tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration));
             }
-            else{
-              error("La Carte que vous voulez ajouter existe deja !");
-            } 
+            else error("La carte que vous voulez ajouter existe déjà !");
           }
           else {
             if (bool) error("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
             else      error("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
           }
         }
-        else error("Vous ne pouvez pas utilisé une carte de l'objectif avec ce bouton !");
+        else error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
       }
       else error("Vous devez sélectionner deux cartes !");
     }
-
   }
 
   /**
@@ -1389,7 +1382,7 @@ const Game = ({ mode, ex, numero }) => {
           }
           else error("Cet objectif existe déjà !");
         }
-        else error("Le premier objectif secondaire doit être créé avec l'objectif principal !");
+        else error("Le premier objectif secondaire doit être créé à l'aide de l'objectif principal !");
       }
       else {
         if      (nbSelec  >  1) error("Vous devez sélectionner une seule carte !");
@@ -1927,7 +1920,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {Event} event - on utilise event.target.id 
    */
   const demonstrationClickHandler = (event) => {
-    let id = event.currentTarget.id.substring(4, 20);
+    let id           = event.currentTarget.id.substring(4, 20);
     let indiceRecu   = parseInt(id, 10);
     let indiceRetour = tabIndiceDemonstration[indiceRecu];
     if (indiceRetour !== lastGame.length) {
@@ -1947,16 +1940,13 @@ const Game = ({ mode, ex, numero }) => {
       setNavigation(false);
       allFalse(savedGame);
     }
-
-
-    
-    
   }
 
-  const error = (message) =>{
+  const error = (message) => {
     allFalseGame();
     setMessageError(message);
   }
+  
   return (
     <div className="game" >
       <div className="bouton">
@@ -1971,21 +1961,21 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
         {false && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
-        <button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"18"} height={"23"}/></button>
+        <button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"}/></button>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
-        {mode !== "Create" && <button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"} width={"89"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"}/></button>}
         {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
             est égale à la partie gauche */}
-        {mode !== "Create" && <button id= "addImplique" className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Ajout carte =>"} width={"106"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "addImplique" className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Ajout carte =>"}/></button>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et" */}
-        {mode !== "Create" && <button id= "fuseAnd" className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}><img src={"img/fusion_carte_et.png"} alt={"Fusion carte et"} width={"106"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "fuseAnd" className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}><img src={"img/fusion_carte_et.png"} alt={"Fusion carte et"}/></button>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Ajout objectif"} width={"30"} height={"23"}/></button>}
+        {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Ajout objectif"}/></button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">

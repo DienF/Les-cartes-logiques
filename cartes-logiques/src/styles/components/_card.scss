@@ -7,8 +7,8 @@
     border-radius: 5px;
     font-size: 2vh;
     position: absolute;
-    background-color: rgba(160,160,160,0.9);
-    border: 2px solid rgb(160,160,160);
+    background-color: rgba(160, 160, 160, 0.9);
+    border: 2px solid rgb(160, 160, 160);
     margin-top: -8.8vh;
     margin-left: 7.3vh;
     padding: 1vh 0.5vh;
@@ -21,8 +21,8 @@
     border-radius: 5px;
     font-size: 2vh;
     position: absolute;
-    background-color: rgba(160,160,160,0.9);
-    border: 2px solid rgb(160,160,160);
+    background-color: rgba(160, 160, 160, 0.9);
+    border: 2px solid rgb(160, 160, 160);
     margin-top: -2vh;
     margin-left: 2.5vh;
     padding: 0.2vh 1vh;
@@ -94,8 +94,8 @@
     grid-template-columns: 9vh 9vh;
     grid-template-rows: 6vh 6vh;
     grid-template-areas: 
-    "a c"
-    "b c";
+      "a c"
+      "b c";
     
     .card0{
       grid-area: a;
@@ -181,5 +181,4 @@
       margin-left: 3vh;
     }
   }
-
 }

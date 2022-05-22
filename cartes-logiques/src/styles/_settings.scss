@@ -1,21 +1,36 @@
+@font-face {
+  font-family: 'FilmCryptic';
+  src: url("../../public/fonts/FilmCryptic.ttf");
+}
+
+#root {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #432F75;
+  // background-image: url("../../public/img/fond.jpg");
+  background-image: linear-gradient(to bottom, #7887AB, #162856);
+  color: #fdfdfd;
+  font-family: 'Open Sans', sans-serif;
+}
+
 body {
   min-height: 100vh;
   min-width: 100vw;
 }
 
-#root {
-  min-height: 100vh;
-  min-width: 100wh;
-  background-color: #432F75;
-  // background-image: url("../../public/img/fond.jpg");
-  background-image : linear-gradient( to bottom, #7887AB, #162856 );
-  color: #fdfdfd;
-  font-family: 'Open Sans', sans-serif;
-}
-
 * {
   margin: 0;
 }
+
 button {
   cursor: pointer;
+}
+
+h1, h2 {
+    font-family: 'Fredericka the Great', cursive;
+    text-align: center;
+}
+
+h2 {
+    color: red;
 }

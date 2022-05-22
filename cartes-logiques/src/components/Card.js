@@ -75,14 +75,14 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
     if (className.includes("card_simple")) return res += "card_simple_h";
     if (className.includes("card_double")) return res += "card_simple_h";
     if (className.includes("card_triple_a")) {
-      if (k === 0) return res +="card_simple_h";
-      else         return res +="card_simple_w";
+      if (k === 0) return res += "card_simple_h";
+      else         return res += "card_simple_w";
     }
     if (className.includes("card_triple_b")) {
-      if (k === 2) return res +="card_simple_h";
-      else         return res +="card_simple_w";
+      if (k === 2) return res += "card_simple_h";
+      else         return res += "card_simple_w";
     }
-    if (className.includes("card_quadruple")) return res +="card_simple_w";
+    if (className.includes("card_quadruple")) return res += "card_simple_w";
   };
 
   /**
@@ -95,7 +95,7 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   const getTab = (card) => {
     const className = getClassType(card);
     var tab = [];
-    if (card.right !== null && card.link === "=>" && card.right.color === "white" )
+    if (card.right !== null && card.link === "=>" && card.right.color === "white")
       card = card.left;
     if (className.includes("card_simple"))
       tab.push(card);

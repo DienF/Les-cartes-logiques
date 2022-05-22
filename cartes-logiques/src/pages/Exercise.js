@@ -18,7 +18,7 @@ const Exercise = () => {
         setEx(JSON.parse(data));
       });
     }
-    else if (mode ==="Tutoriel") {
+    else if (mode === "Tutoriel") {
       setNum(tmp);
       fetch("tutoriel.json")
       .then(response => response.text())

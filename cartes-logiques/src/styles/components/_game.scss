@@ -7,46 +7,46 @@
   display: grid;
   grid-template-columns: 20% 30% 30% 20%; 
   grid-template-areas:
-  "b b b b"
-  "t t t t"
-  "e e e e"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "start other1 other2 goal"
-  "d d d d";
+    "b b b b"
+    "t t t t"
+    "e e e e"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "start other1 other2 goal"
+    "d d d d";
 
   .bouton {
     grid-area: b;
@@ -55,18 +55,23 @@
 
     button {
       cursor: pointer;
-      margin-bottom: 1.2vh;
+      margin-bottom: 0.8vh;
       margin-top: 0.8vh;
       margin-right: 2vh;
       margin-left: 2vh;
     }
 
-    #back, #addAnd, #addImplique, #fuseAnd, #addGoal{
-      height: 35px;
+    #back, #addAnd, #addImplique, #fuseAnd, #addGoal {
+      height: 42px;
       width: auto;
       border-radius: 5px;
       border: 2px solid lightgray;
       background-image : linear-gradient( to right, #d4ddf5, #97b4fc );
+    
+      img {
+        height: 35px;
+        width: auto;
+      }
     }
 
     #back:hover, #addAnd:hover, #addImplique:hover, #fuseAnd:hover, #addGoal:hover{
@@ -77,7 +82,7 @@
   .message {
     color: black;
     text-align: center;
-    border-radius:10px;
+    border-radius: 10px;
     margin-left: 100px;
     margin-right: 100px;
     font-weight: bold;
@@ -88,13 +93,13 @@
   .tutoriel {
     grid-area: t;
     background:#e9ffd9;
-    border:1px solid #a6ca8a;
+    border: 1px solid #a6ca8a;
   }
 
   .error {
     grid-area: e;
     background:#ffecec;
-    border:1px solid #f5aca6;
+    border: 1px solid #f5aca6;
   }
 
   .boutonSelection {
@@ -103,15 +108,14 @@
   }
   .demonstration {
     grid-area: d;
-    background-image: url("../../../public/img/FondLigneCahier.png");
+    background-image: url("../../../public/img/fond_ligne_cahier.png");
     border-radius: 10px;
     color : black;
     margin-top: 50px;
-  
 
     div {
       border-radius: 10px;
-      //padding: 0px 10px 5px 10px;
+      // padding: 0px 10px 5px 10px;
       text-align: center;
       background : rgba(255,255,255,0.5);
     }

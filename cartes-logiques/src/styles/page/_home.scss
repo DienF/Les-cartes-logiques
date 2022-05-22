@@ -4,21 +4,44 @@
     position: relative;
     display: grid;
     grid-template-areas:
-    "h h h h h h h"
-    "l . . . . . r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
-    "l m m m m m r"
+        "h h h h h h h"
+        "l . . . . . r"
+        "l t t t t t r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r"
+        "l m m m m m r";
 
-    
-    ;
+    .regles {
+        grid-area: t;
+        padding-top: 1%;
+        padding-bottom: 2%;
+        // Fond ardoise
+        background-image: url("../../../public/img/fond_ardoise.png");
+        margin-top: 6%;
+        margin-left: 14%;
+        margin-right: 14%;
+        // border-image: url("../../../public/img/fond_bois.png") 30 30 stretch;
+        // border: 10px inset transparent 30 30 stretch;
+        border-width: 20px;
+        border-radius: 4%;
+        font-family: 'FilmCryptic';
+        font-size: 20px;
+        text-align: justify;
+
+        li {
+            padding-right: 2%;
+
+            li {
+                padding-right: 0%;
+            }
+        }
+    }
 }

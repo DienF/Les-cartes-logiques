@@ -1,7 +1,14 @@
 .choice {
     grid-area: m;
-    padding-top: 20%;
+    padding-top: 1%;
+    padding-left: 13%;
+    padding-right: 13%;
+    text-align: center;
     margin: 0 auto;
+
+    ul {
+        padding-left: 0;
+    }
 
     li {
         list-style-type: none;

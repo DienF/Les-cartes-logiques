@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className="home">
       <Navigation />
-      <div>
+      <div className="regles">
         <h1>Les règles du jeu</h1>
         <h2>Présentation du jeu</h2>
         <ul>
@@ -63,7 +63,7 @@ const Home = () => {
         <h2>La zone d'objectifs</h2>
         <ul>
           <li>
-            La <string>zone d'objectifs</string> est la liste des cartes qui doivent apparaître dans la LPU pour que la partie s'arrête (victorieusement).
+            La <strong>zone d'objectifs</strong> est la liste des cartes qui doivent apparaître dans la LPU pour que la partie s'arrête (victorieusement).
           </li>
           <li>
             Lorsqu'une carte est dans la zone d'objectifs, il est recommandé de mettre en oeuvre sa <strong>méthode d'acquisition</strong>.
