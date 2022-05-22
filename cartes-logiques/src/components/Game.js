@@ -1927,7 +1927,8 @@ const Game = ({ mode, ex, numero }) => {
    * @param {Event} event - on utilise event.target.id 
    */
   const demonstrationClickHandler = (event) => {
-    let indiceRecu   = parseInt(event.currentTarget.id, 10);
+    let id = event.currentTarget.id.substring(4, 20);
+    let indiceRecu   = parseInt(id, 10);
     let indiceRetour = tabIndiceDemonstration[indiceRecu];
     if (indiceRetour !== lastGame.length) {
       setNavigation(true);
