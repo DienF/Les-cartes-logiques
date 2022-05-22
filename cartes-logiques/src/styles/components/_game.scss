@@ -104,14 +104,15 @@
   .demonstration {
     grid-area: d;
     background-image: url("../../../public/img/FondLigneCahier.png");
-    border-radius: 5px;
+    border-radius: 10px;
     color : black;
-    margin: auto;
     margin-top: 50px;
   
 
     div {
-      padding: 0px 10px 5px 10px;
+      border-radius: 10px;
+      //padding: 0px 10px 5px 10px;
+      text-align: center;
       background : rgba(255,255,255,0.5);
     }
 
