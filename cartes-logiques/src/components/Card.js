@@ -20,9 +20,8 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    */
   const getClassType = (card) => {
     
-    if(card.left !== null && card.link === "=>" && card.right.color === "white" ){
+    if (card.left !== null && card.link === "=>" && card.right.color === "white" )
       return getClassType(card.left);
-    }
     if (card.left === null && card.right === null)
       return "card_simple";
     if (
@@ -69,14 +68,12 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    *                                      & l'autre fois avec k=1
    * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
    */
-  const getTabClass = (card,k) => {
+  const getTabClass = (card, k) => {
     const className = getClassType(card);
     let res = "";
-    if(card.right !== null && card.link === "=>" && card.right.color === "white" ){
-      res = "card_non ";
-    }
+    if (card.right !== null && card.link === "=>" && card.right.color === "white" ) res = "card_non ";
     if (className.includes("card_simple")) return res += "card_simple_h";
-    if (className.includes("card_double")) return res +="card_simple_h";
+    if (className.includes("card_double")) return res += "card_simple_h";
     if (className.includes("card_triple_a")) {
       if (k === 0) return res +="card_simple_h";
       else         return res +="card_simple_w";
@@ -98,12 +95,10 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   const getTab = (card) => {
     const className = getClassType(card);
     var tab = [];
-    if(card.right !== null && card.link === "=>" && card.right.color === "white" ){
+    if (card.right !== null && card.link === "=>" && card.right.color === "white" )
       card = card.left;
-    }
-    if (className.includes("card_simple")) {
+    if (className.includes("card_simple"))
       tab.push(card);
-    }
     else if (className.includes("card_double")) {
       tab.push(card.left);
       tab.push(card.right);
@@ -127,10 +122,9 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
     return tab;
   };
 
-  const getGoodCard = (card) =>{
-    if(card.right !== null && card.link === "=>" && card.right.color === "white" ){
+  const getGoodCard = (card) => {
+    if (card.right !== null && card.link === "=>" && card.right.color === "white" )
       return card.left;
-    }
     return card;
   }
   return (

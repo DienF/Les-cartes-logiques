@@ -281,13 +281,13 @@ const Game = ({ mode, ex, numero }) => {
 
   const [indentationDemonstration, setIndentationDemonstration] = useState(0);
 
-  const [tabIndiceDemonstration , setTabIndiceDemonstration] = useState();
+  const [tabIndiceDemonstration, setTabIndiceDemonstration] = useState();
 
-  const [navigation , setNavigation] = useState();
+  const [navigation, setNavigation] = useState();
 
-  const [savedGame , setSavedGame] = useState();
+  const [savedGame, setSavedGame] = useState();
 
-  const [tabIndentation , setTabIndentation] = useState([0]);
+  const [tabIndentation, setTabIndentation] = useState([0]);
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
@@ -793,28 +793,23 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} numObjectif - le numero de l'objectif
    * @returns {true|false} true ou false
    */
-  const isWin = (numObjectif,tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration) => {
+  const isWin = (numObjectif, tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration) => {
     // Objectif à vérifier
     const objectif = game[game.length-1][tabObjectif[numObjectif][1]];
     // Indice du deck lié à l'objectif
     let currentDeck = numObjectif;
     // Variable que l'on va retourner (false par défaut)
     let bool = false;
-    //copie du jeu actuel
+    // Copie du jeu actuel
     let tmp = [...game];
     // Parcourt le deck lié à l'objectif
     game[currentDeck].forEach((card) => {
       // Si une carte liée à cet objectif est trouvée l'objectif est validé
       if (card.equals(objectif)) {
         // Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
-        if (currentDeck === 0){
-          bool = true;
-          
-        } 
+        if (currentDeck === 0) bool = true;
         else {
-          // Si c'est un objectif secondaire :
-          
-          // Copie de la carte qui a servi à créer l'objectif secondaire
+          // Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
           let tmpCard = game[game.length-1][findObjectifRelative(objectif)].copy();
           tmpCard.id = tmp[tabObjectif[currentDeck][1]-1].length;
           // Ajoute cette carte dans le deck précédent
@@ -958,7 +953,7 @@ const Game = ({ mode, ex, numero }) => {
           tmpTabIndentation.push(indentationDemonstration);
           setTabIndentation(tmpTabIndentation);
           // Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-          setPopupWin(isWin(selecDeck1,tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration));
+          setPopupWin(isWin(selecDeck1, tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration));
         }
         else setMessageErreur("La carte sélectionnée doit avoir une liaison principale de type \"et\" !");
       }
@@ -985,7 +980,7 @@ const Game = ({ mode, ex, numero }) => {
    * Si toutes les conditions énumérées au-dessus sont respectées la partie droite est ajoutée au deck le plus haut.
    */
   const addCardFuse = () => {
-    if(!navigation){
+    if (!navigation) {
       // S'il y a 2 cartes sélectionnées
       if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
         // Prend le deck le plus grand
@@ -1030,7 +1025,7 @@ const Game = ({ mode, ex, numero }) => {
             tmpTabIndentation.push(indentationDemonstration);
             setTabIndentation(tmpTabIndentation);
             // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-            setPopupWin(isWin(Math.max(selecDeck1,selecDeck2),tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration));
+            setPopupWin(isWin(Math.max(selecDeck1, selecDeck2), tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration));
           }
           else if (tmp[selecDeck2][selecCard2].link === "<=>" || tmp[selecDeck1][selecCard1].link === "<=>") {
             bool = false;
@@ -1105,7 +1100,7 @@ const Game = ({ mode, ex, numero }) => {
               tmpTabIndentation.push(indentationDemonstration);
               setTabIndentation(tmpTabIndentation);
               // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-              setPopupWin(isWin(Math.max(selecDeck1,selecDeck2), tmpDemonstration, tmpTabIndentation));
+              setPopupWin(isWin(Math.max(selecDeck1, selecDeck2), tmpDemonstration, tmpTabIndentation));
             }
           }
           else{
@@ -1134,11 +1129,11 @@ const Game = ({ mode, ex, numero }) => {
    * Si toutes les conditions énumérées au-dessus sont respectées les deux cartes fusionnent en une nouvelle carte qui prend la liaison "et" dans le deck le plus haut des deux cartes.
    */
   const fuseCardAdd = () => {
-    if(!navigation){
+    if (!navigation) {
       // Si 2 cartes sont sélectionnées
       if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
         // Prend le deck le plus haut
-        let finalDeck = Math.max(selecDeck1,selecDeck2);
+        let finalDeck = Math.max(selecDeck1, selecDeck2);
         if (finalDeck !== game.length-1) {
           // Copie du jeu actuel
           let tmp = [...game];
@@ -1173,7 +1168,7 @@ const Game = ({ mode, ex, numero }) => {
             tmpTabIndentation.push(tmpIndentationDemonstration);
             setTabIndentation(tmpTabIndentation);
             // Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-            setPopupWin(isWin(Math.max(selecDeck1, selecDeck2),tmpDemonstration,tmpTabIndentation,tmpTabIndiceDemonstration));
+            setPopupWin(isWin(Math.max(selecDeck1, selecDeck2), tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration));
           }
           else {
             if (bool) setMessageErreur("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
@@ -1277,12 +1272,12 @@ const Game = ({ mode, ex, numero }) => {
    *    Le reste : ajoute la partie gauche dans l'objectif et ne le considère pas comme un objectif secondaire.
    */
    const addObjectif = () => {
-    if(!navigation){
+    if (!navigation) {
       // S'il n'y a qu'une carte de sélectionné
       if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
         // Prend la carte sélectionnée
-        let deckI = Math.max(selecDeck1,selecDeck2);
-        let cardI = Math.max(selecCard1,selecCard2);
+        let deckI = Math.max(selecDeck1, selecDeck2);
+        let cardI = Math.max(selecCard1, selecCard2);
         // Si le 1er sous-objectif choisi n'est pas l'objectif principal
         if (true || !(game.length === 2 && (cardI !== 0 || deckI === 0))) {
           // Si le sous-objectif n'existe pas déjà
@@ -1325,7 +1320,7 @@ const Game = ({ mode, ex, numero }) => {
                 // Copie du tableau objectif
                 let tmpObj = [...tabObjectif];
                 // Ajoute l'objectif secondaire dans le tableau objectif
-                tmpObj.push([tabObjectif.length,game[game.length-1].length,true]);
+                tmpObj.push([tabObjectif.length, game[game.length-1].length, true]);
                 // Met à jour le tableau objectif
                 setTabObjectif(tmpObj);
                 let tmpDemonstration = [...demonstration];
@@ -1356,7 +1351,7 @@ const Game = ({ mode, ex, numero }) => {
                   tmp[tmp.length-1] = tmpObjectif;
                   // Met à jour le jeu & désélectionne toutes les cartes
                   let tmpDemonstration = [...demonstration];
-                  tmpDemonstration.push("$$\\text{Montrons }" + secondObjectif.toString() +".$$");
+                  tmpDemonstration.push("$$\\text{Montrons }" + secondObjectif.toString() + ".$$");
                   setDemonstration(tmpDemonstration);
                   let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
                   tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1912,7 +1907,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {Event} event - on utilise event.target.id 
    */
   const demonstrationClickHandler = (event) => {
-    let indiceRecu = parseInt(event.currentTarget.id,10);
+    let indiceRecu   = parseInt(event.currentTarget.id, 10);
     let indiceRetour = tabIndiceDemonstration[indiceRecu];
     if (indiceRetour !== lastGame.length) {
       setNavigation(true);
@@ -1951,7 +1946,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
         {false && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
-        <button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"17"} height={"23"}/></button>
+        <button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"} width={"18"} height={"23"}/></button>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
         {mode !== "Create" && <button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"} width={"89"} height={"23"}/></button>}
         {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
@@ -1997,13 +1992,8 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affichage de la démonstration de logique mathématique de l'exercice */}
       <div className="demonstration">
         {demonstration.map((element, index) => {
-          if(index === 1){
-            return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 , marginTop : 20 }} ><Latex >{element}</Latex></div>
-          }
-          else{
-            return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
-          }
-
+          if (index === 1) return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20, marginTop : 20 }} ><Latex >{element}</Latex></div>
+          else             return <div key={index} id={index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
         })}
       </div>
       {popupAddCard && (
@@ -2085,7 +2075,7 @@ const Game = ({ mode, ex, numero }) => {
             <>
               <b>Bravo, vous avez gagné !</b>
               <button
-                //onClick={nextExercise}
+                // onClick={nextExercise}
                 onClick={function () {
                   setPopupWin(false);
                 }}
@@ -2094,13 +2084,8 @@ const Game = ({ mode, ex, numero }) => {
               </button>
               <div className="demonstration-win">
                 {demonstration.map((element, index) => {
-                  if(index === 1){
-                    return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20 , marginTop : 20 }} ><Latex >{element}</Latex></div>
-                  }
-                  else{
-                    return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
-                  }
-                  
+                  if (index === 1) return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20, marginTop : 20 }} ><Latex >{element}</Latex></div>
+                  else             return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
                 })}
               </div>
             </>
