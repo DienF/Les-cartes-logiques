@@ -7,10 +7,11 @@
     border-radius: 5px;
     font-size: 2vh;
     position: absolute;
-    background-color: grey;
-    margin-top: -8.5vh;
-    margin-left: 7vh;
-    padding: 1vh;
+    background-color: rgba(160,160,160,0.9);
+    border: 2px solid rgb(160,160,160);
+    margin-top: -8.8vh;
+    margin-left: 7.3vh;
+    padding: 1vh 0.5vh;
     display: inline-block;
     vertical-align: middle;
     transition: all .5s;
@@ -20,10 +21,11 @@
     border-radius: 5px;
     font-size: 2vh;
     position: absolute;
-    background-color: grey;
+    background-color: rgba(160,160,160,0.9);
+    border: 2px solid rgb(160,160,160);
     margin-top: -2vh;
     margin-left: 2.5vh;
-    padding: 0.5vh 1vh;
+    padding: 0.2vh 1vh;
     display: inline-block;
     vertical-align: middle;
     transform: rotate(90deg);
@@ -149,7 +151,7 @@
     .affix_h {
       font-size: 3vh;
       margin-top: -10.5vh;
-      margin-left: 8vh;
+      margin-left: 8.5vh;
     }
   }
 
@@ -175,8 +177,8 @@
 
     .affix_v {
       font-size: 3vh;
-      margin-top: -3vh;
-      margin-left: 3.5vh;
+      margin-top: -2.7vh;
+      margin-left: 3vh;
     }
   }
 
