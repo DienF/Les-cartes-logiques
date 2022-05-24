@@ -285,6 +285,8 @@ const Game = ({ mode, ex, numero }) => {
 
   const [navigation, setNavigation] = useState();
 
+  const [win , setWin] = useState();
+
   const [savedGame, setSavedGame] = useState();
 
   const [tabIndentation, setTabIndentation] = useState([0]);
@@ -309,6 +311,7 @@ const Game = ({ mode, ex, numero }) => {
     setDemonstration([]);
     setTabIndentation([0]);
     setNavigation(false);
+    setWin(false);
     setTabIndiceDemonstration([0]);
     setPopupWin(false);
     setMessageError("");
@@ -391,7 +394,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
-    if(!navigation){
+    if(!navigation && !win){
       // Met le message d'erreur en "" ce qui ne l'affiche plus
       setMessageError("");
       // N'affiche plus les deux cartes d'aide
@@ -806,7 +809,10 @@ const Game = ({ mode, ex, numero }) => {
       // Si une carte liée à cet objectif est trouvée l'objectif est validé
       if (card.equals(objectif)) {
         // Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
-        if (currentDeck === 0) bool = true;
+        if (currentDeck === 0){
+           bool = true;
+           setWin(true);
+        }
         else {
           // Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
           let tmpCard = game[game.length-1][findObjectifRelative(objectif)].copy();
@@ -851,7 +857,7 @@ const Game = ({ mode, ex, numero }) => {
    * @todo Ne marche pas.
    */
   const retourEnArriere = () => {
-    if(!navigation){
+    if(!navigation && !win){
       // Vérifie s'il y a au moins une sauvegarde du jeu
       if (lastGame.length > 0) {
         // Copie le tableau de sauvegarde
@@ -919,7 +925,7 @@ const Game = ({ mode, ex, numero }) => {
    * Si toutes les conditions énumérées au-dessus sont respectées les parties gauche et droite de la carte sont ajoutées au Deck.
    */
   const addCardAnd = () => {
-    if (!navigation) {
+    if (!navigation && !win) {
       // Si une seule carte est sélectionnée
       if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
         /** Prend la carte qui est sélectionnée.
@@ -982,7 +988,7 @@ const Game = ({ mode, ex, numero }) => {
    * Si toutes les conditions énumérées au-dessus sont respectées la partie droite est ajoutée au deck le plus haut.
    */
   const addCardFuse = () => {
-    if (!navigation) {
+    if (!navigation && !win) {
       // S'il y a 2 cartes sélectionnées
       if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
         // Prend le deck le plus grand
@@ -1140,7 +1146,7 @@ const Game = ({ mode, ex, numero }) => {
    * Si toutes les conditions énumérées au-dessus sont respectées les deux cartes fusionnent en une nouvelle carte qui prend la liaison "et" dans le deck le plus haut des deux cartes.
    */
   const fuseCardAdd = () => {
-    if (!navigation) {
+    if (!navigation && !win) {
       // Si 2 cartes sont sélectionnées
       if (selecCard1 !== -1 && selecCard2 !== -1 && selecDeck1 !== -1 && selecDeck2 !== -1) {
         // Prend le deck le plus haut
@@ -1285,7 +1291,7 @@ const Game = ({ mode, ex, numero }) => {
    *    Le reste : ajoute la partie gauche dans l'objectif et ne le considère pas comme un objectif secondaire.
    */
    const addObjectif = () => {
-    if (!navigation) {
+    if (!navigation && !win) {
       // S'il n'y a qu'une carte de sélectionné
       if ((selecCard1 !== -1 && selecCard2 === -1 && selecDeck1 !== -1 && selecDeck2 === -1) || (selecCard1 === -1 && selecCard2 !== -1 && selecDeck1 === -1 && selecDeck2 !== -1)) {
         // Prend la carte sélectionnée
