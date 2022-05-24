@@ -7,19 +7,20 @@
         "h h h"
         "l m r";
     
-    .credits {
+    #credits {
         grid-area: m;
+        height: fit-content;
         font-family: 'FilmCryptic';
         font-size: 20px;
         text-align: center;
         // Fond ardoise
         background-image: url("../../../public/img/fond_ardoise.png");
-        margin-left: 14%;
-        margin-right: 14%;
-        // border-image: url("../../../public/img/fond_bois.png") 30 30 stretch;
-        // border: 10px inset transparent 30 30 stretch;
-        border-width: 20px;
-        border-radius: 4%;
+        margin-left:  13%;
+        margin-right: 13%;
+        border: 10px solid transparent;
+        border-image: url("../../../public/img/fond_bois.png") 30 30 stretch;
+        border-width: 13px;
+        box-shadow: 7px 7px 15px black;
     
         h2 {
             margin-top: 1%;
@@ -41,7 +42,7 @@
         }
     
         .linkedin {
-            height: 15px;
+            height: 17px;
             width: auto;
             border-radius: 0px;
         }

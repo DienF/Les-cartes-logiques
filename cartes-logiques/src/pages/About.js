@@ -5,7 +5,7 @@ const About = () => {
   return (
     <div className="about">
       <Navigation />
-      <div className="credits"> 
+      <div id="credits"> 
         <h2>À propos de ce site</h2>
         <a href="https://unc.nc/" target="_blank" rel="noopener noreferrer"><img src={"img/logo_unc.png"} alt="Logo de l'Université de Nouvelle-Calédonie"/></a>
         <p> <u>Projet tutoré :</u> Création d'un jeu de logique encadré par M. Éric Edo <a href="https://www.linkedin.com/in/eric-edo-8a0639228/" target="_blank" rel="noopener noreferrer"><img className="linkedin" src={"img/logo_linkedin.png"} alt={"LinkedIn d'Éric Edo"}/></a>.</p>
