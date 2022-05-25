@@ -37,17 +37,17 @@ class CardClass {
   getColor = (color) => {
     switch (color) {
       case "red":
-        return "\\textit{Rouge}";
+        return "Rouge";
       case "yellow":
-        return "\\textit{Jaune}";
+        return "Jaune";
       case "blue":
-        return "\\textit{Bleue}";
+        return "Bleue";
       case "orange":
-        return "\\textit{Orange}";
+        return "Orange";
       case "black":
-        return "\\textit{True}";
+        return "True";
       case "white":
-        return "\\textit{False}";
+        return "False";
       default:
         return "Non definie";
     }
@@ -69,9 +69,9 @@ class CardClass {
     // Carte gauche
     if (this.left  !== null) res += "(" + this.left.toString();
     // Liaison
-    if      (this.link === "et")  res += "\\land";
-    else if (this.link === "=>")  res += "\\Rightarrow";
-    else if (this.link === "<=>") res += "\\Leftrightarrow";
+    if      (this.link === "et")  res += "^";
+    else if (this.link === "=>")  res += "=>";
+    else if (this.link === "<=>") res += "<=>";
     else                          res += this.link;
     // Carte droite
     if (this.right !== null) res += this.right.toString() + ")";
@@ -178,9 +178,9 @@ class CardClass {
    * Renvoie la démonstration correspondante à l'action effectuée.
    */
   toDemonstration() {
-    if      (this.color !== null) return "$$\\text{On a }"    + this.getColor(this.color)                                                 + ".$$";
-    else if (this.link  === "et") return "$$\\text{On a }"    + this.left.toString() + "\\text{ }\\land\\text{ }" + this.right.toString() + ".$$";
-    else                          return "$$\\text{Puisque }" + this.left.toString() + "\\text{, on a }"          + this.right.toString() + ".$$";
+    if      (this.color !== null) return "On a"    + this.getColor(this.color);
+    else if (this.link  === "et") return "On a"    + this.left.toString() + "^" + this.right.toString();
+    else                          return "Puisque" + this.left.toString() + ", on a "          + this.right.toString();
   }
 }
 
@@ -323,9 +323,9 @@ const Game = ({ mode, ex, numero }) => {
         let tmpDemonstration = [];
         let res = "";
         tmp[0].forEach(element => {
-          res += "$$\\text{On a }" + element.toString() + "\\text{. }$$";
+          res += "On a " + element.toString() + ".";
         });
-        if (tmp.length === 2 && tmp[1].length > 0) res += "$$\\text{ Montrons }" + tmp[1][0].toString() +".$$";
+        if (tmp.length === 2 && tmp[1].length > 0) res += "Montrons " + tmp[1][0].toString() +".";
         tmpDemonstration.push(res);
         setDemonstration(tmpDemonstration);
         allFalse(tmp);
@@ -830,7 +830,7 @@ const Game = ({ mode, ex, numero }) => {
           tmp = delDeck(tmp, currentDeck);
           // Met à jour la table des objectifs
           createTabObj(tmp);
-          tmpDemonstration.push("$$\\text{On a }" + tmpCard.toString() + ".$$");
+          tmpDemonstration.push("On a " + tmpCard.toString() + ".");
           setDemonstration(tmpDemonstration);
           tmpTabIndiceDemonstration.push(tmpTabIndiceDemonstration[tmpTabIndiceDemonstration.length-1]);
           setTabIndiceDemonstration(tmpTabIndiceDemonstration);
@@ -950,7 +950,7 @@ const Game = ({ mode, ex, numero }) => {
             allFalse(tmp);
             setSavedGame(tmp);
             let tmpDemonstration = [...demonstration];
-            tmpDemonstration.push("$$\\text{On a }" + game[deckI][cardI].left.toString() + "\\text{. On a }" +game[deckI][cardI].right.toString() + ".$$");
+            tmpDemonstration.push("On a " + game[deckI][cardI].left.toString() + ". On a " +game[deckI][cardI].right.toString() + ".");
             setDemonstration(tmpDemonstration);
             let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
             tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1026,7 +1026,7 @@ const Game = ({ mode, ex, numero }) => {
               allFalse(tmp);
               setSavedGame(tmp);
               let tmpDemonstration = [...demonstration];
-              tmpDemonstration.push("$$\\text{Puisque }" + tmp[deckCarteComplex][cardCarteComplex].left + "\\text{, on a }" + tmp[deckCarteComplex][cardCarteComplex].right +"\\text{. }$$");
+              tmpDemonstration.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a " + tmp[deckCarteComplex][cardCarteComplex].right +".");
               setDemonstration(tmpDemonstration);
               let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
               tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1105,8 +1105,8 @@ const Game = ({ mode, ex, numero }) => {
                 allFalse(tmp);
                 setSavedGame(tmp);
                 let tmpDemonstration = [...demonstration];
-                if (bool2) tmpDemonstration.push("$$\\text{On a }"    + cardAdd.left.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardFuse.toString() + "\\text{ }\\Leftrightarrow\\text{ }" + cardAdd.right.toString() + ".$$");
-                else       tmpDemonstration.push("$$\\text{Puisque }" + cardFuse.toString()     + "\\text{, on a }"                    + cardAdd.toString()                                                                    + "\\text{. }$$");
+                if (bool2) tmpDemonstration.push("On a "    + cardAdd.left.toString() + "<=>" + cardFuse.toString() + "<=>" + cardAdd.right.toString() + ".");
+                else       tmpDemonstration.push("Puisque " + cardFuse.toString()     + ", on a "                    + cardAdd.toString() + ".");
                 setDemonstration(tmpDemonstration);
                 let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
                 tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1176,7 +1176,7 @@ const Game = ({ mode, ex, numero }) => {
               allFalse(tmp);
               setSavedGame(tmp);
               let tmpDemonstration = [...demonstration];
-              tmpDemonstration.push("$$\\text{On a }" + tmpCard1.toString() + "\\text{ }\\land\\text{ }" + tmpCard2.toString()+". $$");
+              tmpDemonstration.push("On a " + tmpCard1.toString() + "^" + tmpCard2.toString()+".");
               setDemonstration(tmpDemonstration);
               let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
               tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1343,7 +1343,7 @@ const Game = ({ mode, ex, numero }) => {
                 // Met à jour le tableau objectif
                 setTabObjectif(tmpObj);
                 let tmpDemonstration = [...demonstration];
-                tmpDemonstration.push("$$\\text{Supposons }" + tmpCard.toString()  +"\\text{. Montrons }" + secondObjectif.toString() + ".$$");
+                tmpDemonstration.push("Supposons " + tmpCard.toString()  +". Montrons " + secondObjectif.toString() + ".");
                 setDemonstration(tmpDemonstration);
                 let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
                 tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1370,7 +1370,7 @@ const Game = ({ mode, ex, numero }) => {
                   tmp[tmp.length-1] = tmpObjectif;
                   // Met à jour le jeu & désélectionne toutes les cartes
                   let tmpDemonstration = [...demonstration];
-                  tmpDemonstration.push("$$\\text{Montrons }" + secondObjectif.toString() + ".$$");
+                  tmpDemonstration.push("Montrons " + secondObjectif.toString() + ".");
                   setDemonstration(tmpDemonstration);
                   let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
                   tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length-1]+1);
@@ -1952,6 +1952,28 @@ const Game = ({ mode, ex, numero }) => {
     allFalseGame();
     setMessageError(message);
   }
+
+  const StringToLatex = (str) =>{
+
+    str = str.replaceAll("Rouge","\\textit{Rouge}");
+    str = str.replaceAll("Jaune","\\textit{Jaune}");
+    str = str.replaceAll("Bleue","\\textit{Bleue}");
+    str = str.replaceAll("Orange","\\textit{Orange}");
+    str = str.replaceAll("True","\\textit{True}");
+    str = str.replaceAll("False","\\textit{False}");
+    str = str.replaceAll("^","\\text{ }\\land\\text{ }");
+    str = str.replaceAll("<=>", "\\text{ }\\Leftrightarrow\\text{ }");
+    str = str.replaceAll("=>","\\text{ }\\Rightarrow\\text{ }");
+    str = str.replaceAll(".","\\text{. }$$$");
+    str = str.replaceAll(",","\\text{, }$$$");
+    str = str.replaceAll("On a","$$$\\text{On a }");
+    str = str.replaceAll("on a","$$$\\text{on a }");
+    str = str.replaceAll("Montrons","$$$\\text{Montrons }");
+    str = str.replaceAll("Supposons","$$$\\text{Supposons }")
+    str = str.replaceAll("Puisque","$$$\\text{Puisque }")
+    console.log(str)
+    return str;
+  }
   
   return (
     <div className="game" >
@@ -2013,8 +2035,8 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affichage de la démonstration de logique mathématique de l'exercice */}
       <div className="demonstration">
         {demonstration.map((element, index) => {
-          if (index === 0) return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{paddingTop : 5 }} ><Latex >{element}</Latex></div>
-          else             return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} ><Latex >{element}</Latex></div>
+          if (index === 0) return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{paddingTop : 5 }} ><Latex >{StringToLatex(element)}</Latex></div>
+          else             return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} ><Latex >{StringToLatex(element)}</Latex></div>
         })}
       </div>
       {popupAddCard && (
@@ -2091,7 +2113,7 @@ const Game = ({ mode, ex, numero }) => {
       {/* Popup de victoire quand on réussit l'objectif principal */}
       {popupWin && (
         <Popup
-          size = {demonstration[0].length/5}
+          size = {StringToLatex(demonstration[0]).length/5}
           content={
             <>
               <b>Bravo, vous avez gagné !</b>
