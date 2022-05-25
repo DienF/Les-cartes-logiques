@@ -1955,15 +1955,15 @@ const Game = ({ mode, ex, numero }) => {
 
   const StringToLatex = (str) =>{
 
-    str = str.replaceAll("Rouge","\\textit{Rouge}");
-    str = str.replaceAll("Jaune","\\textit{Jaune}");
-    str = str.replaceAll("Bleue","\\textit{Bleue}");
-    str = str.replaceAll("Orange","\\textit{Orange}");
-    str = str.replaceAll("True","\\textit{True}");
-    str = str.replaceAll("False","\\textit{False}");
-    str = str.replaceAll("^","\\text{ }\\land\\text{ }");
-    str = str.replaceAll("<=>", "\\text{ }\\Leftrightarrow\\text{ }");
-    str = str.replaceAll("=>","\\text{ }\\Rightarrow\\text{ }");
+    str = str.replaceAll("Rouge","\\textit{ Rouge }");
+    str = str.replaceAll("Jaune","\\textit{ Jaune }");
+    str = str.replaceAll("Bleue","\\textit{ Bleue }");
+    str = str.replaceAll("Orange","\\textit{ Orange }");
+    str = str.replaceAll("True","\\textit{ True }");
+    str = str.replaceAll("False","\\textit{ False }");
+    str = str.replaceAll("^","\\land");
+    str = str.replaceAll("<=>", "\\Leftrightarrow");
+    str = str.replaceAll("=>","\\Rightarrow");
     str = str.replaceAll(".","\\text{. }$$$");
     str = str.replaceAll(",","\\text{, }$$$");
     str = str.replaceAll("On a","$$$\\text{On a }");
@@ -2035,8 +2035,8 @@ const Game = ({ mode, ex, numero }) => {
       {/* Affichage de la démonstration de logique mathématique de l'exercice */}
       <div className="demonstration">
         {demonstration.map((element, index) => {
-          if (index === 0) return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{paddingTop : 5 }} ><Latex >{StringToLatex(element)}</Latex></div>
-          else             return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} ><Latex >{StringToLatex(element)}</Latex></div>
+          if (index === 1) return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 , marginTop : 20 }} ><Latex >{StringToLatex(element)}</Latex></div>
+          else             return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 }} ><Latex >{StringToLatex(element)}</Latex></div>
         })}
       </div>
       {popupAddCard && (
@@ -2127,8 +2127,8 @@ const Game = ({ mode, ex, numero }) => {
               </button>
               <div className="demonstration-win">
                 {demonstration.map((element, index) => {
-                  if (index === 1) return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20, marginTop : 20 }} ><Latex >{element}</Latex></div>
-                  else             return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{element}</Latex></div>
+                  if (index === 1) return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20, marginTop : 20 }} ><Latex >{StringToLatex(element)}</Latex></div>
+                  else             return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{StringToLatex(element)}</Latex></div>
                 })}
               </div>
             </>
