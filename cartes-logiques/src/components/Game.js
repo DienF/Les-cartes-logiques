@@ -1971,10 +1971,59 @@ const Game = ({ mode, ex, numero }) => {
     str = str.replaceAll("Montrons","$$$\\text{Montrons }");
     str = str.replaceAll("Supposons","$$$\\text{Supposons }")
     str = str.replaceAll("Puisque","$$$\\text{Puisque }")
-    console.log(str)
+    str = str.replaceAll("  "," ");
     return str;
   }
-  
+  const copyHandler = (event) =>{
+    let str = window.getSelection().toString();
+    str = str.replaceAll("\\textit{ Rouge }"," Rouge ");
+    str = str.replaceAll("\\textit{ Jaune }"," Jaune ");
+    str = str.replaceAll("\\textit{ Bleue }"," Bleue ");
+    str = str.replaceAll("\\textit{ Orange }"," Orange ");
+    str = str.replaceAll("\\textit{ True }"," True ");
+    str = str.replaceAll("\\textit{ False }"," False ");
+    str = str.replaceAll("\\land","^");
+    str = str.replaceAll("∧","^");
+    str = str.replaceAll("\\Leftrightarrow","<=>");
+    str = str.replaceAll("⇒","=>")
+    str = str.replaceAll("\\Rightarrow","=>");
+    str = str.replaceAll("\\text{. }",". ");
+    str = str.replaceAll("\\text{, }",", ");
+    str = str.replaceAll("\\text{On a }","On a");
+    str = str.replaceAll("\\text{on a }","on a");
+    str = str.replaceAll("\\text{Montrons }","Montrons");
+    str = str.replaceAll("\\text{Supposons }","Supposons")
+    str = str.replaceAll("\\text{Puisque }","Puisque")
+
+    let espaceInsec = new RegExp(String.fromCharCode(160), "g");
+    str = str.replaceAll(espaceInsec," ");
+    str = str.replaceAll("  ", " " );
+    str = str.replaceAll(" .", ".");
+    console.log(str);
+    let arrayLine = str.split("\n");
+    let futurArrayLine = [];
+    arrayLine.forEach(line =>{
+      let arrayElement = line.split(", ");
+      let futurArrayElement = [];
+      arrayElement.forEach(elementComa=>{
+        let arrayPoint = elementComa.split(". ");
+        let futurArrayPoint = []
+        arrayPoint.forEach(element =>{
+          if(!futurArrayPoint.includes(element)){
+            futurArrayPoint.push(element);
+          }
+        })
+        let res = futurArrayPoint.join(". ");
+        if(!futurArrayElement.includes(res)){
+          futurArrayElement.push(res);
+        }
+      })
+      futurArrayLine.push(futurArrayElement.join(", "));
+    })
+    str = futurArrayLine.join("\n");
+    console.log(str);
+    navigator.clipboard.writeText(str);
+  }
   return (
     <div className="game" >
       <div className="bouton">
@@ -2033,7 +2082,7 @@ const Game = ({ mode, ex, numero }) => {
         ))}
       </GameTab.Provider>
       {/* Affichage de la démonstration de logique mathématique de l'exercice */}
-      <div className="demonstration">
+      <div className="demonstration" onCopy={copyHandler}>
         {demonstration.map((element, index) => {
           if (index === 1) return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 , marginTop : 20 }} ><Latex >{StringToLatex(element)}</Latex></div>
           else             return <div key={index} id={"demo"+index} onClick={demonstrationClickHandler} style={{ marginLeft : 20+tabIndentation[index]*20 }} ><Latex >{StringToLatex(element)}</Latex></div>
@@ -2125,7 +2174,7 @@ const Game = ({ mode, ex, numero }) => {
               >
                 ✖
               </button>
-              <div className="demonstration-win">
+              <div className="demonstration-win" onCopy={copyHandler}>
                 {demonstration.map((element, index) => {
                   if (index === 1) return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20, marginTop : 20 }} ><Latex >{StringToLatex(element)}</Latex></div>
                   else             return <div key={index} style={{ marginLeft : 20+tabIndentation[index]*20}} ><Latex >{StringToLatex(element)}</Latex></div>
