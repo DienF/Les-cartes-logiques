@@ -1985,7 +1985,8 @@ const Game = ({ mode, ex, numero }) => {
     str = str.replaceAll("\\land","^");
     str = str.replaceAll("∧","^");
     str = str.replaceAll("\\Leftrightarrow","<=>");
-    str = str.replaceAll("⇒","=>")
+    str = str.replaceAll("⇒","=>");
+    str = str.replaceAll("⇔","<=>");
     str = str.replaceAll("\\Rightarrow","=>");
     str = str.replaceAll("\\text{. }",". ");
     str = str.replaceAll("\\text{, }",", ");
