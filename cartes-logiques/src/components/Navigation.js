@@ -67,11 +67,27 @@ const Navigation = () => {
           </li>
       </ul>
       <h1>Les Cartes Logiques</h1>
+      {window.location.pathname.substring(9,13) === ("Play") && 
       <div id="titrePage">
-        {window.location.pathname}
-      </div>
+        {"Exercice "+window.location.pathname.substring(13,18)}
+      </div>}
+      {window.location.pathname === ("/") && 
+      <div id="titrePage">
+        {"Accueil"}
+      </div>}
+      {window.location.pathname === ("/About") && 
+      <div id="titrePage">
+        {"A propos"}
+      </div>}
+      {window.location.pathname.substring(9,15) === ("Create") && 
+      <div id="titrePage">
+        {"Créer un exercice"}
+      </div>}
+      {window.location.pathname.substring(9,17) === ("Tutoriel") && 
+      <div id="titrePage">
+        {"Tutoriel"}
+    </div>}
     </div>
-    
   );
 };
 
