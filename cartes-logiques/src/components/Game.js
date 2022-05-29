@@ -285,7 +285,7 @@ const Game = ({ mode, ex, numero }) => {
 
   const [navigation, setNavigation] = useState();
 
-  const [win , setWin] = useState();
+  const [win, setWin] = useState();
 
   const [savedGame, setSavedGame] = useState();
 
@@ -394,7 +394,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {number} j - index de la carte
    */
   const update = (i, j) => {
-    if(!navigation && !win){
+    if (!navigation && !win) {
       // Met le message d'erreur en "" ce qui ne l'affiche plus
       setMessageError("");
       // N'affiche plus les deux cartes d'aide
@@ -809,7 +809,7 @@ const Game = ({ mode, ex, numero }) => {
       // Si une carte liée à cet objectif est trouvée l'objectif est validé
       if (card.equals(objectif)) {
         // Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
-        if (currentDeck === 0){
+        if (currentDeck === 0) {
            bool = true;
            setWin(true);
         }
@@ -1902,8 +1902,8 @@ const Game = ({ mode, ex, numero }) => {
          *  qui ne soit pas dans le deck objectif.
          */
         let tmpCard = cardError;
-        game.forEach((deck,decki) => {
-          deck.forEach((card,cardi) => {
+        game.forEach((deck, decki) => {
+          deck.forEach((card, cardi) => {
             /** Cherche une carte avec une liaison "=>" dont la partie gauche a une liaison "=>".
              *  (pour l'instant c'est le seul cas connu pour créer un sous-objectif dans le deck
              *  à partir d'une carte qui ne soit pas dans le deck objectif.
@@ -1942,7 +1942,7 @@ const Game = ({ mode, ex, numero }) => {
       }
       allFalse(tmpFutureGame);
     }
-    else{
+    else {
       setNavigation(false);
       allFalse(savedGame);
     }
@@ -1953,71 +1953,66 @@ const Game = ({ mode, ex, numero }) => {
     setMessageError(message);
   }
 
-  const StringToLatex = (str) =>{
-
-    str = str.replaceAll("Rouge","\\textit{ Rouge }");
-    str = str.replaceAll("Jaune","\\textit{ Jaune }");
-    str = str.replaceAll("Bleue","\\textit{ Bleue }");
-    str = str.replaceAll("Orange","\\textit{ Orange }");
-    str = str.replaceAll("True","\\textit{ True }");
-    str = str.replaceAll("False","\\textit{ False }");
-    str = str.replaceAll("^","\\land");
-    str = str.replaceAll("<=>", "\\Leftrightarrow");
-    str = str.replaceAll("=>","\\Rightarrow");
-    str = str.replaceAll(".","\\text{. }$$$");
-    str = str.replaceAll(",","\\text{, }$$$");
-    str = str.replaceAll("On a","$$$\\text{On a }");
-    str = str.replaceAll("on a","$$$\\text{on a }");
-    str = str.replaceAll("Montrons","$$$\\text{Montrons }");
-    str = str.replaceAll("Supposons","$$$\\text{Supposons }")
-    str = str.replaceAll("Puisque","$$$\\text{Puisque }")
-    str = str.replaceAll("  "," ");
+  const StringToLatex = (str) => {
+    str = str.replaceAll("Rouge",     "\\textit{ Rouge }");
+    str = str.replaceAll("Jaune",     "\\textit{ Jaune }");
+    str = str.replaceAll("Bleue",     "\\textit{ Bleue }");
+    str = str.replaceAll("Orange",    "\\textit{ Orange }");
+    str = str.replaceAll("True",      "\\textit{ True }");
+    str = str.replaceAll("False",     "\\textit{ False }");
+    str = str.replaceAll("^",         "\\land");
+    str = str.replaceAll("<=>",       "\\Leftrightarrow");
+    str = str.replaceAll("=>",        "\\Rightarrow");
+    str = str.replaceAll(".",         "\\text{. }$$$");
+    str = str.replaceAll(",",         "\\text{, }$$$");
+    str = str.replaceAll("On a",      "$$$\\text{On a }");
+    str = str.replaceAll("on a",      "$$$\\text{on a }");
+    str = str.replaceAll("Montrons",  "$$$\\text{Montrons }");
+    str = str.replaceAll("Supposons", "$$$\\text{Supposons }")
+    str = str.replaceAll("Puisque",   "$$$\\text{Puisque }")
+    str = str.replaceAll("  ",        " ");
     return str;
   }
-  const copyHandler = (event) =>{
-    let str = window.getSelection().toString();
-    str = str.replaceAll("\\textit{ Rouge }"," Rouge ");
-    str = str.replaceAll("\\textit{ Jaune }"," Jaune ");
-    str = str.replaceAll("\\textit{ Bleue }"," Bleue ");
-    str = str.replaceAll("\\textit{ Orange }"," Orange ");
-    str = str.replaceAll("\\textit{ True }"," True ");
-    str = str.replaceAll("\\textit{ False }"," False ");
-    str = str.replaceAll("\\land","^");
-    str = str.replaceAll("∧","^");
-    str = str.replaceAll("\\Leftrightarrow","<=>");
-    str = str.replaceAll("⇒","=>");
-    str = str.replaceAll("⇔","<=>");
-    str = str.replaceAll("\\Rightarrow","=>");
-    str = str.replaceAll("\\text{. }",". ");
-    str = str.replaceAll("\\text{, }",", ");
-    str = str.replaceAll("\\text{On a }","On a");
-    str = str.replaceAll("\\text{on a }","on a");
-    str = str.replaceAll("\\text{Montrons }","Montrons");
-    str = str.replaceAll("\\text{Supposons }","Supposons")
-    str = str.replaceAll("\\text{Puisque }","Puisque")
 
+  const copyHandler = (event) => {
+    let str = window.getSelection().toString();
+    str = str.replaceAll("\\textit{ Rouge }",  " Rouge ");
+    str = str.replaceAll("\\textit{ Jaune }",  " Jaune ");
+    str = str.replaceAll("\\textit{ Bleue }",  " Bleue ");
+    str = str.replaceAll("\\textit{ Orange }", " Orange ");
+    str = str.replaceAll("\\textit{ True }",   " True ");
+    str = str.replaceAll("\\textit{ False }",  " False ");
+    str = str.replaceAll("\\land",             "^");
+    str = str.replaceAll("∧",                  "^");
+    str = str.replaceAll("\\Leftrightarrow",   "<=>");
+    str = str.replaceAll("⇒",                 "=>");
+    str = str.replaceAll("⇔",                 "<=>");
+    str = str.replaceAll("\\Rightarrow",       "=>");
+    str = str.replaceAll("\\text{. }",         ". ");
+    str = str.replaceAll("\\text{, }",         ", ");
+    str = str.replaceAll("\\text{On a }",      "On a");
+    str = str.replaceAll("\\text{on a }",      "on a");
+    str = str.replaceAll("\\text{Montrons }",  "Montrons");
+    str = str.replaceAll("\\text{Supposons }", "Supposons")
+    str = str.replaceAll("\\text{Puisque }",   "Puisque")
     let espaceInsec = new RegExp(String.fromCharCode(160), "g");
-    str = str.replaceAll(espaceInsec," ");
-    str = str.replaceAll("  ", " " );
-    str = str.replaceAll(" .", ".");
+    str = str.replaceAll(espaceInsec, " ");
+    str = str.replaceAll("  ",        " " );
+    str = str.replaceAll(" .",        ".");
     console.log(str);
-    let arrayLine = str.split("\n");
+    let arrayLine      = str.split("\n");
     let futurArrayLine = [];
-    arrayLine.forEach(line =>{
-      let arrayElement = line.split(", ");
+    arrayLine.forEach(line => {
+      let arrayElement      = line.split(", ");
       let futurArrayElement = [];
-      arrayElement.forEach(elementComa=>{
-        let arrayPoint = elementComa.split(". ");
+      arrayElement.forEach(elementComa => {
+        let arrayPoint      = elementComa.split(". ");
         let futurArrayPoint = []
-        arrayPoint.forEach(element =>{
-          if(!futurArrayPoint.includes(element)){
-            futurArrayPoint.push(element);
-          }
+        arrayPoint.forEach(element => {
+          if (!futurArrayPoint.includes(element)) futurArrayPoint.push(element);
         })
         let res = futurArrayPoint.join(". ");
-        if(!futurArrayElement.includes(res)){
-          futurArrayElement.push(res);
-        }
+        if (!futurArrayElement.includes(res)) futurArrayElement.push(res);
       })
       futurArrayLine.push(futurArrayElement.join(", "));
     })
@@ -2025,6 +2020,7 @@ const Game = ({ mode, ex, numero }) => {
     console.log(str);
     navigator.clipboard.writeText(str);
   }
+
   return (
     <div className="game" >
       <div className="bouton">
