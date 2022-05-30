@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-//import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from "react-router-dom";
 import Deck from "./Deck";
 import Popup from "./Popup";
 export const GameTab = React.createContext();
@@ -290,16 +290,16 @@ const Game = ({ mode, ex, numero }) => {
   const [savedGame, setSavedGame] = useState();
 
   const [tabIndentation, setTabIndentation] = useState([0]);
+
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
-  //const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   /** Variable qui reçoit les JSONs des fichiers.
    *  @see {@link convertFile()} & {@link printConvertFile()}
    */
   let filesCopy = "";
-
 
   /**
    * Renvoie un nouveau deck sans la carte passée en paramètre.
@@ -1996,10 +1996,8 @@ const Game = ({ mode, ex, numero }) => {
     setTabIndiceDemonstration([0]);
     setPopupWin(false);
     setMessageError("");
-    
     if (ex[numero] !== undefined && numero !== undefined && mode !== "Create") {
-      try {      
-        
+      try {
         let tmp = gameInput(ex[numero]);
         let tmpDemonstration = [];
         let res = "";
@@ -2011,9 +2009,7 @@ const Game = ({ mode, ex, numero }) => {
         setDemonstration(tmpDemonstration);
         allFalse(tmp);
         setSavedGame(tmp);
-      } catch (error) {
-        
-      }
+      } catch (error) { }
     }
 
     if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])

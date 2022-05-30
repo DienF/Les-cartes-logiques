@@ -19,8 +19,8 @@ const Home = () => {
           <li>
             Chaque <strong>carte</strong> dispose
             <ul>
-              <li>d'un <strong>pouvoir d'utilisation</strong></li>
-              <li>d'une <strong>méthode d'acquisition</strong></li>
+              <li>d'un <strong>pouvoir d'utilisation</strong>,</li>
+              <li>d'une <strong>méthode d'acquisition</strong>.</li>
             </ul>
           </li>
           <li>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-
-
 const Navigation = () => {
   const [ex, setEx] = useState();
   useEffect(() => {
@@ -57,7 +55,7 @@ const Navigation = () => {
           </li>
       </ul>
       <h1>Les Cartes Logiques</h1>
-      {window.location.pathname.substring(9,13) === ("Play") && 
+      {window.location.pathname.substring(9, 13) === ("Play") && 
       <div id="titrePage">
         {"Exercice "+window.location.pathname.substring(13,18)}
       </div>}
@@ -67,16 +65,16 @@ const Navigation = () => {
       </div>}
       {window.location.pathname === ("/About") && 
       <div id="titrePage">
-        {"A propos"}
+        {"À propos"}
       </div>}
-      {window.location.pathname.substring(9,15) === ("Create") && 
+      {window.location.pathname.substring(9, 15) === ("Create") && 
       <div id="titrePage">
         {"Créer un exercice"}
       </div>}
-      {window.location.pathname.substring(9,17) === ("Tutoriel") && 
+      {window.location.pathname.substring(9, 17) === ("Tutoriel") && 
       <div id="titrePage">
         {"Tutoriel"}
-    </div>}
+      </div>}
     </div>
   );
 };

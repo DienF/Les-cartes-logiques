@@ -29,8 +29,8 @@ const Exercise = () => {
     else {
       setEx([[], []]);
     }
-
   }, [tmp, mode]);
+  
   return (
     <div className="home">
       <Navigation />

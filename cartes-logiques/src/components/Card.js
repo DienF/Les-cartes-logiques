@@ -64,8 +64,7 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    * @param {number}              i - le numéro du Deck
    * @param {number}              j - la position de la carte dans le Deck
    * @param {number}              k - la position de la carte dans les cartes complexes ;
-   *                                  ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0
-   *                                      & l'autre fois avec k=1
+   *                                  ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
    * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
    */
   const getTabClass = (card, k) => {
