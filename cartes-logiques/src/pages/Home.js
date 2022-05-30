@@ -28,7 +28,7 @@ const Home = () => {
             <ul>
               <li><strong>la banque</strong> contient toutes les cartes,</li>
               <li>la <strong>LPU</strong> contient les cartes utilisables par le joueur,</li>
-              <li>la <strong>zone d'objectifs</strong> contient l'objectif de la partie.</li>
+              <li>la <strong>zone d'objectifs</strong> contient l'objectif de la partie (l'objectif principal et les objectifs secondaires).</li>
             </ul>
           </li>
         </ul>
