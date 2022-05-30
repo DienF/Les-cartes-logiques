@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-const getPage = (location) => {
-  console.log(location);
-  switch (location) {
-    case "/":
-      return "Accueil";
-    case "/About":
-      return "A propos";
-    default:
-      return "";
-  }
-}
+
 
 const Navigation = () => {
   const [ex, setEx] = useState();

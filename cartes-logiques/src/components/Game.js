@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import Deck from "./Deck";
 import Popup from "./Popup";
 export const GameTab = React.createContext();
@@ -293,53 +293,13 @@ const Game = ({ mode, ex, numero }) => {
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   /** Variable qui reçoit les JSONs des fichiers.
    *  @see {@link convertFile()} & {@link printConvertFile()}
    */
   let filesCopy = "";
 
-  /**
-   * Initialise l'exercice.
-   */
-  useEffect(() => {
-    setTabObjectif([[0, 0, false]]);
-    setGame([[], []]);
-    setLastGame([]);
-    setIndentationDemonstration(0);
-    setDemonstration([]);
-    setTabIndentation([0]);
-    setNavigation(false);
-    setWin(false);
-    setTabIndiceDemonstration([0]);
-    setPopupWin(false);
-    setMessageError("");
-    
-    if (ex[numero] !== undefined && numero !== undefined && mode !== "Create") {
-      try {      
-        
-        let tmp = gameInput(ex[numero]);
-        let tmpDemonstration = [];
-        let res = "";
-        tmp[0].forEach(element => {
-          res += "On a " + element.toString() + ".";
-        });
-        if (tmp.length === 2 && tmp[1].length > 0) res += "Montrons " + tmp[1][0].toString() +".";
-        tmpDemonstration.push(res);
-        setDemonstration(tmpDemonstration);
-        allFalse(tmp);
-        setSavedGame(tmp);
-      } catch (error) {
-        
-      }
-    }
-
-    if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
-    if (numero === 1) setMessageTutoriel(["Dans cet exercice nous allons apprendre le troisième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
-    if (numero === 2) setMessageTutoriel(["Dans cet exercice nous allons apprendre le quatrième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
-    if (numero === 3) setMessageTutoriel(["Dans cet exercice nous allons apprendre le dernier bouton.", "Pour faire fonctionner ce bouton on doit sélectionner l’objectif."])
-  }, [mode, ex, numero])
 
   /**
    * Renvoie un nouveau deck sans la carte passée en paramètre.
@@ -1402,7 +1362,7 @@ const Game = ({ mode, ex, numero }) => {
    * Appellée avec le sélecteur, reçoit le numéro puis redirige le site vers l'exercice correspondant.
    * @param {Event} event - le sélecteur (le numéro est dans {@link event.target.value})
    */
-  const changeExercise = (event) => {
+  /* const changeExercise = (event) => {
     // Numéro de l'exercice demandée
     let value = event.target.value;
     // Si le sélecteur n'est pas sur "Choisir un exercice"
@@ -1412,7 +1372,7 @@ const Game = ({ mode, ex, numero }) => {
       // Redirection vers l'exercice voulu
       navigate(url);
     }
-  }
+  } */
   
   /**
    * Reçoit plusieurs fichiers puis fusionne ces fichiers pour n'en faire qu'un.
@@ -1451,7 +1411,7 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * Redirige vers le prochain exercice si il existe.
    */
-  const nextExercise = () => {
+  /* const nextExercise = () => {
     // S'il y a un prochain exercice
     if (numero+2 <= ex.length) {
       // url du prochain exercice
@@ -1460,7 +1420,7 @@ const Game = ({ mode, ex, numero }) => {
       navigate(url);
     }
     setPopupWin(false);
-  }
+  } */
 
   /**
    * Teste une carte pour voir si en utilisant le bouton pour séparer une carte on peut obtenir la carte (carteObjectif).
@@ -1742,7 +1702,7 @@ const Game = ({ mode, ex, numero }) => {
   /** Met dans la console tous les mouvements à faire pour gagner la partie.
    *  @todo Fonction inutilisée pour l'instant. Ne marche pas normalement.
    */
-  const soluceExercise = () => {
+  /* const soluceExercise = () => {
     let tmp      = [...game];
     let chemin   = [[],false];
     let objectif = tmp[1][0];
@@ -1772,7 +1732,7 @@ const Game = ({ mode, ex, numero }) => {
     }
     else console.log("Aucune solution trouvée");
     tmp = null;
-  }
+  } */
 
   /**
    * Fait une copie du jeu actuel en créant un nouveau tableau & en copiant toutes les cartes.
@@ -1820,7 +1780,7 @@ const Game = ({ mode, ex, numero }) => {
     return bool;
   }
 
-  const testResolve = () => {
+  /* const testResolve = () => {
     let tmp       = copyGame();
     let chemin    = [[], false];
     let deckId    = tmp.length-1;
@@ -1830,7 +1790,7 @@ const Game = ({ mode, ex, numero }) => {
     let tmpResult = [...result[0]]
     let affiche   = tmpResult.reverse();
     console.log(affiche);
-  }
+  } */
 
   /**
    * Cherche le prochain coup qui amène à finir l'exercice :
@@ -1974,7 +1934,7 @@ const Game = ({ mode, ex, numero }) => {
     return str;
   }
 
-  const copyHandler = (event) => {
+  const copyHandler = () => {
     let str = window.getSelection().toString();
     str = str.replaceAll("\\textit{ Rouge }",  " Rouge ");
     str = str.replaceAll("\\textit{ Jaune }",  " Jaune ");
@@ -2020,18 +1980,51 @@ const Game = ({ mode, ex, numero }) => {
     console.log(str);
     navigator.clipboard.writeText(str);
   }
+  
+  /**
+   * Initialise l'exercice.
+   */
+   useEffect(() => {
+    setTabObjectif([[0, 0, false]]);
+    setGame([[], []]);
+    setLastGame([]);
+    setIndentationDemonstration(0);
+    setDemonstration([]);
+    setTabIndentation([0]);
+    setNavigation(false);
+    setWin(false);
+    setTabIndiceDemonstration([0]);
+    setPopupWin(false);
+    setMessageError("");
+    
+    if (ex[numero] !== undefined && numero !== undefined && mode !== "Create") {
+      try {      
+        
+        let tmp = gameInput(ex[numero]);
+        let tmpDemonstration = [];
+        let res = "";
+        tmp[0].forEach(element => {
+          res += "On a " + element.toString() + ".";
+        });
+        if (tmp.length === 2 && tmp[1].length > 0) res += "Montrons " + tmp[1][0].toString() +".";
+        tmpDemonstration.push(res);
+        setDemonstration(tmpDemonstration);
+        allFalse(tmp);
+        setSavedGame(tmp);
+      } catch (error) {
+        
+      }
+    }
+
+    if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
+    if (numero === 1) setMessageTutoriel(["Dans cet exercice nous allons apprendre le troisième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
+    if (numero === 2) setMessageTutoriel(["Dans cet exercice nous allons apprendre le quatrième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
+    if (numero === 3) setMessageTutoriel(["Dans cet exercice nous allons apprendre le dernier bouton.", "Pour faire fonctionner ce bouton on doit sélectionner l’objectif."])
+  }, [mode, ex, numero,allFalse])
 
   return (
     <div className="game" >
       <div className="bouton">
-      {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
-      {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
-      {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
-      {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regroupés</button>}
-      {/* Bouton pour ouvrir un fichier JSON et afficher l'exercice à l'écran pour le modifier */}
-      {mode === "Create" && <input type="file" accept="application/json" onChange={openFile}></input>}
-      {/* Copie du jeu actuel en format JSON dans le presse-papier */}
-      {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
       {/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
         {false && <button onClick={getNextMove}>Aide</button>}
         {/* Revient à la partie avant l'ajout d'une carte */}
@@ -2050,6 +2043,14 @@ const Game = ({ mode, ex, numero }) => {
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
         {mode !== "Create" && <button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Ajout objectif"}/></button>}
+      {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
+      {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
+      {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
+      {mode === "Create" && <button onClick={printConvertFile}>Copier les fichiers regroupés</button>}
+      {/* Bouton pour ouvrir un fichier JSON et afficher l'exercice à l'écran pour le modifier */}
+      {mode === "Create" && <input type="file" accept="application/json" onChange={openFile}></input>}
+      {/* Copie du jeu actuel en format JSON dans le presse-papier */}
+      {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
       {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
