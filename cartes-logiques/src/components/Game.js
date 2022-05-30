@@ -2020,7 +2020,7 @@ const Game = ({ mode, ex, numero }) => {
     if (numero === 1) setMessageTutoriel(["Dans cet exercice nous allons apprendre le troisième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
     if (numero === 2) setMessageTutoriel(["Dans cet exercice nous allons apprendre le quatrième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
     if (numero === 3) setMessageTutoriel(["Dans cet exercice nous allons apprendre le dernier bouton.", "Pour faire fonctionner ce bouton on doit sélectionner l’objectif."])
-  }, [mode, ex, numero,allFalse])
+  }, [mode, ex, numero])
 
   return (
     <div className="game" >
