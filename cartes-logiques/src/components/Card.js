@@ -1,7 +1,7 @@
 import React from "react";
 import { GameTab } from "./Game";
 
-const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
+const Card = ({deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   /**
    * Fonction qui détecte le clique sur une carte & qui appelle la fonction {@link update()} passée par le
    * component Deck.
@@ -12,14 +12,11 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   
   /**
    * Détermine le type de carte.
-   * @param {Array<CardClass>} game - le tableau qui contient toutes les cartes
-   * @param {number}              i - le numéro du Deck
-   * @param {number}              j - la position de la carte dans le Deck
+   * @param {CardClass} card - la carte
    * @returns {"card_simple"|"card_double"|"card_triple_a"|"card_triple_b"|"card_quadruple"} le nom de la classe
    * correspondant à la carte
    */
   const getClassType = (card) => {
-    
     if (card.left !== null && card.link === "=>" && card.right.color === "white" )
       return getClassType(card.left);
     if (card.left === null && card.right === null)
@@ -60,11 +57,9 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
 
   /**
    * Permet de savoir si l'on doit afficher une carte à la verticale ou à l'horizontale.
-   * @param {Array<CardClass>} game - le tableau qui contient toutes les cartes
-   * @param {number}              i - le numéro du Deck
-   * @param {number}              j - la position de la carte dans le Deck
-   * @param {number}              k - la position de la carte dans les cartes complexes ;
-   *                                  ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
+   * @param {CardClass} card - la carte à afficher
+   * @param {number}       k - la position de la carte dans les cartes complexes ;
+   *                           ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
    * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
    */
   const getTabClass = (card, k) => {
@@ -86,9 +81,7 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
 
   /**
    * Renvoie un tableau qui va être utilisé par la fonction {@link Array.map()} pour afficher toutes les cartes.
-   * @param {Array<CardClass>} game - le tableau qui contient toutes les cartes
-   * @param {number}              i - le numéro du deck
-   * @param {number}              j - la position de la carte dans le deck
+   * @param {CardClass} card - la carte à mettre dans le tableau
    * @returns {Array<CardClass>} un tableau de cartes
    */
   const getTab = (card) => {
@@ -121,20 +114,28 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
     return tab;
   };
 
+  /**
+   * Donne la carte de gauche dans une implication si la carte de droite est blanche ("Vrai").
+   * @param {CardClass} card - la carte à vérifier
+   * @returns {CardClass} la carte gauche si c'est une implication & que la carte de droite est blanche sinon la carte passée en paramètre
+   * @example "Jaune => Blanc" renvoie "Jaune"
+   */
   const getGoodCard = (card) => {
-    if (card.right !== null && card.link === "=>" && card.right.color === "white" )
+    if (card.right !== null && card.link === "=>" && card.right.color === "white")
       return card.left;
     return card;
   }
 
-  const afficheLink = (str) =>{
-    if(str === "et"){
-      return " ^ ";
-    }
-    else{
-      return str;
-    }
+  /**
+   * Affiche "^" au lieu de "et" dans les liaisons entre cartes.
+   * @param {String} str - la liaison
+   * @returns {String} "^" si la liaison est "^" sinon la liaison reste inchangée
+   */
+  const afficheLink = (str) => {
+    if (str === "et") return " ^ ";
+    else return str;
   }
+  
   return (
     <div className="card">
       <GameTab.Consumer>
