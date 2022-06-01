@@ -1,5 +1,6 @@
 import React from "react";
 import { GameTab } from "./Game";
+var Latex = require("react-latex");
 
 const Card = ({deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
   /**
@@ -132,7 +133,9 @@ const Card = ({deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
    * @returns {String} "^" si la liaison est "^" sinon la liaison reste inchangée
    */
   const afficheLink = (str) => {
-    if (str === "et") return " ^ ";
+    if (str === "et") return "$$\\land$$";
+    else if (str === "=>") return "$$\\Rightarrow$$"
+    else if (str === "<=>") return "$$\\Leftrightarrow$$"
     else return str;
   }
   
@@ -158,28 +161,28 @@ const Card = ({deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
                     ></div>
                     {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_double"    &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
-                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</Latex></div>)}
                     {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
-                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</Latex></div>)}
                     {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].right.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
-                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).right.link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).right.link)}</Latex></div>)}
                     {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].left.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
-                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).left.link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).left.link)}</Latex></div>)}
                     {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
-                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</Latex></div>)}
                     {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].left.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
-                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).left.link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).left.link)}</Latex></div>)}
                     {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].right.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
-                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).right.link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).right.link)}</Latex></div>)}
                     {index === 2 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&
                     (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
-                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                      <Latex>{afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</Latex></div>)}
                   </div>
                 )
               )}
