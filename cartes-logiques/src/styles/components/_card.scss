@@ -32,6 +32,11 @@
     transform: rotate(90deg);
     transition: all .5s;
   }
+  .no_rotate {
+    transform: rotate(0deg);
+    width: 2vh;
+    text-align: center;
+  }
 
   .card_simple_h {
     border-radius: 2vh;

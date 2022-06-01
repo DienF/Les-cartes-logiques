@@ -126,6 +126,15 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
       return card.left;
     return card;
   }
+
+  const afficheLink = (str) =>{
+    if(str === "et"){
+      return " ^ ";
+    }
+    else{
+      return str;
+    }
+  }
   return (
     <div className="card">
       <GameTab.Consumer>
@@ -146,14 +155,30 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2}) => {
                         ((cardHelp[0] === deckIndice && cardHelp[1] === cardIndice) || (cardHelp2[0] === deckIndice && cardHelp2[1] === cardIndice) ? " card_help" : "")
                       }
                     ></div>
-                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_double"    &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
-                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
-                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).right.link}</div>)}
-                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).left.link}</div>)}
-                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
-                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).left.link}</div>)}
-                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&(<div className="affix_v">{getGoodCard(game[deckIndice][cardIndice]).right.link}</div>)}
-                    {index === 2 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&(<div className="affix_h">{getGoodCard(game[deckIndice][cardIndice]).link}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_double"    &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
+                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
+                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_a"  &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].right.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
+                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).right.link)}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].left.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
+                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).left.link)}</div>)}
+                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_triple_b"  &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
+                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
+                    {index === 0 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].left.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
+                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).left.link)}</div>)}
+                    {index === 1 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].right.link) === "et" ? "affix_v no_rotate" : "affix_v"}>
+                      {afficheLink(getGoodCard(game[deckIndice][cardIndice]).right.link)}</div>)}
+                    {index === 2 && getClassType(getGoodCard(game[deckIndice][cardIndice])) === "card_quadruple" &&
+                    (<div className={getGoodCard(game[deckIndice][cardIndice].link) === "et" ? "affix_h no_rotate" : "affix_h"}>
+                    {afficheLink(getGoodCard(game[deckIndice][cardIndice]).link)}</div>)}
                   </div>
                 )
               )}
