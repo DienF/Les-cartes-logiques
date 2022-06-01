@@ -91,6 +91,9 @@ const Home = () => {
               <li>
                 le <strong>connecteur « implique »</strong> dont le symbole est <strong>⟹</strong>.
               </li>
+              <li>
+                le <strong>connecteur « équivaut »</strong> dont le symbole est <strong>⟺</strong>.
+              </li>
             </ul>
           </li>
         </ul>
@@ -101,6 +104,9 @@ const Home = () => {
           </li>
           <li>
             En présentant à la banque une carte avec le connecteur <strong>⟹</strong> et <strong>la carte d’où vient la flèche</strong>, on peut obtenir <strong>la carte d'où va la flèche</strong>.
+          </li>
+          <li>
+            En présentant à la banque une carte avec le connecteur <strong>⟺</strong> et <strong>une des deux cartes connectées</strong>, on peut obtenir <strong>l'autre carte</strong> connectée.
           </li>
         </ul>
       </div>
