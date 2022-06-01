@@ -53,12 +53,17 @@
     align-items: center;
     margin: auto;
 
+    div{
+     display: inline-block; 
+    }
+
     button {
       cursor: pointer;
       margin-bottom: 0.8vh;
       margin-top: 0.8vh;
       margin-right: 2vh;
       margin-left: 2vh;
+      position: relative;
     }
 
     #back, #addAnd, #addImplique, #fuseAnd, #addGoal {
@@ -72,10 +77,38 @@
         height: 35px;
         width: auto;
       }
+
+      .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        top: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .tooltiptext::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
     }
 
     #back:hover, #addAnd:hover, #addImplique:hover, #fuseAnd:hover, #addGoal:hover{
       border: 2px solid black;
+      .tooltiptext {
+        visibility: visible;
+      }
     }
   }
 
