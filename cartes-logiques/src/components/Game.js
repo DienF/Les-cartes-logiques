@@ -2036,19 +2036,19 @@ const Game = ({ mode, ex, numero }) => {
         {/* Revient à la partie avant l'ajout d'une carte */}
         <div><button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"}/><span className="tooltiptext">Retour arrière</span></button></div>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
-        {mode !== "Create" && <div><button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Ajout carte et"}/><span className="tooltiptext">Ajout carte et</span></button></div>}
+        {mode !== "Create" && <div><button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Séparation"}/><span className="tooltiptext">Séparation</span></button></div>}
         {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
             est égale à la partie gauche */}
-        {mode !== "Create" && <div><button id= "addImplique" className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Ajout carte =>"}/><span className="tooltiptext">Ajout carte {"=>"}</span></button></div>}
+        {mode !== "Create" && <div><button id= "addImplique" className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Implique"}/><span className="tooltiptext">Implique</span></button></div>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et" */}
-        {mode !== "Create" && <div><button id= "fuseAnd" className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}><img src={"img/fusion_carte_et.png"} alt={"Fusion carte et"}/><span className="tooltiptext">Fusion carte et</span></button></div>}
+        {mode !== "Create" && <div><button id= "fuseAnd" className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAdd}><img src={"img/fusion_carte_et.png"} alt={"Fusion"}/><span className="tooltiptext">Fusion</span></button></div>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <div><button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Ajout objectif"}/><span className="tooltiptext">Ajout objectif</span></button></div>}
+        {mode !== "Create" && <div><button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Objectif"}/><span className="tooltiptext">Objectif</span></button></div>}
       {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
       {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
