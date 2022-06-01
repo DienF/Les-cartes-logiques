@@ -477,11 +477,16 @@ const Game = ({ mode, ex, numero }) => {
     setSelecCard2(-1);
     setSelecDeck2(-1);
     // On désélectionne toutes les cartes du jeu passé en paramètre
-    tmp.forEach((e) => {
-      e.forEach((s) => {
-        s.select(false);
+    try {
+      tmp.forEach((e) => {
+        e.forEach((s) => {
+          s.select(false);
+        });
       });
-    });
+    } catch (error) {
+      
+    }
+
     // On actualise le jeu
     setGame(tmp);
   };
@@ -499,11 +504,16 @@ const Game = ({ mode, ex, numero }) => {
     // Copie du jeu actuel
     let tmp = [...game];
     // On désélectionne toutes les cartes du jeu actuel
-    tmp.forEach((e) => {
-      e.forEach((s) => {
-        s.select(false);
+    try {
+      tmp.forEach((e) => {
+        e.forEach((s) => {
+          s.select(false);
+        });
       });
-    });
+    } catch (error) {
+      
+    }
+
     // On actualise le jeu
     setGame(tmp);
   };
@@ -2089,19 +2099,19 @@ const Game = ({ mode, ex, numero }) => {
             <>
               <b>Choisissez une couleur</b>
               <div onChange={choixCouleur}>
-                <input type="radio" value="red"    name="couleur" /> Rouge
-                <input type="radio" value="yellow" name="couleur" /> Jaune
-                <input type="radio" value="blue"   name="couleur" /> Bleu
-                <input type="radio" value="orange" name="couleur" /> Orange
-                <input type="radio" value="black"  name="couleur" /> Noir
-                <input type="radio" value="white"  name="couleur" /> Blanc
+                <input type="radio" value="red"    name="couleur" /> {" Rouge "}
+                <input type="radio" value="yellow" name="couleur" /> {" Jaune "}
+                <input type="radio" value="blue"   name="couleur" /> {" Bleu "}
+                <input type="radio" value="orange" name="couleur" /> {" Orange "}
+                <input type="radio" value="black"  name="couleur" /> {" Noir "}
+                <input type="radio" value="white"  name="couleur" /> {" Blanc "}
               </div>
               <button
                 onClick={function () {
                   setPopupAddCard(false);
                 }}
               >
-                Annuler
+                X
               </button>
             </>
           }
@@ -2115,16 +2125,16 @@ const Game = ({ mode, ex, numero }) => {
             <>
               <b>Choisissez une liaison</b>
               <div onChange={choixLiaison}>
-                <input type="radio" value="et" name="liaison" /> et
-                <input type="radio" value="=>" name="liaison" /> {"=>"}
-                <input type="radio" value="<=>" name="liaison" /> {"<=>"}
+                <input type="radio" value="et" name="liaison" /> {"et "}
+                <input type="radio" value="=>" name="liaison" /> {"=> "}
+                <input type="radio" value="<=>" name="liaison" /> {"<=> "}
               </div>
               <button
                 onClick={function () {
                   setPopupFusion(false);
                 }}
               >
-                Annuler
+                X
               </button>
             </>
           }

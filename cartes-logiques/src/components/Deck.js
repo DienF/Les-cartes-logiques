@@ -22,7 +22,7 @@ const Deck = ({updateGame, indice, addCardFunc, deleteCardFunc, nbDeck, mode, ob
    * @see Card#deleteCard()
    */
   const deleleCardToDeck = () => {
-    deleteCardFunc(true);
+    deleteCardFunc();
   }
 
   /**
