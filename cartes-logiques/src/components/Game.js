@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 import Deck from "./Deck";
 import Popup from "./Popup";
-import {Card} from '../class/Card'
+import Card from '../class/Card'
 
 export const GameTab = React.createContext();
 var Latex = require("react-latex");

@@ -1,6 +1,6 @@
 
 
-export class Card {
+export default class Card {
     /**
      * @param {number} id
      * @param {string|null} color - couleurs disponibles :
