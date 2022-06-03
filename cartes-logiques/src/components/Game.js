@@ -7,8 +7,6 @@ import Card from '../class/Card'
 export const GameTab = React.createContext();
 var Latex = require("react-latex");
 
-
-
 const Game = ({ mode, ex, numero }) => {
   // Carte qui n'existera jamais dans un deck
   var cardError = new Card(-1, "error", false, null, null); 
@@ -128,7 +126,7 @@ const Game = ({ mode, ex, numero }) => {
 
   /**
    * Renvoie un nouveau deck sans la carte passée en paramètre.
-   * @param {Array<Card>} deck - deck dans lequel il faut supprimer la carte
+   * @param {Array<Card>}      deck - deck dans lequel il faut supprimer la carte
    * @param {number}     indiceCard - indice de la carte à supprimer
    * @returns {Array<Card>} le deck sans la carte d'indice {@link indiceCard}
    */
@@ -154,7 +152,7 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * Renvoie un nouveau tableau sans le deck passé en paramètre.
    * @param {Array<Array<Card>} currentGame - tableau de la partie (avec potentiellement des modifications)
-   * @param {number}                  indiceDeck - indice du Deck à supprimer
+   * @param {number}             indiceDeck - indice du Deck à supprimer
    * @returns {Array<Array<Card>} le jeu sans le deck d'indice {@link indiceDeck}
    */
   const delDeck = (currentGame, indiceDeck) => {
@@ -1301,7 +1299,7 @@ const Game = ({ mode, ex, numero }) => {
    * carte passée en paramètre.
    *    Si oui renvoie true.
    * @param {Array<Array<Card>} tmp - tableau du jeu temporaire
-   * @param {number}              deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
+   * @param {number}         deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
    * @param {Card}             card - la carte à trouver
    * @returns {true|false} true ou false
    */
@@ -1321,7 +1319,7 @@ const Game = ({ mode, ex, numero }) => {
    * carte passée en paramètre.
    *    Si oui renvoie son indice.
    * @param {Array<Array<Card>} tmp - tableau du jeu temporaire
-   * @param {number}              deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
+   * @param {number}         deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
    * @param {Card}             card - la carte à trouver
    * @returns {number} -1 si la carte n'est pas dans le deck sinon son indice
    */
@@ -1342,8 +1340,8 @@ const Game = ({ mode, ex, numero }) => {
    * simple existante.
    * @param {Array<Array<Card>} tmp - tableau du jeu temporaire
    * @param {Card}         cardTest - la dernière carte trouvée pour aller à l'objectif
-   * @param {number}              deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
-   * @param {number}        deckObjectif - numéro de l'objectif
+   * @param {number}         deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
+   * @param {number}   deckObjectif - numéro de l'objectif
    * @param {Array<Card>}    chemin - le chemin de cartes actuel
    * @returns {Array<Card>} le chemin
    */

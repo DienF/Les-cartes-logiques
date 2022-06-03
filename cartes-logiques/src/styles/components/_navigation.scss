@@ -45,26 +45,26 @@
       >li {
         min-height: 50px;
       }
+
       li {
-        background-color:#729EBF; 
+        background-color: #729EBF; 
       }
     
   }
 
   .navbar li li {
-     max-height:0;
-     overflow: hidden;
-     transition: all 1s;
-     border-radius:0;
-     background: #444;
-     box-shadow: none;
-     border: none;
-     margin: 0
+    max-height: 0;
+    overflow: hidden;
+    transition: all 1s;
+    border-radius: 0;
+    background: #444;
+    box-shadow: none;
+    border: none;
+    margin: 0
   }
 
   .choose ul {
     max-height: 0;
-    // overflow: hidden;
     transition: all 1s;
     position: absolute;
     right: -150px;
@@ -85,7 +85,7 @@
      background: #729EBF;
      
      .choose li {
-        display:none;
+        display: none;
      }
 
      .choose:hover .exo {

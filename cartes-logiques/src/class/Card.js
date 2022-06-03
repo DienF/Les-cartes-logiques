@@ -130,7 +130,6 @@ export default class Card {
      * Fonction récursive qui :
      * change l'attribut 'active' ;
      * regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
-     * @param {Card}   card - la carte qui doit être sélectionnée ou pas
      * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
      */
     select(state) {
@@ -172,7 +171,7 @@ export default class Card {
      */
     toDemonstration() {
       if      (this.color !== null) return "On a"    + this.getColor(this.color);
-      else if (this.link  === "et") return "On a"    + this.left.toString() + "^" + this.right.toString();
-      else                          return "Puisque" + this.left.toString() + ", on a "          + this.right.toString();
+      else if (this.link  === "et") return "On a"    + this.left.toString() + "^"       + this.right.toString();
+      else                          return "Puisque" + this.left.toString() + ", on a " + this.right.toString();
     }
   }

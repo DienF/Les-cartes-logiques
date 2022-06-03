@@ -7,7 +7,6 @@
   min-height: 100vh;
   min-width: 100vw;
   background-color: #432F75;
-  // background-image: url("../../public/img/fond.jpg");
   background-image: linear-gradient(to bottom, #7887AB, #162856);
   color: #fdfdfd;
   font-family: 'Open Sans', sans-serif;
@@ -27,11 +26,11 @@ button {
 }
 
 h1, h2 {
-    font-family: 'Fredericka the Great', cursive;
-    text-align: center;
+  font-family: 'Fredericka the Great', cursive;
+  text-align: center;
 }
 
 h2 {
-    color: rgb(255, 132, 132);
-    text-decoration: underline;
+  color: rgb(255, 132, 132);
+  text-decoration: underline;
 }
