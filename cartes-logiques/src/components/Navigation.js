@@ -3,11 +3,17 @@ import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
   const [ex, setEx] = useState();
+  const [exTuto , setExTuto] = useState();
   useEffect(() => {
     fetch("exercices.json")
     .then(response => response.text())
     .then(data => {
       setEx(JSON.parse(data));
+    });
+    fetch("tutoriel.json")
+    .then(response => response.text())
+    .then(data => {
+      setExTuto(JSON.parse(data));
     });
   }, []);
 
@@ -41,10 +47,19 @@ const Navigation = () => {
                   ))}
                 </ul>
               </li>
-              <li>
-                <NavLink exact="true" to="/ExerciseTutorial1">
-                  Tutoriel
+              <li className="choose">
+                <NavLink exact="true" to="/">
+                 Tutorial
                 </NavLink>
+                <ul id="tuto">
+                {exTuto !== undefined && exTuto.map((exercice, index) => (
+                  <li className="exo" key={index}>
+                    <NavLink exact="true" to={"/ExerciseTutorial"+(index+1)}>
+                      Tutoriel {index+1}
+                    </NavLink>
+                  </li>
+                  ))}
+                </ul>
               </li>
               <li>
                 <NavLink exact="true" to="/About">
