@@ -49,7 +49,7 @@ const Navigation = () => {
               </li>
               <li className="choose">
                 <NavLink exact="true" to="/">
-                 Tutorial
+                 Tutoriel
                 </NavLink>
                 <ul id="tuto">
                 {exTuto !== undefined && exTuto.map((exercice, index) => (
