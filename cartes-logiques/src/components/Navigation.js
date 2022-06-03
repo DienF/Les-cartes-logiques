@@ -42,7 +42,7 @@ const Navigation = () => {
                 </ul>
               </li>
               <li>
-                <NavLink exact="true" to="/ExerciseTutoriel1">
+                <NavLink exact="true" to="/ExerciseTutorial1">
                   Tutoriel
                 </NavLink>
               </li>
