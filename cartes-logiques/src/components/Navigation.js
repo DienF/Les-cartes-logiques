@@ -71,7 +71,7 @@ const Navigation = () => {
       <div id="titrePage">
         {"Créer un exercice"}
       </div>}
-      {window.location.pathname.substring(9, 17) === ("Tutoriel") && 
+      {window.location.pathname.substring(9, 17) === ("Tutorial") && 
       <div id="titrePage">
         {"Tutoriel"}
       </div>}

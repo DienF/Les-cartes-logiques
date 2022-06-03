@@ -86,7 +86,7 @@ const Game = ({ mode, ex, numero }) => {
    *  Attention c'est un tableau de strings.
    *  Si le message est "" on affiche rien.
    */ 
-  const [messageTutoriel, setMessageTutoriel] = useState("");
+  const [messageTutorial, setMessageTutorial] = useState("");
 
   /** Tableau des objectifs.
    *  Sous cette forme : [numero objectif, indice de la carte dans le deck, (numero != indice)]
@@ -243,9 +243,9 @@ const Game = ({ mode, ex, numero }) => {
       // Affiche le popup de fusion en mode création si 2 cartes sont séléctionnées
       if (tmpNbselec === 2 && mode === "Create") setPopupFusion(true);
       // Affichage des tutoriels en fonction de l'exercice et du nombre de cartes sélectionnées
-      if (mode === "Tutoriel") {
+      if (mode === "Tutorial") {
         if (numero === 0) {
-          setMessageTutoriel([
+          setMessageTutorial([
             "Une fois une carte sélectionnée elle aura un contour noir.", 
             "Vous pouvez utiliser les boutons au-dessus pour effectuer une action.",
             "Dans cet exercice nous allons apprendre le fonctionnement du deuxième bouton.",
@@ -256,7 +256,7 @@ const Game = ({ mode, ex, numero }) => {
           );
         }
         if (tmpNbselec === 2 && numero === 1) {
-          setMessageTutoriel([
+          setMessageTutorial([
             "Ce bouton a besoin de trois conditions :",
             "- Avoir deux cartes sélectionnées",
             "- Une des deux cartes doit avoir une liaison \"=>\"",
@@ -265,7 +265,7 @@ const Game = ({ mode, ex, numero }) => {
           );
         }
         if (tmpNbselec === 2 && numero === 2) {
-          setMessageTutoriel([
+          setMessageTutorial([
             "Ce bouton a besoin de deux conditions :",
             "- Avoir deux cartes sélectionnées",
             "- Les deux cartes sélectionnées doivent comporter une ou deux cartes.",
@@ -273,7 +273,7 @@ const Game = ({ mode, ex, numero }) => {
           );
         }
         if (tmpNbselec === 1 && numero === 3 && Math.max(tmpSelecDeck1, tmpSelecDeck2) === game.length-1) {
-          setMessageTutoriel([
+          setMessageTutorial([
             "Ce bouton a besoin de deux conditions :",
             "- Une seule carte doit être sélectionnée.",
             "- La carte sélectionnée doit être dans le deck des objectifs.",
@@ -1023,8 +1023,8 @@ const Game = ({ mode, ex, numero }) => {
                 // Sauvegarde du jeu actuel
                 saveGame();
                 // Message en mode tutoriel
-                if (mode === "Tutoriel" && numero === 3) {
-                  setMessageTutoriel([
+                if (mode === "Tutorial" && numero === 3) {
+                  setMessageTutorial([
                     "Vous devez maintenant compléter l’objectif secondaire.",
                     "Si vous complétez l’objectif secondaire cela créera la carte d’où il a été créé dans deck avant, dans notre cas dans le deck départ cela complétera l’objectif principal."]);
                 }
@@ -1833,10 +1833,10 @@ const Game = ({ mode, ex, numero }) => {
       } catch (error) { }
     }
 
-    if (numero === 0) setMessageTutoriel(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
-    if (numero === 1) setMessageTutoriel(["Dans cet exercice nous allons apprendre le troisième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
-    if (numero === 2) setMessageTutoriel(["Dans cet exercice nous allons apprendre le quatrième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
-    if (numero === 3) setMessageTutoriel(["Dans cet exercice nous allons apprendre le dernier bouton.", "Pour faire fonctionner ce bouton on doit sélectionner l’objectif."])
+    if (numero === 0) setMessageTutorial(["Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.", "Vous pouvez sélectionner une carte en cliquant dessus."])
+    if (numero === 1) setMessageTutorial(["Dans cet exercice nous allons apprendre le troisième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
+    if (numero === 2) setMessageTutorial(["Dans cet exercice nous allons apprendre le quatrième bouton.", "Ce bouton a besoin de deux cartes pour fonctionner.", "Sélectionner deux cartes."])
+    if (numero === 3) setMessageTutorial(["Dans cet exercice nous allons apprendre le dernier bouton.", "Pour faire fonctionner ce bouton on doit sélectionner l’objectif."])
   }, [mode, ex, numero])
 
   return (
@@ -1847,19 +1847,19 @@ const Game = ({ mode, ex, numero }) => {
         {/* Revient à la partie avant l'ajout d'une carte */}
         <div><button id="back" onClick={retourEnArriere}><img src={"img/retour_arriere.png"} alt={"Retour arrière"}/><span className="tooltiptext">Retour arrière</span></button></div>
         {/* Bouton pour obtenir les 2 parties d'une carte "et" */}
-        {mode !== "Create" && <div><button id= "addAnd" className={(mode === "Tutoriel" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Séparation"}/><span className="tooltiptext">Séparation</span></button></div>}
+        {mode !== "Create" && <div><button id= "addAnd" className={(mode === "Tutorial" && numero === 0) ? "boutonSelection" : ""} onClick={addCardAnd}><img src={"img/ajout_carte_et.png"} alt={"Séparation"}/><span className="tooltiptext">Séparation</span></button></div>}
         {/* Bouton pour obtenir la partie droite d'une carte "=>" si l'on a sélectionné une autre carte qui
             est égale à la partie gauche */}
-        {mode !== "Create" && <div><button id= "addImplique" className={(mode === "Tutoriel" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Implique"}/><span className="tooltiptext">Implique</span></button></div>}
+        {mode !== "Create" && <div><button id= "addImplique" className={(mode === "Tutorial" && numero === 1) ? "boutonSelection" : ""} onClick={addCardFuse}><img src={"img/ajout_carte_implique.png"} alt={"Implique"}/><span className="tooltiptext">Implique</span></button></div>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et" */}
-        {mode !== "Create" && <div><button id= "fuseAnd" className={(mode === "Tutoriel" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAnd}><img src={"img/fusion_carte_et.png"} alt={"Fusion"}/><span className="tooltiptext">Fusion</span></button></div>}
+        {mode !== "Create" && <div><button id= "fuseAnd" className={(mode === "Tutorial" && numero === 2) ? "boutonSelection" : ""} onClick={fuseCardAnd}><img src={"img/fusion_carte_et.png"} alt={"Fusion"}/><span className="tooltiptext">Fusion</span></button></div>}
         {/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
         {false && mode !== "Create" && <button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>}
         {/* Ajout objectif secondaire */}
-        {mode !== "Create" && <div><button id= "addGoal" className={(mode === "Tutoriel" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Objectif"}/><span className="tooltiptext">Objectif</span></button></div>}
+        {mode !== "Create" && <div><button id= "addGoal" className={(mode === "Tutorial" && numero === 3) ? "boutonSelection" : ""} onClick={addObjectif}><img src={"img/ajout_objectif.png"} alt={"Objectif"}/><span className="tooltiptext">Objectif</span></button></div>}
       {/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
       {mode === "Create" && <input type="file" accept="application/json" multiple="multiple" onChange={convertFile} ></input>}
       {/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
@@ -1870,8 +1870,8 @@ const Game = ({ mode, ex, numero }) => {
       {mode === "Create" && <button onClick={saveAsFile}>Copier le fichier</button>}
       </div>
       {/* Message d'aide en mode tutoriel */}
-      {mode === "Tutoriel" && messageTutoriel !== "" && <div className="message tutoriel">
-        {messageTutoriel.map((element,index) => {
+      {mode === "Tutorial" && messageTutorial !== "" && <div className="message tutoriel">
+        {messageTutorial.map((element,index) => {
           return <div key={index}>{element}</div>
         })}
       </div>}
