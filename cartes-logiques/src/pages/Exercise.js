@@ -2,32 +2,50 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Game from "../components/Game";
 import Navigation from "../components/Navigation";
+import { useNavigate } from "react-router-dom";
 
 const Exercise = () => {
   const [num, setNum] = useState();
   let tmp = useParams().num;
   let mode = useParams().mode;
   const [ex, setEx] = useState();
-
+  
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    if (mode !== "Create" && mode !== "Tutorial") {
+    let tmpEx = [];
+    if (mode !== "Create" && mode !== "Tutorial" && mode === "Play") {
       setNum(tmp);
       fetch("exercices.json")
       .then(response => response.text())
       .then(data => {
-        setEx(JSON.parse(data));
+        tmpEx = JSON.parse(data);
+        console.log(tmp)
+        if(tmpEx.length >= tmp && tmp !== 0){
+          setEx(tmpEx);
+        }
+        else{
+          navigate("/NotFound");
+        }
       });
+
     }
     else if (mode === "Tutorial") {
       setNum(tmp);
       fetch("tutoriel.json")
       .then(response => response.text())
       .then(data => {
-        setEx(JSON.parse(data));
+        tmpEx = JSON.parse(data);
+        if(tmpEx.length >= tmp && tmp !== 0){
+          setEx(tmpEx);
+        }
+        else{
+          navigate("/NotFound");
+        }
       });
     }
     else {
-      setEx([[], []]);
+      navigate("/NotFound");
     }
   }, [tmp, mode]);
   
