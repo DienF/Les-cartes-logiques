@@ -14,7 +14,7 @@ const Exercise = () => {
   
   useEffect(() => {
     let tmpEx = [];
-    if (mode !== "Create" && mode !== "Tutorial" && mode === "Play") {
+    if (mode === "Play") {
       setNum(tmp);
       fetch("exercices.json")
       .then(response => response.text())
@@ -43,6 +43,9 @@ const Exercise = () => {
           navigate("/NotFound");
         }
       });
+    }
+    else if(mode === "Creat" && tmp === "e") {
+      setEx([[],[]]);
     }
     else {
       navigate("/NotFound");
