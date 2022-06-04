@@ -14,15 +14,12 @@ const Exercise = () => {
   
   useEffect(() => {
     let tmpEx = [];
-    console.log(tmp)
-    console.log(mode)
     if (mode === "Play") {
       setNum(tmp);
       fetch("exercices.json")
       .then(response => response.text())
       .then(data => {
         tmpEx = JSON.parse(data);
-        console.log(tmp)
         if(tmpEx.length >= tmp && tmp !== 0){
           setEx(tmpEx);
         }
@@ -46,7 +43,7 @@ const Exercise = () => {
         }
       });
     }
-    else if(mode === "Create") {
+    else if(mode === "Create" && tmp === undefined) {
       setEx([[],[]]);
     }
     else {
