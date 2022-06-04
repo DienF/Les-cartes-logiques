@@ -14,6 +14,8 @@ const Exercise = () => {
   
   useEffect(() => {
     let tmpEx = [];
+    console.log(tmp)
+    console.log(mode)
     if (mode === "Play") {
       setNum(tmp);
       fetch("exercices.json")
@@ -44,7 +46,7 @@ const Exercise = () => {
         }
       });
     }
-    else if(mode === "Creat" && tmp === "e") {
+    else if(mode === "Create") {
       setEx([[],[]]);
     }
     else {

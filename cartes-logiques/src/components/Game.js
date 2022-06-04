@@ -197,7 +197,7 @@ const Game = ({ mode, ex, numero }) => {
       let tmpSelecCard2 = selecCard2;
       /** Rentre dans le if si :
        *  - on ne clique pas sur l'objectif
-       *  - le jeu n'est pas en mode Create
+       *  - le jeu n'est pas en mode Creat
        *  - si on clique sur l'objectif et qu'il a une liaison =>
        */
       if ((i === game.length-1 && game[i][j].link === "=>" && mode !== "Create") || i !== game.length-1 || mode === "Create") {
@@ -335,7 +335,7 @@ const Game = ({ mode, ex, numero }) => {
   };
 
   /** 
-   * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
+   * /!\ Attention cette fonction doit être uniquement appelée en mode Creat ou pour faire des tests !
    * Fait apparaître le popup qui nous demande la couleur de la carte qu'on veut ajouter.
    * @param {number} deckIndice - l'indice du deck où l'on ajoute une carte
    */
@@ -347,7 +347,7 @@ const Game = ({ mode, ex, numero }) => {
   };
 
   /**
-   * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
+   * /!\ Attention cette fonction doit être uniquement appelée en mode Creat ou pour faire des tests !
    * Crée une carte avec la couleur sélectionnée (ne ferme pas le popup quand on sélectionne une couleur).
    * @param {Event} event - reçoit la couleur cliquée ({@link event.target.value}) ;
    *                      - on le met à false si on veut faire plusieurs fois la même couleur ({@link event.target.checked})
@@ -375,7 +375,7 @@ const Game = ({ mode, ex, numero }) => {
   };
 
   /**
-   * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
+   * /!\ Attention cette fonction doit être uniquement appelée en mode Creat ou pour faire des tests !
    * Crée une carte complexe avec les 2 cartes sélectionnées (cette fonction est appelée à la fin de {@link update()} en mode création).
    * @param {Event} event - reçoit la liaison cliquée ({@link event.target.value})
    */
@@ -411,7 +411,7 @@ const Game = ({ mode, ex, numero }) => {
   };
 
   /**
-   * /!\ Attention cette fonction doit être uniquement appelée en mode Create ou pour faire des tests !
+   * /!\ Attention cette fonction doit être uniquement appelée en mode Creat ou pour faire des tests !
    * Supprime la carte qui est sélectionnée.
    */
   const deleteCard = () => {
@@ -555,7 +555,7 @@ const Game = ({ mode, ex, numero }) => {
    * @param {Array<Array<Card>} tmp - tableau du jeu temporaire
    * @returns {int} la taille du tableau ajouté à tabObjectif
    */
-  const createTabObj = (tmp) => {
+  const CreatTabObj = (tmp) => {
     // Création du tableau que l'on va affecter à tabObjectif
     let tmpObj = [];
     // Push l'objectif principal
@@ -615,7 +615,7 @@ const Game = ({ mode, ex, numero }) => {
           // Supprime le deck qui a servi pour cet objectif secondaire
           tmp = delDeck(tmp, currentDeck);
           // Met à jour la table des objectifs
-          createTabObj(tmp);
+          CreatTabObj(tmp);
           tmpDemonstration.push("On a " + tmpCard.toString() + ".");
           setDemonstration(tmpDemonstration);
           tmpTabIndiceDemonstration.push(tmpTabIndiceDemonstration[tmpTabIndiceDemonstration.length-1]);
@@ -661,7 +661,7 @@ const Game = ({ mode, ex, numero }) => {
           }
         }
         // Refait le tableau des objectifs au cas où on retourne en arrière sur une suppression d'objectif secondaire
-        setIndentationDemonstration(createTabObj(tmpFutureGame)-1);
+        setIndentationDemonstration(CreatTabObj(tmpFutureGame)-1);
         // Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
         allFalse(tmpFutureGame);
         setSavedGame(tmpFutureGame);

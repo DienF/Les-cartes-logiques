@@ -29,7 +29,7 @@ const Navigation = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink exact="true" to="/ExerciseCreate">
+                <NavLink exact="true" to="/Exercise/Create">
                   Créer un exercice
                 </NavLink>
               </li>
@@ -40,7 +40,7 @@ const Navigation = () => {
                 <ul>
                 {ex !== undefined && ex.map((exercice, index) => (
                   <li className="exo" key={index}>
-                    <NavLink exact="true" to={"/ExercisePlay"+(index+1)}>
+                    <NavLink exact="true" to={"/Exercise/Play/"+(index+1)}>
                       Exercice {index+1}
                     </NavLink>
                   </li>
@@ -54,7 +54,7 @@ const Navigation = () => {
                 <ul id="tuto">
                 {exTuto !== undefined && exTuto.map((exercice, index) => (
                   <li className="exo" key={index}>
-                    <NavLink exact="true" to={"/ExerciseTutorial"+(index+1)}>
+                    <NavLink exact="true" to={"/Exercise/Tutorial/"+(index+1)}>
                       Tutoriel {index+1}
                     </NavLink>
                   </li>
