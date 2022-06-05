@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Game from "../components/Game";
 import Navigation from "../components/Navigation";
-import { useNavigate } from "react-router-dom";
 
 const Exercise = () => {
   const [num, setNum] = useState();
   let tmp = useParams().num;
   let mode = useParams().mode;
   const [ex, setEx] = useState();
-  
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -20,14 +19,9 @@ const Exercise = () => {
       .then(response => response.text())
       .then(data => {
         tmpEx = JSON.parse(data);
-        if(tmpEx.length >= tmp && tmp !== 0){
-          setEx(tmpEx);
-        }
-        else{
-          navigate("/NotFound");
-        }
+        if (tmpEx.length >= tmp && tmp !== 0) setEx(tmpEx);
+        else                                  navigate("/NotFound");
       });
-
     }
     else if (mode === "Tutorial") {
       setNum(tmp);
@@ -35,20 +29,12 @@ const Exercise = () => {
       .then(response => response.text())
       .then(data => {
         tmpEx = JSON.parse(data);
-        if(tmpEx.length >= tmp && tmp !== 0){
-          setEx(tmpEx);
-        }
-        else{
-          navigate("/NotFound");
-        }
+        if (tmpEx.length >= tmp && tmp !== 0) setEx(tmpEx);
+        else                                  navigate("/NotFound");
       });
     }
-    else if(mode === "Create" && tmp === undefined) {
-      setEx([[],[]]);
-    }
-    else {
-      navigate("/NotFound");
-    }
+    else if (mode === "Create" && tmp === undefined) setEx([[],[]]);
+    else                                             navigate("/NotFound");
   }, [tmp, mode]);
   
   return (

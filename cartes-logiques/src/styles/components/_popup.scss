@@ -5,15 +5,15 @@
     height: 100vh;
     top: 0;
     left: 0;
-  }
+}
 
-  .bigbox{
+.bigbox{
     position: relative;
     margin: 0 auto;
     height: auto;
-  }
+}
   
-  .box {
+.box {
     color: black;
     margin-top: 30vh;
     background: #fff;
@@ -25,25 +25,25 @@
     overflow: hidden;
 
     button {
-      position: absolute;
-      top: -10px;
-      right: -5px;
-      text-align: center;
-      font-weight: 900;
-      padding: 0px;
-      background-color: red;
-      border: 1px solid #0082b0;
-      border-radius: 15px;
-      height: 20px;
-      width: 20px;
+        position: absolute;
+        top: -10px;
+        right: -5px;
+        text-align: center;
+        font-weight: 900;
+        padding: 0px;
+        background-color: red;
+        border: 1px solid #0082b0;
+        border-radius: 15px;
+        height: 20px;
+        width: 20px;
     }
 
     button:hover {
-      background-color: lightgrey;
+        background-color: lightgrey;
     }
     .demonstration-win {
-      text-align: left;
-      background-color: #F5CBA0;
-      border : 1px solid #A53010;
+        text-align: left;
+        background-color: #F5CBA0;
+        border : 1px solid #A53010;
     }
   }

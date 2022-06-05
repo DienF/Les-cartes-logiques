@@ -7,7 +7,7 @@ const NotFound = () => {
       <Navigation />
       <div id="notFound">
         <h1>Not Found</h1>
-        <p> Désolé, mais cette page n'existe pas</p>
+        <p>Désolé, mais cette page n'existe pas</p>
       </div>
     </div>
   );

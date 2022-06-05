@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
   const [ex, setEx] = useState();
-  const [exTuto , setExTuto] = useState();
-  useEffect(() => {
+  const [exTuto, setExTuto] = useState();
 
+  useEffect(() => {
     fetch("exercices.json")
     .then(response => response.text())
     .then(data => {
@@ -89,7 +89,7 @@ const Navigation = () => {
       </div>}
       {window.location.pathname.substring(10, 18) === ("Tutorial") && 
       <div id="titrePage">
-        {"Tutoriel " + window.location.pathname.substring(19,30)}
+        {"Tutoriel " + window.location.pathname.substring(19, 30)}
       </div>}
     </div>
   );

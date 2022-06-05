@@ -1,43 +1,43 @@
 .deck {
-  background-color: beige;
-  border-radius: 10px;
-  grid-area: 1;
-  position: relative;
-  padding: 2%;
-  margin-left: 2%;
-  margin-right: 2%;
-  border: 3px solid white;
-  min-width: 160px;
-  height: 100%;
-  color : black;
-  margin-top: 20px;
-  
-  h3 {
+    background-color: beige;
+    border-radius: 10px;
+    grid-area: 1;
+    position: relative;
+    padding: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    border: 3px solid white;
+    min-width: 160px;
+    height: 100%;
     color : black;
-    text-align: center;
-    margin-bottom: 10%;
-  }
+    margin-top: 20px;
+  
+    h3 {
+        color : black;
+        text-align: center;
+        margin-bottom: 10%;
+    }
 
-  img {
-    height: 20px;
-    width: auto;
-  }
+    img {
+        height: 20px;
+        width: auto;
+    }
 }
 
 .start {
-  grid-area: start;
+    grid-area: start;
 }
 
 .goal {
-  grid-area: goal;
+    grid-area: goal;
 }
 
 .other1{
-  grid-area: other1;
+    grid-area: other1;
 }
 
 .other2{
-  grid-area: other2;
+    grid-area: other2;
 }
 
 
