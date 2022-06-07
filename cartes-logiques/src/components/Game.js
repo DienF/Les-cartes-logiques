@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+ import { useNavigate } from "react-router-dom";
 import Deck from "./Deck";
 import Popup from "./Popup";
 import Card from '../class/Card'
@@ -117,7 +117,7 @@ const Game = ({ mode, ex, numero }) => {
   /** Variable pour les redirections.
    *  Utilisation : navigate(url)
    */ 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   /** Variable qui reçoit les JSONs des fichiers.
    *  @see {@link convertFile()} & {@link printConvertFile()}
@@ -1234,16 +1234,16 @@ const Game = ({ mode, ex, numero }) => {
   /**
    * Redirige vers le prochain exercice si il existe.
    */
-  /* const nextExercise = () => {
+  const nextExercise = () => {
     // S'il y a un prochain exercice
     if (numero+2 <= ex.length) {
       // url du prochain exercice
-      let url = "/Exercise" + mode + (numero+2);
+      let url = "/Exercise-" + mode + "-" + (numero+2);
       // Redirige vers cet url
       navigate(url);
     }
     setPopupWin(false);
-  } */
+  }
 
   /**
    * Teste une carte pour voir si en utilisant le bouton pour séparer une carte on peut obtenir la carte (carteObjectif).
@@ -1982,9 +1982,11 @@ const Game = ({ mode, ex, numero }) => {
             <>
               <b>Bravo, vous avez gagné !</b>
               <button
-                // onClick={nextExercise}
                 onClick={function () {
                   setPopupWin(false);
+                  if(mode === "Tutorial"){
+                    nextExercise();
+                  }
                 }}
               >
                 ✖
