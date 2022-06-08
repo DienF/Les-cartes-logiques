@@ -1984,9 +1984,7 @@ const Game = ({ mode, ex, numero }) => {
               <button
                 onClick={function () {
                   setPopupWin(false);
-                  if(mode === "Tutorial"){
-                    nextExercise();
-                  }
+                  if (mode === "Tutorial") nextExercise();
                 }}
               >
                 ✖
