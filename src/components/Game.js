@@ -8,6 +8,75 @@ export const GameTab = React.createContext();
 var Latex = require("react-latex");
 
 const Game = ({ mode, ex, numero }) => {
+	// test
+	const changeHover = (indexDeck, indexCard) => {
+		const tmp = [...game];
+		tmp[currentCardArrow[0]][currentCardArrow[1]].hover = false;
+		tmp[indexDeck][indexCard].hover = true;
+		setGame(tmp);
+		setcurrentCardArrow([indexDeck, indexCard]);
+	};
+
+	const [currentCardArrow, setcurrentCardArrow] = useState(undefined);
+	document.onkeydown = (event) => {
+		if (event.code.toLowerCase().includes("arrow")) {
+			event.preventDefault();
+			if (currentCardArrow === undefined) {
+				const tmp = [...game];
+				tmp[0][0].hover = true;
+				setGame(tmp);
+				setcurrentCardArrow([0, 0]);
+			} else if (event.code.toLowerCase().includes("down")) {
+				const futurHover = Math.min(
+					currentCardArrow[1] + 1,
+					game[currentCardArrow[0]].length - 1
+				);
+				changeHover(currentCardArrow[0], futurHover);
+			} else if (event.code.toLowerCase().includes("up")) {
+				const futurHover = Math.max(currentCardArrow[1] - 1, 0);
+				changeHover(currentCardArrow[0], futurHover);
+			} else if (event.code.toLowerCase().includes("left")) {
+				const futurHover = Math.max(currentCardArrow[0] - 1, 0);
+				changeHover(
+					futurHover,
+					Math.min(currentCardArrow[1], game[futurHover].length - 1)
+				);
+			} else if (event.code.toLowerCase().includes("right")) {
+				const futurHover = Math.min(
+					currentCardArrow[0] + 1,
+					game.length - 1
+				);
+				changeHover(
+					futurHover,
+					Math.min(currentCardArrow[1], game[futurHover].length - 1)
+				);
+			}
+		} else if (
+			currentCardArrow !== undefined &&
+			event.code.toLowerCase().includes("space")
+		) {
+			event.preventDefault();
+			update(currentCardArrow[0], currentCardArrow[1]);
+		}
+		if (event.code === "KeyQ") {
+			addCardAnd();
+		}
+		if (event.code === "KeyW") {
+			addCardFuse();
+		}
+		if (event.code === "KeyE") {
+			fuseCardAnd();
+		}
+		if (event.code === "KeyR") {
+			addObjectif();
+		}
+		if (event.code === "KeyT") {
+			retourEnArriere();
+		}
+		console.log(event.code);
+	};
+	// fin du test
+
 	// Carte qui n'existera jamais dans un deck
 	var cardError = new Card(-1, "error", false, null, null);
 

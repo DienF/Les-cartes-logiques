@@ -162,9 +162,15 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2 }) => {
 				{(game) => {
 					return (
 						<div
-							className={getClassType(
-								game[deckIndice][cardIndice]
-							)}
+							className={
+								getClassType(game[deckIndice][cardIndice]) +
+								" " +
+								(game[deckIndice][cardIndice].hover
+									? getClassType(
+											game[deckIndice][cardIndice]
+									  ) + "_hover"
+									: "")
+							}
 							onClick={handleClick}
 						>
 							{getTab(game[deckIndice][cardIndice]).map(
