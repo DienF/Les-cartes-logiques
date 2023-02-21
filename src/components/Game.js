@@ -73,7 +73,6 @@ const Game = ({ mode, ex, numero }) => {
 		if (event.code === "KeyT") {
 			retourEnArriere();
 		}
-		console.log(event.code);
 	};
 	// fin du test
 
@@ -746,44 +745,45 @@ const Game = ({ mode, ex, numero }) => {
 	 * Prend le dernier élément du tableau {@link lastGame} et remplace la variable {@link game}.
 	 */
 	const retourEnArriere = () => {
-		if (!navigation && !win) {
-			// Vérifie s'il y a au moins une sauvegarde du jeu
-			if (lastGame.length > 0) {
-				// Copie le tableau de sauvegarde
-				let tmpLastGame = [...lastGame];
-				// Prend le dernier tableau de jeu ajoutée
-				let tmpSavedGame = tmpLastGame[tmpLastGame.length - 1];
-				// Initialise le futur tableau de jeu
-				let tmpFutureGame = [];
-				// Copie le dernier tableau de jeu sauvegardé dans le futur tableau
-				for (var i = 0; i < tmpSavedGame.length; i++) {
-					tmpFutureGame[i] = [];
-					for (var j = 0; j < tmpSavedGame[i].length; j++) {
-						tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
-					}
-				}
-				// Refait le tableau des objectifs au cas où on retourne en arrière sur une suppression d'objectif secondaire
-				setIndentationDemonstration(CreatTabObj(tmpFutureGame) - 1);
-				// Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
-				allFalse(tmpFutureGame);
-				setSavedGame(tmpFutureGame);
-				let demonstrationTmp = [...demonstration];
-				demonstrationTmp.pop();
-				setDemonstration(demonstrationTmp);
-				// Supprime la dernière sauvegrade du jeu
-				tmpLastGame.pop();
-				// Met à jour le tableau des sauvegardes
-				let tmpDemonstration = [];
-				for (let i = 0; i <= lastGame.length - 1; i++)
-					tmpDemonstration.push(demonstration[i]);
-				let tmpTabDemonstration = [];
-				for (let i = 0; i <= lastGame.length - 1; i++)
-					tmpTabDemonstration.push(tabIndentation[i]);
-				setDemonstration(tmpDemonstration);
-				setTabIndentation(tmpTabDemonstration);
-				setLastGame(tmpLastGame);
-			} else allFalseGame();
+		if (navigation || win) {
+			return;
 		}
+		// Vérifie s'il y a au moins une sauvegarde du jeu
+		if (lastGame.length > 0) {
+			// Copie le tableau de sauvegarde
+			let tmpLastGame = [...lastGame];
+			// Prend le dernier tableau de jeu ajoutée
+			let tmpSavedGame = tmpLastGame[tmpLastGame.length - 1];
+			// Initialise le futur tableau de jeu
+			let tmpFutureGame = [];
+			// Copie le dernier tableau de jeu sauvegardé dans le futur tableau
+			for (var i = 0; i < tmpSavedGame.length; i++) {
+				tmpFutureGame[i] = [];
+				for (var j = 0; j < tmpSavedGame[i].length; j++) {
+					tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
+				}
+			}
+			// Refait le tableau des objectifs au cas où on retourne en arrière sur une suppression d'objectif secondaire
+			setIndentationDemonstration(CreatTabObj(tmpFutureGame) - 1);
+			// Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
+			allFalse(tmpFutureGame);
+			setSavedGame(tmpFutureGame);
+			let demonstrationTmp = [...demonstration];
+			demonstrationTmp.pop();
+			setDemonstration(demonstrationTmp);
+			// Supprime la dernière sauvegrade du jeu
+			tmpLastGame.pop();
+			// Met à jour le tableau des sauvegardes
+			let tmpDemonstration = [];
+			for (let i = 0; i <= lastGame.length - 1; i++)
+				tmpDemonstration.push(demonstration[i]);
+			let tmpTabDemonstration = [];
+			for (let i = 0; i <= lastGame.length - 1; i++)
+				tmpTabDemonstration.push(tabIndentation[i]);
+			setDemonstration(tmpDemonstration);
+			setTabIndentation(tmpTabDemonstration);
+			setLastGame(tmpLastGame);
+		} else allFalseGame();
 	};
 
 	/**
@@ -814,88 +814,78 @@ const Game = ({ mode, ex, numero }) => {
 	 * Si toutes les conditions énumérées au-dessus sont respectées les parties gauche et droite de la carte sont ajoutées au Deck.
 	 */
 	const addCardAnd = () => {
-		if (!navigation && !win) {
-			// Si une seule carte est sélectionnée
-			if (
-				(selecCard1 !== -1 &&
-					selecCard2 === -1 &&
-					selecDeck1 !== -1 &&
-					selecDeck2 === -1) ||
-				(selecCard1 === -1 &&
-					selecCard2 !== -1 &&
-					selecDeck1 === -1 &&
-					selecDeck2 !== -1)
-			) {
-				/** Prend la carte qui est sélectionnée.
-				 *  Si elle n'est pas sélectionné c'est -1 donc on prend la plus haute valeur.
-				 */
-				let deckI = Math.max(selecDeck1, selecDeck2);
-				let cardI = Math.max(selecCard1, selecCard2);
-				// La carte sélectionnée doit avoir la liaison principal "et"
-				if (game[deckI][cardI].link === "et") {
-					if (
-						!containCard(game, deckI, game[deckI][cardI].left) &&
-						!containCard(game, deckI, game[deckI][cardI].left)
-					) {
-						// Sauvegarde du jeu actuel
-						saveGame();
-						// Copie du jeu actuel
-						let tmp = [...game];
-						// Ajoute la partie gauche de la carte dans le jeu
-						tmp[deckI].push(game[deckI][cardI].left.copy());
-						tmp[deckI][tmp[deckI].length - 1].id =
-							tmp[deckI].length - 1;
-						// Ajoute la partie droite de la carte dans le jeu
-						tmp[deckI].push(game[deckI][cardI].right.copy());
-						tmp[deckI][tmp[deckI].length - 1].id =
-							tmp[deckI].length - 1;
-						// Met à jour le jeu & désélectionne toutes les cartes
-						allFalse(tmp);
-						setSavedGame(tmp);
-						let tmpDemonstration = [...demonstration];
-						tmpDemonstration.push(
-							"On a " +
-								game[deckI][cardI].left.toString() +
-								". On a " +
-								game[deckI][cardI].right.toString() +
-								"."
-						);
-						setDemonstration(tmpDemonstration);
-						let tmpTabIndiceDemonstration = [
-							...tabIndiceDemonstration,
-						];
-						tmpTabIndiceDemonstration.push(
-							tabIndiceDemonstration[
-								tabIndiceDemonstration.length - 1
-							] + 1
-						);
-						setTabIndiceDemonstration(tmpTabIndiceDemonstration);
-						let tmpTabIndentation = [...tabIndentation];
-						tmpTabIndentation.push(indentationDemonstration);
-						setTabIndentation(tmpTabIndentation);
-						// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-						setPopupWin(
-							isWin(
-								selecDeck1,
-								tmpDemonstration,
-								tmpTabIndentation,
-								tmpTabIndiceDemonstration
-							)
-						);
-					} else
-						error(
-							"Les cartes que vous voulez ajouter existe déjà !"
-						);
-				} else
-					error(
-						'La carte sélectionnée doit avoir une liaison principale de type "et" !'
-					);
-			} else {
-				if (nbSelec > 1)
-					error("Vous devez sélectionner une seule carte !");
-				if (nbSelec === 0) error("Vous devez sélectionner une carte !");
-			}
+		if (navigation || win) {
+			return;
 		}
+		// Si deux seule cartes sont sélectionnées
+		if (nbSelec > 1) {
+			error("Vous devez sélectionner une seule carte !");
+			return;
+		}
+		// Si aucune carte n'est sélectionnée
+		if (nbSelec === 0) {
+			error("Vous devez sélectionner une carte !");
+			return;
+		}
+		/** Prend la carte qui est sélectionnée.
+		 *  Si elle n'est pas sélectionné c'est -1 donc on prend la plus haute valeur.
+		 */
+		let deckI = Math.max(selecDeck1, selecDeck2);
+		let cardI = Math.max(selecCard1, selecCard2);
+		// La carte sélectionnée doit avoir la liaison principal "et"
+		if (game[deckI][cardI].link !== "et") {
+			error(
+				'La carte sélectionnée doit avoir une liaison principale de type "et" !'
+			);
+			return;
+		}
+		// ajoute si les deux cartes a séparé n'existe pas deja dans le deck
+		if (
+			containCard(game, deckI, game[deckI][cardI].left) ||
+			containCard(game, deckI, game[deckI][cardI].left)
+		) {
+			error("Les cartes que vous voulez ajouter existe déjà !");
+			return;
+		}
+		// Sauvegarde du jeu actuel
+		saveGame();
+		// Copie du jeu actuel
+		let tmp = [...game];
+		// Ajoute la partie gauche de la carte dans le jeu
+		tmp[deckI].push(game[deckI][cardI].left.copy());
+		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
+		// Ajoute la partie droite de la carte dans le jeu
+		tmp[deckI].push(game[deckI][cardI].right.copy());
+		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
+		// Met à jour le jeu & désélectionne toutes les cartes
+		allFalse(tmp);
+		setSavedGame(tmp);
+		let tmpDemonstration = [...demonstration];
+		tmpDemonstration.push(
+			"On a " +
+				game[deckI][cardI].left.toString() +
+				". On a " +
+				game[deckI][cardI].right.toString() +
+				"."
+		);
+		setDemonstration(tmpDemonstration);
+		let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+		tmpTabIndiceDemonstration.push(
+			tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
+		);
+		setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+		let tmpTabIndentation = [...tabIndentation];
+		tmpTabIndentation.push(indentationDemonstration);
+		setTabIndentation(tmpTabIndentation);
+		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
+		setPopupWin(
+			isWin(
+				selecDeck1,
+				tmpDemonstration,
+				tmpTabIndentation,
+				tmpTabIndiceDemonstration
+			)
+		);
 	};
 
 	/**
@@ -913,306 +903,281 @@ const Game = ({ mode, ex, numero }) => {
 	 * Si toutes les conditions énumérées au-dessus sont respectées la partie droite est ajoutée au deck le plus haut.
 	 */
 	const addCardFuse = () => {
-		if (!navigation && !win) {
-			// S'il y a 2 cartes sélectionnées
+		if (navigation || win) {
+			return;
+		}
+		// S'il n'y a pas 2 cartes sélectionnées
+		if (nbSelec !== 2) {
+			error("Vous devez sélectionner deux cartes !");
+			return;
+		}
+		// Prend le deck le plus grand
+		let finalDeck = Math.max(selecDeck1, selecDeck2);
+		if (finalDeck === game.length - 1) {
+			error(
+				"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+			);
+			return;
+		}
+		// Copie du jeu actuel
+		let tmp = [...game];
+		/** Vérifie si la 2ème carte a une liaison => et si sa partie gauche est égale à l'autre carte.
+		 *  Met le résultat dans {@link bool}.
+		 *  On ne met pas directement la condition dans le if car on veut savoir avec quelle condition on y est rentré.
+		 */
+		let bool =
+			tmp[selecDeck2][selecCard2].link === "=>" &&
+			tmp[selecDeck2][selecCard2].left.equals(
+				tmp[selecDeck1][selecCard1]
+			);
+		// Une des 2 cartes doit avoir une liaison =>
+		if (
+			bool ||
+			(tmp[selecDeck1][selecCard1].link === "=>" &&
+				tmp[selecDeck1][selecCard1].left.equals(
+					tmp[selecDeck2][selecCard2]
+				))
+		) {
+			// Initialisation de la carte où la liaison => va être utilisée
+			let deckCarteComplex = -1;
+			let cardCarteComplex = -1;
+			// Détermine & affecte l'id de la carte => utilisée
+			if (bool) {
+				deckCarteComplex = selecDeck2;
+				cardCarteComplex = selecCard2;
+			} else {
+				deckCarteComplex = selecDeck1;
+				cardCarteComplex = selecCard1;
+			}
 			if (
-				selecCard1 !== -1 &&
-				selecCard2 !== -1 &&
-				selecDeck1 !== -1 &&
-				selecDeck2 !== -1
+				containCard(
+					game,
+					finalDeck,
+					tmp[deckCarteComplex][cardCarteComplex].right
+				)
 			) {
-				// Prend le deck le plus grand
-				let finalDeck = Math.max(selecDeck1, selecDeck2);
-				if (finalDeck !== game.length - 1) {
-					// Copie du jeu actuel
-					let tmp = [...game];
-					/** Vérifie si la 2ème carte a une liaison => et si sa partie gauche est égale à l'autre carte.
-					 *  Met le résultat dans {@link bool}.
-					 *  On ne met pas directement la condition dans le if car on veut savoir avec quelle condition on y est rentré.
-					 */
-					let bool =
-						tmp[selecDeck2][selecCard2].link === "=>" &&
-						tmp[selecDeck2][selecCard2].left.equals(
-							tmp[selecDeck1][selecCard1]
-						);
-					// Une des 2 cartes doit avoir une liaison =>
-					if (
-						bool ||
-						(tmp[selecDeck1][selecCard1].link === "=>" &&
-							tmp[selecDeck1][selecCard1].left.equals(
-								tmp[selecDeck2][selecCard2]
-							))
-					) {
-						// Initialisation de la carte où la liaison => va être utilisée
-						let deckCarteComplex = -1;
-						let cardCarteComplex = -1;
-						// Détermine & affecte l'id de la carte => utilisée
-						if (bool) {
-							deckCarteComplex = selecDeck2;
-							cardCarteComplex = selecCard2;
-						} else {
-							deckCarteComplex = selecDeck1;
-							cardCarteComplex = selecCard1;
-						}
-						if (
-							!containCard(
-								game,
-								finalDeck,
-								tmp[deckCarteComplex][cardCarteComplex].right
-							)
-						) {
-							// Sauvegarde du jeu actuel
-							saveGame();
-							// Ajoute la partie droite de la carte => utilisée dans le deck le plus haut
-							tmp[finalDeck].push(
-								tmp[deckCarteComplex][
-									cardCarteComplex
-								].right.copy()
-							);
-							tmp[finalDeck][tmp[finalDeck].length - 1].id =
-								tmp[finalDeck].length - 1;
-							// Met à jour le jeu & désélectionne toutes les cartes
-							allFalse(tmp);
-							setSavedGame(tmp);
-							let tmpDemonstration = [...demonstration];
-							tmpDemonstration.push(
-								"Puisque " +
-									tmp[deckCarteComplex][cardCarteComplex]
-										.left +
-									", on a " +
-									tmp[deckCarteComplex][cardCarteComplex]
-										.right +
-									"."
-							);
-							setDemonstration(tmpDemonstration);
-							let tmpTabIndiceDemonstration = [
-								...tabIndiceDemonstration,
-							];
-							tmpTabIndiceDemonstration.push(
-								tabIndiceDemonstration[
-									tabIndiceDemonstration.length - 1
-								] + 1
-							);
-							setTabIndiceDemonstration(
-								tmpTabIndiceDemonstration
-							);
-							let tmpTabIndentation = [...tabIndentation];
-							tmpTabIndentation.push(indentationDemonstration);
-							setTabIndentation(tmpTabIndentation);
-							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-							setPopupWin(
-								isWin(
-									Math.max(selecDeck1, selecDeck2),
-									tmpDemonstration,
-									tmpTabIndentation,
-									tmpTabIndiceDemonstration
-								)
-							);
-						} else
-							error(
-								"La carte que vous voulez ajouter existe déjà !"
-							);
-					} else if (
-						tmp[selecDeck2][selecCard2].link === "<=>" ||
-						tmp[selecDeck1][selecCard1].link === "<=>"
-					) {
-						bool = false;
-						let bool2 = false;
-						let cardAdd;
-						let cardFuse;
-						if (tmp[selecDeck1][selecCard1].link === "<=>") {
-							if (
-								tmp[selecDeck2][selecCard2].equals(
-									tmp[selecDeck1][selecCard1].left
-								)
-							) {
-								bool = true;
-								cardAdd =
-									tmp[selecDeck1][selecCard1].right.copy();
-								cardFuse = tmp[selecDeck1][selecCard1].left;
-							}
-							if (
-								tmp[selecDeck2][selecCard2].equals(
-									tmp[selecDeck1][selecCard1].right
-								)
-							) {
-								bool = true;
-								cardAdd =
-									tmp[selecDeck1][selecCard1].left.copy();
-								cardFuse = tmp[selecDeck1][selecCard1].right;
-							}
-						}
-						if (tmp[selecDeck2][selecCard2].link === "<=>") {
-							if (
-								tmp[selecDeck1][selecCard1].equals(
-									tmp[selecDeck2][selecCard2].left
-								)
-							) {
-								bool = true;
-								cardAdd =
-									tmp[selecDeck2][selecCard2].right.copy();
-								cardFuse = tmp[selecDeck2][selecCard2].left;
-							}
-							if (
-								tmp[selecDeck1][selecCard1].equals(
-									tmp[selecDeck2][selecCard2].right
-								)
-							) {
-								bool = true;
-								cardAdd =
-									tmp[selecDeck2][selecCard2].left.copy();
-								cardFuse = tmp[selecDeck2][selecCard2].right;
-							}
-						}
-						if (
-							tmp[selecDeck1][selecCard1].link === "<=>" &&
-							tmp[selecDeck2][selecCard2].link === "<=>"
-						) {
-							if (
-								tmp[selecDeck1][selecCard1].left.equals(
-									tmp[selecDeck2][selecCard2].left
-								)
-							) {
-								bool = true;
-								bool2 = true;
-								cardAdd = new Card(
-									0,
-									null,
-									false,
-									"<=>",
-									tmp[selecDeck1][selecCard1].right.copy(),
-									tmp[selecDeck2][selecCard2].right.copy()
-								);
-								cardFuse = tmp[selecDeck1][selecCard1].left;
-							}
-							if (
-								tmp[selecDeck1][selecCard1].left.equals(
-									tmp[selecDeck2][selecCard2].right
-								)
-							) {
-								bool = true;
-								bool2 = true;
-								cardAdd = new Card(
-									0,
-									null,
-									false,
-									"<=>",
-									tmp[selecDeck1][selecCard1].right.copy(),
-									tmp[selecDeck2][selecCard2].left.copy()
-								);
-								cardFuse = tmp[selecDeck1][selecCard1].left;
-							}
-							if (
-								tmp[selecDeck1][selecCard1].right.equals(
-									tmp[selecDeck2][selecCard2].left
-								)
-							) {
-								bool = true;
-								bool2 = true;
-								cardAdd = new Card(
-									0,
-									null,
-									false,
-									"<=>",
-									tmp[selecDeck1][selecCard1].left.copy(),
-									tmp[selecDeck2][selecCard2].right.copy()
-								);
-								cardFuse = tmp[selecDeck1][selecCard1].right;
-							}
-							if (
-								tmp[selecDeck1][selecCard1].right.equals(
-									tmp[selecDeck2][selecCard2].right
-								)
-							) {
-								bool = true;
-								bool2 = true;
-								cardAdd = new Card(
-									0,
-									null,
-									false,
-									"<=>",
-									tmp[selecDeck1][selecCard1].left.copy(),
-									tmp[selecDeck2][selecCard2].left.copy()
-								);
-								cardFuse = tmp[selecDeck1][selecCard1].right;
-							}
-						}
-						if (bool) {
-							if (!containCard(game, finalDeck, cardAdd)) {
-								// Sauvegarde du jeu actuel
-								saveGame();
-								cardAdd.id = tmp[finalDeck].length;
-								tmp[finalDeck].push(cardAdd);
-								allFalse(tmp);
-								setSavedGame(tmp);
-								let tmpDemonstration = [...demonstration];
-								if (bool2)
-									tmpDemonstration.push(
-										"On a " +
-											cardAdd.left.toString() +
-											"<=>" +
-											cardFuse.toString() +
-											"<=>" +
-											cardAdd.right.toString() +
-											"."
-									);
-								else
-									tmpDemonstration.push(
-										"Puisque " +
-											cardFuse.toString() +
-											", on a " +
-											cardAdd.toString() +
-											"."
-									);
-								setDemonstration(tmpDemonstration);
-								let tmpTabIndiceDemonstration = [
-									...tabIndiceDemonstration,
-								];
-								tmpTabIndiceDemonstration.push(
-									tabIndiceDemonstration[
-										tabIndiceDemonstration.length - 1
-									] + 1
-								);
-								setTabIndiceDemonstration(
-									tmpTabIndiceDemonstration
-								);
-								let tmpTabIndentation = [...tabIndentation];
-								tmpTabIndentation.push(
-									indentationDemonstration
-								);
-								setTabIndentation(tmpTabIndentation);
-								// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-								setPopupWin(
-									isWin(
-										Math.max(selecDeck1, selecDeck2),
-										tmpDemonstration,
-										tmpTabIndentation
-									)
-								);
-							} else
-								error(
-									"La carte que vous voulez ajouter existe déjà !"
-								);
-						}
-					} else {
-						// Si aucune des 2 cartes n'a de liaison =>
-						if (
-							tmp[selecDeck2][selecCard2].link !== "=>" &&
-							tmp[selecDeck1][selecCard1].link !== "=>"
-						)
-							error(
-								'Une des deux cartes doit avoir une liaison principale de type "=>" !'
-							);
-						else
-							error(
-								'La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !'
-							);
-					}
-				} else
-					error(
-						"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+				error("La carte que vous voulez ajouter existe déjà !");
+				return;
+			}
+			// Sauvegarde du jeu actuel
+			saveGame();
+			// Ajoute la partie droite de la carte => utilisée dans le deck le plus haut
+			tmp[finalDeck].push(
+				tmp[deckCarteComplex][cardCarteComplex].right.copy()
+			);
+			tmp[finalDeck][tmp[finalDeck].length - 1].id =
+				tmp[finalDeck].length - 1;
+			// Met à jour le jeu & désélectionne toutes les cartes
+			allFalse(tmp);
+			setSavedGame(tmp);
+			let tmpDemonstration = [...demonstration];
+			tmpDemonstration.push(
+				"Puisque " +
+					tmp[deckCarteComplex][cardCarteComplex].left +
+					", on a " +
+					tmp[deckCarteComplex][cardCarteComplex].right +
+					"."
+			);
+			setDemonstration(tmpDemonstration);
+			let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+			tmpTabIndiceDemonstration.push(
+				tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
+			);
+			setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+			let tmpTabIndentation = [...tabIndentation];
+			tmpTabIndentation.push(indentationDemonstration);
+			setTabIndentation(tmpTabIndentation);
+			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
+			setPopupWin(
+				isWin(
+					Math.max(selecDeck1, selecDeck2),
+					tmpDemonstration,
+					tmpTabIndentation,
+					tmpTabIndiceDemonstration
+				)
+			);
+		} else if (
+			tmp[selecDeck2][selecCard2].link === "<=>" ||
+			tmp[selecDeck1][selecCard1].link === "<=>"
+		) {
+			bool = false;
+			let bool2 = false;
+			let cardAdd;
+			let cardFuse;
+			if (tmp[selecDeck1][selecCard1].link === "<=>") {
+				if (
+					tmp[selecDeck2][selecCard2].equals(
+						tmp[selecDeck1][selecCard1].left
+					)
+				) {
+					bool = true;
+					cardAdd = tmp[selecDeck1][selecCard1].right.copy();
+					cardFuse = tmp[selecDeck1][selecCard1].left;
+				}
+				if (
+					tmp[selecDeck2][selecCard2].equals(
+						tmp[selecDeck1][selecCard1].right
+					)
+				) {
+					bool = true;
+					cardAdd = tmp[selecDeck1][selecCard1].left.copy();
+					cardFuse = tmp[selecDeck1][selecCard1].right;
+				}
+			}
+			if (tmp[selecDeck2][selecCard2].link === "<=>") {
+				if (
+					tmp[selecDeck1][selecCard1].equals(
+						tmp[selecDeck2][selecCard2].left
+					)
+				) {
+					bool = true;
+					cardAdd = tmp[selecDeck2][selecCard2].right.copy();
+					cardFuse = tmp[selecDeck2][selecCard2].left;
+				}
+				if (
+					tmp[selecDeck1][selecCard1].equals(
+						tmp[selecDeck2][selecCard2].right
+					)
+				) {
+					bool = true;
+					cardAdd = tmp[selecDeck2][selecCard2].left.copy();
+					cardFuse = tmp[selecDeck2][selecCard2].right;
+				}
+			}
+			if (
+				tmp[selecDeck1][selecCard1].link === "<=>" &&
+				tmp[selecDeck2][selecCard2].link === "<=>"
+			) {
+				if (
+					tmp[selecDeck1][selecCard1].left.equals(
+						tmp[selecDeck2][selecCard2].left
+					)
+				) {
+					bool = true;
+					bool2 = true;
+					cardAdd = new Card(
+						0,
+						null,
+						false,
+						"<=>",
+						tmp[selecDeck1][selecCard1].right.copy(),
+						tmp[selecDeck2][selecCard2].right.copy()
 					);
-			} else error("Vous devez sélectionner deux cartes !");
+					cardFuse = tmp[selecDeck1][selecCard1].left;
+				}
+				if (
+					tmp[selecDeck1][selecCard1].left.equals(
+						tmp[selecDeck2][selecCard2].right
+					)
+				) {
+					bool = true;
+					bool2 = true;
+					cardAdd = new Card(
+						0,
+						null,
+						false,
+						"<=>",
+						tmp[selecDeck1][selecCard1].right.copy(),
+						tmp[selecDeck2][selecCard2].left.copy()
+					);
+					cardFuse = tmp[selecDeck1][selecCard1].left;
+				}
+				if (
+					tmp[selecDeck1][selecCard1].right.equals(
+						tmp[selecDeck2][selecCard2].left
+					)
+				) {
+					bool = true;
+					bool2 = true;
+					cardAdd = new Card(
+						0,
+						null,
+						false,
+						"<=>",
+						tmp[selecDeck1][selecCard1].left.copy(),
+						tmp[selecDeck2][selecCard2].right.copy()
+					);
+					cardFuse = tmp[selecDeck1][selecCard1].right;
+				}
+				if (
+					tmp[selecDeck1][selecCard1].right.equals(
+						tmp[selecDeck2][selecCard2].right
+					)
+				) {
+					bool = true;
+					bool2 = true;
+					cardAdd = new Card(
+						0,
+						null,
+						false,
+						"<=>",
+						tmp[selecDeck1][selecCard1].left.copy(),
+						tmp[selecDeck2][selecCard2].left.copy()
+					);
+					cardFuse = tmp[selecDeck1][selecCard1].right;
+				}
+			}
+			if (bool) {
+				if (!containCard(game, finalDeck, cardAdd)) {
+					// Sauvegarde du jeu actuel
+					saveGame();
+					cardAdd.id = tmp[finalDeck].length;
+					tmp[finalDeck].push(cardAdd);
+					allFalse(tmp);
+					setSavedGame(tmp);
+					let tmpDemonstration = [...demonstration];
+					if (bool2)
+						tmpDemonstration.push(
+							"On a " +
+								cardAdd.left.toString() +
+								"<=>" +
+								cardFuse.toString() +
+								"<=>" +
+								cardAdd.right.toString() +
+								"."
+						);
+					else
+						tmpDemonstration.push(
+							"Puisque " +
+								cardFuse.toString() +
+								", on a " +
+								cardAdd.toString() +
+								"."
+						);
+					setDemonstration(tmpDemonstration);
+					let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+					tmpTabIndiceDemonstration.push(
+						tabIndiceDemonstration[
+							tabIndiceDemonstration.length - 1
+						] + 1
+					);
+					setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+					let tmpTabIndentation = [...tabIndentation];
+					tmpTabIndentation.push(indentationDemonstration);
+					setTabIndentation(tmpTabIndentation);
+					// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
+					setPopupWin(
+						isWin(
+							Math.max(selecDeck1, selecDeck2),
+							tmpDemonstration,
+							tmpTabIndentation
+						)
+					);
+				} else error("La carte que vous voulez ajouter existe déjà !");
+			}
+		} else {
+			// Si aucune des 2 cartes n'a de liaison =>
+			if (
+				tmp[selecDeck2][selecCard2].link !== "=>" &&
+				tmp[selecDeck1][selecCard1].link !== "=>"
+			)
+				error(
+					'Une des deux cartes doit avoir une liaison principale de type "=>" !'
+				);
+			else
+				error(
+					'La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !'
+				);
 		}
 	};
 
