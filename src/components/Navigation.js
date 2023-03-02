@@ -35,7 +35,7 @@ const Navigation = () => {
 							</NavLink>
 						</li>
 						<li className="choose">
-							Choisir un exercice
+							<a>Choisir un exercice</a>
 							<ul>
 								{ex !== undefined &&
 									ex.map((exercice, index) => (
@@ -54,7 +54,7 @@ const Navigation = () => {
 							</ul>
 						</li>
 						<li className="choose">
-							Tutoriel
+							<a>Tutoriel</a>
 							<ul id="tuto">
 								{exTuto !== undefined &&
 									exTuto.map((exercice, index) => (
