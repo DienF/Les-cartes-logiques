@@ -1,0 +1,167 @@
+.game {
+    grid-area: m;
+    background-color: rgba(117, 190, 218, 0.7);
+    position: relative;
+    padding: 55px 5% 5% 5%;
+    border: 5px solid rgb(28, 2, 53);
+    display: grid;
+    grid-template-columns: 20% 30% 30% 20%; 
+    grid-template-areas:
+        "b b b b"
+        "t t t t"
+        "e e e e"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "start other1 other2 goal"
+        "d d d d";
+
+    .bouton {
+        grid-area: b;
+        align-items: center;
+        margin: auto;
+
+        div {
+            display: inline-block; 
+        }
+
+        button {
+            cursor: pointer;
+            margin-bottom: 0.8vh;
+            margin-top: 0.8vh;
+            margin-right: 2vh;
+            margin-left: 2vh;
+            position: relative;
+        }
+
+        #back, #addAnd, #addImplique, #fuseAnd, #addGoal {
+            height: 42px;
+            width: auto;
+            border-radius: 5px;
+            border: 2px solid lightgray;
+            background-image : linear-gradient( to right, #d4ddf5, #97b4fc );
+    
+            img {
+                height: 35px;
+                width: auto;
+            }
+
+            .tooltiptext {
+                visibility: hidden;
+                width: 120px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                top: 120%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .tooltiptext::after {
+                content: "";
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: transparent transparent black transparent;
+            }
+        }
+
+        #back:hover, #addAnd:hover, #addImplique:hover, #fuseAnd:hover, #addGoal:hover {
+            border: 2px solid black;
+
+            .tooltiptext {
+                visibility: visible;
+            }
+        }
+    }
+
+    .message {
+        color: black;
+        text-align: center;
+        border-radius: 10px;
+        margin-left: 100px;
+        margin-right: 100px;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .tutoriel {
+        grid-area: t;
+        background:#e9ffd9;
+        border: 1px solid #a6ca8a;
+    }
+
+    .error {
+        grid-area: e;
+        background:#ffecec;
+        border: 1px solid #f5aca6;
+    }
+
+    .boutonSelection {
+        border: #a6ca8a solid 5px;
+        border-radius: 1px;
+    }
+  
+    .demonstration {
+        grid-area: d;
+        background-image: url("../../../public/img/fond_ligne_cahier.png");
+        border-radius: 10px;
+        color : black;
+        margin-top: 50px;
+
+        div {
+            border-radius: 10px;
+            padding: 5px 10px 5px 10px;
+            text-align: left;
+            background : rgba(255, 255, 255, 0.5);
+        }
+
+        div {
+            cursor: pointer;
+        }
+
+        div:hover {
+            color: #444444;
+        }
+    }
+}
