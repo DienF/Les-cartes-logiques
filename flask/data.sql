@@ -2,9 +2,8 @@ DROP TABLE IF EXISTS data CASCADE;
 
 
 CREATE TABLE data(
-    matiere text PRIMARY KEY,
-    note int
+    un_text text PRIMARY KEY
 );
 
 
-INSERT INTO data (matiere,note) VALUES ('maths',18),('français',5),('histoire',10),('physique',15),('svt',12),('phylo',6),('sport',14);
+INSERT INTO data (un_text) VALUES ("bonjour de la base de donnée");

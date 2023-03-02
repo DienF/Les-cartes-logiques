@@ -6,17 +6,26 @@ import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/"                    exact element={<Home/>}    />
-        <Route path="/Exercise-:mode-:num" exact element={<Exercise/>}/>
-        <Route path="/Exercise-:mode"      exact element={<Exercise/>}/>
-        <Route path="/About"               exact element={<About/>}   />
-        <Route path="*"                          element={<NotFound/>}/>
-      </Routes>
-    </BrowserRouter>
-  );
+	fetch("http://localhost:80/getDatabase")
+		.then((res) => res.json())
+		.then((data) => {
+			console.log(data);
+		});
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" exact element={<Home />} />
+				<Route
+					path="/Exercise-:mode-:num"
+					exact
+					element={<Exercise />}
+				/>
+				<Route path="/Exercise-:mode" exact element={<Exercise />} />
+				<Route path="/About" exact element={<About />} />
+				<Route path="*" element={<NotFound />} />
+			</Routes>
+		</BrowserRouter>
+	);
 };
 
 export default App;
