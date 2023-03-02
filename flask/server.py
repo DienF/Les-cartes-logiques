@@ -29,7 +29,7 @@ with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manage
             cur.execute(file.read())
 
 app = Flask(__name__)
-CORS(app, origins="http://localhost:3000")
+CORS(app, origins="http://localhost:80")
 
 
 @app.route("/getDatabase", methods=["GET"])
@@ -46,4 +46,4 @@ def index():  # pylint: disable=missing-function-docstring
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0")

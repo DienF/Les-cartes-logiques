@@ -6,7 +6,7 @@ import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
-	fetch("http://localhost:80/getDatabase")
+	fetch("http://localhost:5000/getDatabase")
 		.then((res) => res.json())
 		.then((data) => {
 			console.log(data);
