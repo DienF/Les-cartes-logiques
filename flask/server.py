@@ -5,8 +5,7 @@ import os
 
 import urllib.parse
 
-from flask import Flask, jsonify, render_template
-from flask_cors import CORS
+from flask import Flask, jsonify, send_from_directory
 
 from dotenv import dotenv_values
 import psycopg
@@ -28,7 +27,7 @@ with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manage
         with open(FILENAME_DB_SHEMA, "r", encoding="utf-8") as file:
             cur.execute(file.read())
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../react/build")
 
 
 @app.route("/getDatabase", methods=["GET"])
@@ -39,9 +38,12 @@ def get_database():  # pylint: disable=missing-function-docstring
             return jsonify(cur.fetchall())
 
 
-@app.route("/")
-def index():  # pylint: disable=missing-function-docstring
-    return render_template("index.html")
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def index(path):  # pylint: disable=missing-function-docstring
+    if path != "" and os.path.exists(app.static_folder + "/" + path):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, "index.html")
 
 
 if __name__ == "__main__":
