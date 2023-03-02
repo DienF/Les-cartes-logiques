@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS data CASCADE;
 
 
 CREATE TABLE data(
-    un_text text PRIMARY KEY
+    un_text text
 );
 
 
