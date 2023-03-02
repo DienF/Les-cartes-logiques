@@ -9,7 +9,7 @@ const App = () => {
 	fetch("/getDatabase")
 		.then((res) => res.json())
 		.then((data) => {
-			console.log(data[1]);
+			console.log(data);
 		});
 	return (
 		<BrowserRouter>
