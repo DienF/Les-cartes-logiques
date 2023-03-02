@@ -4,5 +4,5 @@ git pull
 cd react
 rm -r build
 npm run build
-cd flask
+cd ../flask
 screen -d -m sudo python server.py
