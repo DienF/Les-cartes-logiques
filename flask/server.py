@@ -6,6 +6,7 @@ import os
 import urllib.parse
 
 from flask import Flask, jsonify, send_from_directory
+from flask_cors import CORS
 
 from dotenv import dotenv_values
 import psycopg
@@ -28,6 +29,7 @@ with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manage
             cur.execute(file.read())
 
 app = Flask(__name__, static_folder="../react/build")
+CORS(app, origins="http://localhost:3000")
 
 
 @app.route("/getDatabase", methods=["GET"])
