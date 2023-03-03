@@ -1,5 +1,6 @@
 while [ 1 ]
 do
+    git fetch > /dev/null
     if git status -uno | grep behind > /dev/null || screen -ls | grep "found" > /dev/null
     then 
         for s in $( screen -ls | grep -o -P "\d\d\d\d\d*")
