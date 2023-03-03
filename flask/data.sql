@@ -7,4 +7,4 @@ CREATE TABLE data(
 );
 
 
-INSERT INTO data (un_text) VALUES ('bonjour de la base de donnée');
+INSERT INTO data (un_text) VALUES ('bonjour de la base de données');

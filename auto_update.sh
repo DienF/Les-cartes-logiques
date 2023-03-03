@@ -1,4 +1,4 @@
-while 1
+while [ 1 ]
 do
     if git status -uno | grep behind > /dev/null || screen -ls | grep "found" > /dev/null
     then 
@@ -14,5 +14,6 @@ do
         cd ../flask
         screen -d -m sudo python server.py
     fi
+    sleep 5
 done
 
