@@ -1,12 +1,11 @@
 while [ 1 ]
 do
     git fetch > /dev/null
-    if git status -uno | grep behind > /dev/null || screen -ls | grep "found" > /dev/null
+    output_git=$(git status -uno)
+    ouput_screen=$(screen -ls)
+    if [[$output_git == *""* || $ouput_screen == *"found"*]]
     then 
-        for s in $( screen -ls | grep -o -P "\d\d\d\d\d*")
-        do 
-            screen -X -S $s quit
-        done;
+        killall screen
         git reset --hard
         git pull
         cd react
@@ -14,6 +13,7 @@ do
         npm run build
         cd ../flask
         screen -d -m sudo python server.py
+        cd ..
     fi
     sleep 5
 done
