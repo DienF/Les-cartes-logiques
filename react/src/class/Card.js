@@ -121,8 +121,8 @@ export default class Card {
 	 * @returns {Card} une nouvelle instance d'une même carte
 	 */
 	copy() {
-		let l = null;
-		let r = null;
+		let l = null,
+			r = null;
 		if (this.left !== null) l = this.left.copy();
 		if (this.right !== null) r = this.right.copy();
 		return new Card(this.id, this.color, this.active, this.link, l, r);
@@ -183,15 +183,8 @@ export default class Card {
 	 * Renvoie la démonstration correspondante à l'action effectuée.
 	 */
 	toDemonstration() {
-		if (this.color !== null) return "On a" + this.getColor(this.color);
-		else if (this.link === "et")
-			return "On a" + this.left.toString() + "^" + this.right.toString();
-		else
-			return (
-				"Puisque" +
-				this.left.toString() +
-				", on a " +
-				this.right.toString()
-			);
+		if (this.color !== null)     return "On a"     + this.getColor(this.color);
+		else if (this.link === "et") return "On a"     + this.left.toString() + "^"       + this.right.toString();
+		else                         return ("Puisque" + this.left.toString() + ", on a " + this.right.toString());
 	}
 }
