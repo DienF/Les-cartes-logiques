@@ -100,7 +100,7 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2 }) => {
 	 */
 	const getTab = (card) => {
 		const className = getClassType(card);
-		var tab = [];
+		let tab = [];
 		if (
 			card.right !== null &&
 			card.link === "=>" &&
