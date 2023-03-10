@@ -77,6 +77,11 @@ const Navigation = () => {
 								À propos
 							</NavLink>
 						</li>
+						<li>
+							<NavLink exact="true" to="/Forms">
+								Votre avis
+							</NavLink>
+						</li>
 					</ul>
 				</li>
 			</ul>
