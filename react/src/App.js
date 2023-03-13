@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Exercise from "./pages/Exercise";
 import About from "./pages/About";
+import Forms from "./pages/Forms";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
 				/>
 				<Route path="/Exercise-:mode" exact element={<Exercise />} />
 				<Route path="/About" exact element={<About />} />
+				<Route path="/Forms" exact element={<Forms/>}   />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
