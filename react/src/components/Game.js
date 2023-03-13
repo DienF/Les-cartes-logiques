@@ -194,9 +194,9 @@ const Game = ({ mode, ex, numero }) => {
 
 	/**
 	 * Renvoie un nouveau deck sans la carte passée en paramètre.
-	 * @param {Array<Card>}  deck - deck dans lequel il faut supprimer la carte
+	 * @param {Card[]}  deck - deck dans lequel il faut supprimer la carte
 	 * @param {number} indiceCard - indice de la carte à supprimer
-	 * @returns {Array<Card>} le deck sans la carte d'indice {@link indiceCard}
+	 * @returns {Card[]} le deck sans la carte d'indice {@link indiceCard}
 	 */
 	const delCard = (deck, indiceCard) => {
 		// Le deck que l'on va retourner
@@ -218,9 +218,9 @@ const Game = ({ mode, ex, numero }) => {
 
 	/**
 	 * Renvoie un nouveau tableau sans le deck passé en paramètre.
-	 * @param {Array<Array<Card>} currentGame - tableau de la partie (avec potentiellement des modifications)
+	 * @param {Card[][]} currentGame - tableau de la partie (avec potentiellement des modifications)
 	 * @param {number}             indiceDeck - indice du Deck à supprimer
-	 * @returns {Array<Array<Card>} le jeu sans le deck d'indice {@link indiceDeck}
+	 * @returns {Card[][]} le jeu sans le deck d'indice {@link indiceDeck}
 	 */
 	const delDeck = (currentGame, indiceDeck) => {
 		// Le tableau du jeu que l'on va retourner
@@ -361,7 +361,7 @@ const Game = ({ mode, ex, numero }) => {
 
 	/**
 	 * Désélectionne toutes les cartes dans le tableau reçu et devient le jeu.
-	 * @param {Array<Array<Card>} tmp - tableau du jeu temporaire
+	 * @param {Card[][]} tmp - tableau du jeu temporaire
 	 */
 	const allFalse = (tmp) => {
 		// Suppression des messages d'erreur
@@ -528,7 +528,7 @@ const Game = ({ mode, ex, numero }) => {
 	 * Reçoit un tableau d'un fichier JSON à qui on va appliquer la méthode {@link JSON.parse()} dans {@link openFile()}
 	 * ({@link JSON} ⇒ tableau d'{@link Object}) et renvoie un tableau qui peut être lu par notre site.
 	 * @param {Object[]} data - tableau d'objets qui va servir pour l'initialisation
-	 * @returns {Array<Array<Card>} un tableau de decks qui constitue le jeu
+	 * @returns {Card[][]} un tableau de decks qui constitue le jeu
 	 */
 	const gameInput = (data) => {
 		// Tableau que l'on va retourner
@@ -635,7 +635,7 @@ const Game = ({ mode, ex, numero }) => {
 
 	/**
 	 * Crée le tableau tabObjectif en fonction des objectifs présents dans tmp.
-	 * @param {Array<Array<Card>} tmp - tableau du jeu temporaire
+	 * @param {Card[][]} tmp - tableau du jeu temporaire
 	 * @returns {int} la taille du tableau ajouté à tabObjectif
 	 */
 	const CreatTabObj = (tmp) => {
@@ -1560,7 +1560,7 @@ const Game = ({ mode, ex, numero }) => {
 	 * Parcourt le deck passé en paramètre (tmp[deckId]) et regarde s'il existe une carte qui est égale à la
 	 * carte passée en paramètre.
 	 *    Si oui renvoie true.
-	 * @param {Array<Array<Card>>} tmp - tableau du jeu temporaire
+	 * @param {Card[][]} tmp - tableau du jeu temporaire
 	 * @param {number}          deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
 	 * @param {Card}              card - la carte à trouver
 	 * @returns {true|false} true ou false
@@ -1580,7 +1580,7 @@ const Game = ({ mode, ex, numero }) => {
 	 * Parcourt le deck passé en paramètre (tmp[deckId]) et regarde s'il existe une carte qui est égale à la
 	 * carte passée en paramètre.
 	 *    Si oui renvoie son indice.
-	 * @param {Array<Array<Card>>} tmp - tableau du jeu temporaire
+	 * @param {Card[][]} tmp - tableau du jeu temporaire
 	 * @param {number}          deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
 	 * @param {Card}              card - la carte à trouver
 	 * @returns {number} -1 si la carte n'est pas dans le deck sinon son indice
@@ -1600,12 +1600,12 @@ const Game = ({ mode, ex, numero }) => {
 	 * Cherche de manière récursive un objectif : elle cherche à trouver un moyen de créer cardTest avec une
 	 * autre carte, s'il y a un moyen elle va chercher à créer cette autre carte jusqu'à tomber sur une carte
 	 * simple existante.
-	 * @param {Array<Array<Card>>} tmp - tableau du jeu temporaire
+	 * @param {Card[][]} tmp - tableau du jeu temporaire
 	 * @param {Card}          cardTest - la dernière carte trouvée pour aller à l'objectif
 	 * @param {number}          deckId - indice du deck de la dernière carte trouvée pour aller à l'objectif
 	 * @param {number}    deckObjectif - numéro de l'objectif
-	 * @param {Array<Card>}     chemin - le chemin de cartes actuel
-	 * @returns {Array<Card>} le chemin
+	 * @param {Card[]}     chemin - le chemin de cartes actuel
+	 * @returns {Card[]} le chemin
 	 */
 	const recursiveSoluce = (tmp, cardTest, deckId, deckObjectif, chemin) => {
 		/** L'indice 1 de chemin est false par défaut : il n'a pas trouvé une carte permettant de créer la carte
@@ -1659,7 +1659,7 @@ const Game = ({ mode, ex, numero }) => {
 			}
 		}
 		/** Si aucune solution n'a été trouvé jusque-là et que la carte que l'on cherche est l'objectif
-		 *  et qu'elle a une liaison "=>".
+		 *  et qu'elle a une liaison "=>"
 		 */
 		if (!chemin[1] && deckId === tmp.length - 1 && cardTest.link === "=>") {
 			// console.log("Add objectif");
@@ -1771,11 +1771,11 @@ const Game = ({ mode, ex, numero }) => {
 										chemin = [...tmpChemin];
 									}
 									/* Pas sûr & pas d'exemple pour le tester.
-                else {
-                  tmpChemin = [...recursiveSoluce(tmp,card.right,deckIndex,deckObjectif,chemin)];
-                  chemin    = [...tmpChemin];
-                }
-                */
+                					else {
+                					  tmpChemin = [...recursiveSoluce(tmp, card.right, deckIndex, deckObjectif, chemin)];
+                					  chemin    = [...tmpChemin];
+                					}
+                					*/
 								} else {
 									// Si la partie droite de la carte est simple on cherche la partie gauche
 									chemin[1] = true;
@@ -1920,7 +1920,7 @@ const Game = ({ mode, ex, numero }) => {
 
 	/**
 	 * Fait une copie du jeu actuel en créant un nouveau tableau & en copiant toutes les cartes.
-	 * @returns une copie de la partie actuelle
+	 * @returns {never[][]} une copie de la partie actuelle
 	 */
 	const copyGame = () => {
 		// Nouveau tableau vide que l'on va retourner
@@ -2105,11 +2105,20 @@ const Game = ({ mode, ex, numero }) => {
 		}
 	};
 
+	/**
+	 * 
+	 * @param {string} message 
+	 */
 	const error = (message) => {
 		allFalseGame();
 		setMessageError(message);
 	};
 
+	/**
+	 * 
+	 * @param {string} str 
+	 * @returns {string}
+	 */
 	const StringToLatex = (str) => {
 		str = str.replaceAll("Rouge", "\\textit{ Rouge }");
 		str = str.replaceAll("Jaune", "\\textit{ Jaune }");
@@ -2131,6 +2140,9 @@ const Game = ({ mode, ex, numero }) => {
 		return str;
 	};
 
+	/**
+	 * 
+	 */
 	const copyHandler = () => {
 		let str = window.getSelection().toString();
 		str = str.replaceAll("\\textit{ Rouge }", " Rouge ");
