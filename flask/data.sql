@@ -7,4 +7,4 @@ CREATE TABLE data(
 );
 
 
-INSERT INTO data (un_text) VALUES ('test update résolution de commit');
+INSERT INTO data (un_text) VALUES ('Bonjour de la base de données :)');
