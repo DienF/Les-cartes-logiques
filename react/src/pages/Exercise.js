@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Game from "../components/Game";
 import Navigation from "../components/Navigation";
+import PopupForms from "../components/PopupForms";
 
 const Exercise = () => {
 	const [num, setNum] = useState();
@@ -39,6 +40,7 @@ const Exercise = () => {
 		<div className="home">
 			<Navigation />
 			{ex !== undefined && <Game mode={mode} ex={ex} numero={num - 1} />}
+			<PopupForms/>
 		</div>
 	);
 };

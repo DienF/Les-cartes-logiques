@@ -1,4 +1,5 @@
 import Navigation from "../components/Navigation";
+import PopupForms from "../components/PopupForms";
 import Choice from "../components/Choice";
 
 const Home = () => {
@@ -170,6 +171,7 @@ const Home = () => {
 					</li>
 				</ul>
 			</div>
+			<PopupForms/>
 		</div>
 	);
 };
