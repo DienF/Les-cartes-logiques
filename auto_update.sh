@@ -1,6 +1,6 @@
-cd /home/ubuntu/Les-cartes-logiques
 while [ 1 ]
 do
+    cd /home/ubuntu/Les-cartes-logiques
     git fetch > /dev/null
     output_git=$(git status -uno)
     output_ps=$(ps -a)
@@ -11,10 +11,10 @@ do
         git pull
         cd react
         rm -r build
+        npm install
         npm run build
         cd ../flask
         screen -S server -d -m sudo python server.py
-        cd ..
     fi
     sleep 5
 done
