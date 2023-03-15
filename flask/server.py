@@ -28,7 +28,7 @@ with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manage
         with open(FILENAME_DB_SHEMA, "r", encoding="utf-8") as file:
             cur.execute(file.read())
 
-app = Flask(__name__, static_folder="./build")
+app = Flask(__name__, static_folder="../react/build")
 CORS(app, origins="http://localhost:3000")
 
 

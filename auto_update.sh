@@ -13,9 +13,6 @@ do
         rm -r build
         npm install
         npm run build
-        rm -r ../flask/build
-        cp -rp build ../flask/build
-        rm -r build
         cd ../flask
         screen -S server -d -m sudo python server.py
     fi
