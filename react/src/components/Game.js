@@ -2124,6 +2124,7 @@ const Game = ({ mode, ex, numero }) => {
 		str = str.replaceAll("Jaune", "\\textit{ Jaune }");
 		str = str.replaceAll("Bleue", "\\textit{ Bleue }");
 		str = str.replaceAll("Orange", "\\textit{ Orange }");
+		str = str.replaceAll("Verte", "\\textit{ Verte }");
 		str = str.replaceAll("True", "\\textit{ True }");
 		str = str.replaceAll("False", "\\textit{ False }");
 		str = str.replaceAll("^", "\\land");
@@ -2466,13 +2467,25 @@ const Game = ({ mode, ex, numero }) => {
 									value="blue"
 									name="couleur"
 								/>{" "}
-								{" Bleu "}
+								{" Bleue "}
 								<input
 									type="radio"
 									value="orange"
 									name="couleur"
 								/>{" "}
 								{" Orange "}
+								<input
+									type="radio"
+									value="green"
+									name="couleur"
+								/>{" "}
+								{" Verte "}
+								<input
+									type="radio"
+									value="purple"
+									name="couleur"
+								/>{" "}
+								{" Violette "}
 								<input
 									type="radio"
 									value="black"

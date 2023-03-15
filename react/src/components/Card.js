@@ -145,13 +145,12 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2 }) => {
 	};
 
 	/**
-	 * Affiche "^" au lieu de "et" dans les liaisons entre cartes.
+	 * Convertit les liaisons en symboles Latex.
 	 * @param {String} str - la liaison
-	 * @returns {String} "^" si la liaison est "^" sinon la liaison reste inchangée
+	 * @returns {String} le symbole Latex
 	 */
 	const afficheLink = (str) => {
-		if (str === "et") return "$$\\land$$";
-		else if (str === "=>") return "$$\\Rightarrow$$";
+		if (str === "=>") return "$$\\Rightarrow$$";
 		else if (str === "<=>") return "$$\\Leftrightarrow$$";
 		else return str;
 	};

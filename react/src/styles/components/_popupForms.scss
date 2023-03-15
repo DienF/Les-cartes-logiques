@@ -3,7 +3,7 @@
     bottom: 1%;
     right: 1%;
 
-    .bigbox{
+    .bigbox {
         position: relative;
         margin: 0 auto;
         height: auto;
@@ -17,7 +17,11 @@
         padding: 10px;
         overflow: auto;
         text-align: center;
-      }
+
+        a {
+            color: black;
+            font-family: "Fredericka the Great", cursive;
+            text-decoration: none;
+        }
+    }
 }
-
-

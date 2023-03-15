@@ -38,6 +38,10 @@ export default class Card {
 				return "Bleue";
 			case "orange":
 				return "Orange";
+			case "green":
+				return "Verte";
+			case "purple":
+				return "Violette";
 			case "black":
 				return "True";
 			case "white":

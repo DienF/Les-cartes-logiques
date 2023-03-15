@@ -140,12 +140,20 @@ const Home = () => {
 								symbole est <strong>˄</strong>.
 							</li>
 							<li>
+								le <strong>connecteur « ou »</strong> dont le
+								symbole est <strong>˅</strong>.
+							</li>
+							<li>
 								le <strong>connecteur « implique »</strong> dont
 								le symbole est <strong>⟹</strong>.
 							</li>
 							<li>
 								le <strong>connecteur « équivaut »</strong> dont
 								le symbole est <strong>⟺</strong>.
+							</li>
+							<li>
+								le <strong>connecteur unaire « négation »</strong> dont
+								le symbole est <strong>¬</strong>. Comme il est unaire, il n'est connecté qu'à une seule carte.
 							</li>
 						</ul>
 					</li>

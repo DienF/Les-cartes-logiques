@@ -1,16 +1,14 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Exercise from "./pages/Exercise";
 import About from "./pages/About";
+import Exercise from "./pages/Exercise";
 import Forms from "./pages/Forms";
+import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
 	let url_add = "";
-	if (process.env.NODE_ENV === "development") {
-		url_add = "http://localhost:80";
-	}
+	if (process.env.NODE_ENV === "development") url_add = "http://localhost:80";
 	fetch(url_add + "/getDatabase")
 		.then((res) => res.json())
 		.then((data) => {

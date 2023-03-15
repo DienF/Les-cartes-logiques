@@ -1,4 +1,4 @@
-.forms{
+.forms {
     min-width: 100vw;
     min-height: 100vh;
     position: relative;
@@ -7,7 +7,7 @@
         "h h h"
         "l m r";
 
-    #forms{
+    #forms {
         grid-area: m;
         background-color:lightgray;
         border-radius: 15px;
@@ -15,6 +15,7 @@
         padding: 1%;
         width: fit-content;
     }
+    
     h2 {
         margin-top: 1%;
         color: black;
