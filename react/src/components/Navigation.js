@@ -29,30 +29,6 @@ const Navigation = () => {
 								Accueil
 							</NavLink>
 						</li>
-						<li>
-							<NavLink exact="true" to="/Exercise-Create">
-								Créer un exercice
-							</NavLink>
-						</li>
-						<li className="choose">
-							<a>Choisir un exercice</a>
-							<ul>
-								{ex !== undefined &&
-									ex.map((exercice, index) => (
-										<li className="exo" key={index}>
-											<NavLink
-												exact="true"
-												to={
-													"/Exercise-Play-" +
-													(index + 1)
-												}
-											>
-												Exercice {index + 1}
-											</NavLink>
-										</li>
-									))}
-							</ul>
-						</li>
 						<li className="choose">
 							<a>Tutoriel</a>
 							<ul id="tuto">
@@ -72,6 +48,30 @@ const Navigation = () => {
 									))}
 							</ul>
 						</li>
+						<li className="choose">
+							<a>Choisir un niveau</a>
+							<ul>
+								{ex !== undefined &&
+									ex.map((exercice, index) => (
+										<li className="exo" key={index}>
+											<NavLink
+												exact="true"
+												to={
+													"/Exercise-Play-" +
+													(index + 1)
+												}
+											>
+												Niveau {index + 1}
+											</NavLink>
+										</li>
+									))}
+							</ul>
+						</li>
+						<li>
+							<NavLink exact="true" to="/Exercise-Create">
+								Créer un niveau
+							</NavLink>
+						</li>
 						<li>
 							<NavLink exact="true" to="/About">
 								À propos
@@ -88,7 +88,7 @@ const Navigation = () => {
 			<h1>Les Cartes Logiques</h1>
 			{window.location.pathname.substring(10, 14) === "Play" && (
 				<div id="titrePage">
-					{"Exercice " + window.location.pathname.substring(15, 30)}
+					{"Niveau " + window.location.pathname.substring(15, 30)}
 				</div>
 			)}
 			{window.location.pathname === "/" && (
@@ -98,7 +98,7 @@ const Navigation = () => {
 				<div id="titrePage">{"À propos"}</div>
 			)}
 			{window.location.pathname.substring(10, 18) === "Create" && (
-				<div id="titrePage">{"Créer un exercice"}</div>
+				<div id="titrePage">{"Créer un niveau"}</div>
 			)}
 			{window.location.pathname.substring(10, 18) === "Tutorial" && (
 				<div id="titrePage">

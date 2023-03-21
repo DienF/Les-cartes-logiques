@@ -318,7 +318,7 @@ const Game = ({ mode, ex, numero }) => {
 					setMessageTutorial([
 						"Une fois une carte sélectionnée elle aura un contour noir.",
 						"Vous pouvez utiliser les boutons au-dessus pour effectuer une action.",
-						"Dans cet exercice nous allons apprendre le fonctionnement du deuxième bouton.",
+						"Dans ce niveau nous allons apprendre le fonctionnement du deuxième bouton.",
 						"Ce bouton a besoin de deux conditions :",
 						"- Une seule carte doit être sélectionnée",
 						'- La carte doit avoir une liaison "et"',
@@ -2234,19 +2234,19 @@ const Game = ({ mode, ex, numero }) => {
 			]);
 		if (numero === 1)
 			setMessageTutorial([
-				"Dans cet exercice nous allons apprendre le troisième bouton.",
+				"Dans ce niveau nous allons apprendre le troisième bouton.",
 				"Ce bouton a besoin de deux cartes pour fonctionner.",
 				"Sélectionner deux cartes.",
 			]);
 		if (numero === 2)
 			setMessageTutorial([
-				"Dans cet exercice nous allons apprendre le quatrième bouton.",
+				"Dans ce niveau nous allons apprendre le quatrième bouton.",
 				"Ce bouton a besoin de deux cartes pour fonctionner.",
 				"Sélectionner deux cartes.",
 			]);
 		if (numero === 3)
 			setMessageTutorial([
-				"Dans cet exercice nous allons apprendre le dernier bouton.",
+				"Dans ce niveau nous allons apprendre le dernier bouton.",
 				"Pour faire fonctionner ce bouton on doit sélectionner l’objectif.",
 			]);
 	}, [mode, ex, numero]);
