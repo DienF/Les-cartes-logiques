@@ -2229,7 +2229,7 @@ const Game = ({ mode, ex, numero }) => {
 
 		if (numero === 0)
 			setMessageTutorial([
-				"Le but du jeu est de réussir à créer la carte qui est dans l’objectif dans le premier deck.",
+				"Le but du jeu est de réussir à créer la carte qui est dans l'objectif dans le premier deck.",
 				"Vous pouvez sélectionner une carte en cliquant dessus.",
 			]);
 		if (numero === 1)
@@ -2247,7 +2247,7 @@ const Game = ({ mode, ex, numero }) => {
 		if (numero === 3)
 			setMessageTutorial([
 				"Dans ce niveau nous allons apprendre le dernier bouton.",
-				"Pour faire fonctionner ce bouton on doit sélectionner l’objectif.",
+				"Pour faire fonctionner ce bouton on doit sélectionner l'objectif.",
 			]);
 	}, [mode, ex, numero]);
 
@@ -2518,8 +2518,18 @@ const Game = ({ mode, ex, numero }) => {
 						<>
 							<b>Choisissez une liaison</b>
 							<div onChange={choixLiaison}>
-								<input type="radio" value="et" name="liaison" />{" "}
+								<input
+									type="radio"
+									value="et"
+									name="liaison"
+								/>{" "}
 								{"et "}
+								<input
+									type="radio"
+									value="ou"
+									name="liaison"
+								/>{" "}
+								{"ou "}
 								<input
 									type="radio"
 									value="=>"

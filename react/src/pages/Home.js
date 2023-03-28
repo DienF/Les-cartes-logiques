@@ -136,23 +136,23 @@ const Home = () => {
 						<strong>connecteur</strong> et des cartes connectées :
 						<ul>
 							<li>
-								le <strong>connecteur « et »</strong> dont le
-								symbole est <strong>˄</strong>.
+								le <strong>connecteur « et »</strong> dont le
+								symbole est <strong>∧</strong>.
 							</li>
 							<li>
-								le <strong>connecteur « ou »</strong> dont le
-								symbole est <strong>˅</strong>.
+								le <strong>connecteur « ou »</strong> dont le
+								symbole est <strong>∨</strong>.
 							</li>
 							<li>
-								le <strong>connecteur « implique »</strong> dont
+								le <strong>connecteur « implique »</strong> dont
 								le symbole est <strong>⟹</strong>.
 							</li>
 							<li>
-								le <strong>connecteur « équivaut »</strong> dont
+								le <strong>connecteur « équivaut »</strong> dont
 								le symbole est <strong>⟺</strong>.
 							</li>
 							<li>
-								le <strong>connecteur unaire « négation »</strong> dont
+								le <strong>connecteur unaire « négation »</strong> dont
 								le symbole est <strong>¬</strong>. Comme il est unaire, il n'est connecté qu'à une seule carte.
 							</li>
 						</ul>
@@ -162,13 +162,13 @@ const Home = () => {
 				<ul>
 					<li>
 						En présentant à la banque une carte avec le connecteur{" "}
-						<strong>˄</strong>, on peut obtenir chacune des{" "}
+						<strong>∧</strong>, on peut obtenir chacune des{" "}
 						<strong>deux cartes</strong> connectées.
 					</li>
 					<li>
 						En présentant à la banque une carte avec le connecteur{" "}
 						<strong>⟹</strong> et{" "}
-						<strong>la carte d’où vient la flèche</strong>, on peut
+						<strong>la carte d'où vient la flèche</strong>, on peut
 						obtenir <strong>la carte d'où va la flèche</strong>.
 					</li>
 					<li>

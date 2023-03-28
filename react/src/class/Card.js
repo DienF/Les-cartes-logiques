@@ -7,9 +7,12 @@ export default class Card {
 	 *                              bleu   ("blue")   ;
 	 *                              orange ("orange")
 	 * @param {true|false} active
-	 * @param {""|"et"|"=>"} link -  ""  = carte simple ;
-	 *                              "et" = liaison "et" ;
-	 *                              "=>" = liaison "⇒"
+	 * @param {""|"et"|"=>"} link - ""    = carte simple ;
+	 *                              "¬"   = liaison "¬"  ;
+	 *                              "et"  = liaison "et" ;
+	 *                              "ou"  = liaison "ou" ;
+	 *                              "=>"  = liaison "⇒" ;
+	 *                              "<=>" = liaison "⟺"
 	 * @param {Card|null} left
 	 * @param {Card|null} right
 	 */
@@ -68,6 +71,7 @@ export default class Card {
 		if (this.left !== null) res += "(" + this.left.toString();
 		// Liaison
 		if (this.link === "et") res += "^";
+		// else if (this.link === "") res += ""; // ou
 		else if (this.link === "=>") res += "=>";
 		else if (this.link === "<=>") res += "<=>";
 		else res += this.link;
@@ -140,7 +144,7 @@ export default class Card {
 	 */
 	select(state) {
 		this.active = state;
-		if (this.left != null) this.left.select(state);
+		if (this.left  != null) this.left.select(state);
 		if (this.right != null) this.right.select(state);
 	}
 
@@ -188,7 +192,8 @@ export default class Card {
 	 */
 	toDemonstration() {
 		if (this.color !== null)     return "On a"     + this.getColor(this.color);
-		else if (this.link === "et") return "On a"     + this.left.toString() + "^"       + this.right.toString();
+		else if (this.link === "et") return "On a"     + this.left.toString() + "∧"       + this.right.toString();
+		else if (this.link === "ou") return "On a"     + this.left.toString() + "∨"       + this.right.toString();
 		else                         return ("Puisque" + this.left.toString() + ", on a " + this.right.toString());
 	}
 }
