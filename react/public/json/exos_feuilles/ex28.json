@@ -1,0 +1,61 @@
+[
+ [
+  {
+   "left": {
+    "color": "orange"
+   },
+   "link": "=>",
+   "right": {
+    "color": "yellow"
+   }
+  },
+  {
+   "left": {
+    "left": {
+     "color": "orange"
+    },
+    "link": "et",
+    "right": {
+     "color": "yellow"
+    }
+   },
+   "link": "=>",
+   "right": {
+    "color": "red"
+   }
+  },
+  {
+    "left" : {},
+    "link" : "non",
+    "right" : {
+     "left": {
+      "color": "red"
+     },
+     "link": "<=>",
+     "right": {
+      "color": "orange"
+     }
+    }
+  },
+  {
+   "left": {
+    "color": "blue"
+   },
+   "link": "ou",
+   "right": {
+    "left": {
+     "color": "red"
+    },
+    "link": "=>",
+    "right": {
+     "color": "orange"
+    }
+   }
+  }
+ ],
+ [
+  {
+   "color": "blue"
+  }
+ ]
+]
