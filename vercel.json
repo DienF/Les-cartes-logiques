@@ -2,16 +2,6 @@
     "version": 2,
     "installCommand":"npm install",
     "buildCommand":"npm run build",
-    "builds": [
-        {
-            "src": "./server.py",
-            "use": "@vercel/python"
-        },
-        {
-            "src": "./react/build/**",
-            "use": "@vercel/static"
-        }
-    ],
     "routes": [
         {
             "src": "/(.*)",
