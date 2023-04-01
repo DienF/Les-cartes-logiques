@@ -32,6 +32,11 @@ app = Flask(__name__, static_folder="./build")
 CORS(app, origins="http://localhost:3000")
 
 
+@app.route("/test", methods=["GET"])
+def test():  # pylint: disable=missing-function-docstring
+    return jsonify({"test": "test"})
+
+
 @app.route("/getDatabase", methods=["GET"])
 def get_database():  # pylint: disable=missing-function-docstring
     with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manager

@@ -14,6 +14,11 @@ const App = () => {
 		.then((data) => {
 			console.log(data[0][1]);
 		});
+	fetch(url_add + "/test")
+		.then((res) => res.json())
+		.then((data) => {
+			console.log(data.test);
+		});
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -25,7 +30,7 @@ const App = () => {
 				/>
 				<Route path="/Exercise-:mode" exact element={<Exercise />} />
 				<Route path="/About" exact element={<About />} />
-				<Route path="/Forms" exact element={<Forms/>}   />
+				<Route path="/Forms" exact element={<Forms />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
