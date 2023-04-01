@@ -1,23 +1,6 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "./index.py",
-            "use": "@vercel/python"
-        },
-        {
-            "src": "/build/**",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "./src/App.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/"
-        }
+    "rewrites": [
+        { "source": "/(.*)", "destination": "/server" }
     ]
 }
