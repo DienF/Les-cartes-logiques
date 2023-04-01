@@ -36,7 +36,7 @@ CORS(app, origins="http://localhost:3000")
 def get_database():  # pylint: disable=missing-function-docstring
     with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manager
         with conn.cursor() as cur:
-            cur.execute("select * from data;")
+            cur.execute("select * from data_carte;")
             return jsonify(cur.fetchall())
 
 
