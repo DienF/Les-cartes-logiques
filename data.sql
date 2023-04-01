@@ -7,4 +7,4 @@ CREATE TABLE data_carte(
 );
 
 
-INSERT INTO data_carte (un_text) VALUES ('Bonjour de la base de données :)');
+INSERT INTO data_carte (un_text) VALUES ('Bonjours de la base de données :)');
