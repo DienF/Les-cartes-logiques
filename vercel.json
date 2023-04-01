@@ -6,6 +6,10 @@
             "use": "@vercel/python"
         },
         {
+            "src": "./server.py",
+            "use": "@vercel/python"
+        },
+        {
             "src": "./react/build/**",
             "use": "@vercel/static"
         }
