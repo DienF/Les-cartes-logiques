@@ -1,18 +1,19 @@
 """
 Server Flask avec react
 """
-from os import path
+import os
 
 import urllib.parse
 
 from flask import Flask, jsonify, send_from_directory
+from flask_cors import CORS
 
 from dotenv import dotenv_values
 import psycopg
 
-# os.chdir(os.path.dirname(__file__))
+os.chdir(os.path.dirname(__file__))
 
-if path.exists(".env"):
+if os.path.exists(".env"):
     config = dotenv_values(".env")
 else:
     config = dotenv_values("default.env")
@@ -28,6 +29,7 @@ with psycopg.connect(CONN_PARAMS) as conn:  # pylint: disable=not-context-manage
             cur.execute(file.read())
 
 app = Flask(__name__, static_folder="../build")
+CORS(app, origins="http://localhost:3000")
 
 
 @app.route("/test", methods=["GET"])

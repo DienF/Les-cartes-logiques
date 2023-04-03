@@ -1,15 +1,20 @@
 {
-    "version": 2,  
-    "installCommand":"npm install;npm run build;pip install -r requirements.txt",
+    "version": 2,
     "functions":{
-        "api/server.py":{ 
-            "includeFiles":"../build/**"
+        "api/install.sh":{ 
+            "runtime":"vercel-bash"
         }
     },
+    "builds": [
+        {
+            "src": "./server.py",
+            "use": "@vercel/python"
+        }
+    ],
     "routes": [
         {
-          "src": "/(.*)",
-          "dest": "api/server.py"
+            "src": "/(.*)",
+            "dest": "server.py"
         }
-      ]
+    ]
 }
