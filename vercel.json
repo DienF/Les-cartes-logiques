@@ -1,6 +1,11 @@
 {
     "version": 2,  
-    "installCommand":"chmod +x install.sh;./install.sh",
+    "installCommand":"npm install;npm run build;pip install -r requirements.txt",
+    "functions":{
+        "server.py":{ 
+            "runtime":"vercel-python"
+        }
+    },
     "rewrites": [
         { "source": "/(.*)", "destination": "/server" }
     ]
