@@ -48,6 +48,8 @@ def get_database():  # pylint: disable=missing-function-docstring
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def index(path):  # pylint: disable=missing-function-docstring
+    if path != "" and os.path.exists(app.static_folder + "/" + path):
+        return send_from_directory(app.static_folder, path)
     return send_from_directory(app.static_folder, "index.html")
 
 
