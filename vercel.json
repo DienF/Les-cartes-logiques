@@ -3,7 +3,8 @@
     "installCommand":"npm install;npm run build;pip install -r requirements.txt",
     "functions":{
         "api/server.py":{ 
-            "includeFiles":"../build/**"
+            "includeFiles":"../build/**",
+            "memory":1024
         }
     },
     "routes": [
