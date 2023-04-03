@@ -1,5 +1,10 @@
 {
     "version": 2,
+    
+    "scripts": {
+        "build": "npm install;npm build"
+    },
+      
     "builds": [
         {
             "src": "./server.py",
@@ -10,11 +15,6 @@
             "use":"@vercel/static"
         }
     ],
-    "functions":{
-        "api/install.sh":{ 
-            "runtime":"vercel-bash" 
-        }
-    },
     "routes": [
         {
             "src": "/(.*)",
