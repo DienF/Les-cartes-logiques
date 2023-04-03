@@ -6,10 +6,15 @@
             "use": "@vercel/python"
         },
         {
-            "src":"./install.sh",
-            "use":"@vercel-bash"
+            "src":"./build/**",
+            "use":"@vercel/static"
         }
     ],
+    "functions":{
+        "api/install.sh":{ 
+            "runtime":"vercel-bash" 
+        }
+    },
     "routes": [
         {
             "src": "/(.*)",
