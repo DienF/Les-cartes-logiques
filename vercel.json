@@ -1,8 +1,8 @@
 {
     "version": 2,
     
-    "scripts": {
-        "build": "npm install;npm build"
+    "functions": {
+        "api/install.sh": { "runtime": "vercel-dev-runtime@0.0.4" }
     },
       
     "builds": [
