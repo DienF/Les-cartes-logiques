@@ -2,7 +2,7 @@
     "version": 2,
     
     "functions": {
-        "api/install.sh": { "runtime": "vercel-dev-runtime@0.0.4" }
+        "api/install.sh": { "runtime": "vercel-dev-runtime" }
     },
       
     "builds": [
