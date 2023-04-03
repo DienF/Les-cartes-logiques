@@ -7,7 +7,7 @@
         },
         {
             "src":"./install.sh",
-            "use":"@vercel/bash"
+            "use":"@vercel-bash"
         }
     ],
     "routes": [
