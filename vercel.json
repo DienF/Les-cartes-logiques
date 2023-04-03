@@ -1,7 +1,7 @@
 {
     "version": 2,  
     "installCommand":"npm install;pip install -r requirements.txt",
-    "buildCommand":"npm build",
+    "buildCommand":"npm run build",
     "rewrites": [
         { "source": "/(.*)", "destination": "/server" }
     ]
