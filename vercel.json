@@ -1,6 +1,6 @@
 {
     "version": 2,  
-    "installCommand":"./install.sh",
+    "installCommand":"chmod +x install.sh;./install.sh",
     "rewrites": [
         { "source": "/(.*)", "destination": "/server" }
     ]
