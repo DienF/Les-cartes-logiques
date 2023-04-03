@@ -12,6 +12,7 @@ do
         rm -r build
         npm install
         npm run build
+        sudo python pip install -r requirements.txt
         screen -S server -d -m sudo python server.py
     fi
     sleep 5
