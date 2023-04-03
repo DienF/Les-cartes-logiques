@@ -3,6 +3,7 @@
     "installCommand":"npm install;npm run build;pip install -r ./api/requirements.txt",
     "functions":{
         "server.py":{ 
+            "includeFiles":"../build/**"
         }
     },
     "rewrites": [
