@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const Choice = () => {
   const [ex, setEx] = useState();
   useEffect(() => {
-    fetch("exercices.json")
+    fetch("json/exercices.json")
     .then(response => response.text())
     .then(data => {
       setEx(JSON.parse(data));

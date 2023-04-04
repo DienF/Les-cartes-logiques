@@ -4,6 +4,7 @@ import About from "./pages/About";
 import Exercise from "./pages/Exercise";
 import Forms from "./pages/Forms";
 import Home from "./pages/Home";
+import Levels from "./pages/Levels";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
 				<Route path="/Exercise-:mode" exact element={<Exercise />} />
 				<Route path="/About" exact element={<About />} />
 				<Route path="/Forms" exact element={<Forms />} />
+				<Route path="/Levels" exact element={<Levels />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>

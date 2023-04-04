@@ -48,24 +48,10 @@ const Navigation = () => {
 									))}
 							</ul>
 						</li>
-						<li className="choose">
-							<a>Choisir un niveau</a>
-							<ul>
-								{ex !== undefined &&
-									ex.map((exercice, index) => (
-										<li className="exo" key={index}>
-											<NavLink
-												exact="true"
-												to={
-													"/Exercise-Play-" +
-													(index + 1)
-												}
-											>
-												Niveau {index + 1}
-											</NavLink>
-										</li>
-									))}
-							</ul>
+						<li>
+							<NavLink exact="true" to="/Levels">
+								Choisir un niveau
+							</NavLink>
 						</li>
 						<li>
 							<NavLink exact="true" to="/Exercise-Create">
@@ -96,6 +82,12 @@ const Navigation = () => {
 			)}
 			{window.location.pathname === "/About" && (
 				<div id="titrePage">{"À propos"}</div>
+			)}
+			{window.location.pathname === "/Forms" && (
+				<div id="titrePage">{"Votre avis"}</div>
+			)}
+			{window.location.pathname === "/Levels" && (
+				<div id="titrePage">{"Choix du niveau"}</div>
 			)}
 			{window.location.pathname.substring(10, 18) === "Create" && (
 				<div id="titrePage">{"Créer un niveau"}</div>
