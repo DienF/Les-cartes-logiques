@@ -9,8 +9,8 @@ DROP TABLE IF EXISTS "usr_rsn" CASCADE;
 CREATE TABLE IF NOT EXISTS "users" (
 	"id_usr" INTEGER NOT NULL,
 	"username" TEXT NOT NULL,
-    "passwd" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+	"passwd" TEXT NOT NULL,
+	"email" TEXT NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("id_usr")
 );
 
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS "usr_exc" (
 	"id_exc" INTEGER NOT NULL,
 	"bool_usr_exc" BOOLEAN NOT NULL,
 	CONSTRAINT "usr_exc_pk" PRIMARY KEY ("id_usr","id_exc"),
-    CONSTRAINT "usr_exc_fk0" FOREIGN KEY ("id_usr") REFERENCES "users"("id_usr"),
-    CONSTRAINT "usr_exc_fk1" FOREIGN KEY ("id_exc") REFERENCES "exercises"("id_exc")
+	CONSTRAINT "usr_exc_fk0" FOREIGN KEY ("id_usr") REFERENCES "users"("id_usr"),
+	CONSTRAINT "usr_exc_fk1" FOREIGN KEY ("id_exc") REFERENCES "exercises"("id_exc")
 );
 
 CREATE TABLE IF NOT EXISTS "usr_ttl" (
@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS "usr_ttl" (
 	"id_ttl" INTEGER NOT NULL,
 	"bool_usr_ttl" BOOLEAN NOT NULL,
 	CONSTRAINT "usr_ttl_pk" PRIMARY KEY ("id_usr","id_ttl"),
-    CONSTRAINT "usr_ttl_fk0" FOREIGN KEY ("id_usr") REFERENCES "users"("id_usr"),
-    CONSTRAINT "usr_ttl_fk1" FOREIGN KEY ("id_ttl") REFERENCES "tautologies"("id_ttl")
+	CONSTRAINT "usr_ttl_fk0" FOREIGN KEY ("id_usr") REFERENCES "users"("id_usr"),
+	CONSTRAINT "usr_ttl_fk1" FOREIGN KEY ("id_ttl") REFERENCES "tautologies"("id_ttl")
 );
 
 CREATE TABLE IF NOT EXISTS "usr_rsn" (
@@ -55,7 +55,6 @@ CREATE TABLE IF NOT EXISTS "usr_rsn" (
 	"id_rsn" INTEGER NOT NULL,
 	"bool_usr_rsn" BOOLEAN NOT NULL,
 	CONSTRAINT "usr_rsn_pk" PRIMARY KEY ("id_usr","id_rsn"),
-    CONSTRAINT "usr_rsn_fk0" FOREIGN KEY ("id_usr") REFERENCES "users"("id_usr"),
-    CONSTRAINT "usr_rsn_fk1" FOREIGN KEY ("id_rsn") REFERENCES "reasonings"("id_rsn")
+	CONSTRAINT "usr_rsn_fk0" FOREIGN KEY ("id_usr") REFERENCES "users"("id_usr"),
+	CONSTRAINT "usr_rsn_fk1" FOREIGN KEY ("id_rsn") REFERENCES "reasonings"("id_rsn")
 );
-

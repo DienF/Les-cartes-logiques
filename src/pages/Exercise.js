@@ -34,6 +34,7 @@ const Exercise = () => {
 				});
 		} else if (mode === "Create" && tmp === undefined) setEx([[], []]);
 		else navigate("/NotFound");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [tmp, mode]);
 
 	return (

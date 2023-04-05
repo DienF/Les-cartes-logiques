@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
-	const [ex, setEx] = useState();
+	const [setEx] = useState();
 	const [exTuto, setExTuto] = useState();
 
 	useEffect(() => {
@@ -16,13 +16,14 @@ const Navigation = () => {
 			.then((data) => {
 				setExTuto(JSON.parse(data));
 			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<div className="navigation">
 			<ul className="navbar">
 				<li>
-					<a href="#">Menu</a>
+					<div>Menu</div>
 					<ul>
 						<li>
 							<NavLink exact="true" to="/">
@@ -30,7 +31,7 @@ const Navigation = () => {
 							</NavLink>
 						</li>
 						<li className="choose">
-							<a>Tutoriel</a>
+							<div>Tutoriel</div>
 							<ul id="tuto">
 								{exTuto !== undefined &&
 									exTuto.map((exercice, index) => (

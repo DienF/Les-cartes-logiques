@@ -2249,6 +2249,7 @@ const Game = ({ mode, ex, numero }) => {
 				"Dans ce niveau nous allons apprendre le dernier bouton.",
 				"Pour faire fonctionner ce bouton on doit sélectionner l'objectif.",
 			]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, ex, numero]);
 
 	return (
