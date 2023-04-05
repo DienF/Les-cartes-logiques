@@ -2,15 +2,9 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
-	const [setEx] = useState();
 	const [exTuto, setExTuto] = useState();
 
 	useEffect(() => {
-		fetch("json/exercices.json")
-			.then((response) => response.text())
-			.then((data) => {
-				setEx(JSON.parse(data));
-			});
 		fetch("json/tutoriel.json")
 			.then((response) => response.text())
 			.then((data) => {
