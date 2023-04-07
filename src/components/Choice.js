@@ -2,21 +2,17 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Choice = () => {
-	const [ex, setEx] = useState();
-	useEffect(() => {
-		fetch("json/exercices.json")
-			.then((response) => response.text())
-			.then((data) => {
-				setEx(JSON.parse(data));
-			});
-	}, []);
+	const jsonCount = 35;
+	const alljson = [];
+	for (let i = 1; i <= jsonCount; i++) {
+		alljson.push(i);
+		}
 
 	return (
 		<div className="choice">
 			<div className="choicebar">
 				<ul>
-					{ex !== undefined &&
-						ex.map((exercice, index) => (
+					{alljson.map((json, index) => (
 							<li key={index}>
 								<NavLink
 									exact="true"

@@ -2207,12 +2207,12 @@ const Game = ({ mode, ex, numero }) => {
 		setPopupWin(false);
 		setMessageError("");
 		if (
-			ex[numero] !== undefined &&
+			ex !== undefined &&
 			numero !== undefined &&
 			mode !== "Create"
 		) {
 			try {
-				let tmp = gameInput(ex[numero]),
+				let tmp = gameInput(ex),
 					tmpDemonstration = [],
 					res = "";
 				tmp[0].forEach((element) => {

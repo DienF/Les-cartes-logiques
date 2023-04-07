@@ -16,21 +16,25 @@ const Exercise = () => {
 		let tmpEx = [];
 		if (mode === "Play") {
 			setNum(tmp);
-			fetch("json/exercices.json")
+			console.log(tmp);
+			//"json/exos_feuilles/ex"+tmp+".json"
+			//json/exercices.json
+			fetch("json/exos_feuilles/ex"+tmp+".json")
 				.then((response) => response.text())
 				.then((data) => {
 					tmpEx = JSON.parse(data);
-					if (tmpEx.length >= tmp && tmp !== 0) setEx(tmpEx);
-					else navigate("/NotFound");
+					//if (tmpEx.length >= tmp && tmp !== 0)
+					setEx(tmpEx);
+					console.log(tmpEx);
+					//else navigate("/NotFound");
 				});
 		} else if (mode === "Tutorial") {
 			setNum(tmp);
-			fetch("json/tutoriel.json")
+			fetch("json/tuto"+ tmp +".json")
 				.then((response) => response.text())
 				.then((data) => {
 					tmpEx = JSON.parse(data);
-					if (tmpEx.length >= tmp && tmp !== 0) setEx(tmpEx);
-					else navigate("/NotFound");
+					setEx(tmpEx);
 				});
 		} else if (mode === "Create" && tmp === undefined) setEx([[], []]);
 		else navigate("/NotFound");
