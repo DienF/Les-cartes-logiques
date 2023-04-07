@@ -16,17 +16,11 @@ const Exercise = () => {
 		let tmpEx = [];
 		if (mode === "Play") {
 			setNum(tmp);
-			console.log(tmp);
-			//"json/exos_feuilles/ex"+tmp+".json"
-			//json/exercices.json
 			fetch("json/exos_feuilles/ex"+tmp+".json")
 				.then((response) => response.text())
 				.then((data) => {
 					tmpEx = JSON.parse(data);
-					//if (tmpEx.length >= tmp && tmp !== 0)
 					setEx(tmpEx);
-					console.log(tmpEx);
-					//else navigate("/NotFound");
 				});
 		} else if (mode === "Tutorial") {
 			setNum(tmp);
