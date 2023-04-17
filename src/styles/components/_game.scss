@@ -48,6 +48,15 @@
         "start other1 other2 goal"
         "d d d d";
 
+    .buttonWin {
+        position: absolute;
+        text-align: center;
+        top: 40%;
+        left : 50vh;
+        border-radius: 5px;
+
+    }
+
     .bouton {
         grid-area: b;
         align-items: center;

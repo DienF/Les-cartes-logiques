@@ -2254,6 +2254,7 @@ const Game = ({ mode, ex, numero }) => {
 
 	return (
 		<div className="game">
+			{win && <button class="buttonWin" onClick={nextExercise}>Exercice suivant</button>}
 			<div className="bouton">
 				{/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
 				{false && <button onClick={getNextMove}>Aide</button>}
