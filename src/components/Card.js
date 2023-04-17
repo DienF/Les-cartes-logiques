@@ -171,7 +171,7 @@ const Card = ({
 							className={
 								getClassType(game[deckIndice][cardIndice]) +
 								" " +
-								(game[deckIndice][cardIndice].hover && isWin
+								(game[deckIndice][cardIndice].hover && !isWin
 									? getClassType(
 											game[deckIndice][cardIndice]
 									  ) + "_hover"
