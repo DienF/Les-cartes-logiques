@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Choice = () => {
-	const jsonCount = 35;
+	const jsonCount = 32;
 	const alljson = [];
 	for (let i = 1; i <= jsonCount; i++) {
 		alljson.push(i);
