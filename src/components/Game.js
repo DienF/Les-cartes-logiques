@@ -7,7 +7,7 @@ import Card from "../class/Card";
 export const GameTab = React.createContext();
 var Latex = require("react-latex");
 
-const Game = ({ mode, ex, numero }) => {
+const Game = ({ mode, ex, numero, nbExo }) => {
 	// test
 	const changeHover = (indexDeck, indexCard) => {
 		const tmp = [...game];
@@ -1633,9 +1633,11 @@ const Game = ({ mode, ex, numero }) => {
 	 */
 	const nextExercise = () => {
 		// S'il y a un prochain exercice
-		if (numero + 2 <= ex.length) {
+		console.log(numero + 2 <= ex.length);
+		if (numero + 2 <= nbExo) {
 			// url du prochain exercice
 			let url = "/Exercise-" + mode + "-" + (numero + 2);
+			console.log(url);
 			// Redirige vers cet url
 			navigate(url);
 		}
@@ -2387,7 +2389,11 @@ const Game = ({ mode, ex, numero }) => {
 
 	return (
 		<div className="game">
-			{win && <button class="buttonWin" onClick={nextExercise}>Exercice suivant</button>}
+			{win && (
+				<button class="buttonWin" onClick={nextExercise}>
+					Exercice suivant
+				</button>
+			)}
 			<div className="bouton">
 				{/* Affiche la ou les 2 cartes qui sont le prochain mouvement logique dans le but de finir l'exercice */}
 				{false && <button onClick={getNextMove}>Aide</button>}
