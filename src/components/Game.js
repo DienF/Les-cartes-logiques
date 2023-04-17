@@ -2391,7 +2391,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		<div className="game">
 			{win && (
 				<button class="buttonWin" onClick={nextExercise}>
-					Exercice suivant
+					Niveau suivant
 				</button>
 			)}
 			<div className="bouton">
