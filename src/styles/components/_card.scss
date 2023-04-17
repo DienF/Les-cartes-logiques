@@ -2,7 +2,6 @@
     margin-top: 20px;
     margin-bottom: 20px;
     color : black;
-    cursor: pointer;
   
     .affix_h {
         border-radius: 5px;
@@ -141,7 +140,7 @@
         margin: 0px;
     }
 
-    .card_simple:hover {
+    .card_simple_accept_hover:hover {
         grid-template-columns: 11vh;
 
         .card_simple_h {
@@ -149,8 +148,7 @@
             width: 10vh;
         }
     }
-
-    .card_double:hover {
+    .card_double_accept_hover:hover {
         grid-template-columns: 11vh 11vh;
 
         .card_simple_h {
@@ -164,8 +162,10 @@
             margin-left: 8.5vh;
         }
     }
-
-    .card_triple_a:hover, .card_triple_b:hover, .card_quadruple:hover {
+    .card_triple_a_accept_hover, .card_triple_b_accept_hover, .card_quadruple_accept_hover, .card_simple_accept_hover, .card_double_accept_hover{
+        cursor: pointer;
+    }
+    .card_triple_a_accept_hover:hover, .card_triple_b_accept_hover:hover, .card_quadruple_accept_hover:hover {
         grid-template-columns: 11vh 11vh;
         grid-template-rows: 7vh 7vh;
 

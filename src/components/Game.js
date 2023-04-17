@@ -252,14 +252,14 @@ const Game = ({ mode, ex, numero }) => {
 			setCardHelp2(cardError);
 			// Copie du jeu dans tmp
 			let tmp = [...game],
-			// La carte sur laquelle on a cliqué
+				// La carte sur laquelle on a cliqué
 				currentCard = tmp[i][j],
-			// Copie du nombre de carte sélectionnée
+				// Copie du nombre de carte sélectionnée
 				tmpNbselec = nbSelec,
-			// Copie de la 1ère carte sélectionnée
+				// Copie de la 1ère carte sélectionnée
 				tmpSelecDeck1 = selecDeck1,
 				tmpSelecCard1 = selecCard1,
-			// Copie de la 2ème carte sélectionnée
+				// Copie de la 2ème carte sélectionnée
 				tmpSelecDeck2 = selecDeck2,
 				tmpSelecCard2 = selecCard2;
 			/** Rentre dans le if si :
@@ -533,7 +533,7 @@ const Game = ({ mode, ex, numero }) => {
 	const gameInput = (data) => {
 		// Tableau que l'on va retourner
 		let res = [[], []],
-		// id de la future carte
+			// id de la future carte
 			i = 0;
 		// Création du deck de départ
 		data[0].forEach((element) => {
@@ -617,7 +617,7 @@ const Game = ({ mode, ex, numero }) => {
 	const findObjectifRelative = (cardObj) => {
 		// Variable que l'on va retourner (-1 si il trouve pas)
 		let num = -1,
-		// Deck de l'objectif
+			// Deck de l'objectif
 			deck = game.length - 1;
 		/** Cherche parmi les cartes de l'objectif s'il y a une carte dont la partie droite
 		 *  est égale à la carte envoyée en paramètre.
@@ -675,9 +675,9 @@ const Game = ({ mode, ex, numero }) => {
 		const objectif = game[game.length - 1][tabObjectif[numObjectif][1]];
 		// Indice du deck lié à l'objectif
 		let currentDeck = numObjectif,
-		// Variable que l'on va retourner (false par défaut)
+			// Variable que l'on va retourner (false par défaut)
 			bool = false,
-		// Copie du jeu actuel
+			// Copie du jeu actuel
 			tmp = [...game];
 		// Parcourt le deck lié à l'objectif
 		game[currentDeck].forEach((card) => {
@@ -750,14 +750,15 @@ const Game = ({ mode, ex, numero }) => {
 		if (lastGame.length > 0) {
 			// Copie le tableau de sauvegarde
 			let tmpLastGame = [...lastGame],
-			// Prend le dernier tableau de jeu ajoutée
+				// Prend le dernier tableau de jeu ajoutée
 				tmpSavedGame = tmpLastGame[tmpLastGame.length - 1],
-			// Initialise le futur tableau de jeu
+				// Initialise le futur tableau de jeu
 				tmpFutureGame = [];
 			// Copie le dernier tableau de jeu sauvegardé dans le futur tableau
 			for (let i = 0; i < tmpSavedGame.length; i++) {
 				tmpFutureGame[i] = [];
-				for (let j = 0; j < tmpSavedGame[i].length; j++) tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
+				for (let j = 0; j < tmpSavedGame[i].length; j++)
+					tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
 			}
 			// Refait le tableau des objectifs au cas où on retourne en arrière sur une suppression d'objectif secondaire
 			setIndentationDemonstration(CreatTabObj(tmpFutureGame) - 1);
@@ -771,9 +772,11 @@ const Game = ({ mode, ex, numero }) => {
 			tmpLastGame.pop();
 			// Met à jour le tableau des sauvegardes
 			let tmpDemonstration = [];
-			for (let i = 0; i <= lastGame.length - 1; i++) tmpDemonstration.push(demonstration[i]);
+			for (let i = 0; i <= lastGame.length - 1; i++)
+				tmpDemonstration.push(demonstration[i]);
 			let tmpTabDemonstration = [];
-			for (let i = 0; i <= lastGame.length - 1; i++) tmpTabDemonstration.push(tabIndentation[i]);
+			for (let i = 0; i <= lastGame.length - 1; i++)
+				tmpTabDemonstration.push(tabIndentation[i]);
 			setDemonstration(tmpDemonstration);
 			setTabIndentation(tmpTabDemonstration);
 			setLastGame(tmpLastGame);
@@ -787,7 +790,7 @@ const Game = ({ mode, ex, numero }) => {
 	const saveGame = () => {
 		// Copie du tableau de sauvegarde
 		let tmpLastGame = [...lastGame],
-		// Copie du jeu actuel
+			// Copie du jeu actuel
 			saveGameTmp = copyGame();
 		// Ajoute le jeu actuel dans le tableau des sauvegardes
 		tmpLastGame.push(saveGameTmp);
@@ -826,7 +829,9 @@ const Game = ({ mode, ex, numero }) => {
 			cardI = Math.max(selecCard1, selecCard2);
 		// La carte sélectionnée doit avoir la liaison principal "et"
 		if (game[deckI][cardI].link !== "et") {
-			error('La carte sélectionnée doit avoir une liaison principale de type "et" !');
+			error(
+				'La carte sélectionnée doit avoir une liaison principale de type "et" !'
+			);
 			return;
 		}
 		// Ajoute si les 2 cartes à séparer n'existent pas déjà dans le deck
@@ -851,7 +856,13 @@ const Game = ({ mode, ex, numero }) => {
 		allFalse(tmp);
 		setSavedGame(tmp);
 		let tmpDemonstration = [...demonstration];
-		tmpDemonstration.push("On a " + game[deckI][cardI].left.toString() + ". On a " + game[deckI][cardI].right.toString() + ".");
+		tmpDemonstration.push(
+			"On a " +
+				game[deckI][cardI].left.toString() +
+				". On a " +
+				game[deckI][cardI].right.toString() +
+				"."
+		);
 		setDemonstration(tmpDemonstration);
 		let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
 		tmpTabIndiceDemonstration.push(
@@ -896,18 +907,22 @@ const Game = ({ mode, ex, numero }) => {
 		// Prend le deck le plus grand
 		let finalDeck = Math.max(selecDeck1, selecDeck2);
 		if (finalDeck === game.length - 1) {
-			error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
+			error(
+				"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+			);
 			return;
 		}
 		// Copie du jeu actuel
 		let tmp = [...game],
-		/** Vérifie si la 2ème carte a une liaison => et si sa partie gauche est égale à l'autre carte.
-		 *  Met le résultat dans {@link bool}.
-		 *  On ne met pas directement la condition dans le if car on veut savoir avec quelle condition on y est rentré.
-		 */
+			/** Vérifie si la 2ème carte a une liaison => et si sa partie gauche est égale à l'autre carte.
+			 *  Met le résultat dans {@link bool}.
+			 *  On ne met pas directement la condition dans le if car on veut savoir avec quelle condition on y est rentré.
+			 */
 			bool =
-			tmp[selecDeck2][selecCard2].link === "=>" &&
-			tmp[selecDeck2][selecCard2].left.equals(tmp[selecDeck1][selecCard1]);
+				tmp[selecDeck2][selecCard2].link === "=>" &&
+				tmp[selecDeck2][selecCard2].left.equals(
+					tmp[selecDeck1][selecCard1]
+				);
 		// Une des 2 cartes doit avoir une liaison =>
 		if (
 			bool ||
@@ -940,16 +955,27 @@ const Game = ({ mode, ex, numero }) => {
 			// Sauvegarde du jeu actuel
 			saveGame();
 			// Ajoute la partie droite de la carte => utilisée dans le deck le plus haut
-			tmp[finalDeck].push(tmp[deckCarteComplex][cardCarteComplex].right.copy());
-			tmp[finalDeck][tmp[finalDeck].length - 1].id = tmp[finalDeck].length - 1;
+			tmp[finalDeck].push(
+				tmp[deckCarteComplex][cardCarteComplex].right.copy()
+			);
+			tmp[finalDeck][tmp[finalDeck].length - 1].id =
+				tmp[finalDeck].length - 1;
 			// Met à jour le jeu & désélectionne toutes les cartes
 			allFalse(tmp);
 			setSavedGame(tmp);
 			let tmpDemonstration = [...demonstration];
-			tmpDemonstration.push("Puisque " + tmp[deckCarteComplex][cardCarteComplex].left + ", on a " + tmp[deckCarteComplex][cardCarteComplex].right + ".");
+			tmpDemonstration.push(
+				"Puisque " +
+					tmp[deckCarteComplex][cardCarteComplex].left +
+					", on a " +
+					tmp[deckCarteComplex][cardCarteComplex].right +
+					"."
+			);
 			setDemonstration(tmpDemonstration);
 			let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
-			tmpTabIndiceDemonstration.push(tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1);
+			tmpTabIndiceDemonstration.push(
+				tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
+			);
 			setTabIndiceDemonstration(tmpTabIndiceDemonstration);
 			let tmpTabIndentation = [...tabIndentation];
 			tmpTabIndentation.push(indentationDemonstration);
@@ -992,12 +1018,20 @@ const Game = ({ mode, ex, numero }) => {
 				}
 			}
 			if (tmp[selecDeck2][selecCard2].link === "<=>") {
-				if (tmp[selecDeck1][selecCard1].equals(tmp[selecDeck2][selecCard2].left)) {
+				if (
+					tmp[selecDeck1][selecCard1].equals(
+						tmp[selecDeck2][selecCard2].left
+					)
+				) {
 					bool = true;
 					cardAdd = tmp[selecDeck2][selecCard2].right.copy();
 					cardFuse = tmp[selecDeck2][selecCard2].left;
 				}
-				if (tmp[selecDeck1][selecCard1].equals(tmp[selecDeck2][selecCard2].right)) {
+				if (
+					tmp[selecDeck1][selecCard1].equals(
+						tmp[selecDeck2][selecCard2].right
+					)
+				) {
 					bool = true;
 					cardAdd = tmp[selecDeck2][selecCard2].left.copy();
 					cardFuse = tmp[selecDeck2][selecCard2].right;
@@ -1007,7 +1041,11 @@ const Game = ({ mode, ex, numero }) => {
 				tmp[selecDeck1][selecCard1].link === "<=>" &&
 				tmp[selecDeck2][selecCard2].link === "<=>"
 			) {
-				if (tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2].left)) {
+				if (
+					tmp[selecDeck1][selecCard1].left.equals(
+						tmp[selecDeck2][selecCard2].left
+					)
+				) {
 					bool = true;
 					bool2 = true;
 					cardAdd = new Card(
@@ -1020,7 +1058,11 @@ const Game = ({ mode, ex, numero }) => {
 					);
 					cardFuse = tmp[selecDeck1][selecCard1].left;
 				}
-				if (tmp[selecDeck1][selecCard1].left.equals(tmp[selecDeck2][selecCard2].right)) {
+				if (
+					tmp[selecDeck1][selecCard1].left.equals(
+						tmp[selecDeck2][selecCard2].right
+					)
+				) {
 					bool = true;
 					bool2 = true;
 					cardAdd = new Card(
@@ -1033,7 +1075,11 @@ const Game = ({ mode, ex, numero }) => {
 					);
 					cardFuse = tmp[selecDeck1][selecCard1].left;
 				}
-				if (tmp[selecDeck1][selecCard1].right.equals(tmp[selecDeck2][selecCard2].left)) {
+				if (
+					tmp[selecDeck1][selecCard1].right.equals(
+						tmp[selecDeck2][selecCard2].left
+					)
+				) {
 					bool = true;
 					bool2 = true;
 					cardAdd = new Card(
@@ -1046,7 +1092,11 @@ const Game = ({ mode, ex, numero }) => {
 					);
 					cardFuse = tmp[selecDeck1][selecCard1].right;
 				}
-				if (tmp[selecDeck1][selecCard1].right.equals(tmp[selecDeck2][selecCard2].right)) {
+				if (
+					tmp[selecDeck1][selecCard1].right.equals(
+						tmp[selecDeck2][selecCard2].right
+					)
+				) {
 					bool = true;
 					bool2 = true;
 					cardAdd = new Card(
@@ -1069,8 +1119,24 @@ const Game = ({ mode, ex, numero }) => {
 					allFalse(tmp);
 					setSavedGame(tmp);
 					let tmpDemonstration = [...demonstration];
-					if (bool2) tmpDemonstration.push("On a " + cardAdd.left.toString() + "<=>" + cardFuse.toString() + "<=>" + cardAdd.right.toString() + ".");
-					else	   tmpDemonstration.push("Puisque " + cardFuse.toString() + ", on a " + cardAdd.toString() + ".");
+					if (bool2)
+						tmpDemonstration.push(
+							"On a " +
+								cardAdd.left.toString() +
+								"<=>" +
+								cardFuse.toString() +
+								"<=>" +
+								cardAdd.right.toString() +
+								"."
+						);
+					else
+						tmpDemonstration.push(
+							"Puisque " +
+								cardFuse.toString() +
+								", on a " +
+								cardAdd.toString() +
+								"."
+						);
 					setDemonstration(tmpDemonstration);
 					let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
 					tmpTabIndiceDemonstration.push(
@@ -1098,8 +1164,13 @@ const Game = ({ mode, ex, numero }) => {
 				tmp[selecDeck2][selecCard2].link !== "=>" &&
 				tmp[selecDeck1][selecCard1].link !== "=>"
 			)
-				error('Une des deux cartes doit avoir une liaison principale de type "=>" !');
-			else error('La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !');
+				error(
+					'Une des deux cartes doit avoir une liaison principale de type "=>" !'
+				);
+			else
+				error(
+					'La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !'
+				);
 		}
 	};
 
@@ -1128,9 +1199,9 @@ const Game = ({ mode, ex, numero }) => {
 				if (finalDeck !== game.length - 1) {
 					// Copie du jeu actuel
 					let tmp = [...game],
-					/** Vérifie si la 1ère carte sélectionnée est une carte composé au maximum de 2 cartes.
-					 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
-					 */
+						/** Vérifie si la 1ère carte sélectionnée est une carte composé au maximum de 2 cartes.
+						 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
+						 */
 						bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
 					/** Vérifie si la 2ème carte sélectionnée est une carte composé au maximum de 2 cartes.
 					 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
@@ -1175,17 +1246,28 @@ const Game = ({ mode, ex, numero }) => {
 							allFalse(tmp);
 							setSavedGame(tmp);
 							let tmpDemonstration = [...demonstration];
-							tmpDemonstration.push("On a " + tmpCard1.toString() + "^" + tmpCard2.toString() + ".");
+							tmpDemonstration.push(
+								"On a " +
+									tmpCard1.toString() +
+									"^" +
+									tmpCard2.toString() +
+									"."
+							);
 							setDemonstration(tmpDemonstration);
-							let tmpTabIndiceDemonstration = [...tabIndiceDemonstration,];
+							let tmpTabIndiceDemonstration = [
+								...tabIndiceDemonstration,
+							];
 							tmpTabIndiceDemonstration.push(
 								tabIndiceDemonstration[
 									tabIndiceDemonstration.length - 1
 								] + 1
 							);
-							setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+							setTabIndiceDemonstration(
+								tmpTabIndiceDemonstration
+							);
 							let tmpTabIndentation = [...tabIndentation],
-								tmpIndentationDemonstration = indentationDemonstration;
+								tmpIndentationDemonstration =
+									indentationDemonstration;
 							tmpTabIndentation.push(tmpIndentationDemonstration);
 							setTabIndentation(tmpTabIndentation);
 							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
@@ -1198,12 +1280,25 @@ const Game = ({ mode, ex, numero }) => {
 								)
 							);
 						} else
-							error("La carte que vous voulez ajouter existe déjà !");
+							error(
+								"La carte que vous voulez ajouter existe déjà !"
+							);
 					} else {
-						if (bool) error("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck2][selecCard2].toString());
-						else	  error("On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " + tmp[selecDeck1][selecCard1].toString());
+						if (bool)
+							error(
+								"On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " +
+									tmp[selecDeck2][selecCard2].toString()
+							);
+						else
+							error(
+								"On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " +
+									tmp[selecDeck1][selecCard1].toString()
+							);
 					}
-				} else error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
+				} else
+					error(
+						"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+					);
 			} else error("Vous devez sélectionner deux cartes !");
 		}
 	};
@@ -1249,11 +1344,11 @@ const Game = ({ mode, ex, numero }) => {
 						if (game[deckI][cardI].link === "=>") {
 							// Initialisation de la variable du sous-objectif
 							let secondObjectif,
-							// Copie du jeu actuel
+								// Copie du jeu actuel
 								tmp = [...game],
-							// Copie du deck objectif
+								// Copie du deck objectif
 								tmpObjectif = [...game[game.length - 1]],
-							// Initialisation d'une variable temporaire
+								// Initialisation d'une variable temporaire
 								tmpCard;
 							// Si la carte sélectionnée est dans le deck objectif
 							if (deckI === game.length - 1) {
@@ -1267,7 +1362,8 @@ const Game = ({ mode, ex, numero }) => {
 									]);
 								}
 								// Copie de la partie droite de la carte sélectionnée
-								secondObjectif = game[deckI][cardI].right.copy();
+								secondObjectif =
+									game[deckI][cardI].right.copy();
 								// Vide le dernier deck (dans la variable temporaire)
 								tmp[game.length - 1] = [];
 								// Copie de la partie gauche de la carte sélectionnée
@@ -1276,7 +1372,8 @@ const Game = ({ mode, ex, numero }) => {
 								// Ajoute cette partie dans le dernier deck
 								tmp[game.length - 1].push(tmpCard);
 								// Met l'id du sous-objectif que l'on va rajouter de la taille du dernier deck
-								secondObjectif.id = game[game.length - 1].length;
+								secondObjectif.id =
+									game[game.length - 1].length;
 								// Rajoute le second objectif dans le deck objectif
 								tmpObjectif.push(secondObjectif);
 								// Rajoute le deck objectif à la fin
@@ -1292,19 +1389,33 @@ const Game = ({ mode, ex, numero }) => {
 								// Met à jour le tableau objectif
 								setTabObjectif(tmpObj);
 								let tmpDemonstration = [...demonstration];
-								tmpDemonstration.push("Supposons " + tmpCard.toString() + ". Montrons " + secondObjectif.toString() + ".");
+								tmpDemonstration.push(
+									"Supposons " +
+										tmpCard.toString() +
+										". Montrons " +
+										secondObjectif.toString() +
+										"."
+								);
 								setDemonstration(tmpDemonstration);
-								let tmpTabIndiceDemonstration = [...tabIndiceDemonstration,];
+								let tmpTabIndiceDemonstration = [
+									...tabIndiceDemonstration,
+								];
 								tmpTabIndiceDemonstration.push(
 									tabIndiceDemonstration[
 										tabIndiceDemonstration.length - 1
 									] + 1
 								);
-								setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+								setTabIndiceDemonstration(
+									tmpTabIndiceDemonstration
+								);
 								let tmpTabIndentation = [...tabIndentation];
-								tmpTabIndentation.push(indentationDemonstration);
+								tmpTabIndentation.push(
+									indentationDemonstration
+								);
 								setTabIndentation(tmpTabIndentation);
-								setIndentationDemonstration(indentationDemonstration + 1);
+								setIndentationDemonstration(
+									indentationDemonstration + 1
+								);
 								// Met à jour le jeu & désélectionne toutes les cartes
 								allFalse(tmp);
 								setSavedGame(tmp);
@@ -1314,36 +1425,59 @@ const Game = ({ mode, ex, numero }) => {
 									// Sauvegarde du jeu actuel
 									saveGame();
 									// Copie de la partie gauche de la carte sélectionnée
-									secondObjectif = game[deckI][cardI].left.copy();
-									secondObjectif.id = game[game.length - 1].length;
+									secondObjectif =
+										game[deckI][cardI].left.copy();
+									secondObjectif.id =
+										game[game.length - 1].length;
 									// Met la carte copiée dans le deck objectif (ce n'est pas un objectif secondaire)
 									tmpObjectif.push(secondObjectif);
 									// Met à jour le deck objectif
 									tmp[tmp.length - 1] = tmpObjectif;
 									// Met à jour le jeu & désélectionne toutes les cartes
 									let tmpDemonstration = [...demonstration];
-									tmpDemonstration.push("Montrons " + secondObjectif.toString() + ".");
+									tmpDemonstration.push(
+										"Montrons " +
+											secondObjectif.toString() +
+											"."
+									);
 									setDemonstration(tmpDemonstration);
-									let tmpTabIndiceDemonstration = [...tabIndiceDemonstration,];
+									let tmpTabIndiceDemonstration = [
+										...tabIndiceDemonstration,
+									];
 									tmpTabIndiceDemonstration.push(
 										tabIndiceDemonstration[
 											tabIndiceDemonstration.length - 1
 										] + 1
 									);
-									setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+									setTabIndiceDemonstration(
+										tmpTabIndiceDemonstration
+									);
 									let tmpTabIndentation = [...tabIndentation];
-									tmpTabIndentation.push(indentationDemonstration);
+									tmpTabIndentation.push(
+										indentationDemonstration
+									);
 									setTabIndentation(tmpTabIndentation);
 									allFalse(tmp);
 									setSavedGame(tmp);
-								} else error('La partie gauche de l\'objectif secondaire doit avoir une liaison "=>" !');
+								} else
+									error(
+										'La partie gauche de l\'objectif secondaire doit avoir une liaison "=>" !'
+									);
 							}
-						} else error('L\'objectif secondaire doit avoir une liaison "=>" !');
+						} else
+							error(
+								'L\'objectif secondaire doit avoir une liaison "=>" !'
+							);
 					} else error("Cet objectif existe déjà !");
-				} else error("Le premier objectif secondaire doit être créé à l'aide de l'objectif principal !");
+				} else
+					error(
+						"Le premier objectif secondaire doit être créé à l'aide de l'objectif principal !"
+					);
 			} else {
-				if      (nbSelec > 1)   error("Vous devez sélectionner une seule carte !");
-				else if (nbSelec === 0) error("Vous devez sélectionner une carte !");
+				if (nbSelec > 1)
+					error("Vous devez sélectionner une seule carte !");
+				else if (nbSelec === 0)
+					error("Vous devez sélectionner une carte !");
 			}
 		}
 	};
@@ -1361,9 +1495,9 @@ const Game = ({ mode, ex, numero }) => {
 		) {
 			// Copie du jeu actuel
 			let tmp = [...game],
-			/** Vérifie si la 1ère carte sélectionnée est une carte composé au maximum de 2 cartes.
-			 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
-			 */
+				/** Vérifie si la 1ère carte sélectionnée est une carte composé au maximum de 2 cartes.
+				 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
+				 */
 				bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
 			/** Vérifie si la 2ème carte sélectionnée est une carte composé au maximum de 2 cartes.
 			 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
@@ -1373,7 +1507,7 @@ const Game = ({ mode, ex, numero }) => {
 				saveGame();
 				// Prend le deck le plus haut
 				let finalDeck = Math.max(selecDeck1, selecDeck2),
-				// Copie les 2 cartes sélectionnées
+					// Copie les 2 cartes sélectionnées
 					tmpCard1 = tmp[selecDeck1][selecCard1].copy(),
 					tmpCard2 = tmp[selecDeck2][selecCard2].copy();
 				tmpCard1.id = 0;
@@ -1614,7 +1748,7 @@ const Game = ({ mode, ex, numero }) => {
 		chemin[1] = false;
 		// Variable temporaire pour le chemin
 		let tmpChemin,
-		// Comme on effecture la boucle à l'envers, cette variable est le véritable index des cartes de la boucle
+			// Comme on effecture la boucle à l'envers, cette variable est le véritable index des cartes de la boucle
 			deckIndex = 0;
 		/** Vérifie si la carte que l'on cherche a une liaison "et" et qu'elle n'existe pas dans le numéro du
 		 *  deck qui correspond à l'objectif.
@@ -1956,7 +2090,8 @@ const Game = ({ mode, ex, numero }) => {
 				/** La carte ne doit pas être dans les objectifs et on regarde dans le deck si la carte est égale
 				 *  à {@link cardTest}, si oui {@link bool} est true.
 				 */
-				if (index !== game.length - 1 && card.equals(cardTest)) bool = true;
+				if (index !== game.length - 1 && card.equals(cardTest))
+					bool = true;
 			});
 		});
 		// Retourne la variable
@@ -1983,14 +2118,14 @@ const Game = ({ mode, ex, numero }) => {
 	const getNextMove = () => {
 		/** Copie le jeu dans une variable temporaire. */
 		let tmp = copyGame(),
-		/** Initialise le chemin : indice 0 aucune carte & indice 1 aucune solution trouvé. */
+			/** Initialise le chemin : indice 0 aucune carte & indice 1 aucune solution trouvé. */
 			chemin = [[], false],
-		// On cherche l'objectif le plus éloigné dans le deck objectif
+			// On cherche l'objectif le plus éloigné dans le deck objectif
 			deckId = tmp.length - 1,
 			cardId = tmp[tmp.length - 1].length - 1,
-		/** L'objectif que l'on cherche. */
+			/** L'objectif que l'on cherche. */
 			objectif = tmp[deckId][cardId],
-		/** Cherche l'objectif. */
+			/** Cherche l'objectif. */
 			result = recursiveSoluce(
 				tmp,
 				objectif,
@@ -1998,13 +2133,13 @@ const Game = ({ mode, ex, numero }) => {
 				getNumObjectif(cardId),
 				chemin
 			),
-		/** Copie du tableau de cartes pour trouver l'objectif. */
+			/** Copie du tableau de cartes pour trouver l'objectif. */
 			tmpResult = [...result[0]],
-		/** La 1ère carte dans result est l'objectif donc la dernière est le prochain coup à jouer donc
-		 *  on inverse le tableau pour jouer avec l'indice 0 & 1.
-		 */
+			/** La 1ère carte dans result est l'objectif donc la dernière est le prochain coup à jouer donc
+			 *  on inverse le tableau pour jouer avec l'indice 0 & 1.
+			 */
 			affiche = tmpResult.reverse(),
-		// Initialisation des variables
+			// Initialisation des variables
 			bool = false,
 			card1,
 			card2;
@@ -2090,7 +2225,7 @@ const Game = ({ mode, ex, numero }) => {
 			setNavigation(true);
 			let tmpLastGame = [...lastGame],
 				tmpSavedGame = tmpLastGame[indiceRetour],
-			// Initialise le futur tableau de jeu
+				// Initialise le futur tableau de jeu
 				tmpFutureGame = [];
 			// Copie le dernier tableau de jeu sauvegardé dans le futur tableau
 			for (let i = 0; i < tmpSavedGame.length; i++) {
@@ -2106,8 +2241,8 @@ const Game = ({ mode, ex, numero }) => {
 	};
 
 	/**
-	 * 
-	 * @param {string} message 
+	 *
+	 * @param {string} message
 	 */
 	const error = (message) => {
 		allFalseGame();
@@ -2115,8 +2250,8 @@ const Game = ({ mode, ex, numero }) => {
 	};
 
 	/**
-	 * 
-	 * @param {string} str 
+	 *
+	 * @param {string} str
 	 * @returns {string}
 	 */
 	const StringToLatex = (str) => {
@@ -2142,7 +2277,7 @@ const Game = ({ mode, ex, numero }) => {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	const copyHandler = () => {
 		let str = window.getSelection().toString();
@@ -2179,10 +2314,12 @@ const Game = ({ mode, ex, numero }) => {
 				let arrayPoint = elementComa.split(". "),
 					futurArrayPoint = [];
 				arrayPoint.forEach((element) => {
-					if (!futurArrayPoint.includes(element)) futurArrayPoint.push(element);
+					if (!futurArrayPoint.includes(element))
+						futurArrayPoint.push(element);
 				});
 				let res = futurArrayPoint.join(". ");
-				if (!futurArrayElement.includes(res)) futurArrayElement.push(res);
+				if (!futurArrayElement.includes(res))
+					futurArrayElement.push(res);
 			});
 			futurArrayLine.push(futurArrayElement.join(", "));
 		});
@@ -2206,11 +2343,7 @@ const Game = ({ mode, ex, numero }) => {
 		setTabIndiceDemonstration([0]);
 		setPopupWin(false);
 		setMessageError("");
-		if (
-			ex !== undefined &&
-			numero !== undefined &&
-			mode !== "Create"
-		) {
+		if (ex !== undefined && numero !== undefined && mode !== "Create") {
 			try {
 				let tmp = gameInput(ex),
 					tmpDemonstration = [],
@@ -2408,6 +2541,7 @@ const Game = ({ mode, ex, numero }) => {
 						objectif={tabObjectif}
 						cardHelp={cardHelp}
 						cardHelp2={cardHelp2}
+						isWin={win}
 						key={index}
 					></Deck>
 				))}
@@ -2519,11 +2653,7 @@ const Game = ({ mode, ex, numero }) => {
 						<>
 							<b>Choisissez une liaison</b>
 							<div onChange={choixLiaison}>
-								<input
-									type="radio"
-									value="et"
-									name="liaison"
-								/>{" "}
+								<input type="radio" value="et" name="liaison" />{" "}
 								{"et "}
 								<input
 									type="radio"

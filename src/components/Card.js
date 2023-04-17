@@ -2,7 +2,14 @@ import React from "react";
 import { GameTab } from "./Game";
 var Latex = require("react-latex");
 
-const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2 }) => {
+const Card = ({
+	deckIndice,
+	cardIndice,
+	update,
+	cardHelp,
+	cardHelp2,
+	isWin,
+}) => {
 	/**
 	 * Fonction qui détecte le clique sur une carte & qui appelle la fonction {@link update()} passée par le
 	 * component Deck.
@@ -164,11 +171,17 @@ const Card = ({ deckIndice, cardIndice, update, cardHelp, cardHelp2 }) => {
 							className={
 								getClassType(game[deckIndice][cardIndice]) +
 								" " +
-								(game[deckIndice][cardIndice].hover
+								(game[deckIndice][cardIndice].hover && isWin
 									? getClassType(
 											game[deckIndice][cardIndice]
 									  ) + "_hover"
-									: "")
+									: "") +
+								" " +
+								(isWin
+									? ""
+									: getClassType(
+											game[deckIndice][cardIndice]
+									  ) + "_accept_hover")
 							}
 							onClick={handleClick}
 						>
