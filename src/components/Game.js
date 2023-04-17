@@ -73,6 +73,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		if (event.code === "KeyT") {
 			retourEnArriere();
 		}
+		if (event.code === "Escape") {
+			const tmp = [...game];
+			tmp[currentCardArrow[0]][currentCardArrow[1]].hover = false;
+			setGame(tmp);
+			setcurrentCardArrow(undefined);
+		}
 	};
 	// fin du test
 
