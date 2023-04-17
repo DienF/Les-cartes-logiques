@@ -51,15 +51,19 @@
     .buttonWin {
         position:absolute;
         left: 50%;
-        top: 50%;
+        top: 40%;
         width: 326px;
-        height: 118px;
+        height: 100px;
         margin-top: -59px;
         margin-left: -163px;
         border-radius: 15px;
         font-size: 30px;
         border: 2px solid lightgray;
         background-image : linear-gradient( to right, #d4ddf5, #97b4fc );
+    }
+
+    .buttonWin:hover {
+        border: 2px solid black;
     }
 
     .bouton {
