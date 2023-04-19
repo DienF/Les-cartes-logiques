@@ -30,10 +30,10 @@
    },
    "link": "=>",
    "right": {
-    "left" : {},
-    "link" : "non",
+    "left" : {"color": "orange"},
+    "link" : "=>",
     "right" : {
-     "color": "orange"
+     "color": "white"
     }
    }
   }

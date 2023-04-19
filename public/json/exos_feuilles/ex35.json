@@ -15,10 +15,10 @@
    },
    "link": "=>",
    "right": {
-    "left" : {},
-    "link" : "non",
+    "left" : {"color": "blue"},
+    "link" : "=>",
     "right" : {
-     "color": "blue"
+     "color": "white"
     }
    }
   },

@@ -11,10 +11,10 @@
   },
   {
    "left": {
-    "left" : {},
-    "link" : "non",
+    "left" : {"color": "red"},
+    "link" : "=>",
     "right" : {
-     "color": "red"
+     "color": "white"
     }
    },
    "link": "=>",
@@ -53,10 +53,10 @@
  [
   {
    "left": {
-    "left" : {},
-    "link" : "non",
+    "left" : {"color": "orange"},
+    "link" : "=>",
     "right" : {
-     "color": "orange"
+     "color": "white"
     }
    },
    "link": "=>",

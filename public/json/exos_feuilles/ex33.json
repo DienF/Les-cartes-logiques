@@ -57,10 +57,10 @@
      },
      "link": "ou",
      "right": {
-      "left" : {},
-      "link" : "non",
+      "left" : {"color": "green"},
+      "link" : "=>",
       "right" : {
-       "color": "green"
+       "color": "white"
       }
      }
     }

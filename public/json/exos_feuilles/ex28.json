@@ -25,16 +25,16 @@
    }
   },
   {
-    "left" : {},
-    "link" : "non",
-    "right" : {
-     "left": {
+    "left" : {"left": {
       "color": "red"
      },
      "link": "<=>",
      "right": {
       "color": "orange"
-     }
+     }},
+    "link" : "=>",
+    "right" : {
+      "color": "white"
     }
   },
   {

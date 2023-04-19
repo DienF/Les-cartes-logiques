@@ -11,7 +11,7 @@ const Exercise = () => {
 	let mode = useParams().mode;
 	const [ex, setEx] = useState();
 	const navigate = useNavigate();
-	const nbExo = 32;
+	const nbExo = 35;
 
 	useEffect(() => {
 		let tmpEx = [];

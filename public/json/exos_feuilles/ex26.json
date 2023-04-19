@@ -16,10 +16,10 @@
     },
     "link": "et",
     "right": {
-     "left" : {},
-     "link" : "non",
+     "left" : {"color": "yellow"},
+     "link" : "=>",
      "right" : {
-      "color": "yellow"
+      "color": "white"
      }
     }
    },

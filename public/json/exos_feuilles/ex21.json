@@ -11,10 +11,10 @@
     },
     "link": "=>",
     "right": {
-     "left" : {},
-     "link" : "non",
+     "left" : {"color":"orange"},
+     "link" : "=>",
      "right" : {
-      "color": "orange"
+      "color": "white"
      }
     }
    }
@@ -27,11 +27,11 @@
    },
    "link": "=>",
    "right": {
-    "left" : {},
-    "link" : "non",
+    "left" : {"color": "blue"},
+    "link" : "=>",
     "right" : {
      "left": {
-      "color": "blue"
+      "color": "white"
      },
      "link": "et",
      "right": {

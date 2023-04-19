@@ -19,123 +19,6 @@ const Card = ({
 	};
 
 	/**
-	 * Détermine le type de carte.
-	 * @param {CardClass} card - la carte
-	 * @returns {"card_simple"|"card_double"|"card_triple_a"|"card_triple_b"|"card_quadruple"} le nom de la classe
-	 * correspondant à la carte
-	 */
-	const getClassType = (card) => {
-		if (
-			card.left !== null &&
-			card.link === "=>" &&
-			card.right.color === "white"
-		)
-			return getClassType(card.left);
-		if (card.left === null && card.right === null) return "card_simple";
-		if (
-			card.left !== null &&
-			card.right !== null &&
-			card.left.left === null &&
-			card.left.right === null &&
-			card.right.left === null &&
-			card.right.right === null
-		)
-			return "card_double";
-		if (
-			card.left !== null &&
-			card.right !== null &&
-			card.left.left === null &&
-			card.left.right === null &&
-			card.right.left !== null &&
-			card.right.right !== null
-		)
-			return "card_triple_a";
-		if (
-			card.left !== null &&
-			card.right !== null &&
-			card.left.left !== null &&
-			card.left.right !== null &&
-			card.right.left === null &&
-			card.right.right === null
-		)
-			return "card_triple_b";
-		if (
-			card.left !== null &&
-			card.right !== null &&
-			card.left.left !== null &&
-			card.left.right !== null &&
-			card.right.left !== null &&
-			card.right.right !== null
-		)
-			return "card_quadruple";
-	};
-
-	/**
-	 * Permet de savoir si l'on doit afficher une carte à la verticale ou à l'horizontale.
-	 * @param {CardClass} card - la carte à afficher
-	 * @param {number}       k - la position de la carte dans les cartes complexes ;
-	 *                           ex: dans une carte double la fonction est appelée 2 fois, une fois avec k=0 & l'autre fois avec k=1
-	 * @returns {"card_simple_h"|"card_simple_w"} une carte verticale ou une carte horizontale
-	 */
-	const getTabClass = (card, k) => {
-		const className = getClassType(card);
-		let res = "";
-		if (
-			card.right !== null &&
-			card.link === "=>" &&
-			card.right.color === "white"
-		)
-			res = "card_non ";
-		if (className.includes("card_simple")) return (res += "card_simple_h");
-		if (className.includes("card_double")) return (res += "card_simple_h");
-		if (className.includes("card_triple_a")) {
-			if (k === 0) return (res += "card_simple_h");
-			else return (res += "card_simple_w");
-		}
-		if (className.includes("card_triple_b")) {
-			if (k === 2) return (res += "card_simple_h");
-			else return (res += "card_simple_w");
-		}
-		if (className.includes("card_quadruple"))
-			return (res += "card_simple_w");
-	};
-
-	/**
-	 * Renvoie un tableau qui va être utilisé par la fonction {@link Array.map()} pour afficher toutes les cartes.
-	 * @param {CardClass} card - la carte à mettre dans le tableau
-	 * @returns {Array<CardClass>} un tableau de cartes
-	 */
-	const getTab = (card) => {
-		const className = getClassType(card);
-		let tab = [];
-		if (
-			card.right !== null &&
-			card.link === "=>" &&
-			card.right.color === "white"
-		)
-			card = card.left;
-		if (className.includes("card_simple")) tab.push(card);
-		else if (className.includes("card_double")) {
-			tab.push(card.left);
-			tab.push(card.right);
-		} else if (className.includes("card_triple_a")) {
-			tab.push(card.left);
-			tab.push(card.right.left);
-			tab.push(card.right.right);
-		} else if (className.includes("card_triple_b")) {
-			tab.push(card.left.left);
-			tab.push(card.left.right);
-			tab.push(card.right);
-		} else if (className.includes("card_quadruple")) {
-			tab.push(card.left.left);
-			tab.push(card.right.left);
-			tab.push(card.left.right);
-			tab.push(card.right.right);
-		}
-		return tab;
-	};
-
-	/**
 	 * Donne la carte de gauche dans une implication si la carte de droite est blanche ("Vrai").
 	 * @param {CardClass} card - la carte à vérifier
 	 * @returns {CardClass} la carte gauche si c'est une implication & que la carte de droite est blanche sinon la carte passée en paramètre
@@ -198,9 +81,7 @@ const Card = ({
 						originalCount
 					),
 					<span className={`link ${link}`}>
-						<Latex>
-							{afficheLink(getGoodCard(currentCard).link)}
-						</Latex>
+						<Latex>{afficheLink(currentCard.link)}</Latex>
 					</span>,
 					recurciveRender(
 						currentCard.right,
@@ -238,7 +119,6 @@ const Card = ({
 			};
 		}
 		const prof = card.getProfondeur();
-		console.log(prof);
 		if (prof === 1) {
 			return {
 				width: "5vw",
@@ -251,9 +131,15 @@ const Card = ({
 				height: "13vh",
 			};
 		}
-		if (prof < 7) {
+		if (prof < 5) {
 			return {
 				width: "11vw",
+				height: "20vh",
+			};
+		}
+		if (prof < 6) {
+			return {
+				width: "15vw",
 				height: "20vh",
 			};
 		}
