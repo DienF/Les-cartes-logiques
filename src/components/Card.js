@@ -19,22 +19,6 @@ const Card = ({
 	};
 
 	/**
-	 * Donne la carte de gauche dans une implication si la carte de droite est blanche ("Vrai").
-	 * @param {CardClass} card - la carte à vérifier
-	 * @returns {CardClass} la carte gauche si c'est une implication & que la carte de droite est blanche sinon la carte passée en paramètre
-	 * @example "Jaune => Blanc" renvoie "Jaune"
-	 */
-	const getGoodCard = (card) => {
-		if (
-			card.right !== null &&
-			card.link === "=>" &&
-			card.right.color === "white"
-		)
-			return card.left;
-		return card;
-	};
-
-	/**
 	 * Convertit les liaisons en symboles Latex.
 	 * @param {String} str - la liaison
 	 * @returns {String} le symbole Latex
@@ -42,6 +26,7 @@ const Card = ({
 	const afficheLink = (str) => {
 		if (str === "=>") return "$$\\Rightarrow$$";
 		else if (str === "<=>") return "$$\\Leftrightarrow$$";
+		else if (str === "non") return "$$\\neg$$";
 		else return str;
 	};
 	const recurciveRender = (
@@ -52,6 +37,10 @@ const Card = ({
 		originalCount
 	) => {
 		if (currentCard.color !== null) {
+			let style = { backgroundColor: currentCard.color };
+			if (currentCard.color === "transparent") {
+				style["border"] = "none";
+			}
 			return (
 				<span
 					className={
@@ -59,10 +48,11 @@ const Card = ({
 						(selec ? "selectioner " : "") +
 						(help ? "help " : "")
 					}
-					style={{ backgroundColor: currentCard.color }}
+					style={style}
 				></span>
 			);
 		}
+		currentCard = currentCard.ifNonReturnNonCard();
 		let className = "carte_container_horizon";
 		let link = "link_vertical";
 		className = "carte_container_vertical";

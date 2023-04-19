@@ -216,4 +216,20 @@ export default class Card {
 
 		return res;
 	}
+	ifNonReturnNonCard() {
+		if (this.color !== null) {
+			return this;
+		}
+		if (this.right.color !== "white") {
+			return this;
+		}
+		return new Card(
+			this.id,
+			null,
+			this.active,
+			"non",
+			new Card(0, "transparent", this.active, "", null, null),
+			this.left
+		);
+	}
 }
