@@ -161,292 +161,118 @@ const Card = ({
 		else if (str === "<=>") return "$$\\Leftrightarrow$$";
 		else return str;
 	};
-
+	const recurciveRender = (
+		currentCard,
+		count,
+		selec,
+		help,
+		originalCount
+	) => {
+		if (currentCard.color !== null) {
+			return (
+				<span
+					className={
+						`card_simple ` +
+						(selec ? "selectioner " : "") +
+						(help ? "help " : "")
+					}
+					style={{ backgroundColor: currentCard.color }}
+				></span>
+			);
+		}
+		let className = "carte_container_horizon";
+		let link = "link_vertical";
+		className = "carte_container_vertical";
+		if (count % 2 !== 0 || (originalCount === 2 && count === 2)) {
+			className = "carte_container_horizon";
+			link = "";
+		}
+		return (
+			<span className={className}>
+				{[
+					recurciveRender(
+						currentCard.left,
+						count - 1,
+						selec,
+						help,
+						originalCount
+					),
+					<span className={`link ${link}`}>
+						<Latex>
+							{afficheLink(getGoodCard(currentCard).link)}
+						</Latex>
+					</span>,
+					recurciveRender(
+						currentCard.right,
+						count - 1,
+						selec,
+						help,
+						originalCount
+					),
+				]}
+			</span>
+		);
+	};
+	function RenderCard(props) {
+		const currentCard = props.currentCard;
+		const selec = props.selec;
+		const help = props.help;
+		if (currentCard === undefined) {
+			return <span></span>;
+		}
+		const profondeurCard = currentCard.getProfondeur();
+		recurciveRender.count = 0;
+		return recurciveRender(
+			currentCard,
+			profondeurCard,
+			selec,
+			help,
+			profondeurCard
+		);
+	}
+	function calcSizeCard(card) {
+		if (card === undefined) {
+			return {
+				minWidth: 0,
+				minHeight: 0,
+			};
+		}
+		const prof = card.getProfondeur();
+		if (prof === 1) {
+			return {
+				width: "5vw",
+			};
+		}
+	}
 	return (
-		<div className="card">
-			<GameTab.Consumer>
-				{(game) => {
-					return (
-						<div
-							className={
-								getClassType(game[deckIndice][cardIndice]) +
-								" " +
-								(game[deckIndice][cardIndice].hover && !isWin
-									? getClassType(
-											game[deckIndice][cardIndice]
-									  ) + "_hover"
-									: "") +
-								" " +
-								(isWin
-									? ""
-									: getClassType(
-											game[deckIndice][cardIndice]
-									  ) + "_accept_hover")
+		<GameTab.Consumer>
+			{(game) => {
+				return (
+					<div
+						onClick={handleClick}
+						className={
+							"card " +
+							(isWin ? "" : "hoverable ") +
+							(game[deckIndice][cardIndice].hover && !isWin
+								? "activeHover "
+								: "")
+						}
+						style={calcSizeCard(game[deckIndice][cardIndice])}
+					>
+						<RenderCard
+							currentCard={game[deckIndice][cardIndice]}
+							selec={game[deckIndice][cardIndice].active}
+							help={
+								(cardHelp[0] === deckIndice &&
+									cardHelp[1] === cardIndice) ||
+								(cardHelp2[0] === deckIndice &&
+									cardHelp2[1] === cardIndice)
 							}
-							onClick={handleClick}
-						>
-							{getTab(game[deckIndice][cardIndice]).map(
-								(cardAffiche, index) => (
-									<div
-										key={index.toString()}
-										className={"card" + index.toString()}
-									>
-										<div
-											style={{
-												backgroundColor:
-													cardAffiche.color,
-											}}
-											className={
-												getTabClass(
-													game[deckIndice][
-														cardIndice
-													],
-													index
-												) +
-												(cardAffiche.active
-													? " card_selec"
-													: "") +
-												((cardHelp[0] === deckIndice &&
-													cardHelp[1] ===
-														cardIndice) ||
-												(cardHelp2[0] === deckIndice &&
-													cardHelp2[1] === cardIndice)
-													? " card_help"
-													: "")
-											}
-										></div>
-										{index === 0 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_double" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].link
-														) === "et"
-															? "affix_h no_rotate"
-															: "affix_h"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 0 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_triple_a" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].link
-														) === "et"
-															? "affix_h no_rotate"
-															: "affix_h"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 1 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_triple_a" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].right.link
-														) === "et"
-															? "affix_v no_rotate"
-															: "affix_v"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).right.link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 0 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_triple_b" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].left.link
-														) === "et"
-															? "affix_v no_rotate"
-															: "affix_v"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).left.link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 1 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_triple_b" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].link
-														) === "et"
-															? "affix_h no_rotate"
-															: "affix_h"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 0 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_quadruple" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].left.link
-														) === "et"
-															? "affix_v no_rotate"
-															: "affix_v"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).left.link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 1 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_quadruple" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].right.link
-														) === "et"
-															? "affix_v no_rotate"
-															: "affix_v"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).right.link
-														)}
-													</Latex>
-												</div>
-											)}
-										{index === 2 &&
-											getClassType(
-												getGoodCard(
-													game[deckIndice][cardIndice]
-												)
-											) === "card_quadruple" && (
-												<div
-													className={
-														getGoodCard(
-															game[deckIndice][
-																cardIndice
-															].link
-														) === "et"
-															? "affix_h no_rotate"
-															: "affix_h"
-													}
-												>
-													<Latex>
-														{afficheLink(
-															getGoodCard(
-																game[
-																	deckIndice
-																][cardIndice]
-															).link
-														)}
-													</Latex>
-												</div>
-											)}
-									</div>
-								)
-							)}
-						</div>
-					);
-				}}
-			</GameTab.Consumer>
-		</div>
+						></RenderCard>
+					</div>
+				);
+			}}
+		</GameTab.Consumer>
 	);
 };
 

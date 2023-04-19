@@ -144,7 +144,7 @@ export default class Card {
 	 */
 	select(state) {
 		this.active = state;
-		if (this.left  != null) this.left.select(state);
+		if (this.left != null) this.left.select(state);
 		if (this.right != null) this.right.select(state);
 	}
 
@@ -191,9 +191,29 @@ export default class Card {
 	 * Renvoie la démonstration correspondante à l'action effectuée.
 	 */
 	toDemonstration() {
-		if (this.color !== null)     return "On a"     + this.getColor(this.color);
-		else if (this.link === "et") return "On a"     + this.left.toString() + "∧"       + this.right.toString();
-		else if (this.link === "ou") return "On a"     + this.left.toString() + "∨"       + this.right.toString();
-		else                         return ("Puisque" + this.left.toString() + ", on a " + this.right.toString());
+		if (this.color !== null) return "On a" + this.getColor(this.color);
+		else if (this.link === "et")
+			return "On a" + this.left.toString() + "∧" + this.right.toString();
+		else if (this.link === "ou")
+			return "On a" + this.left.toString() + "∨" + this.right.toString();
+		else
+			return (
+				"Puisque" +
+				this.left.toString() +
+				", on a " +
+				this.right.toString()
+			);
+	}
+	getProfondeur() {
+		let res = 1;
+		if (this.color !== null) {
+			return res;
+		}
+		const tmp1 = this.left.getProfondeur();
+		const tmp2 = this.right.getProfondeur();
+		const finalTmp = Math.max(tmp1, tmp2);
+		res += finalTmp;
+
+		return res;
 	}
 }
