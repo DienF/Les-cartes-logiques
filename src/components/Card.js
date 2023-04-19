@@ -238,11 +238,29 @@ const Card = ({
 			};
 		}
 		const prof = card.getProfondeur();
+		console.log(prof);
 		if (prof === 1) {
 			return {
 				width: "5vw",
+				height: "13vh",
 			};
 		}
+		if (prof < 4) {
+			return {
+				width: "11vw",
+				height: "13vh",
+			};
+		}
+		if (prof < 7) {
+			return {
+				width: "11vw",
+				height: "20vh",
+			};
+		}
+		return {
+			width: "15vw",
+			height: "28vh",
+		};
 	}
 	return (
 		<GameTab.Consumer>
@@ -259,6 +277,9 @@ const Card = ({
 						}
 						style={calcSizeCard(game[deckIndice][cardIndice])}
 					>
+						{console.log(
+							calcSizeCard(game[deckIndice][cardIndice])
+						)}
 						<RenderCard
 							currentCard={game[deckIndice][cardIndice]}
 							selec={game[deckIndice][cardIndice].active}
