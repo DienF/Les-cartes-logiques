@@ -2405,7 +2405,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				{false && <button onClick={getNextMove}>Aide</button>}
 				{/* Revient à la partie avant l'ajout d'une carte */}
 				<div>
-					<button id="back" onClick={retourEnArriere}>
+					<button
+						id="back"
+						className="buttonAction "
+						onClick={retourEnArriere}
+					>
 						<img
 							src={"img/retour_arriere.png"}
 							alt={"Retour arrière"}
@@ -2419,9 +2423,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						<button
 							id="addAnd"
 							className={
-								mode === "Tutorial" && numero === 0
+								"buttonAction " +
+								(mode === "Tutorial" && numero === 0
 									? "boutonSelection"
-									: ""
+									: "")
 							}
 							onClick={addCardAnd}
 						>
@@ -2440,9 +2445,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						<button
 							id="addImplique"
 							className={
-								mode === "Tutorial" && numero === 1
+								"buttonAction " +
+								(mode === "Tutorial" && numero === 1
 									? "boutonSelection"
-									: ""
+									: "")
 							}
 							onClick={addCardFuse}
 						>
@@ -2461,9 +2467,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						<button
 							id="fuseAnd"
 							className={
-								mode === "Tutorial" && numero === 2
+								"buttonAction " +
+								(mode === "Tutorial" && numero === 2
 									? "boutonSelection"
-									: ""
+									: "")
 							}
 							onClick={fuseCardAnd}
 						>
@@ -2479,7 +2486,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
             sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
             /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
 				{false && mode !== "Create" && (
-					<button onClick={fuseCardFuse}>Fusion carte {"=>"}</button>
+					<button className={"buttonAction "} onClick={fuseCardFuse}>
+						<img
+							src={"img/fusion_carte_et.png"}
+							alt={"Fusion Carte =>"}
+						/>
+						<span className="tooltiptext">Fusion Carte {"=>"}</span>
+					</button>
 				)}
 				{/* Ajout objectif secondaire */}
 				{mode !== "Create" && (
@@ -2487,9 +2500,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						<button
 							id="addGoal"
 							className={
-								mode === "Tutorial" && numero === 3
+								"buttonAction " +
+								(mode === "Tutorial" && numero === 3
 									? "boutonSelection"
-									: ""
+									: "")
 							}
 							onClick={addObjectif}
 						>

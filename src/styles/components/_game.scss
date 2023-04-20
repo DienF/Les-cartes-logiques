@@ -84,7 +84,7 @@
             position: relative;
         }
 
-        #back, #addAnd, #addImplique, #fuseAnd, #addGoal {
+        .buttonAction {
             height: 42px;
             width: auto;
             border-radius: 5px;
@@ -123,7 +123,7 @@
             }
         }
 
-        #back:hover, #addAnd:hover, #addImplique:hover, #fuseAnd:hover, #addGoal:hover {
+        .buttonAction:hover {
             border: 2px solid black;
 
             .tooltiptext {
