@@ -153,9 +153,6 @@ const Card = ({
 						}
 						style={calcSizeCard(game[deckIndice][cardIndice])}
 					>
-						{console.log(
-							calcSizeCard(game[deckIndice][cardIndice])
-						)}
 						<RenderCard
 							currentCard={game[deckIndice][cardIndice]}
 							selec={game[deckIndice][cardIndice].active}
