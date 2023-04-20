@@ -1,33 +1,33 @@
 .choice {
     grid-area: m;
     padding-top: 1%;
-    padding-left: 13%;
-    padding-right: 13%;
     text-align: center;
+    width: 90%;
     margin: 0 auto;
 
-    ul {
-        padding-left: 0;
+    table {
+        width: 80%;
+        margin: auto;
+        border-spacing: 20px;
     }
 
-    li {
+    td {
         list-style-type: none;
-        padding: auto;
-        margin: 3vw;
-        display: inline-block;
+        min-width: fit-content;
+        background-color: lightgray;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 7px 7px 15px black;
 
-        a {
-            background-color: lightgray;
+        a{
             font-size: large;
-            text-decoration: none;
             color : black;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 7px 7px 15px black;
+            text-decoration: none;
         }
+        
     }
 
-    li:hover {
+    td:hover {
         background-color: gray;
 
         a:hover {
