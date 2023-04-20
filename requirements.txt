@@ -1,4 +1,5 @@
 flask
+Flask-Cors
 psycopg
 psycopg-binary
 python-dotenv
