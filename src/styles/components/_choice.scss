@@ -10,16 +10,20 @@
         margin: auto;
         border-spacing: 20px;
     }
-
+    td:hover{
+        transform: scale(1.1);
+    }
     td {
         list-style-type: none;
         min-width: fit-content;
         background-color: lightgray;
-        padding: 20px;
         border-radius: 5px;
         box-shadow: 7px 7px 15px black;
+        padding: 20px;
+        cursor: pointer;
+        transition: all .2s ease-in-out;
 
-        a{
+        p{
             font-size: large;
             color : black;
             text-decoration: none;
