@@ -52,7 +52,7 @@ const Card = ({
 				></span>
 			);
 		}
-		currentCard = currentCard.ifNonReturnNonCard();
+		currentCard = currentCard.displayGoodCard();
 		let className = "carte_container_horizon";
 		let link = "link_vertical";
 		className = "carte_container_vertical";

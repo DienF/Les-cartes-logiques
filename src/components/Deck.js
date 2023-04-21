@@ -7,6 +7,7 @@ const Deck = ({
 	indice,
 	addCardFunc,
 	deleteCardFunc,
+	transformIntoNonCard,
 	nbDeck,
 	mode,
 	objectif,
@@ -74,6 +75,12 @@ const Deck = ({
 				{mode === "Create" && (
 					<button onClick={deleleCardToDeck}>
 						Supprimer une carte
+					</button>
+				)}
+				<br />
+				{mode === "Create" && (
+					<button onClick={transformIntoNonCard}>
+						Transformer en carte négative
 					</button>
 				)}
 

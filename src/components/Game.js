@@ -473,17 +473,30 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			c2 = game[selecDeck2][selecCard2].copy();
 		c1.id = 0;
 		c2.id = 1;
-		// Ajoute la carte fusionnée dans le deck de la 1ère carte séléctionnée
-		tmp[selecDeck1].push(
-			new Card(
-				game[selecDeck1].length, // id
-				null, // color
-				false, // active
-				l, // link
-				c1, // left
-				c2 // right
-			)
-		);
+		if (l !== "<=>") {
+			// Ajoute la carte fusionnée dans le deck de la 1ère carte séléctionnée
+			tmp[selecDeck1].push(
+				new Card(
+					game[selecDeck1].length, // id
+					null, // color
+					false, // active
+					l, // link
+					c1, // left
+					c2 // right
+				)
+			);
+		} else {
+			tmp[selecDeck1].push(
+				new Card(
+					game[selecDeck1].length, // id
+					null, // color
+					false, // active
+					"et", // link
+					new Card(0, null, false, "=>", c1.copy(), c2.copy()), // left
+					new Card(0, null, false, "=>", c2.copy(), c1.copy()) // right
+				)
+			);
+		}
 		// Enlève le popup
 		setPopupFusion(false);
 		// Actualise le jeu et désélectionne tout
@@ -508,6 +521,27 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			// Actualise le jeu et désélectionne tout
 			allFalse(tmp);
 		} else allFalseGame();
+	};
+	const transformIntoNonCard = () => {
+		if (!(selecCard1 !== -1 && selecDeck1 !== -1)) {
+			allFalseGame();
+			return;
+		}
+		saveGame();
+		let tmp = [...game];
+		const futureCardNon = tmp[selecDeck1][selecCard1].copy();
+		futureCardNon.id = 0;
+		tmp[selecDeck1].push(
+			new Card(
+				futureCardNon.id,
+				null,
+				false,
+				"=>",
+				futureCardNon,
+				new Card(1, "white", false, null, null, null)
+			)
+		);
+		allFalse(tmp);
 	};
 
 	/**
@@ -685,10 +719,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			bool = false,
 			// Copie du jeu actuel
 			tmp = [...game];
-		// Parcourt le deck lié à l'objectif
-		game[currentDeck].forEach((card) => {
+		const checkWin = (card) => {
 			// Si une carte liée à cet objectif est trouvée l'objectif est validé
-			if (card.equals(objectif)) {
+			if (card.equals(objectif) || card.color === "white") {
 				// Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
 				if (currentDeck === 0) {
 					bool = true;
@@ -739,7 +772,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					bool = isWin(currentDeck - 1);
 				}
 			}
-		});
+		};
+		// Parcourt le deck lié à l'objectif
+		game[currentDeck].forEach(checkWin);
+		if (currentDeck !== 0) {
+			game[0].forEach(checkWin);
+		}
 		setSavedGame(tmp);
 		// Retourne true si l'objectif principal est vrai, sinon retourne false
 		return bool;
@@ -2563,6 +2601,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						indice={index}
 						addCardFunc={addCard}
 						deleteCardFunc={deleteCard}
+						transformIntoNonCard={transformIntoNonCard}
 						nbDeck={game.length}
 						mode={mode}
 						objectif={tabObjectif}

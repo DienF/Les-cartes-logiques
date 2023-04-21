@@ -216,11 +216,39 @@ export default class Card {
 
 		return res;
 	}
+	isDoubleArraow() {
+		if (this.color !== null) {
+			return false;
+		}
+		if (this.link !== "et") {
+			return false;
+		}
+		if (this.left.link !== "=>" || this.right.link !== "=>") {
+			return false;
+		}
+		return true;
+	}
+	ifDoubleArraowReturnGoodCard() {
+		if (!this.isDoubleArraow()) {
+			return this;
+		}
+		return new Card(
+			this.id,
+			null,
+			this.active,
+			"<=>",
+			this.left.left,
+			this.left.right
+		);
+	}
 	ifNonReturnNonCard() {
 		if (this.color !== null) {
 			return this;
 		}
 		if (this.right.color !== "white") {
+			return this;
+		}
+		if (this.link !== "=>") {
 			return this;
 		}
 		return new Card(
@@ -231,5 +259,10 @@ export default class Card {
 			new Card(0, "transparent", this.active, "", null, null),
 			this.left
 		);
+	}
+	displayGoodCard() {
+		let tmp = this.ifDoubleArraowReturnGoodCard();
+		tmp = tmp.ifNonReturnNonCard();
+		return tmp;
 	}
 }
