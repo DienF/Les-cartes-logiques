@@ -2,16 +2,24 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
-	const [exTuto, setExTuto] = useState();
+	const nbTuto = 4;
 
-	useEffect(() => {
-		fetch("json/tutoriel.json")
-			.then((response) => response.text())
-			.then((data) => {
-				setExTuto(JSON.parse(data));
-			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	function CreateTuto(props) {
+		const res = [];
+		for (let index = 0; index < nbTuto; index++) {
+			res.push(
+				<li className="exo" key={index}>
+					<NavLink
+						exact="true"
+						to={"/Exercise-Tutorial-" + (index + 1)}
+					>
+						Tutoriel {index + 1}
+					</NavLink>
+				</li>
+			);
+		}
+		return res;
+	}
 
 	return (
 		<div className="navigation">
@@ -27,20 +35,7 @@ const Navigation = () => {
 						<li className="choose">
 							<div>Tutoriel</div>
 							<ul id="tuto">
-								{exTuto !== undefined &&
-									exTuto.map((exercice, index) => (
-										<li className="exo" key={index}>
-											<NavLink
-												exact="true"
-												to={
-													"/Exercise-Tutorial-" +
-													(index + 1)
-												}
-											>
-												Tutoriel {index + 1}
-											</NavLink>
-										</li>
-									))}
+								<CreateTuto></CreateTuto>
 							</ul>
 						</li>
 						<li>
