@@ -9,6 +9,7 @@ const Card = ({
 	cardHelp,
 	cardHelp2,
 	isWin,
+	affichageSimple,
 }) => {
 	/**
 	 * Fonction qui détecte le clique sur une carte & qui appelle la fonction {@link update()} passée par le
@@ -52,7 +53,10 @@ const Card = ({
 				></span>
 			);
 		}
-		currentCard = currentCard.displayGoodCard();
+		if (affichageSimple) {
+			currentCard = currentCard.displayGoodCard();
+		}
+
 		let className = "carte_container_horizon";
 		let link = "link_vertical";
 		className = "carte_container_vertical";

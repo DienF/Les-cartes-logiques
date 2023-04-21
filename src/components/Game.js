@@ -188,6 +188,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 
 	const [tabIndentation, setTabIndentation] = useState([0]);
 
+	const [affichageSimple, setAffichageSimple] = useState(false);
+
 	/** Variable pour les redirections.
 	 *  Utilisation : navigate(url)
 	 */
@@ -473,7 +475,36 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			c2 = game[selecDeck2][selecCard2].copy();
 		c1.id = 0;
 		c2.id = 1;
-		if (l !== "<=>") {
+		if (l === "<=>") {
+			tmp[selecDeck1].push(
+				new Card(
+					game[selecDeck1].length, // id
+					null, // color
+					false, // active
+					"et", // link
+					new Card(0, null, false, "=>", c1.copy(), c2.copy()), // left
+					new Card(0, null, false, "=>", c2.copy(), c1.copy()) // right
+				)
+			);
+		} else if (l === "ou") {
+			tmp[selecDeck1].push(
+				new Card(
+					game[selecDeck1].length, // id
+					null, // color
+					false, // active
+					"=>", // link
+					new Card(
+						c1.id,
+						null,
+						false,
+						"=>",
+						c1,
+						new Card(1, "white", false, null, null, null)
+					), // left
+					c2 // right
+				)
+			);
+		} else {
 			// Ajoute la carte fusionnée dans le deck de la 1ère carte séléctionnée
 			tmp[selecDeck1].push(
 				new Card(
@@ -483,17 +514,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					l, // link
 					c1, // left
 					c2 // right
-				)
-			);
-		} else {
-			tmp[selecDeck1].push(
-				new Card(
-					game[selecDeck1].length, // id
-					null, // color
-					false, // active
-					"et", // link
-					new Card(0, null, false, "=>", c1.copy(), c2.copy()), // left
-					new Card(0, null, false, "=>", c2.copy(), c1.copy()) // right
 				)
 			);
 		}
@@ -2437,6 +2457,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		navigator.clipboard.writeText(str);
 	};
 
+	const affichageSimpleHandler = (event) => {
+		setAffichageSimple(event.target.checked);
+	};
+
 	/**
 	 * Initialise l'exercice.
 	 */
@@ -2452,6 +2476,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		setTabIndiceDemonstration([0]);
 		setPopupWin(false);
 		setMessageError("");
+		setAffichageSimple(true);
 		if (ex !== undefined && numero !== undefined && mode !== "Create") {
 			try {
 				let tmp = gameInput(ex),
@@ -2643,6 +2668,18 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				{mode === "Create" && (
 					<button onClick={saveAsFile}>Copier le fichier</button>
 				)}
+				{
+					<span>
+						<input
+							type="checkbox"
+							id="afficheSimple"
+							name="Affichage Simplifié"
+							onClick={affichageSimpleHandler}
+							checked={affichageSimple}
+						></input>
+						<label>Affichage Simplifié</label>
+					</span>
+				}
 			</div>
 			{/* Message d'aide en mode tutoriel */}
 			{mode === "Tutorial" && messageTutorial !== "" && (
@@ -2671,6 +2708,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						cardHelp={cardHelp}
 						cardHelp2={cardHelp2}
 						isWin={win}
+						affichageSimple={affichageSimple}
 						key={index}
 					></Deck>
 				))}
