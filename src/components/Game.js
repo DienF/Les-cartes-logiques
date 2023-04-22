@@ -680,7 +680,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 * @param {Card} cardObj - la partie droite de l'objectif que l'on cherche
 	 * @returns {number} l'indice de l'objectif dans {@link game[game.length-1]}
 	 */
-	const findObjectifRelative = (cardObj) => {
+	const findObjectifRelative = (cardObj, tmp) => {
+		if (tmp === undefined) {
+			tmp = game;
+		}
 		// Variable que l'on va retourner (-1 si il trouve pas)
 		let num = -1,
 			// Deck de l'objectif
@@ -689,7 +692,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		 *  est égale à la carte envoyée en paramètre.
 		 *  Si oui {@link num} prend la valeur de l'index de cette carte.
 		 */
-		game[deck].forEach((element, index) => {
+		tmp[deck].forEach((element, index) => {
 			// Vérifie si la couleur est null (si elle est null la carte est au moins double)
 			if (element !== null && element.color === null) {
 				if (element.right.equals(cardObj)) num = index;
@@ -722,7 +725,22 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		setTabObjectif(tmpObj);
 		return tmpObj.length;
 	};
-
+	const delCardWithEquals = (deck, cardToDelete) => {
+		// Le deck que l'on va retourner
+		let finalDeck = [];
+		// Supprime la carte en la passant null
+		let cpt = 0;
+		// Recopie le deck sauf la carte qui vaut null
+		for (let i = 0; i < deck.length; i++) {
+			if (!deck[i].equals(cardToDelete)) {
+				let tmpCard = deck[i];
+				tmpCard.id = tmpCard.id - cpt;
+				finalDeck.push(tmpCard);
+			} else cpt++;
+		}
+		// Retourne le nouveau deck
+		return finalDeck;
+	};
 	/**
 	 *
 	 * @returns
@@ -740,6 +758,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		const checkWinForEveryObjectif = (cardArray) => {
 			const cardObj = cardArray[0],
 				numDeckRef = cardArray[1][0];
+			console.log(tmp, cardArray[1]);
 			const checkWin = (card) => {
 				if (
 					card === null ||
@@ -754,21 +773,25 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					setWin(true);
 					return;
 				}
-				const findObj = findObjectifRelative(cardObj);
+				const findObj = findObjectifRelative(cardObj, tmp);
 				if (findObj === -1) return;
 				// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
 				let tmpCard = game[game.length - 1][findObj].copy();
 				tmpCard.id = tmp[numDeckRef].length;
 				// Ajoute cette carte dans le deck précédent
 				tmp[numDeckRef - 1].push(tmpCard);
-
+				// Supprime l'objectif secondaire
+				// console.log(cardObj.id, numDeckRef, index, cardObj.toString());
+				tmp[tmp.length - 1] = delCardWithEquals(
+					tmp[tmp.length - 1],
+					cardObj
+				);
 				// Vérifie si l'objectif a un objectif lié
-				if (numDeckRef !== 1 && tabObjectif[numDeckRef][2]) {
+				if (tabObjectif[numDeckRef][2]) {
 					// Si oui supprime également l'objectif qui lui est lié
 					tmp[tmp.length - 1] = delCard(tmp[tmp.length - 1], findObj);
 				}
-				// Supprime l'objectif secondaire
-				tmp[tmp.length - 1] = delCard(tmp[tmp.length - 1], numDeckRef);
+
 				// Supprime le deck qui a servi pour cet objectif secondaire
 				tmp = delDeck(tmp, numDeckRef);
 				// Met à jour la table des objectifs
@@ -776,14 +799,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				addLineDemonstration(["On a ", tmpCard.copy(), "."], -1);
 				// Met à jour le jeu
 				setGame(tmp);
+			};
+			game[numDeckRef].forEach(checkWin);
+			if (numDeckRef !== 0) game[0].forEach(checkWin);
+			if (bool && numDeckRef !== 0) {
 				/** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
 				 *  Si cela valdie l'objectif principal : bool = true
 				 *  Sinon : bool = false
 				 */
 				bool = isWin();
-			};
-			game[numDeckRef].forEach(checkWin);
-			if (numDeckRef !== 0) game[0].forEach(checkWin);
+			}
 		};
 		listObjectif.forEach(checkWinForEveryObjectif);
 		setSavedGame(tmp);
@@ -829,7 +854,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
 					let tmpCard =
 						game[game.length - 1][
-							findObjectifRelative(objectif)
+							findObjectifRelative(objectif, tmp)
 						].copy();
 					tmpCard.id = tmp[tabObjectif[currentDeck][1] - 1].length;
 					// Ajoute cette carte dans le deck précédent
@@ -844,7 +869,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						// Si oui supprime également l'objectif qui lui est lié
 						tmp[tmp.length - 1] = delCard(
 							tmp[tmp.length - 1],
-							findObjectifRelative(objectif)
+							findObjectifRelative(objectif, tmp)
 						);
 					}
 					// Supprime le deck qui a servi pour cet objectif secondaire
@@ -1281,27 +1306,28 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								secondObjectif =
 									game[deckI][cardI].right.copy();
 								// Vide le dernier deck (dans la variable temporaire)
-								tmp[game.length - 1] = [];
+								let futurArrayToAdd = [];
 								// Copie de la partie gauche de la carte sélectionnée
 								tmpCard = game[deckI][cardI].left.copy();
 								tmpCard.id = 0;
-								// Ajoute cette partie dans le dernier deck
-								tmp[game.length - 1].push(tmpCard);
+								// Ajoute cette partie dans le deck qui vient d'etre créer
+								futurArrayToAdd.push(tmpCard);
 								// Met l'id du sous-objectif que l'on va rajouter de la taille du dernier deck
 								secondObjectif.id =
-									game[game.length - 1].length;
+									tmp[tmp.length - 1].length + 1;
 								// Rajoute le second objectif dans le deck objectif
-								tmpObjectif.push(secondObjectif);
-								// Rajoute le deck objectif à la fin
-								tmp.push(tmpObjectif);
+								tmp[tmp.length - 1].push(secondObjectif);
+								// Rajoute le deck intermediaire
+								tmp.splice(tmp.length - 1, 0, futurArrayToAdd);
 								// Copie du tableau objectif
 								let tmpObj = [...tabObjectif];
 								// Ajoute l'objectif secondaire dans le tableau objectif
 								tmpObj.push([
 									tabObjectif.length,
-									game[game.length - 1].length,
+									tmp[tmp.length - 1].length - 1,
 									true,
 								]);
+								console.log(tmpObj);
 								// Met à jour le tableau objectif
 								setTabObjectif(tmpObj);
 								addLineDemonstration(
@@ -1353,16 +1379,33 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								// Copie de les deux parties de la carte sélectionnée
 								let secondObjectif1 =
 									game[deckI][cardI].left.copy();
-								secondObjectif1.id = game[game.length - 1];
+								secondObjectif1.id =
+									game[game.length - 1].length;
 								let secondObjectif2 =
 									game[deckI][cardI].right.copy();
-								secondObjectif2.id = game[game.length - 1] + 1;
+								secondObjectif2.id =
+									game[game.length - 1].length + 1;
+								let firstArrayDemo = [];
+								let secondArrayDemo = [];
 								if (secondObjectif1.haveImpliqueLinkRecur()) {
 									tmp[tmp.length - 1].push(secondObjectif1);
+									firstArrayDemo = [
+										"Montrons ",
+										secondObjectif1.copy(),
+										".",
+									];
 								}
 								if (secondObjectif2.haveImpliqueLinkRecur()) {
 									tmp[tmp.length - 1].push(secondObjectif2);
+									secondArrayDemo = [
+										"Montrons ",
+										secondObjectif1.copy(),
+										".",
+									];
 								}
+								addLineDemonstration(
+									firstArrayDemo.concat(secondArrayDemo)
+								);
 
 								// Met à jour le jeu & désélectionne toutes les cartes
 								allFalse(tmp);
@@ -1460,7 +1503,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				res += displayCard.toString();
 			}
 		});
-		console.log(res);
 		return StringToLatex(res);
 	};
 	const addLineDemonstration = (msg, indentation, num) => {
@@ -2501,7 +2543,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					<button onClick={saveAsFile}>Copier le fichier</button>
 				)}
 				{
-					<span>
+					<span id="checkBoxSimple">
 						<input
 							type="checkbox"
 							id="afficheSimple"
