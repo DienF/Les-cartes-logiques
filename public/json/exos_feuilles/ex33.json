@@ -32,9 +32,15 @@
     "link": "et",
     "right": {
      "left": {
-      "color": "blue"
+      "left": {
+       "color": "blue"
+      },
+      "link": "=>",
+      "right": {
+       "color": "white"
+      }
      },
-     "link": "ou",
+     "link": "=>",
      "right": {
       "color": "green"
      }
@@ -53,13 +59,21 @@
     "link": "et",
     "right": {
      "left": {
-      "color": "red"
+      "left": {
+       "color": "red"
+      },
+      "link": "=>",
+      "right": {
+       "color": "white"
+      }
      },
-     "link": "ou",
+     "link": "=>",
      "right": {
-      "left" : {"color": "green"},
-      "link" : "=>",
-      "right" : {
+      "left": {
+       "color": "orange"
+      },
+      "link": "=>",
+      "right": {
        "color": "white"
       }
      }
@@ -75,21 +89,45 @@
   {
    "left": {
     "left": {
-     "color": "blue"
+     "left": {
+      "color": "blue"
+     },
+     "link": "et",
+     "right": {
+      "color": "red"
+     }
     },
-    "link": "et",
+    "link": "=>",
     "right": {
-     "color": "red"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "et",
+     "right": {
+      "color": "orange"
+     }
     }
    },
-   "link": "<=>",
+   "link": "et",
    "right": {
     "left": {
-     "color": "yellow"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "et",
+     "right": {
+      "color": "orange"
+     }
     },
-    "link": "et",
+    "link": "=>",
     "right": {
-     "color": "orange"
+     "left": {
+      "color": "blue"
+     },
+     "link": "et",
+     "right": {
+      "color": "red"
+     }
     }
    }
   }

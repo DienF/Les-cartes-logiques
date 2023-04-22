@@ -32,21 +32,45 @@
   {
    "left": {
     "left": {
-     "color": "red"
+     "left": {
+      "color": "red"
+     },
+     "link": "=>",
+     "right": {
+      "color": "orange"
+     }
     },
-    "link": "<=>",
+    "link": "et",
     "right": {
-     "color": "orange"
+     "left": {
+      "color": "orange"
+     },
+     "link": "=>",
+     "right": {
+      "color": "red"
+     }
     }
    },
    "link": "et",
    "right": {
     "left": {
-     "color": "orange"
+     "left": {
+      "color": "orange"
+     },
+     "link": "=>",
+     "right": {
+      "color": "yellow"
+     }
     },
-    "link": "<=>",
+    "link": "et",
     "right": {
-     "color": "yellow"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "=>",
+     "right": {
+      "color": "orange"
+     }
     }
    }
   }

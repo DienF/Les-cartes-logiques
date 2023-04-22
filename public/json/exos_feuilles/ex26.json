@@ -16,9 +16,11 @@
     },
     "link": "et",
     "right": {
-     "left" : {"color": "yellow"},
-     "link" : "=>",
-     "right" : {
+     "left": {
+      "color": "yellow"
+     },
+     "link": "=>",
+     "right": {
       "color": "white"
      }
     }
@@ -41,9 +43,15 @@
    "link": "=>",
    "right": {
     "left": {
-     "color": "yellow"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "=>",
+     "right": {
+      "color": "white"
+     }
     },
-    "link": "ou",
+    "link": "=>",
     "right": {
      "color": "orange"
     }
@@ -53,9 +61,15 @@
  [
   {
    "left": {
-    "color": "yellow"
+    "left": {
+     "color": "yellow"
+    },
+    "link": "=>",
+    "right": {
+     "color": "white"
+    }
    },
-   "link": "ou",
+   "link": "=>",
    "right": {
     "color": "red"
    }

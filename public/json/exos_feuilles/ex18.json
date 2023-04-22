@@ -58,11 +58,23 @@
  [
   {
    "left": {
-    "color": "blue"
+    "left": {
+     "color": "blue"
+    },
+    "link": "=>",
+    "right": {
+     "color": "red"
+    }
    },
-   "link": "<=>",
+   "link": "et",
    "right": {
-    "color": "red"
+    "left": {
+     "color": "red"
+    },
+    "link": "=>",
+    "right": {
+     "color": "blue"
+    }
    }
   }
  ]

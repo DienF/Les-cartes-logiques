@@ -65,21 +65,45 @@
   {
    "left": {
     "left": {
-     "color": "red"
+     "left": {
+      "color": "red"
+     },
+     "link": "et",
+     "right": {
+      "color": "blue"
+     }
     },
-    "link": "et",
+    "link": "=>",
     "right": {
-     "color": "blue"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "et",
+     "right": {
+      "color": "orange"
+     }
     }
    },
-   "link": "<=>",
+   "link": "et",
    "right": {
     "left": {
-     "color": "yellow"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "et",
+     "right": {
+      "color": "orange"
+     }
     },
-    "link": "et",
+    "link": "=>",
     "right": {
-     "color": "orange"
+     "left": {
+      "color": "red"
+     },
+     "link": "et",
+     "right": {
+      "color": "blue"
+     }
     }
    }
   }

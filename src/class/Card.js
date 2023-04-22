@@ -65,9 +65,7 @@ export default class Card {
 	 */
 	toString() {
 		let res = "";
-		if (this.link === "non") {
-			return "non" + this.right.toString();
-		}
+		if (this.link === "non") return "non" + this.right.toString();
 		// Couleur de la carte
 		if (this.color !== null) res += this.getColor(this.color);
 		// Carte gauche
@@ -114,14 +112,14 @@ export default class Card {
 	 *              "right": { "color": "couleur" }
 	 *            }
 	 * }
-	 * @returns {JSON} - à stocker dans un fichier .json
+	 * @returns {JSON} à stocker dans un fichier .json
 	 */
 	toFile() {
 		if (this.color !== null) return { color: this.color };
 		else
 			return {
-				left: this.left.toFile(),
-				link: this.link,
+				left:  this.left.toFile(),
+				link:  this.link,
 				right: this.right.toFile(),
 			};
 	}
@@ -134,7 +132,7 @@ export default class Card {
 	copy() {
 		let l = null,
 			r = null;
-		if (this.left !== null) l = this.left.copy();
+		if (this.left !== null)  l = this.left.copy();
 		if (this.right !== null) r = this.right.copy();
 		return new Card(this.id, this.color, this.active, this.link, l, r);
 	}
@@ -143,11 +141,11 @@ export default class Card {
 	 * Fonction récursive qui :
 	 * change l'attribut 'active' ;
 	 * regarde si left & right sont null, si ils ne le sont pas on appelle la même fonction sur eux.
-	 * @param {true|false} state - booléen qui définit si une carte est sélectionnée ou pas
+	 * @param {true|false} state booléen qui définit si une carte est sélectionnée ou pas
 	 */
 	select(state) {
 		this.active = state;
-		if (this.left != null) this.left.select(state);
+		if (this.left != null)  this.left.select(state);
 		if (this.right != null) this.right.select(state);
 	}
 
@@ -161,17 +159,14 @@ export default class Card {
 			return this.color === card.color;
 		else {
 			let bool = true;
-			if (
-				(this.left === null && card.left !== null) ||
-				(this.left !== null && card.left === null)
-			)
+			if ((this.left === null && card.left !== null) ||
+				(this.left !== null && card.left === null))
 				return false;
-			if (
-				(this.right === null && card.right !== null) ||
-				(this.right !== null && card.right === null)
-			)
+			if ((this.right === null && card.right !== null) ||
+				(this.right !== null && card.right === null))
 				return false;
-			if (this.link !== card.link) return false;
+			if (this.link !== card.link)
+				return false;
 			if (this.left !== null && card.left !== null)
 				bool = this.left.equals(card.left);
 			if (this.right !== null && card.right !== null)
@@ -185,89 +180,81 @@ export default class Card {
 	 * @returns {true|false} true si simple/double sinon false
 	 */
 	isSimpleOrDouble() {
-		if (this.color !== null) return true;
+		if (this.color !== null)                                   return true;
 		if (this.left.color !== null && this.right.color !== null) return true;
-		else return false;
+		else                                                       return false;
 	}
 
 	/**
 	 * Renvoie la démonstration correspondante à l'action effectuée.
+	 * @returns {string} le texte de la démonstration
 	 */
 	toDemonstration() {
-		if (this.color !== null) return "On a" + this.getColor(this.color);
-		else if (this.link === "et")
-			return "On a" + this.left.toString() + "∧" + this.right.toString();
-		else if (this.link === "ou")
-			return "On a" + this.left.toString() + "∨" + this.right.toString();
-		else
-			return (
-				"Puisque" +
-				this.left.toString() +
-				", on a " +
-				this.right.toString()
-			);
+		if (this.color !== null)     return "On a"    + this.getColor(this.color);
+		else if (this.link === "et") return "On a"    + this.left.toString() + "∧"       + this.right.toString();
+		else if (this.link === "ou") return "On a"    + this.left.toString() + "∨"       + this.right.toString();
+		else                         return "Puisque" + this.left.toString() + ", on a " + this.right.toString();
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	getProfondeur() {
 		let res = 1;
-		if (this.color !== null) {
-			return res;
-		}
-		const tmp1 = this.left.getProfondeur();
-		const tmp2 = this.right.getProfondeur();
-		const finalTmp = Math.max(tmp1, tmp2);
+		if (this.color !== null) return res;
+		const tmp1     = this.left.getProfondeur(),
+			  tmp2     = this.right.getProfondeur(),
+			  finalTmp = Math.max(tmp1, tmp2);
 		res += finalTmp;
-
 		return res;
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	haveImpliqueLinkRecur() {
 		let res = false;
-		if (this.color !== null) {
-			return false;
-		}
-		if (this.link === "=>") {
-			res = true;
-		}
+		if (this.color !== null) return false;
+		if (this.link  === "=>") res = true;
 		return (
-			res ||
+			res                               ||
 			this.left.haveImpliqueLinkRecur() ||
 			this.right.haveImpliqueLinkRecur()
 		);
 	}
-	isCardEtObjectif() {
-		if (this.color !== null) {
-			return false;
-		}
-		if (this.link !== "et") {
-			return false;
-		}
-		if (!this.haveImpliqueLinkRecur()) {
-			return false;
-		}
 
+	/**
+	 * 
+	 * @returns 
+	 */
+	isCardEtObjectif() {
+		if (this.color !== null)           return false;
+		if (this.link  !== "et")           return false;
+		if (!this.haveImpliqueLinkRecur()) return false;
 		return true;
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	isDoubleArrow() {
-		if (this.color !== null) {
-			return false;
-		}
-		if (this.link !== "et") {
-			return false;
-		}
-		if (this.left.link !== "=>" || this.right.link !== "=>") {
-			return false;
-		}
-		if (!this.left.left.equals(this.right.right)) {
-			return false;
-		}
-		if (!this.left.right.equals(this.right.left)) {
-			return false;
-		}
+		if (this.color !== null)                                 return false;
+		if (this.link  !== "et")                                 return false;
+		if (this.left.link !== "=>" || this.right.link !== "=>") return false;
+		if (!this.left.left.equals(this.right.right))            return false;
+		if (!this.left.right.equals(this.right.left))            return false;
 		return true;
 	}
-	ifDoubleArraowReturnGoodCard() {
-		if (!this.isDoubleArrow()) {
-			return this;
-		}
+
+	/**
+	 * 
+	 * @returns 
+	 */
+	ifDoubleArrowReturnGoodCard() {
+		if (!this.isDoubleArrow()) return this;
 		return new Card(
 			this.id,
 			null,
@@ -277,22 +264,24 @@ export default class Card {
 			this.left.right
 		);
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	isNonCard() {
-		if (this.color !== null) {
-			return false;
-		}
-		if (this.right.color !== "white") {
-			return false;
-		}
-		if (this.link !== "=>") {
-			return false;
-		}
+		if (this.color       !== null)    return false;
+		if (this.right.color !== "white") return false;
+		if (this.link        !== "=>")    return false;
 		return true;
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	ifNonReturnNonCard() {
-		if (!this.isNonCard()) {
-			return this;
-		}
+		if (!this.isNonCard()) return this;
 		return new Card(
 			this.id,
 			null,
@@ -302,19 +291,23 @@ export default class Card {
 			this.left
 		);
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	isOuCard() {
-		if (this.color !== null) {
-			return false;
-		}
-		if (!this.left.isNonCard()) {
-			return false;
-		}
+		if (this.color !== null)    return false;
+		if (!this.left.isNonCard()) return false;
 		return true;
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	ifOuReturnOuCard() {
-		if (!this.isOuCard()) {
-			return this;
-		}
+		if (!this.isOuCard()) return this;
 		return new Card(
 			this.id,
 			null,
@@ -324,16 +317,24 @@ export default class Card {
 			this.right
 		);
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	displayGoodCard() {
-		let tmp = this.ifDoubleArraowReturnGoodCard();
+		let tmp = this.ifDoubleArrowReturnGoodCard();
 		tmp = tmp.ifOuReturnOuCard();
 		tmp = tmp.ifNonReturnNonCard();
 		return tmp;
 	}
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	displayGoodCardRecur() {
-		if (this.color !== null) {
-			return this;
-		}
+		if (this.color !== null) return this;
 		let tmp = this.displayGoodCard();
 		return new Card(
 			tmp.id,
