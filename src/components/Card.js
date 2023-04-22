@@ -25,7 +25,7 @@ const Card = ({
 	 * @returns {String} le symbole Latex
 	 */
 	const afficheLink = (str) => {
-		if      (str === "=>")  return "$$\\Rightarrow$$";
+		if (str === "=>") return "$$\\Rightarrow$$";
 		else if (str === "<=>") return "$$\\Leftrightarrow$$";
 		else if (str === "non") return "$$\\neg$$";
 		else return str;
@@ -58,11 +58,14 @@ const Card = ({
 		}
 		if (affichageSimple) currentCard = currentCard.displayGoodCard();
 		let className = "carte_container_horizon",
-		    link = "link_vertical";
+			link = "link_vertical";
 		className = "carte_container_vertical";
 		if (count % 2 !== 0 || (originalCount === 2 && count === 2)) {
 			className = "carte_container_horizon";
 			link = "";
+		}
+		if (count % 4 === 0) {
+			link = "link_vertical2";
 		}
 		return (
 			<span className={className} key={recurciveRender.count}>
@@ -92,10 +95,13 @@ const Card = ({
 		);
 	};
 	function RenderCard(props) {
-		const currentCard = props.currentCard,
-		      selec       = props.selec,
-		      help        = props.help;
+		let currentCard = props.currentCard,
+			selec = props.selec,
+			help = props.help;
 		if (currentCard === undefined) return <span></span>;
+		if (affichageSimple) {
+			currentCard = currentCard.displayGoodCardRecur();
+		}
 		const profondeurCard = currentCard.getProfondeur();
 		recurciveRender.count = 0;
 		return recurciveRender(
@@ -112,6 +118,9 @@ const Card = ({
 				minWidth: 0,
 				minHeight: 0,
 			};
+		if (affichageSimple) {
+			card = card.displayGoodCardRecur();
+		}
 		const prof = card.getProfondeur();
 		if (prof === 1)
 			return {

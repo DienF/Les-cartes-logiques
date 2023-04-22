@@ -275,12 +275,14 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			 *  - le jeu n'est pas en mode Creat
 			 *  - si on clique sur l'objectif et qu'il a une liaison =>
 			 */
-			if ((i === game.length - 1           &&
-				 (game[i][j].link === "=>"       ||
-				  game[i][j].isCardEtObjectif()) &&
-				  mode !== "Create")             ||
-				i !== game.length - 1            ||
-				mode === "Create") {
+			if (
+				(i === game.length - 1 &&
+					(game[i][j].link === "=>" ||
+						game[i][j].isCardEtObjectif()) &&
+					mode !== "Create") ||
+				i !== game.length - 1 ||
+				mode === "Create"
+			) {
 				if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
 					// Si la carte sélectionnée est déjà sélectionnée on la désélectionne (1ère carte)
 					tmpSelecCard1 = -1;
@@ -351,7 +353,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				}
 				if (
 					tmpNbselec === 1 &&
-					numero     === 3 &&
+					numero === 3 &&
 					Math.max(tmpSelecDeck1, tmpSelecDeck2) === game.length - 1
 				) {
 					setMessageTutorial([
@@ -543,8 +545,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	};
 
 	/**
-	 * 
-	 * @returns 
+	 *
+	 * @returns
 	 */
 	const transformIntoNonCard = () => {
 		if (!(selecCard1 !== -1 && selecDeck1 !== -1)) {
@@ -722,8 +724,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	};
 
 	/**
-	 * 
-	 * @returns 
+	 *
+	 * @returns
 	 */
 	const isWin = () => {
 		const listObjectif = [];
@@ -736,13 +738,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		let bool = false,
 			tmp = [...game];
 		const checkWinForEveryObjectif = (cardArray) => {
-			const cardObj    = cardArray[0],
-				  numDeckRef = cardArray[1][0];
+			const cardObj = cardArray[0],
+				numDeckRef = cardArray[1][0];
 			const checkWin = (card) => {
-				if (card    === null      ||
-					card    === undefined ||
-					cardObj === null      ||
-					cardObj === undefined)
+				if (
+					card === null ||
+					card === undefined ||
+					cardObj === null ||
+					cardObj === undefined
+				)
 					return;
 				if (!card.equals(cardObj) && card.color !== "white") return;
 				if (numDeckRef === 0) {
@@ -793,13 +797,18 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 * si on ne vérifie pas le deck 0, si l'objectif est dans le deck on ajoute l'objectif au dessus du deck précédent et
 	 * on regarde le deck en dessous (currentDeck-1) pour voir si la carte ajoutée n'est pas l'objectif du dessus.
 	 * @param {number}          numObjectif - le numéro de l'objectif
-	 * @param {*}          tmpDemonstration - 
-	 * @param {*}         tmpTabIndentation - 
-	 * @param {*} tmpTabIndiceDemonstration - 
+	 * @param {*}          tmpDemonstration -
+	 * @param {*}         tmpTabIndentation -
+	 * @param {*} tmpTabIndiceDemonstration -
 	 * @returns {true|false} true ou false
 	 */
 	// eslint-disable-next-line
-	const isWinAncien = (numObjectif, tmpDemonstration, tmpTabIndentation, tmpTabIndiceDemonstration) => {
+	const isWinAncien = (
+		numObjectif,
+		tmpDemonstration,
+		tmpTabIndentation,
+		tmpTabIndiceDemonstration
+	) => {
 		// checkWinTmp();
 		// Objectif à vérifier
 		const objectif = game[game.length - 1][tabObjectif[numObjectif][1]];
@@ -1040,11 +1049,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					tmp[selecDeck1][selecCard1]
 				);
 		// Une des 2 cartes doit avoir une liaison =>
-		if (bool ||
+		if (
+			bool ||
 			(tmp[selecDeck1][selecCard1].link === "=>" &&
 				tmp[selecDeck1][selecCard1].left.equals(
 					tmp[selecDeck2][selecCard2]
-		   ))) {
+				))
+		) {
 			// Initialisation de la carte où la liaison => va être utilisée
 			let deckCarteComplex = -1,
 				cardCarteComplex = -1;
@@ -1093,9 +1104,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				tmp[selecDeck2][selecCard2].link !== "=>" &&
 				tmp[selecDeck1][selecCard1].link !== "=>"
 			)
-				error('Une des deux cartes doit avoir une liaison principale de type "=>" !');
+				error(
+					'Une des deux cartes doit avoir une liaison principale de type "=>" !'
+				);
 			else
-				error('La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !');
+				error(
+					'La partie gauche de la carte "=>" doit être égale à la deuxième carte sélectionnée !'
+				);
 		}
 	};
 
@@ -1113,10 +1128,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	const fuseCardAnd = () => {
 		if (!navigation && !win) {
 			// Si 2 cartes sont sélectionnées
-			if (selecCard1 !== -1 &&
+			if (
+				selecCard1 !== -1 &&
 				selecCard2 !== -1 &&
 				selecDeck1 !== -1 &&
-				selecDeck2 !== -1) {
+				selecDeck2 !== -1
+			) {
 				// Prend le deck le plus haut
 				let finalDeck = Math.max(selecDeck1, selecDeck2);
 				if (finalDeck !== game.length - 1) {
@@ -1129,8 +1146,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					/** Vérifie si la 2ème carte sélectionnée est une carte composé au maximum de 2 cartes.
 					 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
 					 */
-					if (bool &&
-						tmp[selecDeck2][selecCard2].isSimpleOrDouble()) {
+					if (
+						bool &&
+						tmp[selecDeck2][selecCard2].isSimpleOrDouble()
+					) {
 						if (
 							!containCard(
 								game,
@@ -1177,7 +1196,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
 							setPopupWin(isWin());
 						} else
-							error("La carte que vous voulez ajouter existe déjà !");
+							error(
+								"La carte que vous voulez ajouter existe déjà !"
+							);
 					} else {
 						if (bool)
 							error(
@@ -1191,7 +1212,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							);
 					}
 				} else
-					error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
+					error(
+						"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+					);
 			} else error("Vous devez sélectionner deux cartes !");
 		}
 	};
@@ -1437,6 +1460,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				res += displayCard.toString();
 			}
 		});
+		console.log(res);
 		return StringToLatex(res);
 	};
 	const addLineDemonstration = (msg, indentation, num) => {
@@ -2258,7 +2282,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	};
 
 	/**
-	 * 
+	 *
 	 * @param {*} event -
 	 */
 	const affichageSimpleHandler = (event) => {
@@ -2691,7 +2715,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			{/* Popup de victoire quand on réussit l'objectif principal */}
 			{popupWin && (
 				<Popup
-					size={StringToLatex(demonstration[0]).length / 5}
+					size={
+						constructDemonstration(demonstration[0][1]).length / 5
+					}
 					content={
 						<>
 							<b>Bravo, vous avez gagné !</b>
@@ -2721,7 +2747,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 												}}
 											>
 												<Latex>
-													{StringToLatex(element)}
+													{constructDemonstration(
+														element[1]
+													)}
 												</Latex>
 											</div>
 										);
@@ -2737,7 +2765,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 												}}
 											>
 												<Latex>
-													{StringToLatex(element)}
+													{constructDemonstration(
+														element[1]
+													)}
 												</Latex>
 											</div>
 										);
