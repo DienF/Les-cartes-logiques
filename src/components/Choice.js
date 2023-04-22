@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 const Choice = () => {
 	const jsonCount = 35;
 	const alljson = [];
-	for (let i = 1; i <= jsonCount; i++) {
-		alljson.push(i);
-	}
-	const rownumber = alljson.length / 5;
+	for (let i = 1; i <= jsonCount; i++) alljson.push(i);
+	// const rownumber = alljson.length / 5;
 	const navigate = useNavigate();
 
 	function goToExo(event) {
@@ -32,13 +30,13 @@ const Choice = () => {
 		}
 		return <tr>{row}</tr>;
 	};
+
 	function AfficheChoice(props) {
 		const res = [];
-		for (let i = 0; i < jsonCount; i += 5) {
-			res.push(createRow(i, i + 5));
-		}
+		for (let i = 0; i < jsonCount; i += 5) res.push(createRow(i, i + 5));
 		return res;
 	}
+
 	return (
 		<div className="choice">
 			<table>
