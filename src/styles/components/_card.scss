@@ -1,24 +1,24 @@
-
 .card_simple {
     background-color: black;
     border: 3px solid #800000;
     border-radius: 10px;
-
 }
-.carte_container_horizon{
+
+.carte_container_horizon {
     display: inline-grid;
     grid-gap: 1px;
     grid-template-columns: 1fr 0px 1fr;
     grid-template-rows: 1fr;
 }
-.carte_container_vertical{
+
+.carte_container_vertical {
     display: inline-grid;
     grid-gap: 1px;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr  0px 1fr;
 }
 
-.link{
+.link {
     position: relative;
     right : 19px;
     border-radius: 3px;
@@ -35,11 +35,12 @@
     align-self: center;
 }
 
-.link_vertical{
+.link_vertical {
     transform: rotate(90deg);
     left : 25px;
 }
-.link_vertical2{
+
+.link_vertical2 {
     transform: rotate(90deg);
     left : 87px;
 }
@@ -54,17 +55,21 @@
     transition: all .2s ease-in-out;
     user-select: none;  
 }
-.hoverable{
+
+.hoverable {
     cursor: pointer;
 }
-.hoverable:hover,.activeHover{
+
+.hoverable:hover,.activeHover {
     transform: scale(1.1)
 }
-.help{
+
+.help {
     border: 3px solid #102245;
     border-radius: 10px;
 }
-.selectioner{
+
+.selectioner {
     border: 3px solid black;
     border-radius: 10px;
 }
