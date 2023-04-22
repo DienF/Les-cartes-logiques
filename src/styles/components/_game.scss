@@ -70,6 +70,8 @@
         grid-area: b;
         align-items: center;
         margin: auto;
+        position:sticky;
+        top: 55px;
 
         div {
             display: inline-block; 

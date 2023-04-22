@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Choice = () => {
 	const jsonCount = 36;
+	const Difficulty = [[1,20,"Démonstrations"],[21,35,"Raisonnements"],[36,37,"Autres"]];
 	const navigate = useNavigate();
 
 	function goToExo(event) {
@@ -26,21 +27,33 @@ const Choice = () => {
 					</td>
 				);
 			}
+			else {
+				row.push(<td key={index}><p>   </p></td>);
+			}
 		}
 		return <tr>{row}</tr>;
 	};
 
 	function AfficheChoice(props) {
 		const res = [];
-		for (let i = 0; i < jsonCount; i += 5) res.push(<tbody>{createRow(i, i + 5)}</tbody>);
+		Difficulty.forEach(category => {
+			let table = [];
+			res.push(<h2>{category[2]}</h2>);
+			console.log(category[0]);
+			console.log(category[1]);
+			res.push(<table>{table}</table>);
+			for (let i = category[0]-1; i < category[1]-1; i += 5){
+				if (i > category[1]) res.push(table.push(<table>{createRow(i, category[1])}</table>))
+				else table.push(createRow(i, i + 5));
+			}
+		});
+		
 		return res;
 	}
 
 	return (
 		<div className="choice">
-			<table>
-				<AfficheChoice></AfficheChoice>
-			</table>
+			<AfficheChoice></AfficheChoice>
 		</div>
 	);
 };
