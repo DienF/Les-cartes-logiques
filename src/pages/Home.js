@@ -116,10 +116,6 @@ const Home = () => {
 				<h2>Les types de cartes</h2>
 				<ul>
 					<li>
-						La <strong>carte noire</strong> : on peut l'obtenir de
-						la banque sans rien n'avoir à présenter.
-					</li>
-					<li>
 						La <strong>carte blanche</strong> : la présenter permet
 						d’obtenir n’importe quelle carte de la banque.
 					</li>

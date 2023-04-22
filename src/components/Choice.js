@@ -29,13 +29,13 @@ const Choice = () => {
 		}
 		return <tr>{row}</tr>;
 	};
+
 	function AfficheChoice(props) {
 		const res = [];
-		for (let i = 0; i < jsonCount; i += 5) {
-			res.push(<tbody>{createRow(i, i + 5)}</tbody>);
-		}
+		for (let i = 0; i < jsonCount; i += 5) res.push(<tbody>{createRow(i, i + 5)}</tbody>);
 		return res;
 	}
+
 	return (
 		<div className="choice">
 			<table>

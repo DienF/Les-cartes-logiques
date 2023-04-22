@@ -47,16 +47,16 @@ const Deck = ({
 		return "other" + indice;
 	};
 
-	const getObjectifNum = (i) => {
-		let num = -1;
-		objectif.forEach((element) => {
-			if (element[1] === i) num = element[0];
-		});
-		let res = -1;
-		if (num === 0) res = "principal";
-		if (num !== -1 && num !== 0) res = "secondaire " + num;
-		return res;
-	};
+    const getObjectifNum = (i) => {
+        let num = -1;
+        objectif.forEach(element => {
+            if (element[1] === i) num = element[0];   
+        });
+        let res = -1;
+        if (num === 0)               res = "principal";
+        if (num !== -1 && num !== 0) res = "secondaire " + num;
+        return res;
+    }
 
 	return (
 		<div className={setClassname()}>
