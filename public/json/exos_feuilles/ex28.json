@@ -25,23 +25,43 @@
    }
   },
   {
-    "left" : {"left": {
+   "left": {
+    "left": {
+     "left": {
       "color": "red"
      },
-     "link": "<=>",
+     "link": "=>",
      "right": {
       "color": "orange"
-     }},
-    "link" : "=>",
-    "right" : {
-      "color": "white"
+     }
+    },
+    "link": "et",
+    "right": {
+     "left": {
+      "color": "orange"
+     },
+     "link": "=>",
+     "right": {
+      "color": "red"
+     }
     }
+   },
+   "link": "=>",
+   "right": {
+    "color": "white"
+   }
   },
   {
    "left": {
-    "color": "blue"
+    "left": {
+     "color": "blue"
+    },
+    "link": "=>",
+    "right": {
+     "color": "white"
+    }
    },
-   "link": "ou",
+   "link": "=>",
    "right": {
     "left": {
      "color": "red"

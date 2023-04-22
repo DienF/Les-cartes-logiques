@@ -11,18 +11,26 @@
   },
   {
    "left": {
-    "left" : {"color": "red"},
-    "link" : "=>",
-    "right" : {
+    "left": {
+     "color": "red"
+    },
+    "link": "=>",
+    "right": {
      "color": "white"
     }
    },
    "link": "=>",
    "right": {
     "left": {
-     "color": "yellow"
+     "left": {
+      "color": "yellow"
+     },
+     "link": "=>",
+     "right": {
+      "color": "white"
+     }
     },
-    "link": "ou",
+    "link": "=>",
     "right": {
      "color": "blue"
     }
@@ -31,9 +39,15 @@
   {
    "left": {
     "left": {
-     "color": "red"
+     "left": {
+      "color": "red"
+     },
+     "link": "=>",
+     "right": {
+      "color": "white"
+     }
     },
-    "link": "ou",
+    "link": "=>",
     "right": {
      "color": "blue"
     }
@@ -41,9 +55,15 @@
    "link": "=>",
    "right": {
     "left": {
-     "color": "orange"
+     "left": {
+      "color": "orange"
+     },
+     "link": "=>",
+     "right": {
+      "color": "white"
+     }
     },
-    "link": "ou",
+    "link": "=>",
     "right": {
      "color": "yellow"
     }
@@ -53,9 +73,11 @@
  [
   {
    "left": {
-    "left" : {"color": "orange"},
-    "link" : "=>",
-    "right" : {
+    "left": {
+     "color": "orange"
+    },
+    "link": "=>",
+    "right": {
      "color": "white"
     }
    },

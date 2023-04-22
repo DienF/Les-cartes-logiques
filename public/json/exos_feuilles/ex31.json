@@ -3,9 +3,11 @@
   {
    "left": {
     "left": {
-     "left" : {"color": "orange"},
-     "link" : "=>",
-     "right" : {
+     "left": {
+      "color": "orange"
+     },
+     "link": "=>",
+     "right": {
       "color": "white"
      }
     },
@@ -21,18 +23,26 @@
   },
   {
    "left": {
-    "color": "orange"
+    "left": {
+     "color": "orange"
+    },
+    "link": "=>",
+    "right": {
+     "color": "white"
+    }
    },
-   "link": "ou",
+   "link": "=>",
    "right": {
     "left": {
      "color": "yellow"
     },
     "link": "=>",
     "right": {
-     "left" : {"color": "red"},
-     "link" : "=>",
-     "right" : {
+     "left": {
+      "color": "red"
+     },
+     "link": "=>",
+     "right": {
       "color": "white"
      }
     }

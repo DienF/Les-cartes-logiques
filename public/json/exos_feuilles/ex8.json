@@ -28,15 +28,6 @@
  [
   {
    "left": {
-    "color": "red"
-   },
-   "link": "et",
-   "right": {
-    "color": "blue"
-   }
-  },
-  {
-   "left": {
     "left": {
      "color": "red"
     },

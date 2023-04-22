@@ -5,7 +5,7 @@
     width: 90%;
     margin: 0 auto;
 
-    h2{
+    h2 {
         margin-top: 5%;
     }
 
@@ -14,9 +14,11 @@
         margin: auto;
         border-spacing: 20px;
     }
+
     td:hover{
         transform: scale(1.1);
     }
+    
     td {
         /*padding: 20px;*/
         background-color: lightgray;

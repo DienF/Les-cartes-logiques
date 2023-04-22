@@ -2,11 +2,17 @@
  [
   {
    "left": {
-    "color": "blue"
+    "left": {
+     "color": "red"
+    },
+    "link": "=>",
+    "right": {
+     "color": "white"
+    }
    },
-   "link": "ou",
+   "link": "=>",
    "right": {
-    "color": "red"
+    "color": "blue"
    }
   },
   {
@@ -30,9 +36,11 @@
    },
    "link": "=>",
    "right": {
-    "left" : {"color": "orange"},
-    "link" : "=>",
-    "right" : {
+    "left": {
+     "color": "orange"
+    },
+    "link": "=>",
+    "right": {
      "color": "white"
     }
    }

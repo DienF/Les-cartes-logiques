@@ -25,7 +25,7 @@ const Card = ({
 	 * @returns {String} le symbole Latex
 	 */
 	const afficheLink = (str) => {
-		if (str === "=>") return "$$\\Rightarrow$$";
+		if      (str === "=>")  return "$$\\Rightarrow$$";
 		else if (str === "<=>") return "$$\\Leftrightarrow$$";
 		else if (str === "non") return "$$\\neg$$";
 		else return str;
@@ -56,12 +56,9 @@ const Card = ({
 				></span>
 			);
 		}
-		if (affichageSimple) {
-			currentCard = currentCard.displayGoodCard();
-		}
-
-		let className = "carte_container_horizon";
-		let link = "link_vertical";
+		if (affichageSimple) currentCard = currentCard.displayGoodCard();
+		let className = "carte_container_horizon",
+		    link = "link_vertical";
 		className = "carte_container_vertical";
 		if (count % 2 !== 0 || (originalCount === 2 && count === 2)) {
 			className = "carte_container_horizon";
@@ -95,12 +92,10 @@ const Card = ({
 		);
 	};
 	function RenderCard(props) {
-		const currentCard = props.currentCard;
-		const selec = props.selec;
-		const help = props.help;
-		if (currentCard === undefined) {
-			return <span></span>;
-		}
+		const currentCard = props.currentCard,
+		      selec       = props.selec,
+		      help        = props.help;
+		if (currentCard === undefined) return <span></span>;
 		const profondeurCard = currentCard.getProfondeur();
 		recurciveRender.count = 0;
 		return recurciveRender(
@@ -112,37 +107,32 @@ const Card = ({
 		);
 	}
 	function calcSizeCard(card) {
-		if (card === undefined) {
+		if (card === undefined)
 			return {
 				minWidth: 0,
 				minHeight: 0,
 			};
-		}
 		const prof = card.getProfondeur();
-		if (prof === 1) {
+		if (prof === 1)
 			return {
 				width: "5vw",
 				height: "13vh",
 			};
-		}
-		if (prof < 4) {
+		if (prof < 4)
 			return {
 				width: "11vw",
 				height: "13vh",
 			};
-		}
-		if (prof < 5) {
+		if (prof < 5)
 			return {
 				width: "11vw",
 				height: "20vh",
 			};
-		}
-		if (prof < 6) {
+		if (prof < 6)
 			return {
 				width: "15vw",
 				height: "20vh",
 			};
-		}
 		return {
 			width: "15vw",
 			height: "28vh",

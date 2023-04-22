@@ -3,9 +3,15 @@
   {
    "left": {
     "left": {
-     "color": "red"
+     "left": {
+      "color": "red"
+     },
+     "link": "=>",
+     "right": {
+      "color": "white"
+     }
     },
-    "link": "ou",
+    "link": "=>",
     "right": {
      "color": "blue"
     }
@@ -17,9 +23,15 @@
   },
   {
    "left": {
-    "color": "red"
+    "left": {
+     "color": "red"
+    },
+    "link": "=>",
+    "right": {
+     "color": "white"
+    }
    },
-   "link": "ou",
+   "link": "=>",
    "right": {
     "left": {
      "color": "yellow"
