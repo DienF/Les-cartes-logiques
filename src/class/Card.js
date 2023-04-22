@@ -226,6 +226,12 @@ export default class Card {
 		if (this.left.link !== "=>" || this.right.link !== "=>") {
 			return false;
 		}
+		if (!this.left.left.equals(this.right.right)) {
+			return false;
+		}
+		if (!this.left.right.equals(this.right.left)) {
+			return false;
+		}
 		return true;
 	}
 	ifDoubleArraowReturnGoodCard() {
