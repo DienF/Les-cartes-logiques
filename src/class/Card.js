@@ -216,11 +216,45 @@ export default class Card {
 
 		return res;
 	}
-	ifNonReturnNonCard() {
+	isDoubleArraow() {
 		if (this.color !== null) {
+			return false;
+		}
+		if (this.link !== "et") {
+			return false;
+		}
+		if (this.left.link !== "=>" || this.right.link !== "=>") {
+			return false;
+		}
+		return true;
+	}
+	ifDoubleArraowReturnGoodCard() {
+		if (!this.isDoubleArraow()) {
 			return this;
 		}
+		return new Card(
+			this.id,
+			null,
+			this.active,
+			"<=>",
+			this.left.left,
+			this.left.right
+		);
+	}
+	isNonCard() {
+		if (this.color !== null) {
+			return false;
+		}
 		if (this.right.color !== "white") {
+			return false;
+		}
+		if (this.link !== "=>") {
+			return false;
+		}
+		return true;
+	}
+	ifNonReturnNonCard() {
+		if (!this.isNonCard()) {
 			return this;
 		}
 		return new Card(
@@ -231,5 +265,33 @@ export default class Card {
 			new Card(0, "transparent", this.active, "", null, null),
 			this.left
 		);
+	}
+	isOuCard() {
+		if (this.color !== null) {
+			return false;
+		}
+		if (!this.left.isNonCard()) {
+			return false;
+		}
+		return true;
+	}
+	ifOuReturnOuCard() {
+		if (!this.isOuCard()) {
+			return this;
+		}
+		return new Card(
+			this.id,
+			null,
+			this.active,
+			"ou",
+			this.left.left,
+			this.right
+		);
+	}
+	displayGoodCard() {
+		let tmp = this.ifDoubleArraowReturnGoodCard();
+		tmp = tmp.ifOuReturnOuCard();
+		tmp = tmp.ifNonReturnNonCard();
+		return tmp;
 	}
 }

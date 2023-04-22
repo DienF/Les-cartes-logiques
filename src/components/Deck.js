@@ -7,12 +7,14 @@ const Deck = ({
 	indice,
 	addCardFunc,
 	deleteCardFunc,
+	transformIntoNonCard,
 	nbDeck,
 	mode,
 	objectif,
 	cardHelp,
 	cardHelp2,
 	isWin,
+	affichageSimple,
 }) => {
 	/**
 	 * Méthode qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.
@@ -76,6 +78,12 @@ const Deck = ({
 						Supprimer une carte
 					</button>
 				)}
+				<br />
+				{mode === "Create" && (
+					<button onClick={transformIntoNonCard}>
+						Transformer en carte négative
+					</button>
+				)}
 
 				<GameTab.Consumer>
 					{(game) => {
@@ -96,6 +104,7 @@ const Deck = ({
 									cardHelp={cardHelp}
 									cardHelp2={cardHelp2}
 									isWin={isWin}
+									affichageSimple={affichageSimple}
 								/>
 							</div>
 						));
