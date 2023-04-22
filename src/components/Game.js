@@ -178,7 +178,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 
 	const [indentationDemonstration, setIndentationDemonstration] = useState(0);
 
-	const [tabIndiceDemonstration, setTabIndiceDemonstration] = useState();
+	const [tabIndiceDemonstration, setTabIndiceDemonstration] = useState([0]);
 
 	const [navigation, setNavigation] = useState();
 
@@ -277,7 +277,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			 */
 			if (
 				(i === game.length - 1 &&
-					game[i][j].link === "=>" &&
+					(game[i][j].link === "=>" ||
+						game[i][j].isCardEtObjectif()) &&
 					mode !== "Create") ||
 				i !== game.length - 1 ||
 				mode === "Create"
@@ -716,11 +717,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		setTabObjectif(tmpObj);
 		return tmpObj.length;
 	};
-	const isWin = (
-		tmpDemonstration,
-		tmpTabIndentation,
-		tmpTabIndiceDemonstration
-	) => {
+	const isWin = () => {
 		const listObjectif = [];
 		for (let numObjectif of tabObjectif) {
 			listObjectif.push([
@@ -772,17 +769,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				tmp = delDeck(tmp, numDeckRef);
 				// Met à jour la table des objectifs
 				CreatTabObj(tmp);
-				tmpDemonstration.push("On a " + tmpCard.toString() + ".");
-				setDemonstration(tmpDemonstration);
-				tmpTabIndiceDemonstration.push(
-					tmpTabIndiceDemonstration[
-						tmpTabIndiceDemonstration.length - 1
-					]
-				);
-				setTabIndiceDemonstration(tmpTabIndiceDemonstration);
-				tmpTabIndentation.push(indentationDemonstration - 1);
-				setTabIndentation(tmpTabIndentation);
-				setIndentationDemonstration(indentationDemonstration - 1);
+				addLineDemonstration(["On a ", tmpCard.copy(), "."], -1);
 				// Met à jour le jeu
 				setGame(tmp);
 				/** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
@@ -874,7 +861,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					 *  Si cela valdie l'objectif principal : bool = true
 					 *  Sinon : bool = false
 					 */
-					bool = isWin(currentDeck - 1);
+					bool = isWin();
 				}
 			}
 		};
@@ -1004,31 +991,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Met à jour le jeu & désélectionne toutes les cartes
 		allFalse(tmp);
 		setSavedGame(tmp);
-		let tmpDemonstration = [...demonstration];
-		tmpDemonstration.push(
-			"On a " +
-				game[deckI][cardI].left.toString() +
-				". On a " +
-				game[deckI][cardI].right.toString() +
-				"."
-		);
-		setDemonstration(tmpDemonstration);
-		let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
-		tmpTabIndiceDemonstration.push(
-			tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
-		);
-		setTabIndiceDemonstration(tmpTabIndiceDemonstration);
-		let tmpTabIndentation = [...tabIndentation];
-		tmpTabIndentation.push(indentationDemonstration);
-		setTabIndentation(tmpTabIndentation);
+		addLineDemonstration([
+			"On a ",
+			game[deckI][cardI].left.copy(),
+			". On a ",
+			game[deckI][cardI].right.copy(),
+			".",
+		]);
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-		setPopupWin(
-			isWin(
-				tmpDemonstration,
-				tmpTabIndentation,
-				tmpTabIndiceDemonstration
-			)
-		);
+		setPopupWin(isWin());
 	};
 
 	/**
@@ -1111,194 +1082,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			// Met à jour le jeu & désélectionne toutes les cartes
 			allFalse(tmp);
 			setSavedGame(tmp);
-			let tmpDemonstration = [...demonstration];
-			tmpDemonstration.push(
-				"Puisque " +
-					tmp[deckCarteComplex][cardCarteComplex].left +
-					", on a " +
-					tmp[deckCarteComplex][cardCarteComplex].right +
-					"."
-			);
-			setDemonstration(tmpDemonstration);
-			let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
-			tmpTabIndiceDemonstration.push(
-				tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
-			);
-			setTabIndiceDemonstration(tmpTabIndiceDemonstration);
-			let tmpTabIndentation = [...tabIndentation];
-			tmpTabIndentation.push(indentationDemonstration);
-			setTabIndentation(tmpTabIndentation);
+
+			addLineDemonstration([
+				"Puisque ",
+				tmp[deckCarteComplex][cardCarteComplex].left.copy(),
+				", on a ",
+				tmp[deckCarteComplex][cardCarteComplex].right.copy(),
+				".",
+			]);
 			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-			setPopupWin(
-				isWin(
-					tmpDemonstration,
-					tmpTabIndentation,
-					tmpTabIndiceDemonstration
-				)
-			);
-		} else if (
-			tmp[selecDeck2][selecCard2].link === "<=>" ||
-			tmp[selecDeck1][selecCard1].link === "<=>"
-		) {
-			bool = false;
-			let bool2 = false,
-				cardAdd,
-				cardFuse;
-			if (tmp[selecDeck1][selecCard1].link === "<=>") {
-				if (
-					tmp[selecDeck2][selecCard2].equals(
-						tmp[selecDeck1][selecCard1].left
-					)
-				) {
-					bool = true;
-					cardAdd = tmp[selecDeck1][selecCard1].right.copy();
-					cardFuse = tmp[selecDeck1][selecCard1].left;
-				}
-				if (
-					tmp[selecDeck2][selecCard2].equals(
-						tmp[selecDeck1][selecCard1].right
-					)
-				) {
-					bool = true;
-					cardAdd = tmp[selecDeck1][selecCard1].left.copy();
-					cardFuse = tmp[selecDeck1][selecCard1].right;
-				}
-			}
-			if (tmp[selecDeck2][selecCard2].link === "<=>") {
-				if (
-					tmp[selecDeck1][selecCard1].equals(
-						tmp[selecDeck2][selecCard2].left
-					)
-				) {
-					bool = true;
-					cardAdd = tmp[selecDeck2][selecCard2].right.copy();
-					cardFuse = tmp[selecDeck2][selecCard2].left;
-				}
-				if (
-					tmp[selecDeck1][selecCard1].equals(
-						tmp[selecDeck2][selecCard2].right
-					)
-				) {
-					bool = true;
-					cardAdd = tmp[selecDeck2][selecCard2].left.copy();
-					cardFuse = tmp[selecDeck2][selecCard2].right;
-				}
-			}
-			if (
-				tmp[selecDeck1][selecCard1].link === "<=>" &&
-				tmp[selecDeck2][selecCard2].link === "<=>"
-			) {
-				if (
-					tmp[selecDeck1][selecCard1].left.equals(
-						tmp[selecDeck2][selecCard2].left
-					)
-				) {
-					bool = true;
-					bool2 = true;
-					cardAdd = new Card(
-						0,
-						null,
-						false,
-						"<=>",
-						tmp[selecDeck1][selecCard1].right.copy(),
-						tmp[selecDeck2][selecCard2].right.copy()
-					);
-					cardFuse = tmp[selecDeck1][selecCard1].left;
-				}
-				if (
-					tmp[selecDeck1][selecCard1].left.equals(
-						tmp[selecDeck2][selecCard2].right
-					)
-				) {
-					bool = true;
-					bool2 = true;
-					cardAdd = new Card(
-						0,
-						null,
-						false,
-						"<=>",
-						tmp[selecDeck1][selecCard1].right.copy(),
-						tmp[selecDeck2][selecCard2].left.copy()
-					);
-					cardFuse = tmp[selecDeck1][selecCard1].left;
-				}
-				if (
-					tmp[selecDeck1][selecCard1].right.equals(
-						tmp[selecDeck2][selecCard2].left
-					)
-				) {
-					bool = true;
-					bool2 = true;
-					cardAdd = new Card(
-						0,
-						null,
-						false,
-						"<=>",
-						tmp[selecDeck1][selecCard1].left.copy(),
-						tmp[selecDeck2][selecCard2].right.copy()
-					);
-					cardFuse = tmp[selecDeck1][selecCard1].right;
-				}
-				if (
-					tmp[selecDeck1][selecCard1].right.equals(
-						tmp[selecDeck2][selecCard2].right
-					)
-				) {
-					bool = true;
-					bool2 = true;
-					cardAdd = new Card(
-						0,
-						null,
-						false,
-						"<=>",
-						tmp[selecDeck1][selecCard1].left.copy(),
-						tmp[selecDeck2][selecCard2].left.copy()
-					);
-					cardFuse = tmp[selecDeck1][selecCard1].right;
-				}
-			}
-			if (bool) {
-				if (!containCard(game, finalDeck, cardAdd)) {
-					// Sauvegarde du jeu actuel
-					saveGame();
-					cardAdd.id = tmp[finalDeck].length;
-					tmp[finalDeck].push(cardAdd);
-					allFalse(tmp);
-					setSavedGame(tmp);
-					let tmpDemonstration = [...demonstration];
-					if (bool2)
-						tmpDemonstration.push(
-							"On a " +
-								cardAdd.left.toString() +
-								"<=>" +
-								cardFuse.toString() +
-								"<=>" +
-								cardAdd.right.toString() +
-								"."
-						);
-					else
-						tmpDemonstration.push(
-							"Puisque " +
-								cardFuse.toString() +
-								", on a " +
-								cardAdd.toString() +
-								"."
-						);
-					setDemonstration(tmpDemonstration);
-					let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
-					tmpTabIndiceDemonstration.push(
-						tabIndiceDemonstration[
-							tabIndiceDemonstration.length - 1
-						] + 1
-					);
-					setTabIndiceDemonstration(tmpTabIndiceDemonstration);
-					let tmpTabIndentation = [...tabIndentation];
-					tmpTabIndentation.push(indentationDemonstration);
-					setTabIndentation(tmpTabIndentation);
-					// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-					setPopupWin(isWin(tmpDemonstration, tmpTabIndentation));
-				} else error("La carte que vous voulez ajouter existe déjà !");
-			}
+			setPopupWin(isWin());
 		} else {
 			// Si aucune des 2 cartes n'a de liaison =>
 			if (
@@ -1386,39 +1179,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							// Met à jour le jeu & désélectionne toutes les cartes
 							allFalse(tmp);
 							setSavedGame(tmp);
-							let tmpDemonstration = [...demonstration];
-							tmpDemonstration.push(
-								"On a " +
-									tmpCard1.toString() +
-									"^" +
-									tmpCard2.toString() +
-									"."
-							);
-							setDemonstration(tmpDemonstration);
-							let tmpTabIndiceDemonstration = [
-								...tabIndiceDemonstration,
-							];
-							tmpTabIndiceDemonstration.push(
-								tabIndiceDemonstration[
-									tabIndiceDemonstration.length - 1
-								] + 1
-							);
-							setTabIndiceDemonstration(
-								tmpTabIndiceDemonstration
-							);
-							let tmpTabIndentation = [...tabIndentation],
-								tmpIndentationDemonstration =
-									indentationDemonstration;
-							tmpTabIndentation.push(tmpIndentationDemonstration);
-							setTabIndentation(tmpTabIndentation);
+							addLineDemonstration([
+								"On a ",
+								tmpCard1.copy(),
+								"^",
+								tmpCard2.copy(),
+								".",
+							]);
+
 							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-							setPopupWin(
-								isWin(
-									tmpDemonstration,
-									tmpTabIndentation,
-									tmpTabIndiceDemonstration
-								)
-							);
+							setPopupWin(isWin());
 						} else
 							error(
 								"La carte que vous voulez ajouter existe déjà !"
@@ -1528,34 +1298,17 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								]);
 								// Met à jour le tableau objectif
 								setTabObjectif(tmpObj);
-								let tmpDemonstration = [...demonstration];
-								tmpDemonstration.push(
-									"Supposons " +
-										tmpCard.toString() +
-										". Montrons " +
-										secondObjectif.toString() +
-										"."
+								addLineDemonstration(
+									[
+										"Supposons ",
+										tmpCard.copy(),
+										". Montrons ",
+										secondObjectif.copy(),
+										".",
+									],
+									1
 								);
-								setDemonstration(tmpDemonstration);
-								let tmpTabIndiceDemonstration = [
-									...tabIndiceDemonstration,
-								];
-								tmpTabIndiceDemonstration.push(
-									tabIndiceDemonstration[
-										tabIndiceDemonstration.length - 1
-									] + 1
-								);
-								setTabIndiceDemonstration(
-									tmpTabIndiceDemonstration
-								);
-								let tmpTabIndentation = [...tabIndentation];
-								tmpTabIndentation.push(
-									indentationDemonstration
-								);
-								setTabIndentation(tmpTabIndentation);
-								setIndentationDemonstration(
-									indentationDemonstration + 1
-								);
+
 								// Met à jour le jeu & désélectionne toutes les cartes
 								allFalse(tmp);
 								setSavedGame(tmp);
@@ -1573,30 +1326,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									tmpObjectif.push(secondObjectif);
 									// Met à jour le deck objectif
 									tmp[tmp.length - 1] = tmpObjectif;
+									addLineDemonstration([
+										"Montrons ",
+										secondObjectif.copy(),
+										".",
+									]);
 									// Met à jour le jeu & désélectionne toutes les cartes
-									let tmpDemonstration = [...demonstration];
-									tmpDemonstration.push(
-										"Montrons " +
-											secondObjectif.toString() +
-											"."
-									);
-									setDemonstration(tmpDemonstration);
-									let tmpTabIndiceDemonstration = [
-										...tabIndiceDemonstration,
-									];
-									tmpTabIndiceDemonstration.push(
-										tabIndiceDemonstration[
-											tabIndiceDemonstration.length - 1
-										] + 1
-									);
-									setTabIndiceDemonstration(
-										tmpTabIndiceDemonstration
-									);
-									let tmpTabIndentation = [...tabIndentation];
-									tmpTabIndentation.push(
-										indentationDemonstration
-									);
-									setTabIndentation(tmpTabIndentation);
 									allFalse(tmp);
 									setSavedGame(tmp);
 								} else
@@ -1604,9 +1339,32 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 										'La partie gauche de l\'objectif secondaire doit avoir une liaison "=>" !'
 									);
 							}
+						} else if (game[deckI][cardI].isCardEtObjectif()) {
+							if (deckI === game.length - 1) {
+								let tmp = [...game];
+								// Sauvegarde du jeu actuel
+								saveGame();
+								// Copie de les deux parties de la carte sélectionnée
+								let secondObjectif1 =
+									game[deckI][cardI].left.copy();
+								secondObjectif1.id = game[game.length - 1];
+								let secondObjectif2 =
+									game[deckI][cardI].right.copy();
+								secondObjectif2.id = game[game.length - 1] + 1;
+								if (secondObjectif1.haveImpliqueLinkRecur()) {
+									tmp[tmp.length - 1].push(secondObjectif1);
+								}
+								if (secondObjectif2.haveImpliqueLinkRecur()) {
+									tmp[tmp.length - 1].push(secondObjectif2);
+								}
+
+								// Met à jour le jeu & désélectionne toutes les cartes
+								allFalse(tmp);
+								setSavedGame(tmp);
+							}
 						} else
 							error(
-								'L\'objectif secondaire doit avoir une liaison "=>" !'
+								'L\'objectif secondaire doit avoir une liaison "=>" ou une carte "et" avec au moins une liaison "=>" a l\'interieur!'
 							);
 					} else error("Cet objectif existe déjà !");
 				} else
@@ -1683,6 +1441,47 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		} else error("Vous devez sélectionner deux cartes !");
 	};
 
+	const constructDemonstration = (tab) => {
+		let res = "";
+		tab.forEach((element) => {
+			if (typeof element === "string") {
+				res += element;
+			} else {
+				let displayCard = element;
+				if (affichageSimple) {
+					displayCard = displayCard.displayGoodCardRecur();
+				}
+				res += displayCard.toString();
+			}
+		});
+		return StringToLatex(res);
+	};
+	const addLineDemonstration = (msg, indentation, num) => {
+		if (indentation === undefined) {
+			indentation = 0;
+		}
+		let tmpTabIndentation = [...tabIndentation];
+		tmpTabIndentation.push(indentationDemonstration);
+		setTabIndentation(tmpTabIndentation);
+		setIndentationDemonstration(indentationDemonstration + indentation);
+		let tmpDemonstration = [...demonstration];
+		if (demonstration.length === 0 || num !== 0) {
+			tmpDemonstration.push([
+				indentationDemonstration + indentation,
+				msg,
+			]);
+		}
+
+		setDemonstration(tmpDemonstration);
+
+		let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+
+		tmpTabIndiceDemonstration.push(
+			tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
+		);
+
+		setTabIndiceDemonstration(tmpTabIndiceDemonstration);
+	};
 	/**
 	 * Cette fonction sert à déterminer si un objectif est déjà créé.
 	 * Cherche dans les objectifs s'il existe une carte qui est égale à :
@@ -1695,6 +1494,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	const deckContain = (deck, card) => {
 		// Variable que l'on va retourner (false par défaut)
 		let bool = false;
+		if (game[deck][card].color !== null) {
+			return false;
+		}
+		let cardIsDoubleArrow = game[deck][card].isDoubleArrow();
 		// Parcourt le deck objectif
 		game[game.length - 1].forEach((element) => {
 			// Si le deck passé en paramètre est l'objectif
@@ -1704,7 +1507,17 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				/** S'il y a une carte dans les objectifs qui est égale à la partie droite
 				 * de la carte que l'on a passé en paramètre.
 				 */
-				if (element.equals(game[deck][card].right)) bool = true;
+				if (
+					game[deck][card].link === "=>" &&
+					element.equals(game[deck][card].right)
+				)
+					bool = true;
+				if (
+					cardIsDoubleArrow &&
+					(element.equals(game[deck][card].right) ||
+						element.equals(game[deck][card].left))
+				)
+					bool = true;
 			} else {
 				/** S'il y a une carte dans les objectifs qui est égale à la partie gauche
 				 * de la carte que l'on a passé en paramètre.
@@ -2391,9 +2204,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		str = str.replaceAll("Bleue", "\\textit{ Bleue }");
 		str = str.replaceAll("Orange", "\\textit{ Orange }");
 		str = str.replaceAll("Verte", "\\textit{ Verte }");
+		str = str.replaceAll("Vrai", "\\textit{ Vrai }");
+		str = str.replaceAll("Faux", "\\textit{ Faux }");
 		str = str.replaceAll("True", "\\textit{ True }");
 		str = str.replaceAll("False", "\\textit{ False }");
 		str = str.replaceAll("^", "\\land");
+		str = str.replaceAll("non", "\\neg");
 		str = str.replaceAll("<=>", "\\Leftrightarrow");
 		str = str.replaceAll("=>", "\\Rightarrow");
 		str = str.replaceAll(".", "\\text{. }$$$");
@@ -2421,6 +2237,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		str = str.replaceAll("\\land", "^");
 		str = str.replaceAll("∧", "^");
 		str = str.replaceAll("\\Leftrightarrow", "<=>");
+		str = str.replaceAll("\\neg", "non");
 		str = str.replaceAll("⇒", "=>");
 		str = str.replaceAll("⇔", "<=>");
 		str = str.replaceAll("\\Rightarrow", "=>");
@@ -2460,7 +2277,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	const affichageSimpleHandler = (event) => {
 		setAffichageSimple(event.target.checked);
 	};
-
 	/**
 	 * Initialise l'exercice.
 	 */
@@ -2480,15 +2296,20 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		if (ex !== undefined && numero !== undefined && mode !== "Create") {
 			try {
 				let tmp = gameInput(ex),
-					tmpDemonstration = [],
-					res = "";
+					res = [];
 				tmp[0].forEach((element) => {
-					res += "On a " + element.toString() + ".";
+					res.push("On a ");
+					res.push(element.copy());
+					res.push(".");
 				});
-				if (tmp.length === 2 && tmp[1].length > 0)
-					res += "Montrons " + tmp[1][0].toString() + ".";
-				tmpDemonstration.push(res);
-				setDemonstration(tmpDemonstration);
+				if (tmp.length === 2 && tmp[1].length > 0) {
+					res.push("Montrons ");
+					res.push(tmp[1][0].copy());
+					res.push(".");
+				}
+
+				setDemonstration([]);
+				addLineDemonstration(res, 0, 0);
 				allFalse(tmp);
 				setSavedGame(tmp);
 			} catch (error) {}
@@ -2674,8 +2495,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							type="checkbox"
 							id="afficheSimple"
 							name="Affichage Simplifié"
-							onClick={affichageSimpleHandler}
-							checked={affichageSimple}
+							onChange={affichageSimpleHandler}
+							defaultChecked={true}
 						></input>
 						<label>Affichage Simplifié</label>
 					</span>
@@ -2723,11 +2544,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								id={"demo" + index}
 								onClick={demonstrationClickHandler}
 								style={{
-									marginLeft: 20 + tabIndentation[index] * 20,
+									marginLeft: 20 + element[0] * 20,
 									marginTop: 20,
 								}}
 							>
-								<Latex>{StringToLatex(element)}</Latex>
+								<Latex>
+									{constructDemonstration(element[1])}
+								</Latex>
 							</div>
 						);
 					else
@@ -2737,10 +2560,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								id={"demo" + index}
 								onClick={demonstrationClickHandler}
 								style={{
-									marginLeft: 20 + tabIndentation[index] * 20,
+									marginLeft: 20 + element[0] * 20,
 								}}
 							>
-								<Latex>{StringToLatex(element)}</Latex>
+								<Latex>
+									{constructDemonstration(element[1])}
+								</Latex>
 							</div>
 						);
 				})}

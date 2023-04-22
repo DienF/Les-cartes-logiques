@@ -37,6 +37,8 @@ const Card = ({
 		help,
 		originalCount
 	) => {
+		recurciveRender.count++;
+
 		if (currentCard.color !== null) {
 			let style = { backgroundColor: currentCard.color };
 			if (currentCard.color === "transparent") {
@@ -44,6 +46,7 @@ const Card = ({
 			}
 			return (
 				<span
+					key={recurciveRender.count}
 					className={
 						`card_simple ` +
 						(selec ? "selectioner " : "") +
@@ -65,7 +68,7 @@ const Card = ({
 			link = "";
 		}
 		return (
-			<span className={className}>
+			<span className={className} key={recurciveRender.count}>
 				{[
 					recurciveRender(
 						currentCard.left,
@@ -74,7 +77,10 @@ const Card = ({
 						help,
 						originalCount
 					),
-					<span className={`link ${link}`}>
+					<span
+						key={recurciveRender.count + "link"}
+						className={`link ${link}`}
+					>
 						<Latex>{afficheLink(currentCard.link)}</Latex>
 					</span>,
 					recurciveRender(

@@ -46,9 +46,9 @@ export default class Card {
 			case "purple":
 				return "Violette";
 			case "black":
-				return "True";
+				return "Vrai";
 			case "white":
-				return "False";
+				return "Faux";
 			default:
 				return "Non definie";
 		}
@@ -65,13 +65,16 @@ export default class Card {
 	 */
 	toString() {
 		let res = "";
+		if (this.link === "non") {
+			return "non" + this.right.toString();
+		}
 		// Couleur de la carte
 		if (this.color !== null) res += this.getColor(this.color);
 		// Carte gauche
 		if (this.left !== null) res += "(" + this.left.toString();
 		// Liaison
 		if (this.link === "et") res += "^";
-		// else if (this.link === "") res += ""; // ou
+		else if (this.link === "ou") res += "ou";
 		else if (this.link === "=>") res += "=>";
 		else if (this.link === "<=>") res += "<=>";
 		else res += this.link;
@@ -216,7 +219,34 @@ export default class Card {
 
 		return res;
 	}
-	isDoubleArraow() {
+	haveImpliqueLinkRecur() {
+		let res = false;
+		if (this.color !== null) {
+			return false;
+		}
+		if (this.link === "=>") {
+			res = true;
+		}
+		return (
+			res ||
+			this.left.haveImpliqueLinkRecur() ||
+			this.right.haveImpliqueLinkRecur()
+		);
+	}
+	isCardEtObjectif() {
+		if (this.color !== null) {
+			return false;
+		}
+		if (this.link !== "et") {
+			return false;
+		}
+		if (!this.haveImpliqueLinkRecur()) {
+			return false;
+		}
+
+		return true;
+	}
+	isDoubleArrow() {
 		if (this.color !== null) {
 			return false;
 		}
@@ -235,7 +265,7 @@ export default class Card {
 		return true;
 	}
 	ifDoubleArraowReturnGoodCard() {
-		if (!this.isDoubleArraow()) {
+		if (!this.isDoubleArrow()) {
 			return this;
 		}
 		return new Card(
@@ -299,5 +329,19 @@ export default class Card {
 		tmp = tmp.ifOuReturnOuCard();
 		tmp = tmp.ifNonReturnNonCard();
 		return tmp;
+	}
+	displayGoodCardRecur() {
+		if (this.color !== null) {
+			return this;
+		}
+		let tmp = this.displayGoodCard();
+		return new Card(
+			tmp.id,
+			tmp.color,
+			tmp.active,
+			tmp.link,
+			tmp.left.displayGoodCardRecur(),
+			tmp.right.displayGoodCardRecur()
+		);
 	}
 }
