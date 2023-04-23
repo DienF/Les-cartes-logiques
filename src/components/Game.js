@@ -745,7 +745,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 *
 	 * @returns
 	 */
-	const isWin = () => {
+	const isWin = (arrayMsg, arrayIndent, originel) => {
+		if (originel === undefined) {
+			originel = true;
+		}
 		const listObjectif = [];
 		for (let numObjectif of tabObjectif) {
 			listObjectif.push([
@@ -755,10 +758,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		}
 		let bool = false,
 			tmp = [...game];
+		let modif = false;
 		const checkWinForEveryObjectif = (cardArray) => {
 			const cardObj = cardArray[0],
 				numDeckRef = cardArray[1][0];
-			console.log(tmp, cardArray[1]);
 			const checkWin = (card) => {
 				if (
 					card === null ||
@@ -767,12 +770,18 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					cardObj === undefined
 				)
 					return;
-				if (!card.equals(cardObj) && card.color !== "white") return;
+				if (
+					!card.equals(cardObj) &&
+					card.color !== "white" &&
+					!containCard(tmp, numDeckRef, cardObj)
+				)
+					return;
 				if (numDeckRef === 0) {
 					bool = true;
 					setWin(true);
 					return;
 				}
+				modif = true;
 				const findObj = findObjectifRelative(cardObj, tmp);
 				if (findObj === -1) return;
 				// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
@@ -787,7 +796,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					cardObj
 				);
 				// Vérifie si l'objectif a un objectif lié
-				if (tabObjectif[numDeckRef][2]) {
+				if (findObj !== 0 && tabObjectif[numDeckRef][2]) {
 					// Si oui supprime également l'objectif qui lui est lié
 					tmp[tmp.length - 1] = delCard(tmp[tmp.length - 1], findObj);
 				}
@@ -796,23 +805,35 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				tmp = delDeck(tmp, numDeckRef);
 				// Met à jour la table des objectifs
 				CreatTabObj(tmp);
-				addLineDemonstration(["On a ", tmpCard.copy(), "."], -1);
+				arrayMsg.push(["On a ", tmpCard.copy(), "."]);
+				arrayIndent.push(-1);
 				// Met à jour le jeu
 				setGame(tmp);
 			};
 			game[numDeckRef].forEach(checkWin);
-			if (numDeckRef !== 0) game[0].forEach(checkWin);
-			if (bool && numDeckRef !== 0) {
+			if (numDeckRef !== 0) {
+				game[0].forEach(checkWin);
+			}
+			if (!bool && numDeckRef !== 0 && modif) {
 				/** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
 				 *  Si cela valdie l'objectif principal : bool = true
 				 *  Sinon : bool = false
 				 */
-				bool = isWin();
+				bool = isWin(arrayMsg, arrayIndent, false);
 			}
+			return bool;
 		};
-		listObjectif.forEach(checkWinForEveryObjectif);
+		listObjectif.forEach((e) => {
+			if (!bool) {
+				checkWinForEveryObjectif(e);
+			}
+		});
 		setSavedGame(tmp);
+		if (originel) {
+			addLineDemonstration(arrayMsg, arrayIndent);
+		}
 		// Retourne true si l'objectif principal est vrai, sinon retourne false
+
 		return bool;
 	};
 
@@ -1022,15 +1043,21 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Met à jour le jeu & désélectionne toutes les cartes
 		allFalse(tmp);
 		setSavedGame(tmp);
-		addLineDemonstration([
-			"On a ",
-			game[deckI][cardI].left.copy(),
-			". On a ",
-			game[deckI][cardI].right.copy(),
-			".",
-		]);
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-		setPopupWin(isWin());
+		setPopupWin(
+			isWin(
+				[
+					[
+						"On a ",
+						game[deckI][cardI].left.copy(),
+						". On a ",
+						game[deckI][cardI].right.copy(),
+						".",
+					],
+				],
+				[0]
+			)
+		);
 	};
 
 	/**
@@ -1114,15 +1141,23 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			allFalse(tmp);
 			setSavedGame(tmp);
 
-			addLineDemonstration([
-				"Puisque ",
-				tmp[deckCarteComplex][cardCarteComplex].left.copy(),
-				", on a ",
-				tmp[deckCarteComplex][cardCarteComplex].right.copy(),
-				".",
-			]);
 			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-			setPopupWin(isWin());
+			setPopupWin(
+				isWin(
+					[
+						[
+							"Puisque ",
+							tmp[deckCarteComplex][cardCarteComplex].left.copy(),
+							", on a ",
+							tmp[deckCarteComplex][
+								cardCarteComplex
+							].right.copy(),
+							".",
+						],
+					],
+					[0]
+				)
+			);
 		} else {
 			// Si aucune des 2 cartes n'a de liaison =>
 			if (
@@ -1210,16 +1245,23 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							// Met à jour le jeu & désélectionne toutes les cartes
 							allFalse(tmp);
 							setSavedGame(tmp);
-							addLineDemonstration([
-								"On a ",
-								tmpCard1.copy(),
-								"^",
-								tmpCard2.copy(),
-								".",
-							]);
+							addLineDemonstration();
 
 							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-							setPopupWin(isWin());
+							setPopupWin(
+								isWin(
+									[
+										[
+											"On a ",
+											tmpCard1.copy(),
+											"^",
+											tmpCard2.copy(),
+											".",
+										],
+									],
+									[0]
+								)
+							);
 						} else
 							error(
 								"La carte que vous voulez ajouter existe déjà !"
@@ -1332,13 +1374,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								setTabObjectif(tmpObj);
 								addLineDemonstration(
 									[
-										"Supposons ",
-										tmpCard.copy(),
-										". Montrons ",
-										secondObjectif.copy(),
-										".",
+										[
+											"Supposons ",
+											tmpCard.copy(),
+											". Montrons ",
+											secondObjectif.copy(),
+											".",
+										],
 									],
-									1
+									[1]
 								);
 
 								// Met à jour le jeu & désélectionne toutes les cartes
@@ -1358,11 +1402,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									tmpObjectif.push(secondObjectif);
 									// Met à jour le deck objectif
 									tmp[tmp.length - 1] = tmpObjectif;
-									addLineDemonstration([
-										"Montrons ",
-										secondObjectif.copy(),
-										".",
-									]);
+									addLineDemonstration(
+										[
+											[
+												"Montrons ",
+												secondObjectif.copy(),
+												".",
+											],
+										],
+										[0]
+									);
 									// Met à jour le jeu & désélectionne toutes les cartes
 									allFalse(tmp);
 									setSavedGame(tmp);
@@ -1404,7 +1453,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									];
 								}
 								addLineDemonstration(
-									firstArrayDemo.concat(secondArrayDemo)
+									[firstArrayDemo.concat(secondArrayDemo)],
+									[0]
 								);
 
 								// Met à jour le jeu & désélectionne toutes les cartes
@@ -1505,30 +1555,36 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		});
 		return StringToLatex(res);
 	};
-	const addLineDemonstration = (msg, indentation, num) => {
-		if (indentation === undefined) {
-			indentation = 0;
-		}
+	const addLineDemonstration = (msgArray, indentationArray, num) => {
 		let tmpTabIndentation = [...tabIndentation];
-		tmpTabIndentation.push(indentationDemonstration);
-		setTabIndentation(tmpTabIndentation);
-		setIndentationDemonstration(indentationDemonstration + indentation);
 		let tmpDemonstration = [...demonstration];
-		if (demonstration.length === 0 || num !== 0) {
-			tmpDemonstration.push([
-				indentationDemonstration + indentation,
-				msg,
-			]);
-		}
-
-		setDemonstration(tmpDemonstration);
+		let indentation = indentationDemonstration;
 
 		let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
+		msgArray.forEach((msg, index) => {
+			if (indentationArray[index] === undefined) {
+				indentationArray[index] = 0;
+			}
+			indentation += indentationArray[index];
 
-		tmpTabIndiceDemonstration.push(
-			tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
-		);
+			tmpTabIndentation.push(indentationDemonstration);
 
+			if (demonstration.length === 0 || num !== 0) {
+				tmpDemonstration.push([
+					indentationDemonstration + indentation,
+					msg,
+				]);
+			}
+
+			tmpTabIndiceDemonstration.push(
+				tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
+			);
+		});
+		console.log(indentationArray, indentation, indentationDemonstration);
+
+		setDemonstration(tmpDemonstration);
+		setTabIndentation(tmpTabIndentation);
+		setIndentationDemonstration(indentation);
 		setTabIndiceDemonstration(tmpTabIndiceDemonstration);
 	};
 	/**
@@ -2362,7 +2418,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				}
 
 				setDemonstration([]);
-				addLineDemonstration(res, 0, 0);
+				addLineDemonstration([res], [0], 0);
 				allFalse(tmp);
 				setSavedGame(tmp);
 			} catch (error) {}
@@ -2396,7 +2452,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	return (
 		<div className="game">
 			{win && (
-				<button class="buttonWin" onClick={nextExercise}>
+				<button className="buttonWin" onClick={nextExercise}>
 					Niveau suivant
 				</button>
 			)}
@@ -2590,37 +2646,23 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			{/* Affichage de la démonstration de logique mathématique de l'exercice */}
 			<div className="demonstration" onCopy={copyHandler}>
 				{demonstration.map((element, index) => {
-					if (index === 1)
-						return (
-							<div
-								key={index}
-								id={"demo" + index}
-								onClick={demonstrationClickHandler}
-								style={{
-									marginLeft: 20 + element[0] * 20,
-									marginTop: 20,
-								}}
-							>
-								<Latex>
-									{constructDemonstration(element[1])}
-								</Latex>
-							</div>
-						);
-					else
-						return (
-							<div
-								key={index}
-								id={"demo" + index}
-								onClick={demonstrationClickHandler}
-								style={{
-									marginLeft: 20 + element[0] * 20,
-								}}
-							>
-								<Latex>
-									{constructDemonstration(element[1])}
-								</Latex>
-							</div>
-						);
+					return (
+						<div
+							key={index}
+							id={"demo" + index}
+							onClick={demonstrationClickHandler}
+							style={
+								index === 1
+									? {
+											marginLeft: 20 + element[0] * 20,
+											marginTop: 20,
+									  }
+									: { marginLeft: 20 + element[0] * 20 }
+							}
+						>
+							<Latex>{constructDemonstration(element[1])}</Latex>
+						</div>
+					);
 				})}
 			</div>
 			{popupAddCard && (
@@ -2776,43 +2818,31 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								onCopy={copyHandler}
 							>
 								{demonstration.map((element, index) => {
-									if (index === 1)
-										return (
-											<div
-												key={index}
-												style={{
-													marginLeft:
-														20 +
-														tabIndentation[index] *
-															20,
-													marginTop: 20,
-												}}
-											>
-												<Latex>
-													{constructDemonstration(
-														element[1]
-													)}
-												</Latex>
-											</div>
-										);
-									else
-										return (
-											<div
-												key={index}
-												style={{
-													marginLeft:
-														20 +
-														tabIndentation[index] *
-															20,
-												}}
-											>
-												<Latex>
-													{constructDemonstration(
-														element[1]
-													)}
-												</Latex>
-											</div>
-										);
+									return (
+										<div
+											key={index}
+											style={
+												index === 1
+													? {
+															marginLeft:
+																20 +
+																element[0] * 20,
+															marginTop: 20,
+													  }
+													: {
+															marginLeft:
+																20 +
+																element[0] * 20,
+													  }
+											}
+										>
+											<Latex>
+												{constructDemonstration(
+													element[1]
+												)}
+											</Latex>
+										</div>
+									);
 								})}
 							</div>
 						</>
