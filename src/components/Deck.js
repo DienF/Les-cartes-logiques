@@ -91,7 +91,8 @@ const Deck = ({
 					{(game) => {
 						return game[indice].map((card, index) => (
 							<div key={index}>
-								{indice === nbDeck - 1 &&
+								{mode !== "Create" &&
+									indice === nbDeck - 1 &&
 									getObjectifNum(index) !== -1 && (
 										<b>
 											Objectif {getObjectifNum(index)} :

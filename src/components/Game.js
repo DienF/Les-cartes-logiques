@@ -392,8 +392,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 * @param {Card[][]} tmp - tableau du jeu temporaire
 	 */
 	const allFalse = (tmp) => {
-		// Suppression des messages d'erreur
-		error("");
 		// On désélectionne tout
 		setNbSelec(0);
 		setSelecCard1(-1);
@@ -462,18 +460,20 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Dé-check le bouton radio
 		event.target.checked = false;
 		// Ajoute la carte dans le deck (indiceDeckAddCard est affecté avant de rentrer dans la fonction)
-		tmp[indiceDeckAddCard].push(
-			new Card(
-				game[indiceDeckAddCard].length, // id     (taille du deck avant ajout)
-				event.target.value, // color  (reçu avec le bouton radio)
-				false, // active
-				"", // link
-				null, // left
-				null, // right
-				true,
-				false
-			)
+		let cardToAdd = new Card(
+			game[indiceDeckAddCard].length, // id     (taille du deck avant ajout)
+			event.target.value, // color  (reçu avec le bouton radio)
+			false, // active
+			"", // link
+			null, // left
+			null, // right
+			true,
+			false
 		);
+		if (!addToGame(tmp, indiceDeckAddCard, cardToAdd)) {
+			return;
+		}
+
 		// Actualise le jeu et désélectionne tout
 		allFalse(tmp);
 	};
@@ -497,65 +497,54 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			c2 = game[selecDeck2][selecCard2].copy();
 		c1.id = 0;
 		c2.id = 1;
+		let cardToAdd = "";
 		if (l === "<=>") {
-			tmp[selecDeck1].push(
-				new Card(
-					game[selecDeck1].length, // id
-					null, // color
-					false, // active
-					"et", // link
-					new Card(0, null, false, "=>", c1.copy(), c2.copy()), // left
-					new Card(0, null, false, "=>", c2.copy(), c1.copy()), // right
-					true,
-					false
-				)
+			cardToAdd = new Card(
+				game[selecDeck1].length, // id
+				null, // color
+				false, // active
+				"et", // link
+				new Card(0, null, false, "=>", c1.copy(), c2.copy()), // left
+				new Card(0, null, false, "=>", c2.copy(), c1.copy()), // right
+				true,
+				false
 			);
 		} else if (l === "ou") {
-			tmp[selecDeck1].push(
+			cardToAdd = new Card(
+				game[selecDeck1].length, // id
+				null, // color
+				false, // active
+				"=>", // link
 				new Card(
-					game[selecDeck1].length, // id
-					null, // color
-					false, // active
-					"=>", // link
-					new Card(
-						c1.id,
-						null,
-						false,
-						"=>",
-						c1,
-						new Card(
-							1,
-							"white",
-							false,
-							null,
-							null,
-							null,
-							true,
-							false
-						)
-					), // left
-					c2, // right
-					true,
-					false
-				)
+					c1.id,
+					null,
+					false,
+					"=>",
+					c1,
+					new Card(1, "white", false, null, null, null, true, false)
+				), // left
+				c2, // right
+				true,
+				false
 			);
 		} else {
 			// Ajoute la carte fusionnée dans le deck de la 1ère carte séléctionnée
-			tmp[selecDeck1].push(
-				new Card(
-					game[selecDeck1].length, // id
-					null, // color
-					false, // active
-					l, // link
-					c1, // left
-					c2, // right
-					true,
-					false
-				)
+			cardToAdd = new Card(
+				game[selecDeck1].length, // id
+				null, // color
+				false, // active
+				l, // link
+				c1, // left
+				c2, // right
+				true,
+				false
 			);
 		}
 		// Enlève le popup
 		setPopupFusion(false);
+		if (!addToGame(tmp, selecDeck1, cardToAdd)) {
+			return;
+		}
 		// Actualise le jeu et désélectionne tout
 		allFalse(tmp);
 	};
@@ -593,18 +582,19 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		let tmp = [...game];
 		const futureCardNon = tmp[selecDeck1][selecCard1].copy();
 		futureCardNon.id = 0;
-		tmp[selecDeck1].push(
-			new Card(
-				futureCardNon.id,
-				null,
-				false,
-				"=>",
-				futureCardNon,
-				new Card(1, "white", false, null, null, null, true, false),
-				true,
-				false
-			)
+		let cardToAdd = new Card(
+			futureCardNon.id,
+			null,
+			false,
+			"=>",
+			futureCardNon,
+			new Card(1, "white", false, null, null, null, true, false),
+			true,
+			false
 		);
+		if (!addToGame(tmp, selecDeck1, cardToAdd)) {
+			return;
+		}
 		allFalse(tmp);
 	};
 
@@ -827,10 +817,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				if (findObj === -1) return;
 				// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
 				let tmpCard = tmp[tmp.length - 1][findObj].copy();
-				tmpCard.id = tmp[numDeckRef].length;
-				tmpCard.setOld(true);
 				// Ajoute cette carte dans le deck précédent
-				tmp[numDeckRef - 1].push(tmpCard);
+				if (!addToGame(tmp, numDeckRef - 1, tmpCard)) {
+					return;
+				}
 				// Supprime l'objectif secondaire
 				tmp[tmp.length - 1] = delCardWithEquals(
 					tmp[tmp.length - 1],
@@ -886,95 +876,35 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		return [tmp, bool, arrayMsg, arrayIndent];
 	};
 
-	/**
-	 * Compare l'objectif (game[game.length-1][numObjectif]) et toutes les cartes du deck currentDeck(currentDeck = numObjectif) :
-	 * si on vérifie le deck 0, renvoie true si on trouve l'objectif ;
-	 * si on ne vérifie pas le deck 0, si l'objectif est dans le deck on ajoute l'objectif au dessus du deck précédent et
-	 * on regarde le deck en dessous (currentDeck-1) pour voir si la carte ajoutée n'est pas l'objectif du dessus.
-	 * @param {number}          numObjectif - le numéro de l'objectif
-	 * @param {*}          tmpDemonstration -
-	 * @param {*}         tmpTabIndentation -
-	 * @param {*} tmpTabIndiceDemonstration -
-	 * @returns {true|false} true ou false
-	 */
-	// eslint-disable-next-line
-	const isWinAncien = (
-		numObjectif,
-		tmpDemonstration,
-		tmpTabIndentation,
-		tmpTabIndiceDemonstration
-	) => {
-		// checkWinTmp();
-		// Objectif à vérifier
-		const objectif = game[game.length - 1][tabObjectif[numObjectif][1]];
-		// Indice du deck lié à l'objectif
-		let currentDeck = numObjectif,
-			// Variable que l'on va retourner (false par défaut)
-			bool = false,
-			// Copie du jeu actuel
-			tmp = [...game];
-		const checkWin = (card) => {
-			// Si une carte liée à cet objectif est trouvée l'objectif est validé
-			if (card.equals(objectif) || card.color === "white") {
-				// Si c'est l'objectif principal on ne cherche pas plus loin : fin de partie
-				if (currentDeck === 0) {
-					bool = true;
-					setWin(true);
-				} else {
-					// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
-					let tmpCard =
-						game[game.length - 1][
-							findObjectifRelative(objectif, tmp)
-						].copy();
-					tmpCard.id = tmp[tabObjectif[currentDeck][1] - 1].length;
-					// Ajoute cette carte dans le deck précédent
-					tmp[currentDeck - 1].push(tmpCard);
-					// Supprime l'objectif secondaire
-					tmp[tmp.length - 1] = delCard(
-						tmp[tmp.length - 1],
-						tabObjectif[currentDeck][1]
-					);
-					// Vérifie si l'objectif a un objectif lié
-					if (currentDeck !== 1 && tabObjectif[currentDeck][2]) {
-						// Si oui supprime également l'objectif qui lui est lié
-						tmp[tmp.length - 1] = delCard(
-							tmp[tmp.length - 1],
-							findObjectifRelative(objectif, tmp)
-						);
-					}
-					// Supprime le deck qui a servi pour cet objectif secondaire
-					tmp = delDeck(tmp, currentDeck);
-					// Met à jour la table des objectifs
-					setTabObjectif(CreatTabObj(tmp));
-					tmpDemonstration.push("On a " + tmpCard.toString() + ".");
-					setDemonstration(tmpDemonstration);
-					tmpTabIndiceDemonstration.push(
-						tmpTabIndiceDemonstration[
-							tmpTabIndiceDemonstration.length - 1
-						]
-					);
-					setTabIndiceDemonstration(tmpTabIndiceDemonstration);
-					tmpTabIndentation.push(indentationDemonstration - 1);
-					setTabIndentation(tmpTabIndentation);
-					setIndentationDemonstration(indentationDemonstration - 1);
-					// Met à jour le jeu
-					setGame(tmp);
-					/** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
-					 *  Si cela valdie l'objectif principal : bool = true
-					 *  Sinon : bool = false
-					 */
-					bool = isWin();
-				}
-			}
-		};
-		// Parcourt le deck lié à l'objectif
-		game[currentDeck].forEach(checkWin);
-		if (currentDeck !== 0) {
-			game[0].forEach(checkWin);
+	const addToGame = (tmp, deckId, card, defaultEmitError) => {
+		if (defaultEmitError === undefined) {
+			defaultEmitError = true;
 		}
-		setSavedGame(tmp);
-		// Retourne true si l'objectif principal est vrai, sinon retourne false
-		return bool;
+		if (containCard(tmp, deckId, card)) {
+			if (!defaultEmitError) {
+				return false;
+			}
+			let deckAffiche = deckId + 1;
+			if (deckAffiche === tmp.length) {
+				deckAffiche = "des objectifs";
+			}
+			error(
+				`La carte ${card} existe deja dans la LPU ${deckAffiche}`,
+				false
+			);
+			return false;
+		}
+		if (deckId === tmp.length - 1 && containCard(tmp, 0, card)) {
+			if (!defaultEmitError) {
+				return false;
+			}
+			error(`La carte ${card} existe deja dans la LPU 1`, false);
+			return false;
+		}
+		card.id = tmp[deckId].length;
+		card.setOld(true);
+		tmp[deckId].push(card);
+		return true;
 	};
 
 	/**
@@ -1084,22 +1014,14 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Copie du jeu actuel
 		let tmp = [...game];
 		// Ajoute la partie gauche de la carte dans le jeu
-		tmp[deckI].push(game[deckI][cardI].left.copy());
-		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
+		let tmpCard1 = tmp[deckI][cardI].left.copy();
+		addToGame(tmp, deckI, tmpCard1);
 		// Ajoute la partie droite de la carte dans le jeu
-		tmp[deckI].push(game[deckI][cardI].right.copy());
-		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
+		let tmpCard2 = tmp[deckI][cardI].right.copy();
+		addToGame(tmp, deckI, tmpCard2);
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
 		isWin(
-			[
-				[
-					"On a ",
-					game[deckI][cardI].left.copy(),
-					". On a ",
-					game[deckI][cardI].right.copy(),
-					".",
-				],
-			],
+			[["On a ", tmpCard1.copy(), ". On a ", tmpCard2.copy(), "."]],
 			[0],
 			tmp
 		);
@@ -1177,12 +1099,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			// Sauvegarde du jeu actuel
 			saveGame();
 			// Ajoute la partie droite de la carte => utilisée dans le deck le plus haut
-			tmp[finalDeck].push(
-				tmp[deckCarteComplex][cardCarteComplex].right.copy()
-			);
-			tmp[finalDeck][tmp[finalDeck].length - 1].id =
-				tmp[finalDeck].length - 1;
-			tmp[finalDeck][tmp[finalDeck].length - 1].setOld(true);
+			let cardToAdd =
+				tmp[deckCarteComplex][cardCarteComplex].right.copy();
+			addToGame(tmp, finalDeck, cardToAdd);
+
 			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
 			isWin(
 				[
@@ -1265,18 +1185,19 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						tmpCard1.setOld(true);
 						tmpCard2.setOld(true);
 						// Ajoute la nouvelle carte dans le deck le plus haut avec les 2 autres cartes & une liaison "et"
-						tmp[finalDeck].push(
-							new Card(
-								tmp[finalDeck].length,
-								null,
-								false,
-								"et",
-								tmpCard1,
-								tmpCard2,
-								true,
-								false
-							)
+						let cardToAdd = new Card(
+							tmp[finalDeck].length,
+							null,
+							false,
+							"et",
+							tmpCard1,
+							tmpCard2,
+							true,
+							false
 						);
+						if (!addToGame(tmp, finalDeck, cardToAdd)) {
+							return;
+						}
 
 						// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
 						isWin(
@@ -1345,8 +1266,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							let secondObjectif,
 								// Copie du jeu actuel
 								tmp = [...game],
-								// Copie du deck objectif
-								tmpObjectif = [...game[game.length - 1]],
 								// Initialisation d'une variable temporaire
 								tmpCard;
 							// Si la carte sélectionnée est dans le deck objectif
@@ -1363,22 +1282,23 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								// Copie de la partie droite de la carte sélectionnée
 								secondObjectif =
 									game[deckI][cardI].right.copy();
-								// Vide le dernier deck (dans la variable temporaire)
-								let futurArrayToAdd = [];
-								// Copie de la partie gauche de la carte sélectionnée
-								tmpCard = game[deckI][cardI].left.copy();
-								tmpCard.id = 0;
-								tmpCard.setOld(true);
-								// Ajoute cette partie dans le deck qui vient d'etre créer
-								futurArrayToAdd.push(tmpCard);
-								// Met l'id du sous-objectif que l'on va rajouter de la taille du dernier deck
-								secondObjectif.id =
-									tmp[tmp.length - 1].length + 1;
 								// Rajoute le second objectif dans le deck objectif
-								secondObjectif.setOld(true);
-								tmp[tmp.length - 1].push(secondObjectif);
+								if (
+									!addToGame(
+										tmp,
+										tmp.length - 1,
+										secondObjectif
+									)
+								) {
+									return;
+								}
+								// Copie de la partie gauche de la carte sélectionnée
+								tmpCard = tmp[deckI][cardI].left.copy();
 								// Rajoute le deck intermediaire
-								tmp.splice(tmp.length - 1, 0, futurArrayToAdd);
+								tmp.splice(tmp.length - 1, 0, []);
+								// Ajoute cette partie dans le deck qui vient d'etre créer
+								addToGame(tmp, tmp.length - 2, tmpCard);
+
 								// Copie du tableau objectif
 								let tmpObj = [...tabObjectif];
 								// Ajoute l'objectif secondaire dans le tableau objectif
@@ -1412,14 +1332,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									saveGame();
 									// Copie de la partie gauche de la carte sélectionnée
 									secondObjectif =
-										game[deckI][cardI].left.copy();
-									secondObjectif.id =
-										game[game.length - 1].length;
-									secondObjectif.setOld(true);
+										tmp[deckI][cardI].left.copy();
 									// Met la carte copiée dans le deck objectif (ce n'est pas un objectif secondaire)
-									tmpObjectif.push(secondObjectif);
-									// Met à jour le deck objectif
-									tmp[tmp.length - 1] = tmpObjectif;
+									if (
+										!addToGame(tmp, deckI, secondObjectif)
+									) {
+										return;
+									}
 									addLineDemonstration(
 										[
 											[
@@ -1446,31 +1365,41 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								// Copie de les deux parties de la carte sélectionnée
 								let secondObjectif1 =
 									game[deckI][cardI].left.copy();
-								secondObjectif1.id =
-									game[game.length - 1].length;
-								secondObjectif1.setOld(true);
 								let secondObjectif2 =
 									game[deckI][cardI].right.copy();
-								secondObjectif2.id =
-									game[game.length - 1].length + 1;
-								secondObjectif2.setOld(true);
 								let firstArrayDemo = [];
 								let secondArrayDemo = [];
 								if (secondObjectif1.haveImpliqueLinkRecur()) {
-									tmp[tmp.length - 1].push(secondObjectif1);
-									firstArrayDemo = [
-										"Montrons ",
-										secondObjectif1.copy(),
-										".",
-									];
+									if (
+										addToGame(
+											tmp,
+											tmp.length - 1,
+											secondObjectif1,
+											false
+										)
+									) {
+										firstArrayDemo = [
+											"Montrons ",
+											secondObjectif1.copy(),
+											".",
+										];
+									}
 								}
 								if (secondObjectif2.haveImpliqueLinkRecur()) {
-									tmp[tmp.length - 1].push(secondObjectif2);
-									secondArrayDemo = [
-										"Montrons ",
-										secondObjectif2.copy(),
-										".",
-									];
+									if (
+										addToGame(
+											tmp,
+											tmp.length - 1,
+											secondObjectif2,
+											false
+										)
+									) {
+										secondArrayDemo = [
+											"Montrons ",
+											secondObjectif2.copy(),
+											".",
+										];
+									}
 								}
 								addLineDemonstration(
 									[firstArrayDemo.concat(secondArrayDemo)],
@@ -1530,18 +1459,17 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				tmpCard1.id = 0;
 				tmpCard2.id = 1;
 				// Ajoute la nouvelle carte dans le deck le plus haut avec les 2 autres cartes & une liaison "=>"
-				tmp[finalDeck].push(
-					new Card(
-						tmp[finalDeck].length,
-						null,
-						false,
-						"=>",
-						tmpCard1,
-						tmpCard2,
-						true,
-						false
-					)
+				let cardToAdd = new Card(
+					tmp[finalDeck].length,
+					null,
+					false,
+					"=>",
+					tmpCard1,
+					tmpCard2,
+					true,
+					false
 				);
+				addToGame(tmp, finalDeck, cardToAdd);
 				// Met à jour le jeu & désélectionne toutes les cartes
 				allFalse(tmp);
 				setSavedGame(tmp);
@@ -2300,9 +2228,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 *
 	 * @param {string} message
 	 */
-	const error = (message) => {
-		allFalseGame();
+	const error = (message, allFalseBool) => {
+		if (allFalseBool === undefined) {
+			allFalseBool = true;
+		}
+		console.log(message);
 		setMessageError(message);
+		if (!allFalseBool) {
+			return;
+		}
+		allFalseGame();
 	};
 
 	/**
