@@ -788,7 +788,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				// Ajoute cette carte dans le deck précédent
 				tmp[numDeckRef - 1].push(tmpCard);
 				// Supprime l'objectif secondaire
-				// console.log(cardObj.id, numDeckRef, index, cardObj.toString());
 				tmp[tmp.length - 1] = delCardWithEquals(
 					tmp[tmp.length - 1],
 					cardObj
@@ -1360,7 +1359,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									tmp[tmp.length - 1].length - 1,
 									true,
 								]);
-								console.log(tmpObj);
 								// Met à jour le tableau objectif
 								setTabObjectif(tmpObj);
 								addLineDemonstration(
@@ -1571,7 +1569,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				tabIndiceDemonstration[tabIndiceDemonstration.length - 1] + 1
 			);
 		});
-		console.log(indentationArray, indentation, indentationDemonstration);
 
 		setDemonstration(tmpDemonstration);
 		setTabIndentation(tmpTabIndentation);
@@ -1806,7 +1803,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			cardTest.link === "et" &&
 			!containCard(tmp, deckObjectif, cardTest)
 		) {
-			// console.log("Carte objectif " + cardTest.toString());
 			if (containCard(tmp, deckId, cardTest)) {
 				// Ajoute la carte test dans le chemin
 				chemin[0].push([deckId, tabObjectif[deckObjectif][1]]);
@@ -1845,7 +1841,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		 *  et qu'elle a une liaison "=>"
 		 */
 		if (!chemin[1] && deckId === tmp.length - 1 && cardTest.link === "=>") {
-			// console.log("Add objectif");
 			// Ajoute un deck avant l'objectif
 			tmp.splice(tmp.length - 1, 0, []);
 			// Copie la partie gauche de l'objectif dans le deck qui vient d'être créé
@@ -1896,7 +1891,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								deckIndex <= deckObjectif &&
 								containCard(tmp, deckIndex, cardTest)
 							) {
-								// console.log("fin");
 								// On a trouvé une solution
 								chemin[1] = true;
 								// Vérifie que l'on ajoute pas la carte si elle est déjà ajoutée en dernier
@@ -1922,7 +1916,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								deckIndex !== tmp.length - 1 &&
 								isObtainableImplique(card, cardTest)
 							) {
-								// console.log(card.left.toString() + " Implique " + cardTest.toString());
 								// Vérifie si la partie droite de la carte que l'on vient de tester est une carte double
 								if (card.right.color === null) {
 									// Vérifie si la partie droite de la carte que l'on vient de tester a une liaison "=>"
@@ -2011,7 +2004,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								deckIndex !== tmp.length - 1 &&
 								isObtainableEt(card, cardTest)
 							) {
-								// console.log(card.toString() + "utilisé ajout des cartes : " + card.left.toString() + " et " + card.right.toString());
 								// Ajoute la carte au chemin
 								chemin[0].push([deckIndex, cardIndex]);
 								// Ajoute les 2 parties de la carte "et" au deck
@@ -2069,28 +2061,21 @@ const Game = ({ mode, ex, numero, nbExo }) => {
     		result   = recursiveSoluce(tmp,objectif,1,0,chemin),
     		affiche;
     	if (result[1]) {
-    	  console.log("Solution trouvée")
     	  if (objectif.link === "=>") {
-    	    console.log("Ajout Objectif secondaire : " + result[0][0]);
-    	    console.log("Création d'une LPU avec la carte " + objectif.left.toString());
     	    affiche = result[0].reverse();
     	    for (let i = 0; i < affiche.length-1; i++) {
     	      if (affiche[i].color !== null ) {
     	        if (affiche[i+1].link === "=>") {
-    	          console.log("Utilisation de la carte " + affiche[i] + " et " + affiche[i+1] + " Création de la carte " + affiche[i+1].right);
     	        }
     	        i++;
     	      }
     	      else if (affiche[i].link === "=>") {
-    	        console.log("Utilisation de la carte " + affiche[i].left + " et " + affiche[i] + " Création de la carte " + affiche[i].right);
     	      }
     	    }
-    	    console.log("Objectif secondaire rempli");
     	  }
     	  else if (objectif.link === "et") { }
     	  else { }
     	}
-    	else console.log("Aucune solution trouvée");
     	tmp = null;
   	} */
 
@@ -2149,7 +2134,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
     		result    = recursiveSoluce(tmp, objectif, deckId, getNumObjectif(cardId), chemin),
     		tmpResult = [...result[0],
     		affiche   = tmpResult.reverse();
-    	console.log(affiche);
   	} */
 
 	/**
@@ -2225,7 +2209,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			}
 			// Si elles n'existent pas
 			else {
-				// console.log("Les 2 cartes n'existent pas");
 				/** Si les 2 cartes n'existent pas, c'est qu'il doit y aboir un sous-objectif à créer
 				 *  qui ne soit pas dans le deck objectif.
 				 */
