@@ -16,7 +16,7 @@ export default class Card {
 	 * @param {Card|null} left
 	 * @param {Card|null} right
 	 */
-	constructor(id, color, active, link, left, right) {
+	constructor(id, color, active, link, left, right, nouveau, suppr) {
 		this.id = id;
 		this.color = color;
 		this.active = active;
@@ -24,6 +24,8 @@ export default class Card {
 		this.left = left;
 		this.right = right;
 		this.hover = false;
+		this.nouveau = nouveau;
+		this.suppr = suppr;
 	}
 
 	/**
@@ -134,7 +136,16 @@ export default class Card {
 			r = null;
 		if (this.left !== null) l = this.left.copy();
 		if (this.right !== null) r = this.right.copy();
-		return new Card(this.id, this.color, this.active, this.link, l, r);
+		return new Card(
+			this.id,
+			this.color,
+			this.active,
+			this.link,
+			l,
+			r,
+			this.nouveau,
+			this.suppr
+		);
 	}
 
 	/**
@@ -147,6 +158,16 @@ export default class Card {
 		this.active = state;
 		if (this.left != null) this.left.select(state);
 		if (this.right != null) this.right.select(state);
+	}
+	setOld(state) {
+		this.nouveau = state;
+		if (this.left != null) this.left.setOld(state);
+		if (this.right != null) this.right.setOld(state);
+	}
+	setDel(state) {
+		this.suppr = state;
+		if (this.left != null) this.left.setDel(state);
+		if (this.right != null) this.right.setDel(state);
 	}
 
 	/**
@@ -272,7 +293,9 @@ export default class Card {
 			this.active,
 			"<=>",
 			this.left.left,
-			this.left.right
+			this.left.right,
+			this.nouveau,
+			this.suppr
 		);
 	}
 
@@ -299,7 +322,9 @@ export default class Card {
 			this.active,
 			"non",
 			new Card(0, "transparent", this.active, "", null, null),
-			this.left
+			this.left,
+			this.nouveau,
+			this.suppr
 		);
 	}
 
@@ -326,7 +351,9 @@ export default class Card {
 			this.active,
 			"ou",
 			this.left.left,
-			this.right
+			this.right,
+			this.nouveau,
+			this.suppr
 		);
 	}
 
@@ -354,7 +381,9 @@ export default class Card {
 			tmp.active,
 			tmp.link,
 			tmp.left.displayGoodCardRecur(),
-			tmp.right.displayGoodCardRecur()
+			tmp.right.displayGoodCardRecur(),
+			this.nouveau,
+			this.suppr
 		);
 	}
 }

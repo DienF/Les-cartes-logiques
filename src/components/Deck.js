@@ -15,6 +15,8 @@ const Deck = ({
 	cardHelp2,
 	isWin,
 	affichageSimple,
+	suppr,
+	nouveau,
 }) => {
 	/**
 	 * Méthode qui est appelée au moment d'un clique sur une carte & qui appelle la fonction updateGame passée par le component Game.

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GameTab } from "./Game";
 var Latex = require("react-latex");
 
@@ -147,6 +147,13 @@ const Card = ({
 			height: "28vh",
 		};
 	}
+	useEffect((_) => {
+		return (_) => {
+			if (false) {
+				console.log("lol");
+			}
+		};
+	});
 	return (
 		<GameTab.Consumer>
 			{(game) => {
@@ -158,6 +165,9 @@ const Card = ({
 							(isWin ? "" : "hoverable ") +
 							(game[deckIndice][cardIndice].hover && !isWin
 								? "activeHover "
+								: "") +
+							(game[deckIndice][cardIndice].nouveau
+								? "nouveau "
 								: "")
 						}
 						style={calcSizeCard(game[deckIndice][cardIndice])}

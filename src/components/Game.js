@@ -83,7 +83,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	// fin du test
 
 	// Carte qui n'existera jamais dans un deck
-	let cardError = new Card(-1, "error", false, null, null);
+	let cardError = new Card(
+		-1,
+		"error",
+		false,
+		null,
+		null,
+		null,
+		false,
+		false
+	);
 
 	/** Tableau où sont réunies toutes les cartes & decks.
 	 *  Il est disposé de cette manière :
@@ -209,6 +218,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	const delCard = (deck, indiceCard) => {
 		// Le deck que l'on va retourner
 		let finalDeck = [];
+		deck[indiceCard].setDel(true);
 		// Supprime la carte en la passant null
 		deck[indiceCard] = null;
 		let cpt = 0;
@@ -270,6 +280,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				// Copie de la 2ème carte sélectionnée
 				tmpSelecDeck2 = selecDeck2,
 				tmpSelecCard2 = selecCard2;
+			setAllCardOld(tmp);
 			/** Rentre dans le if si :
 			 *  - on ne clique pas sur l'objectif
 			 *  - le jeu n'est pas en mode Creat
@@ -367,7 +378,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			}
 		}
 	};
-
+	const setAllCardOld = (tmp) => {
+		try {
+			tmp.forEach((e) => {
+				e.forEach((s) => {
+					s.setOld(false);
+				});
+			});
+		} catch (error) {}
+	};
 	/**
 	 * Désélectionne toutes les cartes dans le tableau reçu et devient le jeu.
 	 * @param {Card[][]} tmp - tableau du jeu temporaire
@@ -450,7 +469,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				false, // active
 				"", // link
 				null, // left
-				null // right
+				null, // right
+				true,
+				false
 			)
 		);
 		// Actualise le jeu et désélectionne tout
@@ -484,7 +505,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					false, // active
 					"et", // link
 					new Card(0, null, false, "=>", c1.copy(), c2.copy()), // left
-					new Card(0, null, false, "=>", c2.copy(), c1.copy()) // right
+					new Card(0, null, false, "=>", c2.copy(), c1.copy()), // right
+					true,
+					false
 				)
 			);
 		} else if (l === "ou") {
@@ -500,9 +523,20 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						false,
 						"=>",
 						c1,
-						new Card(1, "white", false, null, null, null)
+						new Card(
+							1,
+							"white",
+							false,
+							null,
+							null,
+							null,
+							true,
+							false
+						)
 					), // left
-					c2 // right
+					c2, // right
+					true,
+					false
 				)
 			);
 		} else {
@@ -514,7 +548,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					false, // active
 					l, // link
 					c1, // left
-					c2 // right
+					c2, // right
+					true,
+					false
 				)
 			);
 		}
@@ -564,7 +600,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				false,
 				"=>",
 				futureCardNon,
-				new Card(1, "white", false, null, null, null)
+				new Card(1, "white", false, null, null, null, true, false),
+				true,
+				false
 			)
 		);
 		allFalse(tmp);
@@ -669,10 +707,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				false,
 				obj.link,
 				toClass(obj.left, 0),
-				toClass(obj.right, 1)
+				toClass(obj.right, 1),
+				true,
+				false
 			);
 		// Si c'est une carte simple
-		else return new Card(i, obj.color, false, "", null, null);
+		else return new Card(i, obj.color, false, "", null, null, true, false);
 	};
 
 	/**
@@ -721,9 +761,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					tmpObj.push([tmpObj.length, index, true]);
 			}
 		});
-		// Actualise le tableau des objectifs
-		setTabObjectif(tmpObj);
-		return tmpObj.length;
+
+		return tmpObj;
 	};
 	const delCardWithEquals = (deck, cardToDelete) => {
 		// Le deck que l'on va retourner
@@ -749,8 +788,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		if (originel === undefined) {
 			originel = true;
 		}
+		let tmpTabObjectif = CreatTabObj(tmp);
 		const listObjectif = [];
-		for (let numObjectif of tabObjectif) {
+		for (let numObjectif of tmpTabObjectif) {
 			listObjectif.push([
 				tmp[tmp.length - 1][numObjectif[1]],
 				numObjectif,
@@ -769,6 +809,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					cardObj === undefined
 				)
 					return;
+				if (modif || bool) {
+					return;
+				}
 				if (
 					!card.equals(cardObj) &&
 					card.color !== "white" &&
@@ -785,6 +828,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
 				let tmpCard = tmp[tmp.length - 1][findObj].copy();
 				tmpCard.id = tmp[numDeckRef].length;
+				tmpCard.setOld(true);
 				// Ajoute cette carte dans le deck précédent
 				tmp[numDeckRef - 1].push(tmpCard);
 				// Supprime l'objectif secondaire
@@ -793,7 +837,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					cardObj
 				);
 				// Vérifie si l'objectif a un objectif lié
-				if (findObj !== 0 && tabObjectif[numDeckRef][2]) {
+				if (findObj !== 0 && tmpTabObjectif[numDeckRef][2]) {
 					// Si oui supprime également l'objectif qui lui est lié
 					tmp[tmp.length - 1] = delCard(tmp[tmp.length - 1], findObj);
 				}
@@ -812,7 +856,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			return bool;
 		};
 		listObjectif.forEach((e) => {
-			if (!bool) {
+			if (!bool && !modif) {
 				checkWinForEveryObjectif(e);
 			}
 		});
@@ -832,7 +876,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			addLineDemonstration(arrayMsg, arrayIndent);
 			setSavedGame(tmp);
 			allFalse(tmp);
-			CreatTabObj(tmp);
+			setTabObjectif(CreatTabObj(tmp));
 		}
 		if (originel && bool) {
 			setWin(true);
@@ -901,7 +945,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					// Supprime le deck qui a servi pour cet objectif secondaire
 					tmp = delDeck(tmp, currentDeck);
 					// Met à jour la table des objectifs
-					CreatTabObj(tmp);
+					setTabObjectif(CreatTabObj(tmp));
 					tmpDemonstration.push("On a " + tmpCard.toString() + ".");
 					setDemonstration(tmpDemonstration);
 					tmpTabIndiceDemonstration.push(
@@ -954,7 +998,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					tmpFutureGame[i].push(tmpSavedGame[i][j].copy());
 			}
 			// Refait le tableau des objectifs au cas où on retourne en arrière sur une suppression d'objectif secondaire
-			setIndentationDemonstration(CreatTabObj(tmpFutureGame) - 1);
+			setIndentationDemonstration(CreatTabObj(tmpFutureGame).length - 1);
 			// Met à jour le jeu avec la dernière sauvegarde & désélectionne toutes les cartes
 			allFalse(tmpFutureGame);
 			setSavedGame(tmpFutureGame);
@@ -1138,7 +1182,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			);
 			tmp[finalDeck][tmp[finalDeck].length - 1].id =
 				tmp[finalDeck].length - 1;
-
+			tmp[finalDeck][tmp[finalDeck].length - 1].setOld(true);
 			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
 			isWin(
 				[
@@ -1215,7 +1259,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									false,
 									"et",
 									tmp[selecDeck1][selecCard1],
-									tmp[selecDeck2][selecCard2]
+									tmp[selecDeck2][selecCard2],
+									true,
+									false
 								)
 							)
 						) {
@@ -1226,6 +1272,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								tmpCard2 = tmp[selecDeck2][selecCard2].copy();
 							tmpCard1.id = 0;
 							tmpCard2.id = 1;
+							tmpCard1.setOld(true);
+							tmpCard2.setOld(true);
 							// Ajoute la nouvelle carte dans le deck le plus haut avec les 2 autres cartes & une liaison "et"
 							tmp[finalDeck].push(
 								new Card(
@@ -1234,7 +1282,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									false,
 									"et",
 									tmpCard1,
-									tmpCard2
+									tmpCard2,
+									true,
+									false
 								)
 							);
 
@@ -1342,12 +1392,14 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								// Copie de la partie gauche de la carte sélectionnée
 								tmpCard = game[deckI][cardI].left.copy();
 								tmpCard.id = 0;
+								tmpCard.setOld(true);
 								// Ajoute cette partie dans le deck qui vient d'etre créer
 								futurArrayToAdd.push(tmpCard);
 								// Met l'id du sous-objectif que l'on va rajouter de la taille du dernier deck
 								secondObjectif.id =
 									tmp[tmp.length - 1].length + 1;
 								// Rajoute le second objectif dans le deck objectif
+								secondObjectif.setOld(true);
 								tmp[tmp.length - 1].push(secondObjectif);
 								// Rajoute le deck intermediaire
 								tmp.splice(tmp.length - 1, 0, futurArrayToAdd);
@@ -1387,6 +1439,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 										game[deckI][cardI].left.copy();
 									secondObjectif.id =
 										game[game.length - 1].length;
+									secondObjectif.setOld(true);
 									// Met la carte copiée dans le deck objectif (ce n'est pas un objectif secondaire)
 									tmpObjectif.push(secondObjectif);
 									// Met à jour le deck objectif
@@ -1419,10 +1472,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									game[deckI][cardI].left.copy();
 								secondObjectif1.id =
 									game[game.length - 1].length;
+								secondObjectif1.setOld(true);
 								let secondObjectif2 =
 									game[deckI][cardI].right.copy();
 								secondObjectif2.id =
 									game[game.length - 1].length + 1;
+								secondObjectif2.setOld(true);
 								let firstArrayDemo = [];
 								let secondArrayDemo = [];
 								if (secondObjectif1.haveImpliqueLinkRecur()) {
@@ -1506,7 +1561,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						false,
 						"=>",
 						tmpCard1,
-						tmpCard2
+						tmpCard2,
+						true,
+						false
 					)
 				);
 				// Met à jour le jeu & désélectionne toutes les cartes
