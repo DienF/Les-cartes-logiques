@@ -15,10 +15,6 @@
         border-spacing: 20px;
     }
 
-    td:hover{
-        transform: scale(1.1);
-    }
-
     td {
         /*padding: 20px;*/
         background-color: lightgray;
@@ -32,8 +28,10 @@
             font-size: large;
             color : black;
             text-decoration: none;
-        }
-        
+        }   
+    }
+    .tdVoid {
+          visibility: hidden;  
     }
 
     td:hover {

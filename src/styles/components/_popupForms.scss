@@ -2,16 +2,11 @@
     position: fixed;
     bottom: 1%;
     right: 1%;
-
-    .bigbox {
-        position: relative;
-        margin: 0 auto;
-        height: auto;
-    }
-      
+    max-height: fit-content;
+    width: auto;
+  
     .box {
         color: black;
-        margin-top: 30vh;
         background: #fac906;
         border-radius: 8px;
         padding: 10px;
