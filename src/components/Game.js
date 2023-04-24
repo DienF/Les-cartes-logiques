@@ -1237,87 +1237,63 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				let finalDeck = Math.max(selecDeck1, selecDeck2);
 				if (finalDeck !== game.length - 1) {
 					// Copie du jeu actuel
-					let tmp = [...game],
-						/** Vérifie si la 1ère carte sélectionnée est une carte composé au maximum de 2 cartes.
-						 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
-						 */
-						bool = tmp[selecDeck1][selecCard1].isSimpleOrDouble();
-					/** Vérifie si la 2ème carte sélectionnée est une carte composé au maximum de 2 cartes.
-					 *  Le jeu ne prend pas en compte les cartes composées de plus de 4 cartes.
-					 */
-					if (
-						bool &&
-						tmp[selecDeck2][selecCard2].isSimpleOrDouble()
-					) {
-						if (
-							!containCard(
-								game,
-								finalDeck,
-								new Card(
-									0,
-									null,
-									false,
-									"et",
-									tmp[selecDeck1][selecCard1],
-									tmp[selecDeck2][selecCard2],
-									true,
-									false
-								)
-							)
-						) {
-							// Sauvegarde du jeu actuel
-							saveGame();
-							// Copie les 2 cartes sélectionnées
-							let tmpCard1 = tmp[selecDeck1][selecCard1].copy(),
-								tmpCard2 = tmp[selecDeck2][selecCard2].copy();
-							tmpCard1.id = 0;
-							tmpCard2.id = 1;
-							tmpCard1.setOld(true);
-							tmpCard2.setOld(true);
-							// Ajoute la nouvelle carte dans le deck le plus haut avec les 2 autres cartes & une liaison "et"
-							tmp[finalDeck].push(
-								new Card(
-									tmp[finalDeck].length,
-									null,
-									false,
-									"et",
-									tmpCard1,
-									tmpCard2,
-									true,
-									false
-								)
-							);
+					let tmp = [...game];
 
-							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-							isWin(
+					if (
+						!containCard(
+							game,
+							finalDeck,
+							new Card(
+								0,
+								null,
+								false,
+								"et",
+								tmp[selecDeck1][selecCard1],
+								tmp[selecDeck2][selecCard2],
+								true,
+								false
+							)
+						)
+					) {
+						// Sauvegarde du jeu actuel
+						saveGame();
+						// Copie les 2 cartes sélectionnées
+						let tmpCard1 = tmp[selecDeck1][selecCard1].copy(),
+							tmpCard2 = tmp[selecDeck2][selecCard2].copy();
+						tmpCard1.id = 0;
+						tmpCard2.id = 1;
+						tmpCard1.setOld(true);
+						tmpCard2.setOld(true);
+						// Ajoute la nouvelle carte dans le deck le plus haut avec les 2 autres cartes & une liaison "et"
+						tmp[finalDeck].push(
+							new Card(
+								tmp[finalDeck].length,
+								null,
+								false,
+								"et",
+								tmpCard1,
+								tmpCard2,
+								true,
+								false
+							)
+						);
+
+						// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
+						isWin(
+							[
 								[
-									[
-										"On a ",
-										tmpCard1.copy(),
-										"^",
-										tmpCard2.copy(),
-										".",
-									],
+									"On a ",
+									tmpCard1.copy(),
+									"^",
+									tmpCard2.copy(),
+									".",
 								],
-								[0],
-								tmp
-							);
-						} else
-							error(
-								"La carte que vous voulez ajouter existe déjà !"
-							);
-					} else {
-						if (bool)
-							error(
-								"On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " +
-									tmp[selecDeck2][selecCard2].toString()
-							);
-						else
-							error(
-								"On ne peut unir que des cartes simples et doubles, ce qui n'est pas le cas de cette carte : " +
-									tmp[selecDeck1][selecCard1].toString()
-							);
-					}
+							],
+							[0],
+							tmp
+						);
+					} else
+						error("La carte que vous voulez ajouter existe déjà !");
 				} else
 					error(
 						"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"

@@ -200,16 +200,6 @@ export default class Card {
 	}
 
 	/**
-	 * Vérifie si la carte est simple/double.
-	 * @returns {true|false} true si simple/double sinon false
-	 */
-	isSimpleOrDouble() {
-		if (this.color !== null) return true;
-		if (this.left.color !== null && this.right.color !== null) return true;
-		else return false;
-	}
-
-	/**
 	 * Renvoie la démonstration correspondante à l'action effectuée.
 	 * @returns {string} le texte de la démonstration
 	 */
