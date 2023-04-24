@@ -687,7 +687,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Variable que l'on va retourner (-1 si il trouve pas)
 		let num = -1,
 			// Deck de l'objectif
-			deck = game.length - 1;
+			deck = tmp.length - 1;
 		/** Cherche parmi les cartes de l'objectif s'il y a une carte dont la partie droite
 		 *  est égale à la carte envoyée en paramètre.
 		 *  Si oui {@link num} prend la valeur de l'index de cette carte.
@@ -745,19 +745,18 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 *
 	 * @returns
 	 */
-	const isWin = (arrayMsg, arrayIndent, originel) => {
+	const isWin = (arrayMsg, arrayIndent, tmp, originel) => {
 		if (originel === undefined) {
 			originel = true;
 		}
 		const listObjectif = [];
 		for (let numObjectif of tabObjectif) {
 			listObjectif.push([
-				game[game.length - 1][numObjectif[1]],
+				tmp[tmp.length - 1][numObjectif[1]],
 				numObjectif,
 			]);
 		}
-		let bool = false,
-			tmp = [...game];
+		let bool = false;
 		let modif = false;
 		const checkWinForEveryObjectif = (cardArray) => {
 			const cardObj = cardArray[0],
@@ -778,14 +777,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					return;
 				if (numDeckRef === 0) {
 					bool = true;
-					setWin(true);
 					return;
 				}
 				modif = true;
 				const findObj = findObjectifRelative(cardObj, tmp);
 				if (findObj === -1) return;
 				// Si c'est un objectif secondaire : copie de la carte qui a servi à créer l'objectif secondaire
-				let tmpCard = game[game.length - 1][findObj].copy();
+				let tmpCard = tmp[tmp.length - 1][findObj].copy();
 				tmpCard.id = tmp[numDeckRef].length;
 				// Ajoute cette carte dans le deck précédent
 				tmp[numDeckRef - 1].push(tmpCard);
@@ -804,22 +802,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				// Supprime le deck qui a servi pour cet objectif secondaire
 				tmp = delDeck(tmp, numDeckRef);
 				// Met à jour la table des objectifs
-				CreatTabObj(tmp);
 				arrayMsg.push(["On a ", tmpCard.copy(), "."]);
 				arrayIndent.push(-1);
 				// Met à jour le jeu
-				setGame(tmp);
 			};
-			game[numDeckRef].forEach(checkWin);
+			tmp[numDeckRef].forEach(checkWin);
 			if (numDeckRef !== 0) {
-				game[0].forEach(checkWin);
-			}
-			if (!bool && numDeckRef !== 0 && modif) {
-				/** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
-				 *  Si cela valdie l'objectif principal : bool = true
-				 *  Sinon : bool = false
-				 */
-				bool = isWin(arrayMsg, arrayIndent, false);
+				tmp[0].forEach(checkWin);
 			}
 			return bool;
 		};
@@ -828,13 +817,30 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				checkWinForEveryObjectif(e);
 			}
 		});
-		setSavedGame(tmp);
+		if (!bool && modif) {
+			/** Regarde l'objectif précédent pour voir si le fait d'ajouter l'objectif secondaire ne l'a pas validé.
+			 *  Si cela valdie l'objectif principal : bool = true
+			 *  Sinon : bool = false
+			 */
+			let tmpRes = isWin(arrayMsg, arrayIndent, tmp, false);
+			tmp = tmpRes[0];
+			bool = tmpRes[1];
+			arrayMsg = tmpRes[2];
+			arrayIndent = tmpRes[3];
+		}
+
 		if (originel) {
 			addLineDemonstration(arrayMsg, arrayIndent);
+			setSavedGame(tmp);
+			allFalse(tmp);
+			CreatTabObj(tmp);
 		}
-		// Retourne true si l'objectif principal est vrai, sinon retourne false
+		if (originel && bool) {
+			setWin(true);
+			setPopupWin(true);
+		}
 
-		return bool;
+		return [tmp, bool, arrayMsg, arrayIndent];
 	};
 
 	/**
@@ -1040,23 +1046,19 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Ajoute la partie droite de la carte dans le jeu
 		tmp[deckI].push(game[deckI][cardI].right.copy());
 		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
-		// Met à jour le jeu & désélectionne toutes les cartes
-		allFalse(tmp);
-		setSavedGame(tmp);
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
-		setPopupWin(
-			isWin(
+		isWin(
+			[
 				[
-					[
-						"On a ",
-						game[deckI][cardI].left.copy(),
-						". On a ",
-						game[deckI][cardI].right.copy(),
-						".",
-					],
+					"On a ",
+					game[deckI][cardI].left.copy(),
+					". On a ",
+					game[deckI][cardI].right.copy(),
+					".",
 				],
-				[0]
-			)
+			],
+			[0],
+			tmp
 		);
 	};
 
@@ -1137,26 +1139,20 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			);
 			tmp[finalDeck][tmp[finalDeck].length - 1].id =
 				tmp[finalDeck].length - 1;
-			// Met à jour le jeu & désélectionne toutes les cartes
-			allFalse(tmp);
-			setSavedGame(tmp);
 
 			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-			setPopupWin(
-				isWin(
+			isWin(
+				[
 					[
-						[
-							"Puisque ",
-							tmp[deckCarteComplex][cardCarteComplex].left.copy(),
-							", on a ",
-							tmp[deckCarteComplex][
-								cardCarteComplex
-							].right.copy(),
-							".",
-						],
+						"Puisque ",
+						tmp[deckCarteComplex][cardCarteComplex].left.copy(),
+						", on a ",
+						tmp[deckCarteComplex][cardCarteComplex].right.copy(),
+						".",
 					],
-					[0]
-				)
+				],
+				[0],
+				tmp
 			);
 		} else {
 			// Si aucune des 2 cartes n'a de liaison =>
@@ -1242,25 +1238,20 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									tmpCard2
 								)
 							);
-							// Met à jour le jeu & désélectionne toutes les cartes
-							allFalse(tmp);
-							setSavedGame(tmp);
-							addLineDemonstration();
 
 							// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-							setPopupWin(
-								isWin(
+							isWin(
+								[
 									[
-										[
-											"On a ",
-											tmpCard1.copy(),
-											"^",
-											tmpCard2.copy(),
-											".",
-										],
+										"On a ",
+										tmpCard1.copy(),
+										"^",
+										tmpCard2.copy(),
+										".",
 									],
-									[0]
-								)
+								],
+								[0],
+								tmp
 							);
 						} else
 							error(
@@ -1448,7 +1439,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 									tmp[tmp.length - 1].push(secondObjectif2);
 									secondArrayDemo = [
 										"Montrons ",
-										secondObjectif1.copy(),
+										secondObjectif2.copy(),
 										".",
 									];
 								}
@@ -1524,7 +1515,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				allFalse(tmp);
 				setSavedGame(tmp);
 				// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
-				setPopupWin(isWin());
+				isWin();
 			} else {
 				if (bool)
 					error(
