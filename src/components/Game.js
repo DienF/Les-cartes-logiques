@@ -1023,11 +1023,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Copie du jeu actuel
 		let tmp = [...game];
 		// Ajoute la partie gauche de la carte dans le jeu
-		tmp[deckI].push(game[deckI][cardI].left.copy());
-		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
+		let tmpCard1 = game[deckI][cardI].left.copy();
+		addToGame(tmp, deckI, tmpCard1, false);
 		// Ajoute la partie droite de la carte dans le jeu
-		tmp[deckI].push(game[deckI][cardI].right.copy());
-		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
+		let tmpCard2 = game[deckI][cardI].right.copy();
+		addToGame(tmp, deckI, tmpCard2, false);
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
 		isWin(
 			[["On a ", tmpCard1.copy(), ". On a ", tmpCard2.copy(), "."]],
@@ -1514,12 +1514,21 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		});
 		return StringToLatex(res);
 	};
-	const addLineDemonstration = (msgArray, indentationArray, num) => {
-		let tmpTabIndentation = [...tabIndentation];
-		let tmpDemonstration = [...demonstration];
-		let indentation = indentationDemonstration;
+	const addLineDemonstration = (msgArray, indentationArray, num, reset) => {
+		if (reset === undefined) {
+			reset = false;
+		}
+		let tmpTabIndentation = [];
+		let tmpDemonstration = [];
+		let indentation = 0;
+		let tmpTabIndiceDemonstration = [];
+		if (!reset) {
+			tmpTabIndentation = [...tabIndentation];
+			tmpDemonstration = [...demonstration];
+			indentation = indentationDemonstration;
+			tmpTabIndiceDemonstration = tabIndiceDemonstration;
+		}
 
-		let tmpTabIndiceDemonstration = [...tabIndiceDemonstration];
 		msgArray.forEach((msg, index) => {
 			if (indentationArray[index] === undefined) {
 				indentationArray[index] = 0;
@@ -2342,14 +2351,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 */
 	useEffect(() => {
 		setTabObjectif([[0, 0, false]]);
-		setGame([[], []]);
 		setLastGame([]);
-		setIndentationDemonstration(0);
-		setDemonstration([]);
-		setTabIndentation([0]);
 		setNavigation(false);
 		setWin(false);
-		setTabIndiceDemonstration([0]);
 		setPopupWin(false);
 		setMessageError("");
 		setAffichageSimple(true);
@@ -2368,8 +2372,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					res.push(".");
 				}
 
-				setDemonstration([]);
-				addLineDemonstration([res], [0], 0);
+				addLineDemonstration([res], [0], 0, true);
 				allFalse(tmp);
 				setSavedGame(tmp);
 			} catch (error) {}
