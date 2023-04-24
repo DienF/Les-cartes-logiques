@@ -731,7 +731,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Retourne -1 ou la place de la carte
 		return num;
 	};
-
+	function checkSubObj(deck, card) {
+		let res = false;
+		deck.forEach((elem) => {
+			if (elem.link === "=>" && elem.right.equals(card)) {
+				res = true;
+			}
+		});
+		return res;
+	}
 	/**
 	 * Crée le tableau tabObjectif en fonction des objectifs présents dans tmp.
 	 * @param {Card[][]} tmp - tableau du jeu temporaire
@@ -747,7 +755,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		 */
 		tmp[tmp.length - 1].forEach((element, index) => {
 			if (index !== 0) {
-				if (element.color !== null)
+				if (checkSubObj(tmp[tmp.length - 1], element))
 					tmpObj.push([tmpObj.length, index, true]);
 			}
 		});
@@ -866,7 +874,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			addLineDemonstration(arrayMsg, arrayIndent);
 			setSavedGame(tmp);
 			allFalse(tmp);
-			setTabObjectif(CreatTabObj(tmp));
+			let tmpVar = CreatTabObj(tmp);
+			setTabObjectif(tmpVar);
 		}
 		if (originel && bool) {
 			setWin(true);
@@ -1014,11 +1023,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Copie du jeu actuel
 		let tmp = [...game];
 		// Ajoute la partie gauche de la carte dans le jeu
-		let tmpCard1 = tmp[deckI][cardI].left.copy();
-		addToGame(tmp, deckI, tmpCard1);
+		tmp[deckI].push(game[deckI][cardI].left.copy());
+		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
 		// Ajoute la partie droite de la carte dans le jeu
-		let tmpCard2 = tmp[deckI][cardI].right.copy();
-		addToGame(tmp, deckI, tmpCard2);
+		tmp[deckI].push(game[deckI][cardI].right.copy());
+		tmp[deckI][tmp[deckI].length - 1].id = tmp[deckI].length - 1;
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
 		isWin(
 			[["On a ", tmpCard1.copy(), ". On a ", tmpCard2.copy(), "."]],
