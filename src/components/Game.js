@@ -2759,14 +2759,14 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					content={
 						<>
 							<b>Bravo, vous avez gagné !</b>
-							<button
+							<span className="closeButton"
 								onClick={function () {
 									setPopupWin(false);
 									if (mode === "Tutorial") nextExercise();
 								}}
 							>
 								✖
-							</button>
+							</span>
 							<div
 								className="demonstration-win"
 								onCopy={copyHandler}
