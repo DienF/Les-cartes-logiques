@@ -2573,7 +2573,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							onChange={affichageSimpleHandler}
 							defaultChecked={true}
 						></input>
-						<label>Affichage Simplifié</label>
+						<label for="afficheSimple">
+							<span className="tooltiptext">Affichage Simplifié</span>
+						</label>
 					</span>
 				}
 			</div>
