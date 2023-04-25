@@ -62,7 +62,6 @@
             position: relative;
             top: -500px;
         }
-      
         to {
             position: relative;
             top: 0px;
@@ -87,4 +86,6 @@
 .selectioner {
     border: 3px solid black;
     border-radius: 10px;
+    box-shadow:
+            0 0 15px 8px #f8ff24;
 }
