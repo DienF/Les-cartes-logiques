@@ -910,6 +910,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			error(`La carte ${card} existe deja dans la LPU 1`, false);
 			return false;
 		}
+		if (card.getProfondeur() > 7) {
+			error(`La carte ${card} est trop grosse`, false);
+			return false;
+		}
 		card.id = tmp[deckId].length;
 		card.setOld(true);
 		tmp[deckId].push(card);
@@ -1336,7 +1340,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								setSavedGame(tmp);
 							} else {
 								// Si la carte est pas dans le deck objectif 1 si la partie gauche de la carte a une liaison =>
-								if (game[deckI][cardI].left.link === "=>") {
+								if (
+									game[deckI][
+										cardI
+									].left.haveImpliqueLinkRecur()
+								) {
 									// Sauvegarde du jeu actuel
 									saveGame();
 									// Copie de la partie gauche de la carte sélectionnée
@@ -1344,7 +1352,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 										tmp[deckI][cardI].left.copy();
 									// Met la carte copiée dans le deck objectif (ce n'est pas un objectif secondaire)
 									if (
-										!addToGame(tmp, deckI, secondObjectif)
+										!addToGame(
+											tmp,
+											tmp.length - 1,
+											secondObjectif
+										)
 									) {
 										return;
 									}
