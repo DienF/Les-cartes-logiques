@@ -49,10 +49,12 @@
     display: inline-grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
+    color : black;
+    user-select: none;
     margin-top: 20px;
     margin-bottom: 20px;
-    color : black;
-    user-select: none;  
+    margin-left: 12%;
+    margin-right: 12%;
 }
 .nouveau{
     animation-duration: 1.5s;

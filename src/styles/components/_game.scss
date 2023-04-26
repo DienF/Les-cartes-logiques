@@ -97,6 +97,8 @@
         .tooltiptext {
             visibility: hidden;
             width: 120px;
+            height: 20px;
+            line-height: 20px;
             background-color: black;
             color: #fff;
             text-align: center;
@@ -106,6 +108,7 @@
             z-index: 50;
             top: 120%;
             left: 50%;
+            font-size: small;
             transform: translateX(-50%);
         }
 
@@ -239,7 +242,7 @@
 		transition: all .2s;
 		border-radius: 50%;
 		background: #d82828;
-		top: 0px; left: 3px;
+		top: 0.5px; left: 3px;
 	}
 
 	/* on checked */
@@ -248,6 +251,6 @@
 	}
 	[type="checkbox"]:checked + label:after {
 		background: #14f585;
-		top: 0px; left: 40px;
+		top: 0.5px; left: 40px;
 	}
 }
