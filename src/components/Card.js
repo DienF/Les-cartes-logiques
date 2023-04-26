@@ -49,7 +49,9 @@ const Card = ({
 					key={recurciveRender.count}
 					className={
 						`card_simple ` +
-						(selec ? "selectioner " : "") +
+						(selec && currentCard.color !== "transparent"
+							? "selectioner "
+							: "") +
 						(help ? "help " : "")
 					}
 					style={style}
