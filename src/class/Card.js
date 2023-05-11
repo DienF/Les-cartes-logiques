@@ -299,6 +299,15 @@ export default class Card {
 		if (this.link !== "=>") return false;
 		return true;
 	}
+	canUseTiersExclus() {
+		if (!this.isNonCard()) {
+			return false;
+		}
+		if (!this.left.isNonCard()) {
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 *

@@ -1449,6 +1449,52 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		}
 	};
 
+	const tiersExlus = () => {
+		if (navigation || win) {
+			return;
+		}
+		// S'il n'y a qu'une carte de sélectionné
+		if (
+			(selecCard1 !== -1 &&
+				selecCard2 === -1 &&
+				selecDeck1 !== -1 &&
+				selecDeck2 === -1) ||
+			(selecCard1 === -1 &&
+				selecCard2 !== -1 &&
+				selecDeck1 === -1 &&
+				selecDeck2 !== -1)
+		) {
+			// Prend la carte sélectionnée
+			let deckI = Math.max(selecDeck1, selecDeck2),
+				cardI = Math.max(selecCard1, selecCard2);
+			let tmp = [...game];
+			let cardTmp = tmp[deckI][cardI];
+			if (!cardTmp.canUseTiersExclus()) {
+				error(
+					`La carte${cardTmp.toString()} n'est pas une carte non(non(Carte))`
+				);
+				return;
+			}
+			let cardToAdd = cardTmp.left.left;
+			if (!addToGame(tmp, deckI, cardToAdd)) {
+				return;
+			}
+			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
+			isWin(
+				[
+					[
+						"Puisque ",
+						cardTmp.copy(),
+						", on a ",
+						cardToAdd.copy(),
+						".",
+					],
+				],
+				[0],
+				tmp
+			);
+		}
+	};
 	/**
 	 * Exactement la même fonction que {@link fuseCardAnd()} sauf que la carte créée a une liaison "=>".
 	 */
@@ -2537,6 +2583,26 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						</button>
 					</div>
 				)}
+				{mode !== "Create" && (
+					<div>
+						<button
+							id="tiersExclus"
+							className={
+								"buttonAction " +
+								(mode === "Tutorial" && numero === 3
+									? "boutonSelection"
+									: "")
+							}
+							onClick={tiersExlus}
+						>
+							<img
+								src={"img/ajout_objectif.png"}
+								alt={"tiers-exclus"}
+							/>
+							<span className="tooltiptext">Tire Exclus</span>
+						</button>
+					</div>
+				)}
 				{/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
 				{mode === "Create" && (
 					<input
@@ -2574,7 +2640,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							defaultChecked={true}
 						></input>
 						<label for="afficheSimple">
-							<span className="tooltiptext">Affichage Simplifié</span>
+							<span className="tooltiptext">
+								Affichage Simplifié
+							</span>
 						</label>
 					</span>
 				}
@@ -2773,7 +2841,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					content={
 						<>
 							<b>Bravo, vous avez gagné !</b>
-							<span className="closeButton"
+							<span
+								className="closeButton"
 								onClick={function () {
 									setPopupWin(false);
 									if (mode === "Tutorial") nextExercise();
