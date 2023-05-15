@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
-	const nbTuto = 6;
+	const nbTuto = 7;
 
 	function CreateTuto(props) {
 		const res = [];

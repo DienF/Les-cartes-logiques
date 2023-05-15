@@ -8,7 +8,13 @@ os.chdir(os.path.dirname(__file__))
 if os.path.exists(".env"):
     config = dotenv_values(".env")
 else:
-    config = dotenv_values("default.env")
+    config = {
+        "USER": os.environ.get("USER_DB"),
+        "PASSWORD": os.environ.get("PASSWORD_DB"),
+        "HOST": os.environ.get("HOST_DB"),
+        "PORT": os.environ.get("PORT_DB"),
+        "DATABASE": os.environ.get("DATABASE_DB"),
+    }
 
 FILENAME_DB_SHEMA = "data.sql"
 options = urllib.parse.quote_plus("--search_path=modern,public")
