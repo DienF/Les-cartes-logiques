@@ -2322,27 +2322,34 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 * @returns {string}
 	 */
 	const StringToLatex = (str) => {
-		str = str.replaceAll("Rouge", "\\textit{ Rouge }");
-		str = str.replaceAll("Jaune", "\\textit{ Jaune }");
-		str = str.replaceAll("Bleue", "\\textit{ Bleue }");
-		str = str.replaceAll("Orange", "\\textit{ Orange }");
-		str = str.replaceAll("Verte", "\\textit{ Verte }");
-		str = str.replaceAll("Vrai", "\\textit{ Vrai }");
-		str = str.replaceAll("Faux", "\\textit{ Faux }");
-		str = str.replaceAll("True", "\\textit{ True }");
-		str = str.replaceAll("False", "\\textit{ False }");
-		str = str.replaceAll("^", "\\land");
-		str = str.replaceAll("non", "\\neg");
-		str = str.replaceAll("<=>", "\\Leftrightarrow");
-		str = str.replaceAll("=>", "\\Rightarrow");
-		str = str.replaceAll(".", "\\text{. }$$$");
-		str = str.replaceAll(",", "\\text{, }$$$");
-		str = str.replaceAll("On a", "$$$\\text{On a }");
-		str = str.replaceAll("on a", "$$$\\text{on a }");
-		str = str.replaceAll("Montrons", "$$$\\text{Montrons }");
-		str = str.replaceAll("Supposons", "$$$\\text{Supposons }");
-		str = str.replaceAll("Puisque", "$$$\\text{Puisque }");
-		str = str.replaceAll("  ", " ");
+		str = str.replaceAll("Rouge", " \\textit{ Rouge } ");
+		str = str.replaceAll("Jaune", " \\textit{ Jaune } ");
+		str = str.replaceAll("Bleue", " \\textit{ Bleue } ");
+		str = str.replaceAll("Orange", " \\textit{ Orange } ");
+		str = str.replaceAll("Verte", " \\textit{ Verte } ");
+		str = str.replaceAll("Vrai", " \\textit{ Vrai } ");
+		str = str.replaceAll("Faux", " \\textit{ Faux } ");
+		str = str.replaceAll("True", " \\textit{ True } ");
+		str = str.replaceAll("False", " \\textit{ False } ");
+		str = str.replaceAll("^", " \\land ");
+		str = str.replaceAll("non", " \\neg ");
+		str = str.replaceAll("<=>", " \\Leftrightarrow ");
+		str = str.replaceAll("=>", " \\Rightarrow ");
+		str = str.replaceAll(".", " \\text{. }$$$ ");
+		str = str.replaceAll(",", " \\text{, }");
+		str = str.replaceAll("alors", " $$$\\text{alors } ");
+
+		str = str.replaceAll("On a", "$$$\\text{On a } ");
+		str = str.replaceAll("on a", "\\text{on a } ");
+		str = str.replaceAll(
+			"Par transitivité",
+			" $$$\\text{Par transitivité } "
+		);
+
+		str = str.replaceAll("Montrons", " $$$\\text{Montrons } ");
+		str = str.replaceAll("Supposons", " $$$\\text{Supposons } ");
+		str = str.replaceAll("Puisque", " $$$\\text{Puisque } ");
+		str = str.split().join();
 		return str;
 	};
 
@@ -2461,6 +2468,142 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, ex, numero]);
 
+	const tautologieHandler = (event) => {
+		event.target.value = "";
+		event.preventDefault();
+	};
+	const transitivite = (_) => {
+		if (navigation || win) return;
+		// S'il n'y a pas 2 cartes sélectionnées
+		if (nbSelec !== 2) {
+			error("Vous devez sélectionner deux cartes !");
+			return;
+		}
+		// Prend le deck le plus grand
+		let finalDeck = Math.max(selecDeck1, selecDeck2);
+		if (finalDeck === game.length - 1) {
+			error(
+				"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+			);
+			return;
+		}
+		// Copie du jeu actuel
+		let tmp = [...game];
+		const card1 = tmp[selecDeck1][selecCard1];
+		const card2 = tmp[selecDeck2][selecCard2];
+		let cardToAdd, cardRight, cardLeft, cardMiddle, sign;
+		if (card1.link === "=>" || card2.link === "=>") {
+			sign = "=>";
+			if (card1.left.equals(card2.right)) {
+				cardRight = card1.right;
+				cardLeft = card2.left;
+				cardMiddle = card1.left;
+				cardToAdd = new Card(
+					tmp[finalDeck].length,
+					null,
+					false,
+					"=>",
+					card2.left.copy(),
+					card1.right.copy()
+				);
+			} else if (card1.right.equals(card2.left)) {
+				cardRight = card2.right;
+				cardLeft = card1.left;
+				cardMiddle = card2.left;
+				cardToAdd = new Card(
+					tmp[finalDeck].length,
+					null,
+					false,
+					"=>",
+					card1.left.copy(),
+					card2.right.copy()
+				);
+			} else {
+				error("ces cartes ne peuvent pas utiliser ce bouton");
+				return;
+			}
+		} else if (card1.isDoubleArrow() && card2.isDoubleArrow()) {
+			sign = "<=>";
+			if (card1.left.right.equals(card2.right.right)) {
+				cardRight = card2.left.right;
+				cardLeft = card1.left.left;
+				cardMiddle = card2.left.left;
+				cardToAdd = new Card(
+					tmp[finalDeck].length,
+					null,
+					false,
+					"et",
+					new Card(
+						0,
+						null,
+						false,
+						"=>",
+						card1.left.left.copy(),
+						card2.left.right.copy()
+					), // left
+					new Card(
+						0,
+						null,
+						false,
+						"=>",
+						card2.left.right.copy(),
+						card1.left.left.copy()
+					) // right
+				);
+			} else if (card2.left.right.equals(card1.right.right)) {
+				cardRight = card2.left.left;
+				cardLeft = card1.left.right;
+				cardMiddle = card2.left.right;
+				cardToAdd = new Card(
+					tmp[finalDeck].length,
+					null,
+					false,
+					"et",
+					new Card(
+						0,
+						null,
+						false,
+						"=>",
+						card1.left.right.copy(),
+						card2.left.left.copy()
+					), // left
+					new Card(
+						0,
+						null,
+						false,
+						"=>",
+						card2.left.left.copy(),
+						card1.left.right.copy()
+					) // right
+				);
+			} else {
+				error("ces cartes ne peuvent pas utiliser ce bouton");
+				return;
+			}
+		} else {
+			error(
+				'Les cartes séléctionner doivent avoir des liaison "=>" ou "<=>"'
+			);
+			return;
+		}
+
+		addToGame(tmp, finalDeck, cardToAdd, false);
+		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
+		isWin(
+			[
+				[
+					"Par transitivité, on a : ",
+					cardLeft.copy(),
+					` ${sign} `,
+					cardMiddle.copy(),
+					` ${sign} ` + cardRight.copy(),
+					" .",
+				],
+			],
+			[0],
+			tmp
+		);
+	};
 	return (
 		<div className="game">
 			{win && (
@@ -2602,6 +2745,14 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							<span className="tooltiptext">Tire Exclus</span>
 						</button>
 					</div>
+				)}
+				{mode !== "Create" && (
+					<select onChange={tautologieHandler}>
+						<option value="">Tautologie</option>
+						<option value="transitivite" onClick={transitivite}>
+							Transitivité
+						</option>
+					</select>
 				)}
 				{/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
 				{mode === "Create" && (
