@@ -1449,10 +1449,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		}
 	};
 
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	const tiersExlus = () => {
-		if (navigation || win) {
-			return;
-		}
+		if (navigation || win) return;
 		// S'il n'y a qu'une carte de sélectionné
 		if (
 			(selecCard1 !== -1 &&
@@ -1466,9 +1469,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		) {
 			// Prend la carte sélectionnée
 			let deckI = Math.max(selecDeck1, selecDeck2),
-				cardI = Math.max(selecCard1, selecCard2);
-			let tmp = [...game];
-			let cardTmp = tmp[deckI][cardI];
+				cardI = Math.max(selecCard1, selecCard2),
+				tmp = [...game],
+				cardTmp = tmp[deckI][cardI];
 			if (!cardTmp.canUseTiersExclus()) {
 				error(
 					`La carte${cardTmp.toString()} n'est pas une carte non(non(Carte))`
@@ -1476,9 +1479,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				return;
 			}
 			let cardToAdd = cardTmp.left.left;
-			if (!addToGame(tmp, deckI, cardToAdd)) {
-				return;
-			}
+			if (!addToGame(tmp, deckI, cardToAdd)) return;
 			// Vérifie si l'exercice est résolu, si oui affiche le popup de victoire
 			isWin(
 				[
@@ -1495,6 +1496,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			);
 		}
 	};
+	
 	/**
 	 * Exactement la même fonction que {@link fuseCardAnd()} sauf que la carte créée a une liaison "=>".
 	 */

@@ -11,6 +11,7 @@ const Card = ({
 	isWin,
 	affichageSimple,
 }) => {
+	
 	/**
 	 * Fonction qui détecte le clique sur une carte & qui appelle la fonction {@link update()} passée par le
 	 * component Deck.
@@ -30,20 +31,21 @@ const Card = ({
 		else if (str === "non") return "$$\\neg$$";
 		else return str;
 	};
-	const recurciveRender = (
-		currentCard,
-		count,
-		selec,
-		help,
-		originalCount
-	) => {
-		recurciveRender.count++;
 
+	/**
+	 * 
+	 * @param {*} currentCard 
+	 * @param {*} count 
+	 * @param {*} selec 
+	 * @param {*} help 
+	 * @param {*} originalCount 
+	 * @returns 
+	 */
+	const recurciveRender = (currentCard, count, selec, help, originalCount) => {
+		recurciveRender.count++;
 		if (currentCard.color !== null) {
 			let style = { backgroundColor: currentCard.color };
-			if (currentCard.color === "transparent") {
-				style["border"] = "none";
-			}
+			if (currentCard.color === "transparent") style["border"] = "none";
 			return (
 				<span
 					key={recurciveRender.count}
@@ -96,6 +98,12 @@ const Card = ({
 			</span>
 		);
 	};
+
+	/**
+	 * 
+	 * @param {*} props 
+	 * @returns 
+	 */
 	function RenderCard(props) {
 		let currentCard = props.currentCard,
 			selec = props.selec,
@@ -114,6 +122,12 @@ const Card = ({
 			profondeurCard
 		);
 	}
+
+	/**
+	 * 
+	 * @param {*} card 
+	 * @returns 
+	 */
 	function calcSizeCard(card) {
 		if (card === undefined)
 			return {
@@ -149,6 +163,7 @@ const Card = ({
 			height: "28vh",
 		};
 	}
+
 	useEffect((_) => {
 		return (_) => {
 			if (false) {
@@ -156,6 +171,7 @@ const Card = ({
 			}
 		};
 	});
+
 	return (
 		<GameTab.Consumer>
 			{(game) => {
