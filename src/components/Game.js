@@ -2745,7 +2745,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 								src={"img/tiers_exclus.png"}
 								alt={"tiers-exclus"}
 							/>
-							<span className="tooltiptext">Tire Exclus</span>
+							<span className="tooltiptext">Tiers Exclus</span>
 						</button>
 					</div>
 				)}
@@ -2759,6 +2759,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							src={"img/transitivite.png"}
 							alt={"Transitivité"}
 						></img>
+						<span className="tooltiptext">Transitivité</span>
 					</button>
 				)}
 				{/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
