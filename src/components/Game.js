@@ -2309,7 +2309,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		if (allFalseBool === undefined) {
 			allFalseBool = true;
 		}
-		console.log(message);
 		setMessageError(message);
 		if (!allFalseBool) {
 			return;
