@@ -1449,10 +1449,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		}
 	};
 
-
 	/**
-	 * 
-	 * @returns 
+	 *
+	 * @returns
 	 */
 	const tiersExlus = () => {
 		if (navigation || win) return;
@@ -1496,7 +1495,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			);
 		}
 	};
-	
+
 	/**
 	 * Exactement la même fonction que {@link fuseCardAnd()} sauf que la carte créée a une liaison "=>".
 	 */
@@ -2471,10 +2470,18 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	}, [mode, ex, numero]);
 
 	const tautologieHandler = (event) => {
+		const saveValue = event.target.value;
 		event.target.value = "";
 		event.preventDefault();
+		switch (saveValue) {
+			case "transitivite":
+				transitivite();
+				return;
+			default:
+				return;
+		}
 	};
-	const transitivite = (_) => {
+	const transitivite = () => {
 		if (navigation || win) return;
 		// S'il n'y a pas 2 cartes sélectionnées
 		if (nbSelec !== 2) {
@@ -2732,16 +2739,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					<div>
 						<button
 							id="tiersExclus"
-							className={
-								"buttonAction " +
-								(mode === "Tutorial" && numero === 3
-									? "boutonSelection"
-									: "")
-							}
+							className={"buttonAction "}
 							onClick={tiersExlus}
 						>
 							<img
-								src={"img/ajout_objectif.png"}
+								src={"img/tiers_exclus.png"}
 								alt={"tiers-exclus"}
 							/>
 							<span className="tooltiptext">Tire Exclus</span>
@@ -2749,12 +2751,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					</div>
 				)}
 				{mode !== "Create" && (
-					<select onChange={tautologieHandler}>
-						<option value="">Tautologie</option>
-						<option value="transitivite" onClick={transitivite}>
-							Transitivité
-						</option>
-					</select>
+					<button
+						id="transitivite"
+						className={"buttonAction "}
+						onClick={transitivite}
+					>
+						<img
+							src={"img/transitivite.png"}
+							alt={"Transitivité"}
+						></img>
+					</button>
 				)}
 				{/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
 				{mode === "Create" && (
