@@ -910,7 +910,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			error(`La carte ${card} existe deja dans la LPU 1`, false);
 			return false;
 		}
-		if (card.getProfondeur() > 7) {
+		if (card.getProfondeur() > 6) {
 			error(`La carte ${card} est trop grosse`, false);
 			return false;
 		}
