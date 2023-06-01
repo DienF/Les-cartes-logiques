@@ -34,11 +34,11 @@ const Card = ({
 
 	/**
 	 * 
-	 * @param {*} currentCard 
-	 * @param {*} count 
-	 * @param {*} selec 
-	 * @param {*} help 
-	 * @param {*} originalCount 
+	 * @param {Card} currentCard - la carte sur laquelle on est actuellement
+	 * @param {number} count 
+	 * @param {true|false} selec - true si la carte est sélectionnée, sinon false
+	 * @param {true|false} help 
+	 * @param {number} originalCount 
 	 * @returns 
 	 */
 	const recurciveRender = (currentCard, count, selec, help, originalCount) => {
@@ -125,7 +125,7 @@ const Card = ({
 
 	/**
 	 * 
-	 * @param {*} card 
+	 * @param {Card} card 
 	 * @returns 
 	 */
 	function calcSizeCard(card) {

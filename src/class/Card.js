@@ -159,11 +159,21 @@ export default class Card {
 		if (this.left != null) this.left.select(state);
 		if (this.right != null) this.right.select(state);
 	}
+
+	/**
+	 * 
+	 * @param {true|false} state booléen qui définit si une carte est sélectionnée ou pas
+	 */
 	setOld(state) {
 		this.nouveau = state;
 		if (this.left != null) this.left.setOld(state);
 		if (this.right != null) this.right.setOld(state);
 	}
+
+	/**
+	 * 
+	 * @param {true|false} state booléen qui définit si une carte est sélectionnée ou pas
+	 */
 	setDel(state) {
 		this.suppr = state;
 		if (this.left != null) this.left.setDel(state);
@@ -205,22 +215,14 @@ export default class Card {
 	 */
 	toDemonstration() {
 		if (this.color !== null) return "On a" + this.getColor(this.color);
-		else if (this.link === "et")
-			return "On a" + this.left.toString() + "∧" + this.right.toString();
-		else if (this.link === "ou")
-			return "On a" + this.left.toString() + "∨" + this.right.toString();
-		else
-			return (
-				"Puisque" +
-				this.left.toString() +
-				", on a " +
-				this.right.toString()
-			);
+		else if (this.link === "et") return "On a" + this.left.toString() + "∧" + this.right.toString();
+		else if (this.link === "ou") return "On a" + this.left.toString() + "∨" + this.right.toString();
+		else return "Puisque" + this.left.toString() + ", on a " + this.right.toString();
 	}
 
 	/**
-	 *
-	 * @returns
+	 * Renvoie la profondeur à laquelle est située la carte dans la carte complexe.
+	 * @returns {number} la profondeur de la carte
 	 */
 	getProfondeur() {
 		let res = 1;
@@ -233,8 +235,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns
+	 * Vérifie si la carte complexe a une de ses cartes qui possède le connecteur "=>".
+	 * @returns {true|false} true si la carte possède le connecteur "=>", sinon false
 	 */
 	haveImpliqueLinkRecur() {
 		let res = false;
@@ -248,8 +250,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns
+	 * Vérifie si la carte de l'objectif possède le connecteur "et".
+	 * @returns {true|false} true si la carte possède le connecteur "et", sinon false
 	 */
 	isCardEtObjectif() {
 		if (this.color !== null) return false;
@@ -259,8 +261,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns
+	 * Vérifie si la carte possède le connecteur "<=>>".
+	 * @returns {true|false} true si la carte possède le connecteur "<=>", sinon false
 	 */
 	isDoubleArrow() {
 		if (this.color !== null) return false;
@@ -272,8 +274,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns
+	 * Renvoie la bonne carte "<=>".
+	 * @returns {Card} la bonne carte "<=>"
 	 */
 	ifDoubleArrowReturnGoodCard() {
 		if (!this.isDoubleArrow()) return this;
@@ -290,8 +292,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns
+	 * Vérifie si la carte est une carte "non".
+	 * @returns {true|false} true si la carte est une carte "non", sinon false
 	 */
 	isNonCard() {
 		if (this.color !== null) return false;
@@ -299,19 +301,20 @@ export default class Card {
 		if (this.link !== "=>") return false;
 		return true;
 	}
+
+	/**
+	 * Vérifie si l'on peut utiliser le bouton "Tiers-Exclus" sur la carte.
+	 * @returns {true|false} true si l'on peut l'utiliser, sinon false
+	 */
 	canUseTiersExclus() {
-		if (!this.isNonCard()) {
-			return false;
-		}
-		if (!this.left.isNonCard()) {
-			return false;
-		}
+		if (!this.isNonCard()) return false;
+		if (!this.left.isNonCard()) return false;
 		return true;
 	}
 
 	/**
 	 *
-	 * @returns
+	 * @returns {Card}
 	 */
 	ifNonReturnNonCard() {
 		if (!this.isNonCard()) return this;
@@ -329,7 +332,7 @@ export default class Card {
 
 	/**
 	 *
-	 * @returns
+	 * @returns {true|false}
 	 */
 	isOuCard() {
 		if (this.color !== null) return false;
@@ -340,7 +343,7 @@ export default class Card {
 
 	/**
 	 *
-	 * @returns
+	 * @returns {Card}
 	 */
 	ifOuReturnOuCard() {
 		if (!this.isOuCard()) return this;
@@ -358,7 +361,7 @@ export default class Card {
 
 	/**
 	 *
-	 * @returns
+	 * @returns {Card}
 	 */
 	displayGoodCard() {
 		let tmp = this.ifDoubleArrowReturnGoodCard();
@@ -369,7 +372,7 @@ export default class Card {
 
 	/**
 	 *
-	 * @returns
+	 * @returns {Card}
 	 */
 	displayGoodCardRecur() {
 		if (this.color !== null) return this;
