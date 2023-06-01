@@ -43,17 +43,17 @@
         "d d d d";
 
     .buttonWin {
-        position:absolute;
-        left: 50%;
-        top: 40%;
-        width: 326px;
-        height: 100px;
-        margin-top: -59px;
-        margin-left: -163px;
+        background-image: linear-gradient(to right, #d4ddf5, #97b4fc);
+        border: 2px solid lightgray;
         border-radius: 15px;
         font-size: 30px;
-        border: 2px solid lightgray;
-        background-image : linear-gradient( to right, #d4ddf5, #97b4fc );
+        height: 100px;
+        left: 50%;
+        margin-left: -163px;
+        margin-top: -59px;
+        position: absolute;
+        top: 40%;
+        width: 326px;
     }
 
     .buttonWin:hover {
@@ -75,18 +75,18 @@
         button {
             cursor: pointer;
             margin-bottom: 0.8vh;
-            margin-top: 0.8vh;
-            margin-right: 1vh;
             margin-left: 1vh;
+            margin-right: 1vh;
+            margin-top: 0.8vh;
             position: relative;
         }
 
         .buttonAction {
+            background-image: linear-gradient(to right, #d4ddf5, #97b4fc);
+            border: 2px solid lightgray;
+            border-radius: 5px;
             height: 42px;
             width: auto;
-            border-radius: 5px;
-            border: 2px solid lightgray;
-            background-image : linear-gradient( to right, #d4ddf5, #97b4fc );
     
             img {
                 height: 35px;
@@ -113,28 +113,28 @@
         }
 
         .tooltiptext::after {
-            content: "";
-            position: absolute;
+            border-color: transparent transparent black transparent;
+            border-style: solid;
+            border-width: 5px;
             bottom: 100%;
+            content: "";
             left: 50%;
             margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent black transparent;
+            position: absolute;
         }
         
 
         #checkBoxSimple {
-            position: relative;
-            top : -10px;
             margin-bottom: 0.8vh;
-            margin-top: 0.8vh;
-            margin-right: 1vh;
             margin-left: 1vh;
+            margin-right: 1vh;
+            margin-top: 0.8vh;
+            position: relative;
+            top: -10px;
 
             .tooltiptext {
-                width: 200px;
                 top: 180%;
+                width: 200px;
             }
         }
 
@@ -146,7 +146,7 @@
             }
         }
 
-        #checkBoxSimple:hover{
+        #checkBoxSimple:hover {
             [type="checkbox"] + label:before{
                 border: 2px solid black;
             }
@@ -158,15 +158,15 @@
     }
 
     .message {
-        color: black;
-        text-align: center;
         border-radius: 10px;
+        color: black;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
         margin-left: 200px;
         margin-right: 200px;
-        font-weight: bold;
-        font-size: 14px;
-        margin-bottom: 5px;
         position:sticky;
+        text-align: center;
         top: 110px;
         z-index: 10;
     }
@@ -187,9 +187,11 @@
         border: #a6ca8a solid 5px;
         border-radius: 1px;
     }
+
     #checkBoxSimple{
         color:black;
     }
+
     .demonstration {
         grid-area: d;
         background-image: url("../../../public/img/fond_ligne_cahier.png");
@@ -215,15 +217,17 @@
 
     [type="checkbox"]:not(:checked),
 	[type="checkbox"]:checked {
+        left: -9999px;
 		position: absolute;
-		left: -9999px;
 	}
+
 	[type="checkbox"]:not(:checked) + label,
 	[type="checkbox"]:checked + label {
+        cursor: pointer;
+        padding-left: 75px;
 		position: relative;
-		padding-left: 75px;
-		cursor: pointer;
 	}
+
 	[type="checkbox"]:not(:checked) + label:before,
 	[type="checkbox"]:checked + label:before,
 	[type="checkbox"]:not(:checked) + label:after,
@@ -231,30 +235,38 @@
 		content: '';
 		position: absolute;
 	}
+
 	[type="checkbox"]:not(:checked) + label:before,
 	[type="checkbox"]:checked + label:before {
-		left:0; top: -12px;
-		width: 85px; height: 40px;
-		background: linear-gradient( to right, #989eaf, #6173a1 );
+		background: linear-gradient(to right, #989eaf, #6173a1);
         border: 2px solid lightgray;
 		border-radius: 20px;
+        height: 40px;
+        left: 0;
+        top: -12px;
 		transition: background-color .2s;
+        width: 85px;
 	}
+
 	[type="checkbox"]:not(:checked) + label:after,
 	[type="checkbox"]:checked + label:after {
-		width: 35px; height: 35px;
+        background: #d82828;
+        border-radius: 50%;
+		height: 35px;
+        left: 4px;
+        top: -8px;
 		transition: all .2s;
-		border-radius: 50%;
-		background: #d82828;
-		top: -8px; left: 4px;
+        width: 35px;
 	}
 
 	/* on checked */
 	[type="checkbox"]:checked + label:before {
-		background:linear-gradient( to right, #d4ddf5, #97b4fc );
+		background:linear-gradient(to right, #d4ddf5, #97b4fc);
 	}
+
 	[type="checkbox"]:checked + label:after {
 		background: #14f585;
-		top: -8px; left: 50px;
+        left: 50px;
+		top: -8px;
 	}
 }

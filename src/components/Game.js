@@ -8,7 +8,12 @@ export const GameTab = React.createContext();
 var Latex = require("react-latex");
 
 const Game = ({ mode, ex, numero, nbExo }) => {
-	// test
+	
+	/**
+	 * 
+	 * @param {number} indexDeck 
+	 * @param {number} indexCard 
+	 */
 	const changeHover = (indexDeck, indexCard) => {
 		const tmp = [...game];
 		tmp[currentCardArrow[0]][currentCardArrow[1]].hover = false;
@@ -18,6 +23,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	};
 
 	const [currentCardArrow, setcurrentCardArrow] = useState(undefined);
+
 	document.onkeydown = (event) => {
 		if (event.code.toLowerCase().includes("arrow")) {
 			event.preventDefault();
@@ -58,31 +64,34 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			event.preventDefault();
 			update(currentCardArrow[0], currentCardArrow[1]);
 		}
-		if (event.code === "KeyQ") {
-			addCardAnd();
-		}
-		if (event.code === "KeyW") {
-			addCardFuse();
-		}
-		if (event.code === "KeyE") {
-			fuseCardAnd();
-		}
-		if (event.code === "KeyR") {
-			addObjectif();
-		}
-		if (event.code === "KeyT") {
-			retourEnArriere();
-		}
-		if (event.code === "Escape") {
-			const tmp = [...game];
-			tmp[currentCardArrow[0]][currentCardArrow[1]].hover = false;
-			setGame(tmp);
-			setcurrentCardArrow(undefined);
+		switch (event.code) {
+			case "KeyQ":
+				addCardAnd();
+				break;
+			case "KeyW":
+				addCardFuse();
+				break;
+			case "KeyE":
+				fuseCardAnd();
+				break;
+			case "KeyR":
+				addObjectif();
+				break;
+			case "KeyT":
+				retourEnArriere();
+				break;
+			case "Escape":
+				const tmp = [...game];
+				tmp[currentCardArrow[0]][currentCardArrow[1]].hover = false;
+				setGame(tmp);
+				setcurrentCardArrow(undefined);
+				break;
+			default:
+				break;
 		}
 	};
-	// fin du test
 
-	// Carte qui n'existera jamais dans un deck
+	/** Carte qui n'existera jamais dans un deck */
 	let cardError = new Card(
 		-1,
 		"error",
@@ -378,6 +387,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			}
 		}
 	};
+
+	/**
+	 * 
+	 * @param {*} tmp 
+	 */
 	const setAllCardOld = (tmp) => {
 		try {
 			tmp.forEach((e) => {
@@ -387,6 +401,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			});
 		} catch (error) {}
 	};
+
 	/**
 	 * Désélectionne toutes les cartes dans le tableau reçu et devient le jeu.
 	 * @param {Card[][]} tmp - tableau du jeu temporaire
@@ -470,10 +485,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			true,
 			false
 		);
-		if (!addToGame(tmp, indiceDeckAddCard, cardToAdd)) {
-			return;
-		}
-
+		if (!addToGame(tmp, indiceDeckAddCard, cardToAdd)) return;
 		// Actualise le jeu et désélectionne tout
 		allFalse(tmp);
 	};
@@ -2317,9 +2329,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	};
 
 	/**
-	 *
-	 * @param {string} str
-	 * @returns {string}
+	 * Formatte une chaîne de caractères en format Latex.
+	 * @param {string} str - la chaîne de caractères à formatter
+	 * @returns {string} - la chaîne de caractères formattée en Latex
 	 */
 	const StringToLatex = (str) => {
 		str = str.replaceAll("Rouge", " \\textit{ Rouge } ");
@@ -2338,14 +2350,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		str = str.replaceAll(".", " \\text{. }$$$ ");
 		str = str.replaceAll(",", " \\text{, }");
 		str = str.replaceAll("alors", " $$$\\text{alors } ");
-
 		str = str.replaceAll("On a", "$$$\\text{On a } ");
 		str = str.replaceAll("on a", "\\text{on a } ");
-		str = str.replaceAll(
-			"Par transitivité",
-			" $$$\\text{Par transitivité } "
-		);
-
+		str = str.replaceAll("Par transitivité", " $$$\\text{Par transitivité } ");
 		str = str.replaceAll("Montrons", " $$$\\text{Montrons } ");
 		str = str.replaceAll("Supposons", " $$$\\text{Supposons } ");
 		str = str.replaceAll("Puisque", " $$$\\text{Puisque } ");
@@ -2406,11 +2413,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 
 	/**
 	 *
-	 * @param {*} event -
+	 * @param {Event} event -
 	 */
 	const affichageSimpleHandler = (event) => {
 		setAffichageSimple(event.target.checked);
 	};
+
 	/**
 	 * Initialise l'exercice.
 	 */
@@ -2442,35 +2450,42 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				setSavedGame(tmp);
 			} catch (error) {}
 		}
-
-		if (numero === 0)
-			setMessageTutorial([
-				"Le but du jeu est de réussir à créer la carte qui est dans l'objectif dans le premier deck.",
-				"Vous pouvez sélectionner une carte en cliquant dessus.",
-			]);
-		if (numero === 1)
-			setMessageTutorial([
-				"Dans ce niveau nous allons apprendre le troisième bouton.",
-				"Ce bouton a besoin de deux cartes pour fonctionner.",
-				"Sélectionner deux cartes.",
-			]);
-		if (numero === 2)
-			setMessageTutorial([
-				"Dans ce niveau nous allons apprendre le quatrième bouton.",
-				"Ce bouton a besoin de deux cartes pour fonctionner.",
-				"Sélectionner deux cartes.",
-			]);
-		if (numero === 3)
-			setMessageTutorial([
-				"Dans ce niveau nous allons apprendre le dernier bouton.",
-				"Pour faire fonctionner ce bouton on doit sélectionner l'objectif.",
-			]);
+		switch (numero) {
+			case 0:
+				setMessageTutorial([
+					"Le but du jeu est de réussir à créer la carte qui est dans l'objectif dans le premier deck.",
+					"Vous pouvez sélectionner une carte en cliquant dessus.",
+				]);
+				break;
+			case 1:
+				setMessageTutorial([
+					"Dans ce niveau nous allons apprendre le troisième bouton.",
+					"Ce bouton a besoin de deux cartes pour fonctionner.",
+					"Sélectionner deux cartes.",
+				]);
+				break;
+			case 2:
+				setMessageTutorial([
+					"Dans ce niveau nous allons apprendre le quatrième bouton.",
+					"Ce bouton a besoin de deux cartes pour fonctionner.",
+					"Sélectionner deux cartes.",
+				]);
+				break;
+			case 3:
+				setMessageTutorial([
+					"Dans ce niveau nous allons apprendre le dernier bouton.",
+					"Pour faire fonctionner ce bouton on doit sélectionner l'objectif.",
+				]);
+				break;
+			default:
+				break;
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, ex, numero]);
 
 	/**
 	 * 
-	 * @param {*} event 
+	 * @param {Event} event 
 	 * @returns 
 	 */
 	const tautologieHandler = (event) => {
@@ -2506,8 +2521,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Copie du jeu actuel
 		let tmp = [...game],
 			card1 = tmp[selecDeck1][selecCard1],
-			card2 = tmp[selecDeck2][selecCard2];
-		let cardToAdd, cardRight, cardLeft, cardMiddle, sign;
+			card2 = tmp[selecDeck2][selecCard2],
+			cardToAdd,
+			cardRight,
+			cardLeft,
+			cardMiddle,
+			sign;
 		if (card1.link === "=>" || card2.link === "=>") {
 			sign = "=>";
 			if (card1.left.equals(card2.right)) {
@@ -2804,7 +2823,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							onChange={affichageSimpleHandler}
 							defaultChecked={true}
 						></input>
-						<label for="afficheSimple">
+						<label htmlFor="afficheSimple">
 							<span className="tooltiptext">
 								Affichage Simplifié
 							</span>

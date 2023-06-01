@@ -2,19 +2,37 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Choice = () => {
+	/**
+	 * Nombre de niveaux
+	 */
 	const jsonCount = 36;
+
+	/**
+	 * Chapitrage
+	 */
 	const difficulty = [
 		[1, 20, "Démonstrations"],
-		[21, 35, " Raisonnements"],
+		[21, 35, "Raisonnements"],
 		[36, 40, "Autres"],
 	];
+
 	const navigate = useNavigate();
 
+	/**
+	 * Navigue vers la page du niveau.
+	 * @param {Event} event 
+	 */
 	function goToExo(event) {
 		const url = event.target.getAttribute("url");
 		navigate(url);
 	}
 
+	/**
+	 * Crée une ligne de niveaux à afficher.
+	 * @param {number} start - le premier niveau de la ligne
+	 * @param {number} end   - le dernier niveau de la ligne
+	 * @returns {JSX.Element} la ligne
+	 */
 	const createRow = (start, end) => {
 		let row = [];
 		for (let index = start; index < end; index++) {
@@ -40,11 +58,16 @@ const Choice = () => {
 		return <tr key={start + "-" + end}>{row}</tr>;
 	};
 
+	/**
+	 * Renvoie la liste de choix des niveaux.
+	 * @param {*} props - attributs
+	 * @returns {JSX.Element[]}
+	 */
 	function AfficheChoice(props) {
 		const res = [];
 		difficulty.forEach((category, index) => {
-			let table = [];
-			let y = 1;
+			let table = [],
+				y = 1;
 			res.push(<h2 key={"h-" + index}>{category[2]}</h2>);
 			for (let i = category[0] - 1; i <= category[1] - 1; i++) {
 				if (i + 5 >= category[1] && y === 1) {

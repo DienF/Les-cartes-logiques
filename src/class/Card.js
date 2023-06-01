@@ -313,8 +313,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns {Card}
+	 * Si la carte est censé être une carte "non", renvoie la carte au format "non" pour l'affichage.
+	 * @returns {Card} - la carte au format "non" si c'est une carte "non", sinon la carte de base
 	 */
 	ifNonReturnNonCard() {
 		if (!this.isNonCard()) return this;
@@ -331,8 +331,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns {true|false}
+	 * Vérifie si la carte possède le connecteur "ou".
+	 * @returns {true|false} true si la carte correspond à une carte avec un connecteur "ou", sinon false
 	 */
 	isOuCard() {
 		if (this.color !== null) return false;
@@ -342,8 +342,8 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns {Card}
+	 * Si la carte est censé être une carte "ou", renvoie la carte au format "ou" pour l'affichage.
+	 * @returns {Card} - la carte au format "ouu" si c'est une carte "ou", sinon la carte de base
 	 */
 	ifOuReturnOuCard() {
 		if (!this.isOuCard()) return this;
@@ -360,8 +360,9 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns {Card}
+	 * Renvoie la carte sous un format d'affichage où sont affichés les connecteurs "<=>", "ou" et "non" plutôt que leurs
+	 * équivalents logiques.
+	 * @returns {Card} - la carte sous son autre format d'affichage
 	 */
 	displayGoodCard() {
 		let tmp = this.ifDoubleArrowReturnGoodCard();
@@ -371,8 +372,9 @@ export default class Card {
 	}
 
 	/**
-	 *
-	 * @returns {Card}
+	 * Renvoie la carte complexe sous un format d'affichage où sont affichés les connecteurs "<=>", "ou" et "non" plutôt que leurs
+	 * équivalents logiques, à l'aide d'une récursion sur {@link displayGoodCard()}.
+	 * @returns {Card} - la carte complexe sous son autre format d'affichage
 	 */
 	displayGoodCardRecur() {
 		if (this.color !== null) return this;

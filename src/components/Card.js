@@ -39,7 +39,7 @@ const Card = ({
 	 * @param {true|false} selec - true si la carte est sélectionnée, sinon false
 	 * @param {true|false} help 
 	 * @param {number} originalCount 
-	 * @returns 
+	 * @returns {JSX.Element}
 	 */
 	const recurciveRender = (currentCard, count, selec, help, originalCount) => {
 		recurciveRender.count++;
@@ -101,8 +101,8 @@ const Card = ({
 
 	/**
 	 * 
-	 * @param {*} props 
-	 * @returns 
+	 * @param {JSX.Element} props 
+	 * @returns {JSX.Elements}
 	 */
 	function RenderCard(props) {
 		let currentCard = props.currentCard,
@@ -124,51 +124,24 @@ const Card = ({
 	}
 
 	/**
-	 * 
-	 * @param {Card} card 
-	 * @returns 
+	 * Renvoie les dimensions (largeur et longueur) de la carte selon sa profondeur dans la carte complexe.
+	 * @param {Card} card - la carte
+	 * @returns {JSX.Element} - la largeur et la longueur de la carte
 	 */
 	function calcSizeCard(card) {
-		if (card === undefined)
-			return {
-				minWidth: 0,
-				minHeight: 0,
-			};
-		if (affichageSimple) {
-			card = card.displayGoodCardRecur();
-		}
+		if (card === undefined) return { minWidth: 0, minHeight: 0 };
+		if (affichageSimple) card = card.displayGoodCardRecur();
 		const prof = card.getProfondeur();
-		if (prof === 1)
-			return {
-				width: "5vw",
-				height: "13vh",
-			};
-		if (prof < 4)
-			return {
-				width: "11vw",
-				height: "13vh",
-			};
-		if (prof < 5)
-			return {
-				width: "11vw",
-				height: "20vh",
-			};
-		if (prof < 6)
-			return {
-				width: "15vw",
-				height: "20vh",
-			};
-		return {
-			width: "15vw",
-			height: "28vh",
-		};
+		if (prof === 1) return { width:  "5vw", height: "13vh" };
+		if (prof < 4)   return { width: "11vw", height: "13vh" };
+		if (prof < 5)   return { width: "11vw", height: "20vh" };
+		if (prof < 6)   return { width: "15vw", height: "20vh" };
+		return { width: "15vw", height: "28vh" };
 	}
 
 	useEffect((_) => {
 		return (_) => {
-			if (false) {
-				console.log("lol");
-			}
+			if (false) console.log("Toto");
 		};
 	});
 

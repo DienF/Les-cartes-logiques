@@ -49,6 +49,11 @@ const Deck = ({
 		return "other" + indice;
 	};
 
+	/**
+	 * Indique quel est l'objectif à la ième position.
+	 * @param {number} i - la position de l'objectif
+	 * @returns {string|-1} soit "principal", soit "secondaire" suivi de son numéro
+	 */
 	const getObjectifNum = (i) => {
 		let num = -1;
 		objectif.forEach((element) => {
