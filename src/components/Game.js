@@ -2468,6 +2468,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode, ex, numero]);
 
+	/**
+	 * 
+	 * @param {*} event 
+	 * @returns 
+	 */
 	const tautologieHandler = (event) => {
 		const saveValue = event.target.value;
 		event.target.value = "";
@@ -2480,6 +2485,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				return;
 		}
 	};
+
+	/**
+	 * 
+	 * @returns 
+	 */
 	const transitivite = () => {
 		if (navigation || win) return;
 		// S'il n'y a pas 2 cartes sélectionnées
@@ -2490,15 +2500,13 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Prend le deck le plus grand
 		let finalDeck = Math.max(selecDeck1, selecDeck2);
 		if (finalDeck === game.length - 1) {
-			error(
-				"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
-			);
+			error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
 			return;
 		}
 		// Copie du jeu actuel
-		let tmp = [...game];
-		const card1 = tmp[selecDeck1][selecCard1];
-		const card2 = tmp[selecDeck2][selecCard2];
+		let tmp = [...game],
+			card1 = tmp[selecDeck1][selecCard1],
+			card2 = tmp[selecDeck2][selecCard2];
 		let cardToAdd, cardRight, cardLeft, cardMiddle, sign;
 		if (card1.link === "=>" || card2.link === "=>") {
 			sign = "=>";
@@ -2527,7 +2535,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					card2.right.copy()
 				);
 			} else {
-				error("ces cartes ne peuvent pas utiliser ce bouton");
+				error("Vous ne pouvez pas utiliser ce bouton avec ces cartes !");
 				return;
 			}
 		} else if (card1.isDoubleArrow() && card2.isDoubleArrow()) {
@@ -2548,7 +2556,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						"=>",
 						card1.left.left.copy(),
 						card2.left.right.copy()
-					), // left
+					),
 					new Card(
 						0,
 						null,
@@ -2556,7 +2564,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						"=>",
 						card2.left.right.copy(),
 						card1.left.left.copy()
-					) // right
+					)
 				);
 			} else if (card2.left.right.equals(card1.right.right)) {
 				cardRight = card2.left.left;
@@ -2574,7 +2582,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						"=>",
 						card1.left.right.copy(),
 						card2.left.left.copy()
-					), // left
+					),
 					new Card(
 						0,
 						null,
@@ -2582,19 +2590,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						"=>",
 						card2.left.left.copy(),
 						card1.left.right.copy()
-					) // right
+					)
 				);
 			} else {
-				error("ces cartes ne peuvent pas utiliser ce bouton");
+				error("Vous ne pouvez pas utiliser ce bouton avec ces cartes !");
 				return;
 			}
 		} else {
-			error(
-				'Les cartes séléctionner doivent avoir des liaison "=>" ou "<=>"'
-			);
+			error('Les cartes sélectionnées doivent avoir des liaisons "=>" ou "<=>".');
 			return;
 		}
-
 		addToGame(tmp, finalDeck, cardToAdd, false);
 		// Vérifie si l'exercice est fini, si oui affiche le popup de victoire
 		isWin(
@@ -2612,6 +2617,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			tmp
 		);
 	};
+
 	return (
 		<div className="game">
 			{win && (
@@ -2702,8 +2708,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					</div>
 				)}
 				{/* Fusionne 2 cartes (taille double max) et crée une 3ème carte composée de la partie gauche (1ère carte
-            sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
-            /!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
+            	sélectionnée) & la partie droite (2ème carte sélectionnée). La carte créée aura une liaison "et".
+            	/!\ Pour l'instant ce bouton n'est pas affiché car je n'y vois aucune utilité à voir pour les prochains exercices ! */}
 				{false && mode !== "Create" && (
 					<button className={"buttonAction "} onClick={fuseCardFuse}>
 						<img
