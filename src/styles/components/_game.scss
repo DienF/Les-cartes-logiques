@@ -155,6 +155,12 @@
                 visibility: visible;
             }
         }
+        .boutonSelection {
+                border: 3px solid black;
+                border-radius: 10px;
+                box-shadow:
+                        0 0 15px 8px #f8ff24;
+        }
     }
 
     .message {
@@ -183,10 +189,7 @@
         border: 1px solid #f5aca6;
     }
 
-    .boutonSelection {
-        border: #a6ca8a solid 5px;
-        border-radius: 1px;
-    }
+
 
     #checkBoxSimple{
         color:black;
