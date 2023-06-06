@@ -8,11 +8,10 @@ export const GameTab = React.createContext();
 var Latex = require("react-latex");
 
 const Game = ({ mode, ex, numero, nbExo }) => {
-	
 	/**
-	 * 
-	 * @param {number} indexDeck 
-	 * @param {number} indexCard 
+	 *
+	 * @param {number} indexDeck
+	 * @param {number} indexCard
 	 */
 	const changeHover = (indexDeck, indexCard) => {
 		const tmp = [...game];
@@ -389,8 +388,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	};
 
 	/**
-	 * 
-	 * @param {*} tmp 
+	 *
+	 * @param {*} tmp
 	 */
 	const setAllCardOld = (tmp) => {
 		try {
@@ -2352,7 +2351,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		str = str.replaceAll("alors", " $$$\\text{alors } ");
 		str = str.replaceAll("On a", "$$$\\text{On a } ");
 		str = str.replaceAll("on a", "\\text{on a } ");
-		str = str.replaceAll("Par transitivité", " $$$\\text{Par transitivité } ");
+		str = str.replaceAll(
+			"Par transitivité",
+			" $$$\\text{Par transitivité } "
+		);
 		str = str.replaceAll("Montrons", " $$$\\text{Montrons } ");
 		str = str.replaceAll("Supposons", " $$$\\text{Supposons } ");
 		str = str.replaceAll("Puisque", " $$$\\text{Puisque } ");
@@ -2450,6 +2452,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				setSavedGame(tmp);
 			} catch (error) {}
 		}
+		if (mode === "Create") {
+			allFalse([[], []]);
+		}
 		switch (numero) {
 			case 0:
 				setMessageTutorial([
@@ -2484,26 +2489,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	}, [mode, ex, numero]);
 
 	/**
-	 * 
-	 * @param {Event} event 
-	 * @returns 
-	 */
-	const tautologieHandler = (event) => {
-		const saveValue = event.target.value;
-		event.target.value = "";
-		event.preventDefault();
-		switch (saveValue) {
-			case "transitivite":
-				transitivite();
-				return;
-			default:
-				return;
-		}
-	};
-
-	/**
-	 * 
-	 * @returns 
+	 *
+	 * @returns
 	 */
 	const transitivite = () => {
 		if (navigation || win) return;
@@ -2515,7 +2502,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		// Prend le deck le plus grand
 		let finalDeck = Math.max(selecDeck1, selecDeck2);
 		if (finalDeck === game.length - 1) {
-			error("Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !");
+			error(
+				"Vous ne pouvez pas utiliser une carte de l'objectif avec ce bouton !"
+			);
 			return;
 		}
 		// Copie du jeu actuel
@@ -2554,7 +2543,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					card2.right.copy()
 				);
 			} else {
-				error("Vous ne pouvez pas utiliser ce bouton avec ces cartes !");
+				error(
+					"Vous ne pouvez pas utiliser ce bouton avec ces cartes !"
+				);
 				return;
 			}
 		} else if (card1.isDoubleArrow() && card2.isDoubleArrow()) {
@@ -2612,11 +2603,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					)
 				);
 			} else {
-				error("Vous ne pouvez pas utiliser ce bouton avec ces cartes !");
+				error(
+					"Vous ne pouvez pas utiliser ce bouton avec ces cartes !"
+				);
 				return;
 			}
 		} else {
-			error('Les cartes sélectionnées doivent avoir des liaisons "=>" ou "<=>".');
+			error(
+				'Les cartes sélectionnées doivent avoir des liaisons "=>" ou "<=>".'
+			);
 			return;
 		}
 		addToGame(tmp, finalDeck, cardToAdd, false);
@@ -3019,9 +3014,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			{/* Popup de victoire quand on réussit l'objectif principal */}
 			{popupWin && (
 				<Popup
-					size={
-						constructDemonstration(demonstration[0][1]).length / 5
-					}
 					content={
 						<>
 							<b>Bravo, vous avez gagné !</b>

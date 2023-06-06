@@ -11,11 +11,14 @@ const Exercise = () => {
 	let mode = useParams().mode;
 	const [ex, setEx] = useState();
 	const navigate = useNavigate();
-	const nbExo = 35;
+	const nbExo = 36;
+	const nbTuto = 7;
+	const [nbExoConfondu, setNbExoConfondu] = useState(0);
 
 	useEffect(() => {
 		let tmpEx = [];
-		if (mode === "Play") {
+		if (mode === "Play" && tmp <= nbExo) {
+			setNbExoConfondu(nbExo);
 			setNum(tmp);
 			fetch("json/exos_feuilles/ex" + tmp + ".json")
 				.then((response) => response.text())
@@ -23,7 +26,8 @@ const Exercise = () => {
 					tmpEx = JSON.parse(data);
 					setEx(tmpEx);
 				});
-		} else if (mode === "Tutorial") {
+		} else if (mode === "Tutorial" && tmp <= nbTuto) {
+			setNbExoConfondu(nbTuto);
 			setNum(tmp);
 			fetch("json/tutoriel/tuto" + tmp + ".json")
 				.then((response) => response.text())
@@ -40,7 +44,12 @@ const Exercise = () => {
 		<div className="home">
 			<Navigation />
 			{ex !== undefined && (
-				<Game mode={mode} ex={ex} numero={num - 1} nbExo={nbExo} />
+				<Game
+					mode={mode}
+					ex={ex}
+					numero={num - 1}
+					nbExo={nbExoConfondu}
+				/>
 			)}
 			<PopupForms />
 		</div>
