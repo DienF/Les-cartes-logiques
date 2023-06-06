@@ -344,12 +344,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 			if (mode === "Tutorial") {
 				if (numero === 0) {
 					setMessageTutorial([
-						"Une fois une carte sélectionnée elle aura un contour noir.",
+						"Une fois une carte sélectionnée elle aura un contour noir et une surbrillance jaune.",
 						"Vous pouvez utiliser les boutons au-dessus pour effectuer une action.",
-						"Dans ce niveau nous allons apprendre le fonctionnement du deuxième bouton.",
+						'Dans ce niveau nous allons apprendre le fonctionnement du bouton "Séparation".',
 						"Ce bouton a besoin de deux conditions :",
-						"- Une seule carte doit être sélectionnée",
-						'- La carte doit avoir une liaison "et"',
+						"- Une seule carte doit être sélectionnée ;",
+						'- La carte doit avoir une liaison "et".',
 						"Quand les conditions sont validées la partie gauche et droite de la carte sont ajoutées au deck.",
 					]);
 				}
@@ -365,19 +365,15 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				if (tmpNbselec === 2 && numero === 2) {
 					setMessageTutorial([
 						"Ce bouton a besoin de deux conditions :",
-						"- Avoir deux cartes sélectionnées",
+						"- Avoir deux cartes sélectionnées ;",
 						"- Les deux cartes sélectionnées doivent comporter une ou deux cartes.",
 						'Quand les conditions sont validées une nouvelle carte est créée avec les deux autres cartes sélectionnées et cette carte aura une liaison "et"',
 					]);
 				}
-				if (
-					tmpNbselec === 1 &&
-					numero === 3 &&
-					Math.max(tmpSelecDeck1, tmpSelecDeck2) === game.length - 1
-				) {
+				if (tmpNbselec === 1 && numero === 3 && Math.max(tmpSelecDeck1, tmpSelecDeck2) === game.length - 1) {
 					setMessageTutorial([
 						"Ce bouton a besoin de deux conditions :",
-						"- Une seule carte doit être sélectionnée.",
+						"- Une seule carte doit être sélectionnée ;",
 						"- La carte sélectionnée doit être dans le deck des objectifs.",
 						'La carte sélectionnée doit avoir une liaison "=>"',
 						"Quand les conditions sont validées un objectif secondaire est créée, l’objectif secondaire est la partie droite de la carte sélectionnée, un deck est créée avec la carte qui est à gauche de la carte sélectionnée.",
@@ -2446,7 +2442,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					res.push(tmp[1][0].copy());
 					res.push(".");
 				}
-
 				addLineDemonstration([res], [0], 0, true);
 				allFalse(tmp);
 				setSavedGame(tmp);
@@ -2464,22 +2459,44 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				break;
 			case 1:
 				setMessageTutorial([
-					"Dans ce niveau nous allons apprendre le troisième bouton.",
+					'Dans ce niveau nous allons apprendre le bouton "Implique".',
 					"Ce bouton a besoin de deux cartes pour fonctionner.",
 					"Sélectionner deux cartes.",
 				]);
 				break;
 			case 2:
 				setMessageTutorial([
-					"Dans ce niveau nous allons apprendre le quatrième bouton.",
+					'Dans ce niveau nous allons apprendre le quatrième bouton "Fusion".',
 					"Ce bouton a besoin de deux cartes pour fonctionner.",
 					"Sélectionner deux cartes.",
 				]);
 				break;
 			case 3:
 				setMessageTutorial([
-					"Dans ce niveau nous allons apprendre le dernier bouton.",
+					'Dans ce niveau nous allons apprendre le bouton "+ Objectif".',
 					"Pour faire fonctionner ce bouton on doit sélectionner l'objectif.",
+				]);
+				break;
+			case 4:
+				setMessageTutorial([
+					'Dans ce niveau nous allons apprendre le bouton "Transitivité" avec le connecteur "⟹", le bouton "Affichage Simplifié", ainsi que le fonctionnement de la carte blanche.',
+					'Cliquer sur le bouton "Affichage Simplifié" pour faire apparaître la carte blanche. Lorsqu’on l’obtient, la partie est gagnée qu’importe l’objectif.',
+					'Ensuite, le bouton "Transitivité" a besoin de deux cartes avec un connecteur "⟹" pour fonctionner. Il faut que ces cartes soient de la même forme que dans le symbole du bouton.',
+					"Sélectionner deux cartes.",
+				]);
+				break;
+			case 5:
+				setMessageTutorial([
+					'Dans ce niveau nous allons apprendre le bouton "Transitivité" avec le connecteur "⟺".',
+					'Il fonctionne de la même manière qu’avec le connecteur "⟹", il faut que les cartes sélectionnées soient de la même forme que dans le symbole du bouton.',
+					"Sélectionner deux cartes.",
+				]);
+				break;
+			case 6:
+				setMessageTutorial([
+					'Dans ce niveau nous allons apprendre le bouton "Tiers Exclus".',
+					'Il fonctionne avec une carte "¬(¬Rouge)" par exemple, qui est équivalente à la carte "Rouge ou Blanche".',
+					"Sélectionner une carte.",
 				]);
 				break;
 			default:
@@ -2748,9 +2765,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						>
 							<img
 								src={"img/ajout_objectif.png"}
-								alt={"Objectif"}
+								alt={"+ Objectif"}
 							/>
-							<span className="tooltiptext">Objectif</span>
+							<span className="tooltiptext">+ Objectif</span>
 						</button>
 					</div>
 				)}
@@ -2758,7 +2775,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					<div>
 						<button
 							id="tiersExclus"
-							className={"buttonAction "}
+							className={
+								"buttonAction " +
+								(mode === "Tutorial" && numero === 6
+									? "boutonSelection"
+									: "")
+							}
 							onClick={tiersExlus}
 						>
 							<img
@@ -2772,7 +2794,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				{mode !== "Create" && (
 					<button
 						id="transitivite"
-						className={"buttonAction "}
+						className={
+								"buttonAction " +
+								(mode === "Tutorial" && (numero === 5 || numero === 6)
+									? "boutonSelection"
+									: "")
+						}
 						onClick={transitivite}
 					>
 						<img
