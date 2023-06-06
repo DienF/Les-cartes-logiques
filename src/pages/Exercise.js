@@ -7,7 +7,7 @@ import PopupForms from "../components/PopupForms";
 
 const Exercise = () => {
 	const [num, setNum] = useState();
-	let tmp = useParams().num;
+	let tmpNum = useParams().num;
 	let mode = useParams().mode;
 	const [ex, setEx] = useState();
 	const navigate = useNavigate();
@@ -17,28 +17,28 @@ const Exercise = () => {
 
 	useEffect(() => {
 		let tmpEx = [];
-		if (mode === "Play" && tmp <= nbExo) {
+		if (mode === "Play" && tmpNum <= nbExo) {
 			setNbExoConfondu(nbExo);
-			setNum(tmp);
-			fetch("json/exos_feuilles/ex" + tmp + ".json")
+			setNum(tmpNum);
+			fetch("json/exos_feuilles/ex" + tmpNum + ".json")
 				.then((response) => response.text())
 				.then((data) => {
 					tmpEx = JSON.parse(data);
 					setEx(tmpEx);
 				});
-		} else if (mode === "Tutorial" && tmp <= nbTuto) {
+		} else if (mode === "Tutorial" && tmpNum <= nbTuto) {
 			setNbExoConfondu(nbTuto);
-			setNum(tmp);
-			fetch("json/tutoriel/tuto" + tmp + ".json")
+			setNum(tmpNum);
+			fetch("json/tutoriel/tuto" + tmpNum + ".json")
 				.then((response) => response.text())
 				.then((data) => {
 					tmpEx = JSON.parse(data);
 					setEx(tmpEx);
 				});
-		} else if (mode === "Create" && tmp === undefined) setEx([[], []]);
+		} else if (mode === "Create" && tmpNum === undefined) setEx([[], []]);
 		else navigate("/NotFound");
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [tmp, mode]);
+	}, [tmpNum, mode]);
 
 	return (
 		<div className="home">
