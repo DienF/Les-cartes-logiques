@@ -2459,6 +2459,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					'Dans ce niveau nous allons apprendre le bouton "Transitivité" avec le connecteur "⟹", le bouton "Affichage Simplifié", ainsi que le fonctionnement de la carte blanche.',
 					'Cliquer sur le bouton "Affichage Simplifié" pour faire apparaître la carte blanche. Lorsqu’on l’obtient, la partie est gagnée qu’importe l’objectif.',
 					'Ensuite, le bouton "Transitivité" a besoin de deux cartes avec un connecteur "⟹" pour fonctionner. Il faut que ces cartes soient de la même forme que dans le symbole du bouton.',
+					'On obtient alors une carte avec le connecteur "⟹".',
 					"Sélectionner deux cartes.",
 				]);
 				break;
@@ -2466,13 +2467,14 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				setMessageTutorial([
 					'Dans ce niveau nous allons apprendre le bouton "Transitivité" avec le connecteur "⟺".',
 					'Il fonctionne de la même manière qu’avec le connecteur "⟹", il faut que les cartes sélectionnées soient de la même forme que dans le symbole du bouton.',
+					'On obtient alors une carte avec le connecteur "⟺".',
 					"Sélectionner deux cartes.",
 				]);
 				break;
 			case 6:
 				setMessageTutorial([
 					'Dans ce niveau nous allons apprendre le bouton "Tiers Exclus".',
-					'Il fonctionne avec une carte "¬(¬Rouge)" par exemple, qui est équivalente à la carte "Rouge ou Blanche".',
+					'Il fonctionne avec une carte "¬(¬Rouge)" par exemple, qui est équivalente à la carte "Rouge ou Blanche", pour obtenir la carte "Rouge".',
 					"Sélectionner une carte.",
 				]);
 				break;
@@ -2772,11 +2774,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					<button
 						id="transitivite"
 						className={
-							"buttonAction " +
-							(mode === "Tutorial" &&
-							(numero === 5 || numero === 6)
-								? "boutonSelection"
-								: "")
+								"buttonAction " +
+								(mode === "Tutorial" && (numero === 4 || numero === 5)
+									? "boutonSelection"
+									: "")
 						}
 						onClick={transitivite}
 					>
