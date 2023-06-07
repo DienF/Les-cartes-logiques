@@ -286,45 +286,33 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				tmpSelecDeck2 = selecDeck2,
 				tmpSelecCard2 = selecCard2;
 			setAllCardOld(tmp);
-			/** Rentre dans le if si :
-			 *  - on ne clique pas sur l'objectif
-			 *  - le jeu n'est pas en mode Creat
-			 *  - si on clique sur l'objectif et qu'il a une liaison =>
-			 */
-			if (
-				(i === game.length - 1 &&
-					(game[i][j].link === "=>" ||
-						game[i][j].isCardEtObjectif()) &&
-					mode !== "Create") ||
-				i !== game.length - 1 ||
-				mode === "Create"
-			) {
-				if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
-					// Si la carte sélectionnée est déjà sélectionnée on la désélectionne (1ère carte)
-					tmpSelecCard1 = -1;
-					tmpSelecDeck1 = -1;
-					tmpNbselec--;
-					currentCard.select(!currentCard.active);
-				} else if (tmpSelecDeck2 === i && tmpSelecCard2 === j) {
-					// Si la carte sélectionnée est déjà sélectionnée on la désélectionne (2ème carte)
-					tmpSelecCard2 = -1;
-					tmpSelecDeck2 = -1;
-					tmpNbselec--;
-					currentCard.select(!currentCard.active);
-				} else if (tmpSelecDeck1 === -1 && tmpSelecCard1 === -1) {
-					// Aucune carte n'est sélectionnée
-					tmpSelecDeck1 = i;
-					tmpSelecCard1 = j;
-					tmpNbselec++;
-					currentCard.select(!currentCard.active);
-				} else if (tmpNbselec < 2) {
-					// Une seule & unique carte est sélectionnée
-					tmpSelecDeck2 = i;
-					tmpSelecCard2 = j;
-					tmpNbselec++;
-					currentCard.select(!currentCard.active);
-				}
+
+			if (tmpSelecDeck1 === i && tmpSelecCard1 === j) {
+				// Si la carte sélectionnée est déjà sélectionnée on la désélectionne (1ère carte)
+				tmpSelecCard1 = -1;
+				tmpSelecDeck1 = -1;
+				tmpNbselec--;
+				currentCard.select(!currentCard.active);
+			} else if (tmpSelecDeck2 === i && tmpSelecCard2 === j) {
+				// Si la carte sélectionnée est déjà sélectionnée on la désélectionne (2ème carte)
+				tmpSelecCard2 = -1;
+				tmpSelecDeck2 = -1;
+				tmpNbselec--;
+				currentCard.select(!currentCard.active);
+			} else if (tmpSelecDeck1 === -1 && tmpSelecCard1 === -1) {
+				// Aucune carte n'est sélectionnée
+				tmpSelecDeck1 = i;
+				tmpSelecCard1 = j;
+				tmpNbselec++;
+				currentCard.select(!currentCard.active);
+			} else if (tmpNbselec < 2) {
+				// Une seule & unique carte est sélectionnée
+				tmpSelecDeck2 = i;
+				tmpSelecCard2 = j;
+				tmpNbselec++;
+				currentCard.select(!currentCard.active);
 			}
+
 			// Affecte toute les variables temporaires aux vraies variables
 			setNbSelec(tmpNbselec);
 			setSelecCard1(tmpSelecCard1);
@@ -577,6 +565,22 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		} else allFalseGame();
 	};
 
+	const returnNonCard = (tmp) => {
+		let deckI = Math.max(selecDeck1, selecDeck2),
+			cardI = Math.max(selecCard1, selecCard2);
+		const futureCardNon = tmp[deckI][cardI].copy();
+		let cardToAdd = new Card(
+			0,
+			null,
+			false,
+			"=>",
+			futureCardNon,
+			new Card(1, "white", false, null, null, null, true, false),
+			true,
+			false
+		);
+		return cardToAdd;
+	};
 	/**
 	 *
 	 * @returns
@@ -588,19 +592,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		}
 		saveGame();
 		let tmp = [...game];
-		const futureCardNon = tmp[selecDeck1][selecCard1].copy();
-		futureCardNon.id = 0;
-		let cardToAdd = new Card(
-			futureCardNon.id,
-			null,
-			false,
-			"=>",
-			futureCardNon,
-			new Card(1, "white", false, null, null, null, true, false),
-			true,
-			false
-		);
-		if (!addToGame(tmp, selecDeck1, cardToAdd)) {
+
+		if (!addToGame(tmp, selecDeck1, returnNonCard(tmp))) {
 			return;
 		}
 		allFalse(tmp);
@@ -660,7 +653,9 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		let res;
 		// Copie JSON du jeu
 		res = gameOutput(game);
-		const blob = new Blob([res], { type: "text/json;charset=utf-8;" });
+		const blob = new Blob([JSON.stringify(res)], {
+			type: "text/json;charset=utf-8;",
+		});
 		const url = URL.createObjectURL(blob);
 		const link = document.createElement("a");
 		if (openFileJson !== "") {
@@ -1486,6 +1481,10 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				cardI = Math.max(selecCard1, selecCard2),
 				tmp = [...game],
 				cardTmp = tmp[deckI][cardI];
+			if (deckI === tmp.length - 1) {
+				transformIntoNonCard();
+				return;
+			}
 			if (!cardTmp.canUseTiersExclus()) {
 				error(
 					`La carte${cardTmp.toString()} n'est pas une carte non(non(Carte))`
@@ -2774,10 +2773,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					<button
 						id="transitivite"
 						className={
-								"buttonAction " +
-								(mode === "Tutorial" && (numero === 4 || numero === 5)
-									? "boutonSelection"
-									: "")
+							"buttonAction " +
+							(mode === "Tutorial" &&
+							(numero === 4 || numero === 5)
+								? "boutonSelection"
+								: "")
 						}
 						onClick={transitivite}
 					>
