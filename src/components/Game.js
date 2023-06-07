@@ -2798,7 +2798,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 				)}
 				{/* Copie du jeu actuel en format JSON dans le presse-papier */}
 				{mode === "Create" && (
-					<button onClick={saveAsFile}>Copier le fichier</button>
+					<button onClick={saveAsFile}>Téléchargé le fichier</button>
 				)}
 				{
 					<span id="checkBoxSimple">
