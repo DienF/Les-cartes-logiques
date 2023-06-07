@@ -102,6 +102,8 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		false
 	);
 
+	const [openFileJson, setOpenFileJson] = useState("");
+
 	/** Tableau où sont réunies toutes les cartes & decks.
 	 *  Il est disposé de cette manière :
 	 *  ┌─────────────┬────────────────────┬───────────────┐
@@ -211,11 +213,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 	 *  Utilisation : navigate(url)
 	 */
 	const navigate = useNavigate();
-
-	/** Variable qui reçoit les JSONs des fichiers.
-	 *  @see {@link convertFile()} & {@link printConvertFile()}
-	 */
-	let filesCopy = "";
 
 	/**
 	 * Renvoie un nouveau deck sans la carte passée en paramètre.
@@ -370,7 +367,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 						'Quand les conditions sont validées une nouvelle carte est créée avec les deux autres cartes sélectionnées et cette carte aura une liaison "et"',
 					]);
 				}
-				if (tmpNbselec === 1 && numero === 3 && Math.max(tmpSelecDeck1, tmpSelecDeck2) === game.length - 1) {
+				if (
+					tmpNbselec === 1 &&
+					numero === 3 &&
+					Math.max(tmpSelecDeck1, tmpSelecDeck2) === game.length - 1
+				) {
 					setMessageTutorial([
 						"Ce bouton a besoin de deux conditions :",
 						"- Une seule carte doit être sélectionnée ;",
@@ -659,10 +660,16 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		let res;
 		// Copie JSON du jeu
 		res = gameOutput(game);
-		// Copie la variable dans le presse-papier
-		navigator.clipboard
-			.writeText(JSON.stringify(res, null, 1))
-			.then(() => {});
+		const blob = new Blob([res], { type: "text/json;charset=utf-8;" });
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement("a");
+		if (openFileJson !== "") {
+			link.download = openFileJson;
+		} else {
+			link.download("ouput.json");
+		}
+		link.href = url;
+		link.click();
 	};
 
 	/**
@@ -674,6 +681,7 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		if (event.target.files.length > 0) {
 			// Variable pour lire le fichier
 			let reader = new FileReader();
+			setOpenFileJson(event.target.files[0].name);
 			// Lit le fichier
 			reader.onload = (event) => {
 				// Transforme le fichier JSON en objet
@@ -1683,43 +1691,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
  	} */
 
 	/**
-	 * Reçoit plusieurs fichiers puis fusionne ces fichiers pour n'en faire qu'un.
-	 * @param {Event} event - le bouton qui reçoit les fichiers ({@link event.target.files})
-	 */
-	const convertFile = (event) => {
-		// Initialisation de la variable où vont être stockés les fichiers JSON
-		filesCopy = "";
-		// Si au moins 1 fichier est sélectionné
-		if (event.target.files.length > 0) {
-			// Boucle sur tous les fichiers sélectionnés
-			Array.from(event.target.files).forEach((element) => {
-				// Création d'un objet pour lire les fichiers
-				let reader = new FileReader();
-				// Méthode appelée quand on lit un fichier
-				reader.onload = (event) => {
-					// Ajoute le fichier suivi d'une virgule (liste d'exercices, on les sépare par une virgule dans un tableau JSON)
-					filesCopy += event.target.result + ",";
-				};
-				// Lit le fichier
-				reader.readAsText(element);
-			});
-		}
-	};
-
-	/**
-	 * Copie dans le presse-papier le fichier obtenu avec le bouton "Copier le fichier".
-	 */
-	const printConvertFile = () => {
-		/**
-		 * Copie ce qu'il y a dans {@link convertFile()} sans le dernier caractère (la dernière virgule) et
-		 * le met entre crochets pour faire un tableau. Cela est copié dans le presse-papier.
-		 */
-		navigator.clipboard
-			.writeText("[" + filesCopy.substring(0, filesCopy.length - 1) + "]")
-			.then(() => {});
-	};
-
-	/**
 	 * Redirige vers le prochain exercice si il existe.
 	 */
 	const nextExercise = () => {
@@ -2449,6 +2420,12 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 		}
 		if (mode === "Create") {
 			allFalse([[], []]);
+			setSavedGame([[], []]);
+			setDemonstration([]);
+			setTabIndentation([0]);
+			setIndentationDemonstration(0);
+			setTabIndiceDemonstration([0]);
+			setOpenFileJson("");
 		}
 		switch (numero) {
 			case 0:
@@ -2795,10 +2772,11 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 					<button
 						id="transitivite"
 						className={
-								"buttonAction " +
-								(mode === "Tutorial" && (numero === 5 || numero === 6)
-									? "boutonSelection"
-									: "")
+							"buttonAction " +
+							(mode === "Tutorial" &&
+							(numero === 5 || numero === 6)
+								? "boutonSelection"
+								: "")
 						}
 						onClick={transitivite}
 					>
@@ -2807,21 +2785,6 @@ const Game = ({ mode, ex, numero, nbExo }) => {
 							alt={"Transitivité"}
 						></img>
 						<span className="tooltiptext">Transitivité</span>
-					</button>
-				)}
-				{/* Bouton pour ouvrir plusieurs fichiers JSON pour n'en avoir qu'1 à la fin */}
-				{mode === "Create" && (
-					<input
-						type="file"
-						accept="application/json"
-						multiple="multiple"
-						onChange={convertFile}
-					></input>
-				)}
-				{/* Bouton pour copier le résultat du bouton au-dessus dans le presse-papier */}
-				{mode === "Create" && (
-					<button onClick={printConvertFile}>
-						Copier les fichiers regroupés
 					</button>
 				)}
 				{/* Bouton pour ouvrir un fichier JSON et afficher l'exercice à l'écran pour le modifier */}
